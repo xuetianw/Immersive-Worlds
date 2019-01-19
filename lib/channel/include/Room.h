@@ -14,12 +14,12 @@ namespace channel {
     Room(std::string name, std::string description);
     std::string getDescription();
     std::string getName();
-    deque<string> getCharacters();
+    std::deque<std::string> getCharacters();
 
   private:
     std::string name;
     std::string description;
-    std::deque<string> characters;
+    std::deque<std::string> characters;
   };
 }
 

@@ -15,8 +15,7 @@ using channel::Room;
 Room::Room(std::string name, std::string description) {
     this->name = std::move(name);
     this->description = std::move(description);
-  }
-};
+}
 
 std::string
 Room::getDescription() {
@@ -28,7 +27,7 @@ Room::getName() {
   return this->name;
 }
 
-std::deque<string>
+std::deque<std::string>
 Room::getCharacters() {
   return this->characters;
 };
