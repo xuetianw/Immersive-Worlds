@@ -31,6 +31,23 @@ void jsonTest() {
       auto solaceWorld = solaceJson.get<CusJson::World>();
 
       std::cout << solaceWorld.area.name << std::endl;
+      for (CusJson::NPC npc : solaceWorld.NPCS) {
+          std::cout << "npc id: " + std::to_string(npc.id) << std::endl;
+          for (std::string keyword : npc.keywords) {
+              std::cout << "keywords: "+ keyword << std::endl;
+          }
+
+          std::cout << "shortdesc: "+ npc.shortdesc << std::endl;
+          for (std::string longdesc : npc.longdesc) {
+              std::cout << "longdesc: "+ longdesc << std::endl;
+          }
+
+          for (std::string description : npc.description) {
+              std::cout << description << std::endl;
+          }
+          std::cout << std::endl;
+      }
+
   }
   solaceFile.close();
 }
