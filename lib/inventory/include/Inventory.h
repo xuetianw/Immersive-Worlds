@@ -24,7 +24,7 @@ public:
     /**
      * Get details of what the inventory contains
      */
-    void getItems() const;
+    vector<Item> getItems() const;
 
     /**
      * Add items to inventory
