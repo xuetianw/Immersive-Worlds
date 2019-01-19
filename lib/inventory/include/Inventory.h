@@ -19,6 +19,7 @@ private:
     int playerId;
     vector<Item> items;     //all items in inventory
 public:
+    Inventory();
     Inventory(vector<Item> setOfItems);
 
     /**

@@ -4,7 +4,7 @@
 
 #include "../include/Inventory.h"
 
-//Inventory::Inventory(): items({}) {}
+Inventory::Inventory(): items({}) {}
 Inventory::Inventory(vector<Item> setOfItems): items(setOfItems) {}
 
 vector<Item> Inventory::getItems() const { return items; }
@@ -46,7 +46,6 @@ bool Inventory::removeItems(vector<Item> itemsToRemove){
                 if(item.quantity >= newItem.quantity){
                     //remove item
                     item.quantity -= newItem.quantity;
-                    return true;
                 } else{
                     //item in inventory is less than amount requested to remove
                     return false;
@@ -55,4 +54,5 @@ bool Inventory::removeItems(vector<Item> itemsToRemove){
             }
         }
     }
+    return true;
 }
