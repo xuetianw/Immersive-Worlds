@@ -27,6 +27,7 @@ target_link_libraries(chatclient
   networking
   ${CURSES_LIBRARIES}
   ${CMAKE_THREAD_LIBS_INIT}
+        cusjson
 )
 
 install(TARGETS chatclient

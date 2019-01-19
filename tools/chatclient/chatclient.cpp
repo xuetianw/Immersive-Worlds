@@ -11,6 +11,7 @@
 
 #include "ChatWindow.h"
 #include "Client.h"
+#include "CusJson.h"
 
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -25,9 +26,11 @@ void jsonTest() {
   if (!solaceFile) {
       std::cout << "File was unable to open";
   } else {
-      json jsonTest;
-      solaceFile >> jsonTest;
-      std::cout << jsonTest;
+      json solaceJson;
+      solaceFile >> solaceJson;
+      auto solaceWorld = solaceJson.get<CusJson::World>();
+
+      std::cout << solaceWorld.area.name << std::endl;
   }
   solaceFile.close();
 }
