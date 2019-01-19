@@ -6,7 +6,7 @@
 #define ADVENTURE2019_LOGIN_H
 
 void login(std::string username, std::string password);
-static int validate(std::string username, std::string password);
+static int validatePassword(std::string password);
 bool checkUserNameExistence(std::string username);
 bool checkSpecialCharacter(std::string password);
 bool createUser();

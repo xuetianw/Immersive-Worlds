@@ -19,18 +19,14 @@ std::string password;
 const int SHORT_PASSWORD = 1;
 const int LONG_PASSWORD = 2;
 const int MISSING_SPECIAL_PASSWORD = 3;
-const int INCORRECT_USERNAME = 4;
-
 
 std::vector<string> usernames{"John","Rex","Alex","Garfield"};
 std::vector<string> passwords{"gsgfdgfd*","dbgdbvv#","ff","fvbdfsgvfcvbvxcbdfvdfvd"};
 
 void login(string username, string password)
 {
-    if(validate(username,password))
-    {
-        //prompt user
-    }
+
+
 
     //establish connection with browser
 
@@ -44,22 +40,34 @@ bool createUser()
 
     //check if username already exists
     //mock up using vector test
-    if(std::find(usernames.begin(),usernames.end(),username)!=usernames.end())
-    {   cout<<"User already exists";
-        return false;
+    //in actual implementation use parsed json file
+    if(!checkUserNameExistence(username)){
+         cout<<"User already exists";
+         return false;
     }
 
     cout<<"Enter password";
     cin>>password;
 
-    if(validate(username,password)!=0);
-    {
-        //prompt user in GUI stating invalid username or pass
+    if(validatePassword(password)==1){
+        //prompt user in GUI stating short password
     }
+    else if(validatePassword( password)==2){
+
+    }
+    else if(validatePassword(password)==3){
+
+    }
+    else{
+        cout<<"Congratulation! You have successfully created an account";
+    }
+
+    //store username and pass in json
+
 
 }
 
-int validate(string username, string password)
+int validatePassword(string password)
 {
     if(password.length()<7)
         return SHORT_PASSWORD;
@@ -68,19 +76,15 @@ int validate(string username, string password)
     else if(!checkSpecialCharacter(password))
         return MISSING_SPECIAL_PASSWORD;
 
-    if(checkUserNameExistence(username))
-        return INCORRECT_USERNAME;
-
     return 0;
 
-
     //verify username and password with json
-
 
 }
 
 bool checkUserNameExistence(std::string username)
 {
+    //mock up which checks if user exists or not within vector
     for(int i=0;i<usernames.size();i++)
     {
         if(usernames[i].compare(username)==0)
