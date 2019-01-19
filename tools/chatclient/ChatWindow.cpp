@@ -13,6 +13,10 @@
 #include <form.h>
 #include <ncurses.h>
 
+#include <string>
+#include <sstream>
+#include <iostream>
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Hidden ChatWindow implementation
