@@ -13,15 +13,18 @@
 #include "login.h"
 using namespace std;
 
+//global vars
+
 std::string username;
 std::string password;
+
+//temp vectors
+std::vector<string> usernames{"John","Rex","Alex","Garfield"};
+std::vector<string> passwords{"gsgfdgfd*","dbgdbvv#","ff","fvbdfsgvfcvbvxcbdfvdfvd"};
 
 const int SHORT_PASSWORD = 1;
 const int LONG_PASSWORD = 2;
 const int MISSING_SPECIAL_PASSWORD = 3;
-
-std::vector<string> usernames{"John","Rex","Alex","Garfield"};
-std::vector<string> passwords{"gsgfdgfd*","dbgdbvv#","ff","fvbdfsgvfcvbvxcbdfvdfvd"};
 
 void login(string username, string password)
 {
@@ -67,7 +70,7 @@ bool createUser()
 
 }
 
-int validatePassword(string password)
+int validatePassword(std::string password)
 {
     if(password.length()<7)
         return SHORT_PASSWORD;
