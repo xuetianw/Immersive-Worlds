@@ -8,20 +8,18 @@
 #include <string>
 #include <deque>
 
-using namespace std;
-
 namespace channel {
   class Room {
   public:
     Room(std::string name, std::string description);
-    string getDescription();
-    string getName();
+    std::string getDescription();
+    std::string getName();
     deque<string> getCharacters();
 
   private:
-    string name;
-    string description;
-    deque<string> characters;
+    std::string name;
+    std::string description;
+    std::deque<string> characters;
   };
 }
 

@@ -10,28 +10,25 @@
 #include <string>
 #include <deque>
 
-using namespace std;
 using channel::Room;
 
-namespace channel {
-
-Room::Room(string name, string description) {
+Room::Room(std::string name, std::string description) {
     this->name = std::move(name);
     this->description = std::move(description);
   }
 };
 
-string
+std::string
 Room::getDescription() {
   return this->description;
 }
 
-string
+std::string
 Room::getName() {
   return this->name;
 }
 
-deque<string>
+std::deque<string>
 Room::getCharacters() {
   return this->characters;
 };
