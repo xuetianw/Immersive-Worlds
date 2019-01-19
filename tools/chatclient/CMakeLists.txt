@@ -17,6 +17,10 @@ find_package(Threads REQUIRED)
 target_include_directories(chatclient
   PRIVATE
   ${CURSES_INCLUDE_DIR}
+  PUBLIC
+        $<INSTALL_INTERFACE:include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        PUBLIC
 )
 
 target_link_libraries(chatclient

@@ -12,10 +12,30 @@
 #include "ChatWindow.h"
 #include "Client.h"
 
+#include <fstream>
+#include <nlohmann/json.hpp>
+#include "string"
+
+using json = nlohmann::json;
+
+void jsonTest() {
+  std::ifstream solaceFile;
+  solaceFile.open("/home/user/CMPT373/adventure2019/doc/solace.json"); // Need help with this
+  std::string a;
+  if (!solaceFile) {
+      std::cout << "File was unable to open";
+  } else {
+      json jsonTest;
+      solaceFile >> jsonTest;
+      std::cout << jsonTest;
+  }
+  solaceFile.close();
+}
 
 int
 main(int argc, char* argv[]) {
   if (argc < 3) {
+      jsonTest();
     std::cerr << "Usage: \n  " << argv[0] << " <ip address> <port>\n"
               << "  e.g. " << argv[0] << " localhost 4002\n";
     return 1;
