@@ -4,6 +4,8 @@
 
 #include "networkTests.h"
 #include "gtest/gtest.h"
+#include "Server.h"
+#include "Client.h"
 
 class BasicTest : public::testing::Test{
   protected:

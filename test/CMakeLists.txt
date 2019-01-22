@@ -16,6 +16,10 @@ endif()
 
 enable_testing()
 
-add_executable(run_tests networkTests.cpp networkTests.h)
+## Add your test .cpp file here
+add_executable(run_tests networkTests.cpp)
 target_link_libraries(run_tests gmock gtest gtest_main)
+
+##TO DO: Add Lib Here
+target_link_libraries(run_tests networking channel message cusjson Combat)
 add_test(NAME network_tests COMMAND run_tests)
