@@ -21,11 +21,11 @@ add_executable(run_tests networkTests.cpp)
 target_link_libraries(run_tests gmock gtest gtest_main)
 
 set_target_properties(run_tests
-        PROPERTIES
-        LINKER_LANGUAGE CXX
-        CXX_STANDARD 17
-        PREFIX ""
-        )
+                      PROPERTIES
+                      LINKER_LANGUAGE CXX
+                      CXX_STANDARD 17
+                      PREFIX ""
+)
 
 ##TO DO: Add Lib Here
 target_link_libraries(run_tests networking channel message cusjson Combat)
