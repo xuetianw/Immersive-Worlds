@@ -11,8 +11,9 @@ public:
 	int id;
 	char* shortDesc;
 	char* longDesc;
-	int[] inventory;
-	char* tellCommandMessages //eventually should be a buffer of Message objects for character-to-character messaging
+	//TODO: do we need this array size?
+	int inventory[1000];
+	char* tellCommandMessages; //eventually should be a buffer of Message objects for character-to-character messaging
 };
 
 

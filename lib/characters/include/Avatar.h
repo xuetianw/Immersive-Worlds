@@ -5,10 +5,13 @@
 #ifndef WEBSOCKETNETWORKING_AVATAR_H
 #define WEBSOCKETNETWORKING_AVATAR_H
 
+#include "NonUserCharacter.h"
+#include "character.h"
 
-class Avatar : public Character {
+class Avatar : public Character
+{
 public:
-	int userID //this will eventually be a User type object
+	int userID; //this will eventually be a User type object
 	void takeObject(int objectID); //adds Object object to Inventory
 	void putObject(int objectID);
 	void dropObject(int objectID);
