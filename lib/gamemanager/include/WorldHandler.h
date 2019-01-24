@@ -5,7 +5,7 @@
 #ifndef WEBSOCKETNETWORKING_WORLDHANDLER_H
 #define WEBSOCKETNETWORKING_WORLDHANDLER_H
 #include <string>
-#include "../../worldcontainer/include/WorldContainer.h"
+#include "WorldContainer.h"
 
 class WorldHandler {
 public:

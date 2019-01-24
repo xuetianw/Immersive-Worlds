@@ -107,8 +107,6 @@ main(int argc, char* argv[]) {
     auto incoming = server.receive();
     auto log      = processMessages(server, incoming, done);
     auto outgoing = buildOutgoing(log);
-    std::string test = worldHandler.processCommand("test");
-    server.send(buildOutgoing(test));
     server.send(outgoing);
     sleep(1);
   }

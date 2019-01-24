@@ -15,7 +15,7 @@ find_package(Threads REQUIRED)
 target_link_libraries(chatserver
   networking
   ${CMAKE_THREAD_LIBS_INIT}
-        worldhandler
+        gamemanager
 )
 
 install(TARGETS chatserver

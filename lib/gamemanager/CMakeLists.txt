@@ -1,8 +1,9 @@
-add_library(worldhandler
+add_library(gamemanager
   src/WorldHandler.cpp
+        src/WorldContainer.cpp
 )
 
-target_include_directories(worldhandler
+target_include_directories(gamemanager
   PUBLIC
   $<INSTALL_INTERFACE:include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -11,17 +12,17 @@ target_include_directories(worldhandler
 )
 
 
-target_link_libraries(worldhandler
-  PRIVATE
-        worldcontainer
+target_link_libraries(gamemanager
+  PUBLIC
+        cusjson
         ${CMAKE_THREAD_LIBS_INIT}
   )
-set_target_properties(worldhandler
+set_target_properties(gamemanager
   PROPERTIES
   LINKER_LANGUAGE CXX
   CXX_STANDARD 17
   )
 
-install(TARGETS worldhandler
+install(TARGETS gamemanager
   ARCHIVE DESTINATION lib
   )

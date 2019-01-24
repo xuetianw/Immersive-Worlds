@@ -1,5 +1,5 @@
 add_library(worldcontainer
-        src/WorldContainer.cpp
+        ../gamemanager/src/WorldContainer.cpp
 )
 
 target_include_directories(worldcontainer
