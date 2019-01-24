@@ -13,6 +13,7 @@
 #include <sstream>
 #include <unistd.h>
 #include <vector>
+#include "WorldHandler.h"
 
 using networking::Server;
 using networking::Connection;
@@ -83,6 +84,7 @@ getHTTPMessage(const char* htmlLocation) {
 
 int
 main(int argc, char* argv[]) {
+  WorldHandler worldHandler = WorldHandler();
   if (argc < 3) {
     std::cerr << "Usage:\n  " << argv[0] << " <port> <html response>\n"
               << "  e.g. " << argv[0] << " 4002 ./webchat.html\n";
@@ -105,6 +107,8 @@ main(int argc, char* argv[]) {
     auto incoming = server.receive();
     auto log      = processMessages(server, incoming, done);
     auto outgoing = buildOutgoing(log);
+    std::string test = worldHandler.processCommand("test");
+    server.send(buildOutgoing(test));
     server.send(outgoing);
     sleep(1);
   }
