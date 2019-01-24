@@ -11,23 +11,66 @@
 #include <deque>
 
 using channel::Room;
+using std::string;
+using std::deque;
+using std::unordered_map;
+using std::vector;
 
-Room::Room(std::string name, std::string description) {
-    this->name = std::move(name);
-    this->description = std::move(description);
-}
-
-std::string
-Room::getDescription() {
-  return this->description;
-}
-
-std::string
-Room::getName() {
-  return this->name;
-}
-
-std::deque<std::string>
-Room::getCharacters() {
-  return this->characters;
+Room::Room() {
+  // TODO default constructor
 };
+
+Room::Room(const string& name, const string& description)
+        : _name(name), _description(description) {
+  // TODO
+}
+
+
+Room::Room(const Room& that) {
+  // TODO copy constructor
+}
+
+int Room::getId() const {
+  // TODO make room ID unique
+  return _id;
+}
+
+const string& Room::getName() const {
+  // TODO
+}
+
+void Room::setName(const string& name) {
+  // TODO
+}
+
+const string& Room::getDescription() const {
+  // TODO
+}
+
+void Room::setDescription(const string& name) {
+  // TODO
+}
+
+vector<string> Room::getAllAvatars() const {
+  // TODO
+}
+
+void Room::addAvatar(const string& avatar) {
+  // TODO
+}
+
+vector<string> Room::getAllObjects() const {
+  // TODO
+}
+
+void Room::addObject(const string& object) {
+  // TODO
+}
+
+vector<string> Room::getAllDoors() const {
+  // TODO
+}
+
+void Room::addRoom(const Room& room) {
+  // TODO
+}
