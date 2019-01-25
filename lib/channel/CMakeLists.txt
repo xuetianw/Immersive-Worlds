@@ -1,5 +1,6 @@
 add_library(channel
   src/Room.cpp
+  src/Area.cpp
 )
 
 target_include_directories(channel
