@@ -3,41 +3,27 @@
 //
 
 #include "Server.h"
+#include "../../lib/networking/include/ClientManager.h"
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <unistd.h>
+#include <vector>
 
 using networking::Connection;
+using networking::Message;
+using networking::Server;
 
 
 // Dummy Structs
-class DumbClientManager{
-private:
-
-public:
-  virtual bool login();
-  virtual bool addConnection(Connection connection);
-  virtual bool removeConnection(Connection connection);
-  virtual bool isLoggedIn(Connection connection);
-};
 
 class DumbGameManager{
 public:
   virtual Message updateGame(User user, Message message);
 };
 
-class User{
-private:Dummy Structs
-class DumbClientManager{
-private:
 
-public:
-  virtual bool login();
-  virtual bool addConnection(Connection connection);
-  virtual bool removeConnection(Connection connection);
-  virtual bool isLoggedIn(Connection connection);
-};
-  Connection connection;
-  std::string password;
-
-};
 
 DumbClientManager clientManager;
 DumbGameManager gameManager;
@@ -62,7 +48,7 @@ std::deque<Message> processMessages (Server &server,
         bool &quit) {
   std::deque<Message> result;
   for (auto& message : incoming) {
-    if(!DumbClientManager.isLoggedin(message.id){
+    if(!clientManager.isLoggedIn(message.connection){
       // TODO: Define the design for this ! !
       result.push_back(DumbClientManager.tryLogin(message));
     } if (message.text == "quit") {
@@ -72,18 +58,10 @@ std::deque<Message> processMessages (Server &server,
       quit = true;
     } else {
       User user = clientManager.getUser(message.connection);
-      std::string gameManager.updateGame(user, message);
+      result.push_back(gameManager.updateGame(user.id, message));
     }
   }
-  return result.str();
-}
-
-std::deque<Message> buildOutgoing(const std::string& log) {
-  std::deque<Message> outgoing;
-  for (auto client : clients) {
-    outgoing.push_back({client, log});
-  }
-  return outgoing;
+  return result;
 }
 
 
@@ -123,8 +101,7 @@ int main(int argc, char* argv[]) {
     }
 
     auto incoming = server.receive();
-    auto log      = processMessages(server, incoming, done);
-    auto outgoing = buildOutgoing(log);
+    auto outgoing = processMessages(server, incoming, done);
     server.send(outgoing);
     sleep(1);
   }

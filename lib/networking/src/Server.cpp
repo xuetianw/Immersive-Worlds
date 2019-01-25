@@ -29,7 +29,6 @@ namespace networking {
 
 class Channel;
 
-
 class ServerImpl {
 public:
 
