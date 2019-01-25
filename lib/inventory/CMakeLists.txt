@@ -1,6 +1,8 @@
 add_library(inventory
         src/Inventory.cpp
-        src/Object.cpp
+        src/SingleItem.cpp
+        src/ContainerItem.cpp
+        src/InventoryItem.cpp
         )
 
 

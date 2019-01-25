@@ -6,8 +6,8 @@
 #define WEBSOCKETNETWORKING_CHARACTER_H
 
 #include <string>
-#include "../../channel/include/Room.h"
-#include "../../inventory/include/Inventory.h"
+#include "Room.h"
+#include "Inventory.h"
 
 class Character {
 public:

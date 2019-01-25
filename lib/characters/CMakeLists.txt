@@ -22,3 +22,10 @@ install(TARGETS characters
         ARCHIVE DESTINATION lib
         )
 
+target_link_libraries(characters
+        PUBLIC
+        channel)
+
+target_link_libraries(characters
+        PUBLIC
+        inventory)

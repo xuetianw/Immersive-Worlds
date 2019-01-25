@@ -7,17 +7,18 @@
 
 #include "NonUserCharacter.h"
 #include "character.h"
+#include "InventoryItem.h"
 
 class Avatar : public Character
 {
 public:
 	int userID; //this will eventually be a User type object
-	void takeObject(int objectID); //adds Object object to Inventory
-	void putObject(int objectID);
-	void dropObject(int objectID);
-	void giveObject(int objectID, Character receivingCharacter);
-	int wearObject(int objectID);
-	int removeObject(int objectID);
+	void takeObject(InventoryItem inventoryItem); //adds Object object to Inventory
+	void putObject(InventoryItem inventoryItem);
+	void dropObject(InventoryItem inventoryItem);
+	void giveObject(InventoryItem inventoryItem, Character receivingCharacter);
+	int wearObject(InventoryItem inventoryItem);
+	int removeObject(InventoryItem inventoryItem);
 	void attack(NonUserCharacter characterToAttack);
 	void kill(NonUserCharacter characterToKill);
 	void flee();
