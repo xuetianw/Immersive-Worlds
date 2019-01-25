@@ -3,8 +3,7 @@ add_library(networking
   src/Server.cpp
   src/Client.cpp
   src/ClientManager.cpp
-  src/User.cpp
-  src/login.cpp
+        src/login.cpp
 )
 
 find_package(Boost 1.68 COMPONENTS system REQUIRED)

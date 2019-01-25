@@ -5,17 +5,15 @@
 #ifndef WEBSOCKETNETWORKING_CLIENTMANAGER_H
 #define WEBSOCKETNETWORKING_CLIENTMANAGER_H
 
-
-#include "User.h"
 #include "Server.h"
 
 using networking::Connection;
 using networking::Message;
+using std::string;
+
 
 class ClientManager {
-private:
-  //TODO MAKE THIS A MAP!
-  std::deque<User> users;
+
 public:
   virtual Message promptLogin(Connection connection);
   virtual bool addConnection(Connection connection);
