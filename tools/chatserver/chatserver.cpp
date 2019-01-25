@@ -13,19 +13,40 @@
 #include <sstream>
 #include <unistd.h>
 #include <vector>
+#include <unordered_map>
 
 using networking::Server;
 using networking::Connection;
 using networking::Message;
+using namespace std;
+
+enum class State{
+    LOGGED_IN,
+    CONNECTED,
+    LOGGING_IN_USER,
+    LOGGING_IN_PWD
+};
+struct User{
+    string username;
+    string password;
+    State state;
+
+    User( State state) : username(""), password(""),
+                                                                        state(state) {}
+};
+
 
 
 std::vector<Connection> clients;
+std::unordered_map<uintptr_t, User > connectionMap;
 
 
 void
 onConnect(Connection c) {
   std::cout << "New connection found: " << c.id << "\n";
   clients.push_back(c);
+  User user{State::CONNECTED};
+  connectionMap.insert(std::make_pair(c.id,user));
 }
 
 
@@ -43,12 +64,62 @@ processMessages(Server &server,
                 bool &quit) {
   std::ostringstream result;
   for (auto& message : incoming) {
+    auto itr = connectionMap.find(message.connection.id);
     if (message.text == "quit") {
       server.disconnect(message.connection);
     } else if (message.text == "shutdown") {
       std::cout << "Shutting down.\n";
       quit = true;
-    } else {
+    }
+    else if(itr!=connectionMap.end() && itr->second.state==State::LOGGING_IN_PWD)
+    {
+
+      Message messageAutenthicate;
+      messageAutenthicate.text = "*****\nYou are successfully logged in\n";
+
+      //password check
+
+      if(itr!=connectionMap.end()){
+        itr->second.state = State::LOGGED_IN;
+      }
+
+      messageAutenthicate.connection = message.connection;
+      server.sendPrivateMessage(messageAutenthicate);
+
+      //TODO: add login fail condition, change state to connected
+
+    }
+    else if(itr!=connectionMap.end() && itr->second.state==State::LOGGING_IN_USER)
+    {
+
+      Message messagePassword;
+      messagePassword.text = message.text + "\nEnter password:\n";
+
+      if(itr!=connectionMap.end()){
+        itr->second.state = State::LOGGING_IN_PWD;
+      }
+
+      messagePassword.connection = message.connection;
+      server.sendPrivateMessage(messagePassword);
+
+      //TODO: add username validation condition, change state to connected if failure
+
+
+    }
+    else if(message.text== "/login"){
+
+      Message messageUsername;
+      messageUsername.text = "Enter username:\n";
+
+      if(itr!=connectionMap.end()){
+        itr->second.state = State::LOGGING_IN_USER;
+      }
+
+      messageUsername.connection = message.connection;
+      server.sendPrivateMessage(messageUsername);
+
+    }
+    else {
       result << message.connection.id << "> " << message.text << "\n";
     }
   }

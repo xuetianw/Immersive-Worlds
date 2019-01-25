@@ -367,6 +367,14 @@ Server::send(const std::deque<Message>& messages) {
   }
 }
 
+void
+Server::sendPrivateMessage(const Message &message) {
+    auto found = impl->channels.find(message.connection);
+    if (impl->channels.end() != found) {
+        found->second->send(message.text);
+    }
+}
+
 
 void
 Server::disconnect(Connection connection) {
