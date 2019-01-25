@@ -4,8 +4,9 @@
 
 #include "Area.h"
 
-channel::Area::Area() {
+channel::Area::Area(int id) {
     // TODO 
+    this->_id = std::move(id);
 }
 
 channel::Area::~Area() {

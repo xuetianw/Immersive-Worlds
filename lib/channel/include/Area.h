@@ -11,7 +11,7 @@
 namespace channel {
     class Area {
         public:
-            Area();
+            Area(int id);
             ~Area();
 
             /**
@@ -31,7 +31,7 @@ namespace channel {
             bool addRoom(Room room);
 
         private:
-            const int _id = 0; //TODO make area id unique
+            int _id = 0; //TODO make area id unique
             std::unordered_map<int, Room> _rooms;
     };
 } // namespace channel
