@@ -19,12 +19,13 @@ private:
     int playerId;
     vector<Item> items;     //all items in inventory
 public:
+    Inventory();
     Inventory(vector<Item> setOfItems);
 
     /**
      * Get details of what the inventory contains
      */
-    void getItems() const;
+    vector<Item> getItems() const;
 
     /**
      * Add items to inventory

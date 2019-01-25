@@ -13,6 +13,7 @@ class Object {
         int id;
         string keyword, shortdesc, longdesc, description;
     public:
+        Object();
         Object(int anId, string aKeyword, string aShortdesc, string aLongdesc, string aDescription);
         int getId() const;
         string getKeyword() const;

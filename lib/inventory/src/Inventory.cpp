@@ -7,24 +7,24 @@
 Inventory::Inventory(): items({}) {}
 Inventory::Inventory(vector<Item> setOfItems): items(setOfItems) {}
 
-void Inventory::getItems() const { return items }
+vector<Item> Inventory::getItems() const { return items; }
 
 void Inventory::addItems(vector<Item> itemsToAdd){
     //add items until vector is empty
     while( !itemsToAdd.empty()){
 
         //retrieve last item in itemsToAdd
-        newItem = itemsToAdd.back();
+        Item newItem = itemsToAdd.back();
         itemsToAdd.pop_back();
 
         for (vector<Item>::iterator it = items.begin(); it != items.end(); ++it){
-            item = *it;
-            if(newItem.object == item.object){
+            Item item = *it;
+            if(newItem.object.getId() == item.object.getId()){
                 //add item
                 item.quantity += newItem.quantity;
             } else {
                 //add new item
-                items.push_back(newItem)
+                items.push_back(newItem);
             }
         }
     }
@@ -36,17 +36,16 @@ bool Inventory::removeItems(vector<Item> itemsToRemove){
     while( !itemsToRemove.empty()){
 
         //retrieve last item in itemsToRemove
-        newItem = itemsToRemove.back();
+        Item newItem = itemsToRemove.back();
         itemsToRemove.pop_back();
 
         //assumes that the item requested to be removed must exist in inventory
         for (vector<Item>::iterator it = items.begin(); it != items.end(); ++it){
-            item = *it;
-            if(newItem.object == item.object){
+            Item item = *it;
+            if(newItem.object.getId() == item.object.getId()){
                 if(item.quantity >= newItem.quantity){
                     //remove item
                     item.quantity -= newItem.quantity;
-                    return true;
                 } else{
                     //item in inventory is less than amount requested to remove
                     return false;
@@ -55,4 +54,5 @@ bool Inventory::removeItems(vector<Item> itemsToRemove){
             }
         }
     }
+    return true;
 }
