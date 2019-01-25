@@ -85,6 +85,7 @@ getHTTPMessage(const char* htmlLocation) {
 int
 main(int argc, char* argv[]) {
   WorldHandler worldHandler = WorldHandler();
+  worldHandler.processCommand("test"); // TODO remove test code before merging
   if (argc < 3) {
     std::cerr << "Usage:\n  " << argv[0] << " <port> <html response>\n"
               << "  e.g. " << argv[0] << " 4002 ./webchat.html\n";

@@ -15,7 +15,7 @@ target_include_directories(gamemanager
 target_link_libraries(gamemanager
   PUBLIC
         cusjson
-        ${CMAKE_THREAD_LIBS_INIT}
+        networking
   )
 set_target_properties(gamemanager
   PROPERTIES

@@ -9,9 +9,12 @@
 
 class WorldContainer {
 public:
-    static CusJson::World world;
-    static void jsonTest();
-    std::string getNPCDesc(int roomId);
-    static void resetWorld();
+    void loadFromStorage();
+    std::string getNPCDesc(const int& roomId);
+    void resetWorld();
+private:
+    CusJson::World world;
+
+    void printOutWorld(const CusJson::World &world);
 };
 #endif //WEBSOCKETNETWORKING_WORLDCONTAINTER_H
