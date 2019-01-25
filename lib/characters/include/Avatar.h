@@ -11,14 +11,17 @@
 class Avatar : public Character
 {
 private:
+	/** A unique int identifying the character
+	 *
+	 */
 	int userID; //this will eventually be a User type object
-	void takeObject(int objectID); //adds Object object to Inventory
-	void putObject(int objectID);
-	void dropObject(int objectID);
-	void giveObject(int objectID, Character receivingCharacter);
-	int wearObject(int objectID);
-	int removeObject(int objectID);
-	void attack(NonUserCharacter characterToAttack);
+	void takeObject(Object object);
+	void putObject(Object object, Object containerObject);
+	void dropObject(Object object);
+	void giveObject(Object object, Character receivingCharacter);
+	int wearObject(Object object);
+	int removeObject(Object object);
+	void attack(NonUserCharacter characterToAttack); //eventually make this a character, not necessarily an npc >:)
 	void kill(NonUserCharacter characterToKill);
 	void flee();
 };
