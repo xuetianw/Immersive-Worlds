@@ -10,7 +10,7 @@
 
 class Avatar : public Character
 {
-public:
+private:
 	int userID; //this will eventually be a User type object
 	void takeObject(int objectID); //adds Object object to Inventory
 	void putObject(int objectID);

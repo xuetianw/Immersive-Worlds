@@ -10,7 +10,7 @@
 #include "../../inventory/include/Inventory.h"
 
 class Character {
-public:
+private:
 	int id;
 	std::string name;
 	channel::Room currentRoom;
