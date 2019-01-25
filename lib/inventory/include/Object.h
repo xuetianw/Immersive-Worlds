@@ -6,20 +6,32 @@
 #define PROJECT_OBJECT_H
 
 #include <string>
-using namespace std;
+
 
 class Object {
-    private:
-        int id;
-        string keyword, shortdesc, longdesc, description;
+
     public:
+        enum class ItemType {
+            CLOTHING,
+            WEAPON
+        };
+
         Object();
-        Object(int anId, string aKeyword, string aShortdesc, string aLongdesc, string aDescription);
+        Object(int anId,
+                std::string aKeyword,
+                std::string aShortdesc,
+                std::string aLongdesc,
+                std::string aDescription);
         int getId() const;
-        string getKeyword() const;
-        string getShortdesc() const;
-        string getLongdesc() const;
-        string getDescription() const;
+        std::string getKeyword() const;
+        std::string getShortdesc() const;
+        std::string getLongdesc() const;
+        std::string getDescription() const;
+
+    private:
+        int _id;
+        ItemType _itemType;
+        std::string _keyword, _shortdesc, _longdesc, _description;
 
 };
 

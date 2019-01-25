@@ -11,6 +11,10 @@ target_include_directories(inventory
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         )
 
+target_link_libraries(inventory
+        PRIVATE
+        )
+
 set_target_properties(inventory
         PROPERTIES
         LINKER_LANGUAGE CXX

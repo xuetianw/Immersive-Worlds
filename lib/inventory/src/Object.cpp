@@ -2,18 +2,18 @@
 // Created by Lucy on 2019-01-18.
 //
 
-#include "../include/Object.h"
+#include "Object.h"
 
 using namespace std;
 
-Object::Object() : id(0), keyword(""), shortdesc(""), longdesc("") {}
+Object::Object() : _id(0), _keyword(""), _shortdesc(""), _longdesc("") {}
 Object::Object(int anId, string aKeyword, string aShortdesc, string aLongdesc, string aDescription)
-: id(anId), keyword(aKeyword), shortdesc(aShortdesc), description(aDescription){}
+: _id(anId), _keyword(aKeyword), _shortdesc(aShortdesc), _description(aDescription){}
 
-int Object::getId() const { return id; }
-string Object::getKeyword() const { return keyword; }
-string Object::getShortdesc() const { return shortdesc; }
-string Object::getLongdesc() const { return longdesc; }
-string Object::getDescription() const { return description; }
+int Object::getId() const { return _id; }
+string Object::getKeyword() const { return _keyword; }
+string Object::getShortdesc() const { return _shortdesc; }
+string Object::getLongdesc() const { return _longdesc; }
+string Object::getDescription() const { return _description; }
 
 
