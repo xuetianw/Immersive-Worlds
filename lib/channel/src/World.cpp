@@ -4,25 +4,28 @@
 
 #include "World.h"
 
-channel::World::World(int id)
+using channel::World;
+using std::move;
+
+World::World(int id)
         :_id(id){
     // TODO
 }
 
-channel::World::~World() {
+World::~World() {
     // TODO
 }
 
 bool channel::World::addArea(Area area) {
     auto areaId     = area.getId();
-    auto didInsert  = _areas.insert({areaId, std::move(area)}).second;
+    auto didInsert  = _areas.insert({areaId, move(area)}).second;
 
     return didInsert;
 }
 
 int channel::World::getId() const {
     // TODO make room ID unique
-    return this->_id;
+    return _id;
 }
 
 

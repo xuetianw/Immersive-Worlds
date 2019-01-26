@@ -4,25 +4,28 @@
 
 #include "Area.h"
 
-channel::Area::Area(int id)
+using channel::Area;
+using std::move;
+
+Area::Area(int id)
         :_id(id){
     // TODO
 }
 
-channel::Area::~Area() {
+Area::~Area() {
     // TODO
 }
 
-bool channel::Area::addRoom(Room room) {
+bool Area::addRoom(Room room) {
     auto roomId     = room.getId();
-    auto didInsert  = _rooms.insert({roomId, std::move(room)}).second;
+    auto didInsert  = _rooms.insert({roomId, move(room)}).second;
 
     return didInsert;
 }
 
-int channel::Area::getId() const {
+int Area::getId() const {
     // TODO make room ID unique
-    return this->_id;
+    return _id;
 }
 
 

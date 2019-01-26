@@ -8,6 +8,8 @@
 #include <unordered_map>
 #include <Room.h>
 
+using std::unordered_map;
+
 namespace channel {
     class Area {
         public:
@@ -32,7 +34,7 @@ namespace channel {
 
         private:
             int _id = 0; //TODO make area id unique
-            std::unordered_map<int, Room> _rooms;
+            unordered_map<int, Room> _rooms;
     };
 } // namespace channel
 
