@@ -34,10 +34,10 @@ public:
     void addItems(std::vector<InventoryItem> itemsToAdd);
 
     /**
-     * Remove an item from inventory. Return true if successful, false if item does not exist in inventory
+     * Remove an item from inventory and return the removed item.
      * @param itemToRemove: the item to be removed from inventory
      */
-    bool removeItem(InventoryItem itemToRemove);
+    InventoryItem removeItem(InventoryItem itemToRemove);
 
     /**
      * Remove items from inventory. Return true if successful, false if item carried is less than amount removed
