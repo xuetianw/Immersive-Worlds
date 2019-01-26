@@ -23,12 +23,12 @@ ClientManager clientManager;
 //TODO: decide to make a User <-> UserCharacter Map/make an interpreter class to conver/
 void onConnect(Connection c) {
   std::cout << "New connection found: " << c.id << "\n";
-  clientManager.addConnection(c.id);
+  clientManager.registerClient(c.id);
 }
 
 void onDisconnect(Connection c) {
   std::cout << "Connection lost: " << c.id << "\n";
-  clientManager.removeConnection(c.id);
+  clientManager.unregisterClient(c.id);
 }
 
 //
@@ -39,7 +39,7 @@ std::deque<Message> processMessages (Server &server,
   for (auto& message : incoming) {
     if(!clientManager.isLoggedIn(message.connection.id)){
       // TODO: Define the design for this ! !
-      result.push_back(clientManager.promptLogin(message.connection.id, message.text));
+      result.push_back(clientManager.promptLogin(message.connection.id, message));
     } if (message.text == "quit") {
       server.disconnect(message.connection);
     } else if (message.text == "shutdown") {
