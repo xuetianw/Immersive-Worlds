@@ -4,8 +4,9 @@
 
 #include "World.h"
 
-channel::World::World() {
+channel::World::World(int id) {
     // TODO 
+    this->_id = std::move(id);
 }
 
 channel::World::~World() {
