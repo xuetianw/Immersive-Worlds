@@ -10,14 +10,12 @@
 #include "Inventory.h"
 
 class Character {
-public:
+protected:
 	int id;
 	std::string name;
 	channel::Room currentRoom;
 	char* shortDesc;
 	char* longDesc;
-	//TODO: do we need this array size?
-	//	int inventory[1000];
 	Inventory characterInventory;
 	char* tellCommandMessages; //eventually should be a buffer of Message objects for character-to-character messaging
 };
