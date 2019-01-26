@@ -1,6 +1,7 @@
+add_subdirectory(cusjson)
 add_subdirectory(networking)
 #add_subdirectory(inventory)
 add_subdirectory(channel)
 add_subdirectory(message)
-add_subdirectory(cusjson)
 add_subdirectory(Combat)
+add_subdirectory(gamemanager)

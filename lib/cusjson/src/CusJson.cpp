@@ -45,6 +45,7 @@ namespace CusJson {
     }
 
     void to_json(json& j, const NPC& p) {
+        j = json{{"id", p.id}, {"keywords", p.keywords}, {"shortdesc", p.shortdesc}, {"longdesc", p.longdesc}, {"descriptions", p.description}};
     }
 
     void from_json(const json& j, NPC& p) {
