@@ -18,28 +18,17 @@ using networking::Server;
 
 // Dummy Structs
 
-class DumbGameManager{
-public:
-  virtual Message updateGame(User user, Message message);
-};
-
-
-
-DumbClientManager clientManager;
-DumbGameManager gameManager;
+ClientManager clientManager;
 
 //TODO: decide to make a User <-> UserCharacter Map/make an interpreter class to conver/
 void onConnect(Connection c) {
   std::cout << "New connection found: " << c.id << "\n";
-  clientManager.addConnection(c);
+  clientManager.addConnection(c.id);
 }
 
 void onDisconnect(Connection c) {
   std::cout << "Connection lost: " << c.id << "\n";
-  clientManager.removeConnection(c);
-//  auto eraseBegin = std::remove(std::begin(clients), std::end(clients), c);
-//  clients.erase(eraseBegin, std::end(clients));
-//  TO DO: Handle User information on disconnect
+  clientManager.removeConnection(c.id);
 }
 
 //
@@ -48,18 +37,19 @@ std::deque<Message> processMessages (Server &server,
         bool &quit) {
   std::deque<Message> result;
   for (auto& message : incoming) {
-    if(!clientManager.isLoggedIn(message.connection){
+    if(!clientManager.isLoggedIn(message.connection.id)){
       // TODO: Define the design for this ! !
-      result.push_back(DumbClientManager.tryLogin(message));
+      result.push_back(clientManager.promptLogin(message.connection.id, message.text));
     } if (message.text == "quit") {
       server.disconnect(message.connection);
     } else if (message.text == "shutdown") {
       std::cout << "Shutting down.\n";
       quit = true;
-    } else {
-      User user = clientManager.getUser(message.connection);
-      result.push_back(gameManager.updateGame(user.id, message));
     }
+//    else {
+//      User user = clientManager.getUser(message.connection);
+//      result.push_back(gameManager.updateGame(user.id, message));
+//    }
   }
   return result;
 }

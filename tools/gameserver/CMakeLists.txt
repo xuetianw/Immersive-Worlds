@@ -1,6 +1,5 @@
 add_executable(gameserver
-        gameserver.cpp
-        ../../lib/networking/src/ClientManager.cpp ../../lib/networking/include/ClientManager.h)
+        gameserver.cpp)
 
 set_target_properties(gameserver
         PROPERTIES
@@ -13,7 +12,6 @@ find_package(Threads REQUIRED)
 
 target_link_libraries(gameserver
         networking
-        clientManager
         ${CMAKE_THREAD_LIBS_INIT}
         )
 

@@ -11,14 +11,34 @@ using networking::Connection;
 using networking::Message;
 using std::string;
 
+enum class State{
+  LOGGED_IN,
+  CONNECTED,
+  LOGGING_IN_
+};
+
+struct User{
+  string username;
+  string password;
+  string serialId;
+  State state;
+
+  User( State state) : username(""), password(""),state(state) {}
+};
 
 class ClientManager {
 
 public:
-  virtual Message promptLogin(Connection connection);
-  virtual bool addConnection(Connection connection);
-  virtual bool removeConnection(Connection connection);
-  virtual bool isLoggedIn(Connection connection);
+  virtual Message promptLogin(uintptr_t connection_id, string message);
+  virtual bool addConnection(uintptr_t connection_id);
+  virtual void removeConnection(uintptr_t connection_id);
+  virtual bool isLoggedIn(uintptr_t connection_id);
+
+  ClientManager();
+
+private:
+  friend class ClientManagerImpl;
+  std::unordered_map<uintptr_t, User > connected_users;
 };
 
 
