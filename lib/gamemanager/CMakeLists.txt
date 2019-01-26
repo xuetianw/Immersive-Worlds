@@ -16,6 +16,7 @@ target_link_libraries(gamemanager
   PUBLIC
         cusjson
         networking
+        channel
   )
 set_target_properties(gamemanager
   PROPERTIES
