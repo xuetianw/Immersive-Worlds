@@ -31,29 +31,29 @@ namespace channel {
 
     Room(const Room& that);
 
-    ~Room() {}
+    ~Room();
 
     int getId() const;
 
     const string& getName() const;
 
-    void setName(const string& name);
+    void setName(string& name);
 
     const string& getDescription() const;
 
-    void setDescription(const string& name);
+    void setDescription(string& description);
 
     vector<string> getAllAvatars() const;
 
-    void addAvatar(const string& avatar);
+    void addAvatar(int id, const string& avatar);
 
     vector<string> getAllObjects() const;
 
-    void addObject(const string& object);
+    void addObject(int objectId, const string& object);
 
-    vector<string> getAllDoors() const;
+    vector<Room> getAllDoors() const;
 
-    void addRoom(const Room& room);
+    void addRoom(int roomId, const Room& room);
   };
 }
 
