@@ -23,10 +23,10 @@ void Avatar::dropObject(InventoryItem inventoryItem) {
 //	currentRoom.inventory.addItem(removedItem);
 }
 
-void Avatar::giveObject(InventoryItem inventoryItem, Character receivingCharacter) {
+InventoryItem Avatar::giveObject(InventoryItem inventoryItem) {
 //	TODO uncomment these next lines once Lucy's code is pulled
 //	Item removedItem = characterInventory.removeItem(inventoryItem);
-//	receivingCharacter.characterInventory.addItem(removedItem);
+//	return removedItem;
 
 }
 
