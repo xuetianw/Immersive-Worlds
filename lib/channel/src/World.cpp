@@ -4,9 +4,9 @@
 
 #include "World.h"
 
-channel::World::World(int id) {
-    // TODO 
-    this->_id = std::move(id);
+channel::World::World(int id)
+        :_id(id){
+    // TODO
 }
 
 channel::World::~World() {
@@ -15,8 +15,7 @@ channel::World::~World() {
 
 bool channel::World::addArea(Area area) {
     auto areaId     = area.getId();
-    auto newArea    = std::move(area);
-    auto didInsert  = _areas.insert({areaId, newArea}).second;
+    auto didInsert  = _areas.insert({areaId, std::move(area)}).second;
 
     return didInsert;
 }

@@ -4,9 +4,9 @@
 
 #include "Area.h"
 
-channel::Area::Area(int id) {
-    // TODO 
-    this->_id = std::move(id);
+channel::Area::Area(int id)
+        :_id(id){
+    // TODO
 }
 
 channel::Area::~Area() {
@@ -15,8 +15,7 @@ channel::Area::~Area() {
 
 bool channel::Area::addRoom(Room room) {
     auto roomId     = room.getId();
-    auto newRoom    = std::move(room);
-    auto didInsert  = _rooms.insert({roomId, newRoom}).second;
+    auto didInsert  = _rooms.insert({roomId, std::move(room)}).second;
 
     return didInsert;
 }
