@@ -5,8 +5,10 @@
 #ifndef WEBSOCKETNETWORKING_AVATAR_H
 #define WEBSOCKETNETWORKING_AVATAR_H
 
+#include <ContainerItem.h>
 #include "NonUserCharacter.h"
 #include "character.h"
+#include "InventoryItem.h"
 
 class Avatar : public Character
 {
@@ -15,13 +17,13 @@ private:
 	 *
 	 */
 	int userID; //this will eventually be a User type object
-	void takeObject(Object object);
-	void putObject(Object object, Object containerObject);
-	void dropObject(Object object);
-	void giveObject(Object object, Character receivingCharacter);
-	int wearObject(Object object);
-	int removeObject(Object object);
-	void attack(NonUserCharacter characterToAttack); //eventually make this a character, not necessarily an npc >:)
+	void takeObject(InventoryItem inventoryItem); //adds Object object to Inventory
+	void putObject(InventoryItem object, ContainerItem containerObject) ;
+	void dropObject(InventoryItem inventoryItem);
+	void giveObject(InventoryItem inventoryItem, Character receivingCharacter);
+	int wearObject(InventoryItem inventoryItem);
+	int removeObject(InventoryItem inventoryItem);
+	void attack(NonUserCharacter characterToAttack);
 	void kill(NonUserCharacter characterToKill);
 	void flee();
 };
