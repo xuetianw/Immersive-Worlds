@@ -17,7 +17,7 @@ endif()
 enable_testing()
 
 ## Add your test .cpp file here
-add_executable(run_tests networkTests.cpp)
+add_executable(run_tests networkTests.cpp roomTest.cpp)
 target_link_libraries(run_tests gmock gtest gtest_main)
 
 set_target_properties(run_tests

@@ -73,6 +73,6 @@ CusJson::Area WorldContainer::getArea(const int &areaId) {
 }
 
 channel::Room WorldContainer::getRoom(const int &roomId) {
-    return channel::Room(__cxx11::basic_string(), __cxx11::basic_string());
+    return channel::Room("test room Name", "test room description");
 }
 
