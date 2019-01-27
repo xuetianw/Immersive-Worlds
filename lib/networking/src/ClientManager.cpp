@@ -1,71 +1,99 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Authors: Asim, Nirag, Vincent
+// Created On: January 26, 2019
 //
-// Created by vinshit on 24/01/19.
+// The file implements ClientManager which is responsible for managing clients connected to the
+// server and users registered with the application.
 //
+// This file is distributed under the MIT License. See the LICENSE file
+// for details.
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
 
 #include <ClientManager.h>
 
+//////////////////////////////////////////////PUBLIC///////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+Message ClientManager::promptLogin(uintptr_t connectionId, const Message& message) {
+    auto userIter = _connectedUserMap.find(connectionId);
+    User& user = userIter->second;
 
-bool findUserAccount(User user) {
-    return true;
-}
+    // Response to be sent back to the specific user
+    std::ostringstream response;
 
+    switch(user.state) {
+        case State::CONNECTED:
+            user.state = State::LOGGING_IN_USER;
+            response << "Please enter your username:\n";
+            break;
+        case State::LOGGING_IN_USER:
+            // TODO: Implement DBUtility to validate username for a registered user in the database
+            user.username = message.text;
+            user.state = State::LOGGING_IN_PWD;
+            response << "Please enter your password:\n";
+            break;
+        case State::LOGGING_IN_PWD:
+            //TODO: Implement DBUtility to authenticate user
+            auto dummyUser = _userData.find(user.username);
+            if (dummyUser != _userData.end() && dummyUser->second == message.text) {
+                user.state = State::LOGGED_IN;
+                response << "Successfully logged in!\n";
+            } else {
+                user.state = State::LOGGING_IN_USER;
+                response << "Login Unsuccessful\nPlease enter your username again:\n";
+            }
+            break;
+        default:
+            // Execution should never reach here.
+            // TODO: Log the state on server
+            std::cout << "Invalid State: " << user.state << endl;
 
-Message ClientManager::promptLogin(uintptr_t connection_id, const Message& message) {
-    auto found_connection = connectedUserMap.find(connection_id);
-    User &foundUser = found_connection->second;
-
-    if(foundUser.state == State::CONNECTED) {
-        foundUser.username = message.text;
-        foundUser.state = State::LOGGING_IN_USER;
-        return Message{connection_id, "Please enter your Password:"};
+            response << "Invalid Request\nPlease try logging in again\n" << message.connection.id;
+            response << "> " << message.text + "\n";
     }
 
-    if(foundUser.state == State::LOGGING_IN_PWD) {
-        foundUser.password = connection_id;
-        //TODO: Implement findUserAccountusers to login
-        if (findUserAccount(foundUser)) {
-            foundUser.state = State::LOGGED_IN;
-            return Message{connection_id, "Sucessfully logged in!:"};
-        }
-        else {
-            foundUser.state = State::CONNECTED;
-            return Message{connection_id, "Login Unsucessfull"};
-        }
-    }
-
-    return Message{connection_id, "Sucessfully Logged In."};
+    return Message{connectionId, response.str()};
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
 bool ClientManager::isLoggedIn(uintptr_t connectionId, string username) {
-    auto found_connection = connectedUserMap.find(connectionId);
-    if(found_connection == connectedUserMap.end()){
-        return false;
-    } else {
-        User foundUser = found_connection->second;
-        return !(foundUser.state != State::LOGGED_IN);
+    auto userIter = _connectedUserMap.find(connectionId);
+    if(userIter != _connectedUserMap.end()) {
+        return userIter->second.state == State::LOGGED_IN;
     }
+
+    return false;
 }
 
-// A stub to register a client
-bool ClientManager::registerClient(uintptr_t connectionId) { 
-    auto found_connection = connectedUserMap.find(connectionId);
-    if(found_connection == connectedUserMap.end()){
-        User newUser{State::CONNECTED};
-        connectedUserMap.insert(std::pair(connectionId, newUser));
+///////////////////////////////////////////////////////////////////////////////////////////////////
+bool ClientManager::registerClient(uintptr_t connectionId) {
+    if(_connectedUserMap.find(connectionId) == _connectedUserMap.end()){
+        User user {State::CONNECTED};
+        _connectedUserMap.insert(std::make_pair(connectionId, user));
         return true;
-    } else {
-        std::cout << "This connection is not unique: " << connectionId << "\n";
-        return false;
     }
+
+    // TODO: Manage non-unique connections when database schema is defined
+    std::cout << "This connection is not unique: " << connectionId << endl;
+    return false;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
 bool ClientManager::unregisterClient(uintptr_t connectionId) {
-    connectedUserMap.erase(connectionId);
+    _connectedUserMap.erase(connectionId);
     return true;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+bool ClientManager::isBeingProcessed(uintptr connectionId) {
+    auto userIter = _connectedUserMap.find(connectionId);
+    if(userIter != _connectedUserMap.end()) {
+        return userIter->second.inProcess;
+    }
+
+    return false;
+}
 
 
 
