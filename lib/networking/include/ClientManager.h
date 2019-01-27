@@ -45,6 +45,45 @@ public:
     ClientManager() { }
 
     /*
+     * desc: Checks whether a client is currently being served or is in process
+     *       Indicates when a client is in the middle of login or other system state
+     *
+     * connection: a unique client connection id
+     *
+     * returns true if the client is being processed, false otherwise
+     */
+    bool isBeingProcessed(uintptr_t connectionId) const;
+
+    /*
+     * desc: Prompt user for username and password during login
+     *
+     * connectionId: a unique client connection id
+     * message: request from the client, could be a system command, process message or char message
+     *
+     * returns the response message to the client
+     */
+    Message promptLogin(const Message& message);
+
+    /*
+     * desc: Checks whether a client is logged in
+     *
+     * connection: a unique client connection id
+     * username: unique username to identify a specific client
+     *
+     * returns true if the client exists, false otherwise
+     */
+    bool isLoggedIn(uintptr_t connectionId) const;
+
+    /*
+     * desc: This function is called to logout a user
+     *
+     * connectionId: a unique client connection id
+     *
+     * returns true if user is able to successfully logout, false otherwise
+     */
+    bool logoutClient(uintptr_t connectionId);
+
+    /*
      * desc: Registers a client when connected
      *
      * connection: a unique client connection id
@@ -61,36 +100,6 @@ public:
      * returns the registered client, null if failed to register
      */
     bool unregisterClient(uintptr_t connectionId);
-
-    /*
-     * desc: Prompt user for username and password during login
-     *
-     * connectionId: a unique client connection id
-     * message: request from the client, could be a system command, process message or char message
-     *
-     * returns the response message to the client
-     */
-    Message promptLogin(uintptr_t connectionId, const Message& message);
-
-    /*
-     * desc: Checks whether a client is logged in
-     *
-     * connection: a unique client connection id
-     * username: unique username to identify a specific client
-     *
-     * returns true if the client exists, false otherwise
-     */
-    bool isLoggedIn(uintptr_t connectionId, string username = "");
-
-    /*
-     * desc: Checks whether a client is currently being served or is in process
-     *       Indicates when a client is in the middle of login or other system state
-     *
-     * connection: a unique client connection id
-     *
-     * returns true if the client is being processed, false otherwise
-     */
-    bool isBeingProcessed(uintptr_t connectionId);
 
 private:
     // A map to store currently registered users

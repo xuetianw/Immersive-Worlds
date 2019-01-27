@@ -14,14 +14,34 @@
 #include <sstream>
 #include <unistd.h>
 
-#include <ClientManager.h>
+#include "ClientManager.h"
 
 using namespace std;
 
 //////////////////////////////////////////////PUBLIC///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Message ClientManager::promptLogin(uintptr_t connectionId, const Message& message) {
+bool ClientManager::isBeingProcessed(uintptr_t connectionId) const {
     auto userIter = _connectedUserMap.find(connectionId);
+    if(userIter != _connectedUserMap.end()) {
+        return userIter->second.inProcess;
+    }
+
+    return false;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+bool ClientManager::isLoggedIn(uintptr_t connectionId) const {
+    auto userIter = _connectedUserMap.find(connectionId);
+    if(userIter != _connectedUserMap.end()) {
+        return userIter->second.state == State::LOGGED_IN;
+    }
+
+    return false;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+Message ClientManager::promptLogin(const Message& message) {
+    auto userIter = _connectedUserMap.find(message.connection.id);
     User& user = userIter->second;
 
     // Response to be sent back to the specific user
@@ -30,6 +50,7 @@ Message ClientManager::promptLogin(uintptr_t connectionId, const Message& messag
     switch(user.state) {
         case State::CONNECTED: {
             user.state = State::LOGGING_IN_USER;
+            user.inProcess = true;
             response << "Please enter your username:\n";
             break;
         }
@@ -45,6 +66,7 @@ Message ClientManager::promptLogin(uintptr_t connectionId, const Message& messag
             auto dummyUser = _userData.find(user.username);
             if (dummyUser != _userData.end() && dummyUser->second == message.text) {
                 user.state = State::LOGGED_IN;
+                user.inProcess = false;
                 response << "Successfully logged in!\n";
             } else {
                 user.state = State::LOGGING_IN_USER;
@@ -56,21 +78,21 @@ Message ClientManager::promptLogin(uintptr_t connectionId, const Message& messag
             // Execution should never reach here.
             // TODO: Log the state on server
 
+            user.inProcess = false;
             response << "Invalid Request\nPlease try logging in again\n" << message.connection.id;
             response << "> " << message.text + "\n";
     }
 
-    return Message{connectionId, response.str()};
+    return Message{message.connection.id, response.str()};
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::isLoggedIn(uintptr_t connectionId, string username) {
+bool ClientManager::logoutClient(uintptr_t connectionId) {
     auto userIter = _connectedUserMap.find(connectionId);
-    if(userIter != _connectedUserMap.end()) {
-        return userIter->second.state == State::LOGGED_IN;
-    }
-
-    return false;
+    User& user = userIter->second;
+    user.state = State::CONNECTED;
+    user.inProcess = false;
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,16 +112,6 @@ bool ClientManager::registerClient(uintptr_t connectionId) {
 bool ClientManager::unregisterClient(uintptr_t connectionId) {
     _connectedUserMap.erase(connectionId);
     return true;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::isBeingProcessed(uintptr_t connectionId) {
-    auto userIter = _connectedUserMap.find(connectionId);
-    if(userIter != _connectedUserMap.end()) {
-        return userIter->second.inProcess;
-    }
-
-    return false;
 }
 
 
