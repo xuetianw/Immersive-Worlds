@@ -98,12 +98,15 @@ bool ClientManager::logoutClient(uintptr_t connectionId) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool ClientManager::registerClient(uintptr_t connectionId) {
     if(_connectedUserMap.find(connectionId) == _connectedUserMap.end()){
+        //TODO
+        // before creating another user, check if the user exists
         User user {State::CONNECTED};
         _connectedUserMap.insert(std::make_pair(connectionId, user));
         return true;
     }
 
     // TODO: Manage non-unique connections when database schema is defined
+    // connectionId is always unique
     std::cout << "This connection is not unique: " << connectionId << endl;
     return false;
 }

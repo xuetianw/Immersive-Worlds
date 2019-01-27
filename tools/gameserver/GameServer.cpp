@@ -60,7 +60,7 @@ std::deque<Message> processMessages(Server &server,
             }
         } else if(message.text == "/login" || clientManager.isBeingProcessed(message.connection.id)) {
             Message responseMessage = clientManager.promptLogin(message);
-            server.sendPrivateMessage(responseMessage);
+            server.sendSingleMessage(responseMessage);
         } else {
             result << message.connection.id << "> " << message.text << endl;
         }

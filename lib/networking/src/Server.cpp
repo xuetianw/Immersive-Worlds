@@ -359,15 +359,12 @@ Server::receive() {
 void
 Server::send(const std::deque<Message>& messages) {
   for (auto& message : messages) {
-    auto found = impl->channels.find(message.connection);
-    if (impl->channels.end() != found) {
-      found->second->send(message.text);
-    }
+      sendSingleMessage(message);
   }
 }
 
 void
-Server::sendPrivateMessage(const Message &message) {
+Server::sendSingleMessage(const Message &message) {
     auto found = impl->channels.find(message.connection);
     if (impl->channels.end() != found) {
         found->second->send(message.text);

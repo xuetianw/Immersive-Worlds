@@ -117,7 +117,7 @@ public:
    *  Send a list of messages to a specific Client. The messages may not
    *  contain carriage returns.
    */
-  void sendPrivateMessage(const Message &message);
+  void sendSingleMessage(const Message &message);
 
   /**
    *  Receive Message instances from Client instances. This returns all Message

@@ -19,6 +19,7 @@ using networking::Connection;
 using networking::Message;
 using std::string;
 
+// can you put more comments here?
 enum class State {
     LOGGED_IN,
     CONNECTED,
