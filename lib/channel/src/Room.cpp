@@ -95,6 +95,6 @@ vector<Room> Room::getAllDoors() const {
   return rooms;
 }
 
-void Room::addRoom(int roomId, const Room& room) {
-  _doors.insert(make_pair(roomId, room));
+void Room::addRoom(int roomId, Room& room) {
+  _doors.emplace(roomId, room);
 }

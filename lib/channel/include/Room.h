@@ -5,6 +5,7 @@
 #ifndef CHANNEL_ROOM_H
 #define CHANNEL_ROOM_H
 
+#include <utility>
 #include <string>
 #include <deque>
 #include <unordered_map>
@@ -22,7 +23,7 @@ namespace channel {
     string _description;
     unordered_map<int, string> _avatars;  //TODO change generic type to Avatar/Character
     unordered_map<int, string> _objects;  //TODO change generic type to ItemObject
-    unordered_map<int, Room> _doors;
+    unordered_map<int, Room&> _doors;
 
   public:
     Room();
@@ -53,7 +54,7 @@ namespace channel {
 
     vector<Room> getAllDoors() const;
 
-    void addRoom(int roomId, const Room& room);
+    void addRoom(int roomId, Room& room);
   };
 }
 
