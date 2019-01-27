@@ -20,10 +20,10 @@ using namespace std;
 
 //////////////////////////////////////////////PUBLIC///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::isBeingProcessed(uintptr_t connectionId) const {
+bool ClientManager::isClientBeingPromptedToCompleteServerRequest(uintptr_t connectionId) const {
     auto userIter = _connectedUserMap.find(connectionId);
     if(userIter != _connectedUserMap.end()) {
-        return userIter->second.inProcess;
+        return userIter->second.isBeingPrompted;
     }
 
     return false;
@@ -50,7 +50,7 @@ Message ClientManager::promptLogin(const Message& message) {
     switch(user.state) {
         case State::CONNECTED: {
             user.state = State::LOGGING_IN_USER;
-            user.inProcess = true;
+            user.isBeingPrompted = true;
             response << "Please enter your username:\n";
             break;
         }
@@ -66,7 +66,7 @@ Message ClientManager::promptLogin(const Message& message) {
             auto dummyUser = _userData.find(user.username);
             if (dummyUser != _userData.end() && dummyUser->second == message.text) {
                 user.state = State::LOGGED_IN;
-                user.inProcess = false;
+                user.isBeingPrompted = false;
                 response << "Successfully logged in!\n";
             } else {
                 user.state = State::LOGGING_IN_USER;
@@ -78,7 +78,7 @@ Message ClientManager::promptLogin(const Message& message) {
             // Execution should never reach here.
             // TODO: Log the state on server
 
-            user.inProcess = false;
+            user.isBeingPrompted = false;
             response << "Invalid Request\nPlease try logging in again\n" << message.connection.id;
             response << "> " << message.text + "\n";
     }
@@ -91,7 +91,7 @@ bool ClientManager::logoutClient(uintptr_t connectionId) {
     auto userIter = _connectedUserMap.find(connectionId);
     User& user = userIter->second;
     user.state = State::CONNECTED;
-    user.inProcess = false;
+    user.isBeingPrompted = false;
     return true;
 }
 

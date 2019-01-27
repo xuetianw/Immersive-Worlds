@@ -19,7 +19,7 @@ using networking::Connection;
 using networking::Message;
 using std::string;
 
-// can you put more comments here?
+// User State during a system command such as '/login'
 enum class State {
     LOGGED_IN,
     CONNECTED,
@@ -31,9 +31,9 @@ struct User {
     string username;
     string password;
     State state;
-    bool inProcess;
+    bool isBeingPrompted;
 
-    User( State state ) : username(""), password(""), state(state), inProcess(false) {}
+    User( State state ) : username(""), password(""), state(state), isBeingPrompted(false) {}
 };
 
 class ClientManager {
@@ -46,14 +46,17 @@ public:
     ClientManager() { }
 
     /*
-     * desc: Checks whether a client is currently being served or is in process
-     *       Indicates when a client is in the middle of login or other system state
+     * desc: Checks whether a client is currently being served or is in process.
+     *       A system command (/login) requires multiple requests and responses before
+     *       a client is logged in.
+     *       This function indicates whether a client is responding
+     *       to a server prompt or sending a separate request.
      *
-     * connection: a unique client connection id
+     * connectionId: a unique client connection id
      *
-     * returns true if the client is being processed, false otherwise
+     * returns true if the client is responding to a previous server prompt, false otherwise
      */
-    bool isBeingProcessed(uintptr_t connectionId) const;
+    bool isClientBeingPromptedToCompleteServerRequest(uintptr_t connectionId) const;
 
     /*
      * desc: Prompt user for username and password during login
