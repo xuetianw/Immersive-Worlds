@@ -3,112 +3,112 @@
 //
 
 #include "networkTests.h"
-#include "gtest/gtest.h"
-#include "Server.h"
-#include "Client.h"
 #include "Area.h"
+#include "Client.h"
 #include "Room.h"
+#include "Server.h"
 #include "World.h"
+#include "gtest/gtest.h"
 
-class BasicTest : public::testing::Test{
-  protected:
-    virtual void SetUp(){
+using channel::Area;
+using channel::Room;
+using channel::World;
 
-    }
+class BasicTest : public ::testing::Test {
+protected:
+  virtual void SetUp() {}
 
-    virtual void TearDown(){
-
-    }
+  virtual void TearDown() {}
 };
 
-TEST_F(BasicTest,Test_Nothing){
+TEST_F(BasicTest, Test_Nothing) {
   const int one = 1;
   const int two = 2;
-  EXPECT_NE(one,two);
+  EXPECT_NE(one, two);
 }
 
 /**
  * Channel Tests: Area
- */  
+ */
 TEST(AreaTest, Test_Area_GetId) {
   int id = 1;
-  
-  channel::Area *area = new channel::Area(id);
-  EXPECT_EQ(id, area->getId());
+
+  Area area = Area(id);
+  EXPECT_EQ(id, area.getId());
 }
 
 TEST(AreaTest, Test_Area_GetId_Fail) {
   int id = 1;
   int failId = 3;
-  
-  channel::Area *area = new channel::Area(id);
-  EXPECT_NE(failId, area->getId());
+
+  Area area = Area(id);
+  EXPECT_NE(failId, area.getId());
 }
 
 TEST(AreaTest, Test_Area_Add_Room) {
   std::string name = "room_name";
   std::string desc = "description";
-  
-  channel::Room *room = new channel::Room(name, desc);
+
+  Room room = Room(name, desc);
 
   int id = 1;
-  channel::Area *area = new channel::Area(id);
+  Area area = Area(id);
 
-  auto result = area->addRoom(*room);
+  bool result = area.addRoom(room);
   EXPECT_EQ(true, result);
 }
 
 TEST(AreaTest, Test_Area_Add_Room_Fail) {
   std::string name = "room_name";
   std::string desc = "description";
-  
-  channel::Room *room = new channel::Room(name, desc);
+
+  Room room = Room(name, desc);
 
   int id = 1;
-  channel::Area *area = new channel::Area(id);
+  Area area = Area(id);
 
-  area->addRoom(*room);
+  area.addRoom(room);
 
-  auto result = area->addRoom(*room);
+  bool result = area.addRoom(room);
   EXPECT_EQ(false, result);
 }
 
 TEST(World, Test_World_GetId) {
   int id = 1;
-  
-  channel::World *world = new channel::World(id);
-  EXPECT_EQ(id, world->getId());
+
+  World world = World(id);
+  EXPECT_EQ(id, world.getId());
 }
 
 TEST(AreaTest, Test_World_GetId_Fail) {
   int id = 1;
   int failId = 3;
-  
-  channel::World *world = new channel::World(id);
-  EXPECT_NE(failId, world->getId());
+
+  World world = World(id);
+  EXPECT_NE(failId, world.getId());
 }
 
 TEST(AreaTest, Test_World_Add_Area) {
   int area_id = 1;
-  
-  channel::Area *area = new channel::Area(area_id);
+
+  Area area = Area(area_id);
 
   int world_id = 1;
-  channel::World *world = new channel::World(world_id);
+  World world = World(world_id);
 
-  auto result = world->addArea(*area);
+  bool result = world.addArea(area);
   EXPECT_EQ(true, result);
 }
 
 TEST(AreaTest, Test_World_Add_Area_Fail) {
   int area_id = 1;
-  channel::Area *area = new channel::Area(area_id);
+  Area area = Area(area_id);
 
   int world_id = 1;
-  channel::World *world = new channel::World(world_id);
+  World world = World(world_id);
 
-  world->addArea(*area);
-  auto result = world->addArea(*area);
+  world.addArea(area);
+  bool result = world.addArea(area);
 
   EXPECT_EQ(false, result);
 }
