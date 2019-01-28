@@ -5,6 +5,9 @@
 #ifndef ADVENTURE2019_LOGIN_H
 #define ADVENTURE2019_LOGIN_H
 
+
+#include <string>
+
 void login(std::string username, std::string password);
 static int validatePassword(std::string password);
 bool checkUserNameExistence(std::string username);

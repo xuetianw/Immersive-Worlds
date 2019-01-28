@@ -29,7 +29,6 @@ namespace networking {
 
 class Channel;
 
-
 class ServerImpl {
 public:
 
@@ -360,11 +359,16 @@ Server::receive() {
 void
 Server::send(const std::deque<Message>& messages) {
   for (auto& message : messages) {
+      sendSingleMessage(message);
+  }
+}
+
+void
+Server::sendSingleMessage(const Message &message) {
     auto found = impl->channels.find(message.connection);
     if (impl->channels.end() != found) {
-      found->second->send(message.text);
+        found->second->send(message.text);
     }
-  }
 }
 
 
