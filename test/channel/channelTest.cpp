@@ -2,7 +2,7 @@
 // Created by vinshit on 20/01/19.
 //
 
-#include "networkTests.h"
+#include "channelTest.h"
 #include "Area.h"
 #include "Client.h"
 #include "Room.h"
@@ -16,15 +16,23 @@ using channel::World;
 
 // this just a sample test
 class BasicTest : public ::testing::Test {
+public:
+    std::vector<int> vectorTest;
 protected:
-  virtual void SetUp() {}
+  virtual void SetUp() override{
+    vectorTest.push_back(1);
+    vectorTest.push_back(2);
+  }
 
-  virtual void TearDown() {}
+  //TearDown() is not needed since we
+  // don't have to clean up after each test
+  virtual void TearDown() override{}
 };
 
 TEST_F(BasicTest, Test_Nothing) {
-  const int one = 1;
-  const int two = 2;
+  auto one = vectorTest.back();
+  vectorTest.pop_back();
+  auto two = vectorTest.back();
   EXPECT_NE(one, two);
 }
 
