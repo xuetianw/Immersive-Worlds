@@ -14,6 +14,7 @@ using channel::Area;
 using channel::Room;
 using channel::World;
 
+// this just a sample test
 class BasicTest : public ::testing::Test {
 protected:
   virtual void SetUp() {}
@@ -30,85 +31,41 @@ TEST_F(BasicTest, Test_Nothing) {
 /**
  * Channel Tests: Area
  */
-TEST(AreaTest, Test_Area_GetId) {
-  int id = 1;
 
-  Area area = Area(id);
-  EXPECT_EQ(id, area.getId());
+struct AreaTests : testing:: Test {
+    std::unique_ptr<Area> area = std :: make_unique<Area>(1);
+    std::unique_ptr<Room> room = std :: make_unique<Room>("room_name", "description");
+};
+
+TEST_F(AreaTests, Test_Area_GetId) {
+  EXPECT_EQ(1, area->getId());
+  EXPECT_NE(3, area->getId()); // this part might be redundant
 }
 
-TEST(AreaTest, Test_Area_GetId_Fail) {
-  int id = 1;
-  int failId = 3;
 
-  Area area = Area(id);
-  EXPECT_NE(failId, area.getId());
-}
-
-TEST(AreaTest, Test_Area_Add_Room) {
-  std::string name = "room_name";
-  std::string desc = "description";
-
-  Room room = Room(name, desc);
-
-  int id = 1;
-  Area area = Area(id);
-
-  bool result = area.addRoom(room);
+TEST_F(AreaTests, Test_Area_Add_Room) {
+  bool result = area->addRoom(*room);
   EXPECT_EQ(true, result);
-}
-
-TEST(AreaTest, Test_Area_Add_Room_Fail) {
-  std::string name = "room_name";
-  std::string desc = "description";
-
-  Room room = Room(name, desc);
-
-  int id = 1;
-  Area area = Area(id);
-
-  area.addRoom(room);
-
-  bool result = area.addRoom(room);
+  result = area->addRoom(*room);
   EXPECT_EQ(false, result);
 }
 
-TEST(World, Test_World_GetId) {
-  int id = 1;
 
-  World world = World(id);
-  EXPECT_EQ(id, world.getId());
+struct WorldTests : testing:: Test {
+    std::unique_ptr<World> world = std :: make_unique<World>(1);
+    std::unique_ptr<Area> area = std :: make_unique<Area>(1);
+};
+
+TEST_F(WorldTests, Test_World_GetId) {
+  EXPECT_EQ(1, world->getId());
+  EXPECT_NE(3, world->getId());
 }
 
-TEST(AreaTest, Test_World_GetId_Fail) {
-  int id = 1;
-  int failId = 3;
 
-  World world = World(id);
-  EXPECT_NE(failId, world.getId());
-}
-
-TEST(AreaTest, Test_World_Add_Area) {
-  int area_id = 1;
-
-  Area area = Area(area_id);
-
-  int world_id = 1;
-  World world = World(world_id);
-
-  bool result = world.addArea(area);
+TEST_F(WorldTests, Test_World_Add_Area) {
+  bool result = world->addArea(*area);
   EXPECT_EQ(true, result);
-}
-
-TEST(AreaTest, Test_World_Add_Area_Fail) {
-  int area_id = 1;
-  Area area = Area(area_id);
-
-  int world_id = 1;
-  World world = World(world_id);
-
-  world.addArea(area);
-  bool result = world.addArea(area);
-
+  result = world->addArea(*area);
   EXPECT_EQ(false, result);
 }
+
