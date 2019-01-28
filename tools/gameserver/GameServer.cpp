@@ -58,7 +58,7 @@ std::deque<Message> processMessages(Server &server,
             } else {
                 response = "User not logged in!\n";
             }
-        } else if(message.text == "/login" || clientManager.isClientBeingPromptedToCompleteServerRequest(message.connection.id)) {
+        } else if(message.text == "/login" || clientManager.isClientBeingPromptedByServer(message.connection.id)) {
             Message responseMessage = clientManager.promptLogin(message);
             server.sendSingleMessage(responseMessage);
         } else {
@@ -66,7 +66,7 @@ std::deque<Message> processMessages(Server &server,
         }
     }
 
-    return std::deque<Message>();
+    return clientManager.buildOutgoing(result.str());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

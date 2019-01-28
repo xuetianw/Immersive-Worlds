@@ -31,9 +31,8 @@ struct User {
     string username;
     string password;
     State state;
-    bool isBeingPrompted;
 
-    User( State state ) : username(""), password(""), state(state), isBeingPrompted(false) {}
+    User( State state ) : username(""), password(""), state(state) {}
 };
 
 class ClientManager {
@@ -46,6 +45,15 @@ public:
     ClientManager() { }
 
     /*
+     * desc: Builds an outgoing queue of messages to be sent to every connected client
+     *
+     * log: String representing the message response
+     *
+     * returns a queue of Messages
+     */
+    std::deque<Message> buildOutgoing(const std::string& log) const;
+
+    /*
      * desc: Checks whether a client is currently being served or is in process.
      *       A system command (/login) requires multiple requests and responses before
      *       a client is logged in.
@@ -56,7 +64,7 @@ public:
      *
      * returns true if the client is responding to a previous server prompt, false otherwise
      */
-    bool isClientBeingPromptedToCompleteServerRequest(uintptr_t connectionId) const;
+    bool isClientBeingPromptedByServer(uintptr_t connectionId) const;
 
     /*
      * desc: Prompt user for username and password during login
