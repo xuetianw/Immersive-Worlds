@@ -33,8 +33,8 @@ namespace channel {
              * 
              * @returns true = inserted in the map. false = id already exists in map
              */
-            bool addRoom(Room room);
-
+            bool addRoom(const Room &room);
+      vector<Room> tempRoomContainer;
         private:
             int _id = 0; //TODO make area id unique
             unordered_map<int, Room> _rooms;
