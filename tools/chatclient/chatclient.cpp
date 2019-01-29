@@ -32,6 +32,7 @@ main(int argc, char* argv[]) {
   };
 
   ChatWindow chatWindow(onTextEntry);
+  chatWindow.displayText("Welcome to our game (?) Enter your Username:");
   while (!done && !client.isDisconnected()) {
     try {
       client.update();

@@ -1,0 +1,26 @@
+Coding Conventions
+
+lowerCamelCase for functions and variables
+
+private variables
+    - Private variables must have '_' in the start
+    - Ex.
+        - int _id;
+
+comments functions
+    - /*
+       * Desc:  ...
+       * Param: ...
+       * 
+       * Returns: 
+       */
+
+protected branches
+    - Master
+        - For Iterations
+        - Working Build
+    - Staging
+        - Weekly Iterations
+    - Development
+        - Incremental Features
+        - Pushed Nightly

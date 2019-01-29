@@ -113,6 +113,12 @@ public:
    */
   void send(const std::deque<Message>& messages);
 
+    /**
+   *  Send a list of messages to a specific Client. The messages may not
+   *  contain carriage returns.
+   */
+  void sendSingleMessage(const Message &message);
+
   /**
    *  Receive Message instances from Client instances. This returns all Message
    *  instances collected by previous calls to Server::update() and not yet

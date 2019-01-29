@@ -164,7 +164,7 @@ void
 ChatWindowImpl::displayText(const std::string& text) {
   // This variadic function is part of the curses interface.
   // NOLINTNEXTLINE (cppcoreguidelines-pro-type-vararg)
-  wprintw(view, "%s", text.c_str());
+  wprintw(view, "%s\n", text.c_str());
 }
 
 

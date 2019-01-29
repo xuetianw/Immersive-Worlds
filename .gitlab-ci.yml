@@ -1,0 +1,12 @@
+stages:
+  - build
+
+my_job:
+  stage: build
+  tags:
+    - jacky
+  script:
+    - mkdir my-build
+    - cd my-build
+    - cmake ..
+    - make
