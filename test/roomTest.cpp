@@ -21,7 +21,11 @@ class RoomTest : public::testing::Test{
 };
 
 TEST_F(RoomTest,Test_Nothing){
-  channel::Room testRoom {"test name", 0001};
-  json j = testRoom;
-  EXPECT_EQ(j.at("name"), "test name");
+  channel::Room testRoom {"test name", 1234};
+  json roomJson = testRoom;
+  EXPECT_EQ(roomJson.at("name"), "test name");
+  EXPECT_EQ(roomJson.at("id"), 1234);
+  auto roomFromJson = roomJson.get<channel::Room>();
+  EXPECT_EQ(roomFromJson.getId(), 1234);
+  EXPECT_EQ(roomFromJson.getName(), "test name");
 }
