@@ -51,7 +51,7 @@ bool Inventory::removeItems(std::vector<InventoryItem> itemsToRemove){
 //                    item.quantity -= newItem.quantity;
 //                } else{
 //                    //item in inventory is less than amount requested to remove
-//                    return false;
+                    return false;
 //                }
 //
 //            }

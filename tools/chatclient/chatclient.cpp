@@ -11,51 +11,10 @@
 
 #include "ChatWindow.h"
 #include "Client.h"
-#include "CusJson.h"
-
-#include <fstream>
-#include <nlohmann/json.hpp>
-#include "string"
-
-using json = nlohmann::json;
-
-void jsonTest() {
-  std::ifstream solaceFile;
-  solaceFile.open("/home/user/CMPT373/adventure2019/doc/solace.json"); // Need help with this
-  std::string a;
-  if (!solaceFile) {
-      std::cout << "File was unable to open";
-  } else {
-      json solaceJson;
-      solaceFile >> solaceJson;
-      auto solaceWorld = solaceJson.get<CusJson::World>();
-
-      std::cout << solaceWorld.area.name << std::endl;
-      for (CusJson::NPC npc : solaceWorld.NPCS) {
-          std::cout << "npc id: " + std::to_string(npc.id) << std::endl;
-          for (std::string keyword : npc.keywords) {
-              std::cout << "keywords: "+ keyword << std::endl;
-          }
-
-          std::cout << "shortdesc: "+ npc.shortdesc << std::endl;
-          for (std::string longdesc : npc.longdesc) {
-              std::cout << "longdesc: "+ longdesc << std::endl;
-          }
-
-          for (std::string description : npc.description) {
-              std::cout << description << std::endl;
-          }
-          std::cout << std::endl;
-      }
-
-  }
-  solaceFile.close();
-}
 
 int
 main(int argc, char* argv[]) {
   if (argc < 3) {
-      jsonTest(); // TODO remove testing function
     std::cerr << "Usage: \n  " << argv[0] << " <ip address> <port>\n"
               << "  e.g. " << argv[0] << " localhost 4002\n";
     return 1;
@@ -73,6 +32,7 @@ main(int argc, char* argv[]) {
   };
 
   ChatWindow chatWindow(onTextEntry);
+  chatWindow.displayText("Welcome to our game (?) Enter your Username:");
   while (!done && !client.isDisconnected()) {
     try {
       client.update();

@@ -12,8 +12,24 @@ private:
     MessageType type;               // type of message
     std::string message_text;       // text that user inputted
     std::vector<int> to_user_id;    // list of user id that the message will be sent to
-
 public:
+    int getAuthor_user_id() const;
+
+    void setAuthor_user_id(int author_user_id);
+
+    MessageType getType() const;
+
+    void setType(MessageType type);
+
+    const std::string &getMessage_text() const;
+
+    void setMessage_text(const std::string &message_text);
+
+    const std::vector<int> &getTo_user_id() const;
+
+    void setTo_user_id(const std::vector<int> &to_user_id);
+
+
     /**
      * The constructor for the message class. Will call the getMessageType function to 
      * assing the object value type.
@@ -29,12 +45,12 @@ public:
      * 
      * @param type: "say", "yell", "tell", "error"
      */
-    MessageType getMessageType(std::string type); 
+    static MessageType getMessageType(std::string type);
 
     /** 
      * Add a user_id to the list
      * @param user_id: the id that will receive the message
-     */  
+     */
 
     void addUser(int id);
 };

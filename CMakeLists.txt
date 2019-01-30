@@ -8,7 +8,7 @@ set(PACKAGE_BUGREPORT "wsumner@sfu.ca")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fno-rtti")
-set(CMAKE_CXX_FLAGS_DEBUG 
+set(CMAKE_CXX_FLAGS_DEBUG
     "-O0 -g -fsanitize=address,undefined -fno-omit-frame-pointer"
 )
 
@@ -21,7 +21,6 @@ link_directories(${LIBRARY_OUTPUT_PATH})
 set(CMAKE_TEMP_LIBRARY_PATH "${PROJECT_BINARY_DIR}/lib")
 
 add_subdirectory(lib)
-add_subdirectory(login)
 add_subdirectory(tools)
 add_subdirectory(test)
 
