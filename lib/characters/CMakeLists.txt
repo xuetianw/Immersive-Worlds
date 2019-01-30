@@ -24,8 +24,5 @@ install(TARGETS characters
 
 target_link_libraries(characters
         PUBLIC
-        channel)
-
-target_link_libraries(characters
-        PUBLIC
+        channel
         inventory)
