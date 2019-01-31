@@ -5,6 +5,7 @@
 #ifndef WEBSOCKETNETWORKING_NONUSERCHARACTER_H
 #define WEBSOCKETNETWORKING_NONUSERCHARACTER_H
 
+#include "character.h"
 
 class NonUserCharacter : public Character{
 
