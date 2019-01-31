@@ -5,11 +5,14 @@
 #ifndef WEBSOCKETNETWORKING_COMMANDPROCESSOR_H
 #define WEBSOCKETNETWORKING_COMMANDPROCESSOR_H
 
+
+#include "Server.h"
 #include "string"
 #include "map"
-#include "Server.h"
-using namespace std;
-using namespace networking;
+
+using std::string;
+using std::map;
+using networking::Message;
 
 enum class command{
     LOGIN,
@@ -27,10 +30,8 @@ enum class command{
     DROP
 };
 
-// maps input command to enum value, which in turn points to a specific API
-map<string,command> commandMap;
-
-
 void parseCommand(Message message);
+
+bool isCommand(Message message);
 
 #endif //WEBSOCKETNETWORKING_COMMANDPROCESSOR_H
