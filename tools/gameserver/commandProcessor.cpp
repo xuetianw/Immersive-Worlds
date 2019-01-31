@@ -28,17 +28,19 @@ bool parseCommand(Message message, ClientManager &clientManager, Server &server)
 
     if(words[0]=="/escape" && clientManager.isClientBeingPromptedByServer(message.connection.id)){
     //revert user login state
-    handleEscape(message, clientManager);
+        handleEscape(message, clientManager);
+
+        return true;
     }
     if(words[0]=="/login" ||  clientManager.isClientBeingPromptedByServer(message.connection.id)){
         Message responseMessage = clientManager.promptLogin(message);
         server.sendSingleMessage(responseMessage);
-    }
 
-
-    if(isCommand(message))
         return true;
-    return false;
+    }
+    //no command found
+    else
+        return false;
 }
 
 bool isCommand(Message message){

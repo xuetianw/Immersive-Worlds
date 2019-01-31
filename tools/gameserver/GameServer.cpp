@@ -47,8 +47,6 @@ std::deque<Message> processMessages(Server &server,
     std::ostringstream result;
     for (auto& message : incoming) {
 
-
-
         if (message.text == "quit") {
             server.disconnect(message.connection);
         } else if (message.text == "shutdown") {
