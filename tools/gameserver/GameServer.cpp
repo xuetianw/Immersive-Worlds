@@ -46,6 +46,9 @@ std::deque<Message> processMessages(Server &server,
                             bool &quit) {
     std::ostringstream result;
     for (auto& message : incoming) {
+
+
+
         if (message.text == "quit") {
             server.disconnect(message.connection);
         } else if (message.text == "shutdown") {
@@ -59,12 +62,18 @@ std::deque<Message> processMessages(Server &server,
             } else {
                 response = "User not logged in!\n";
             }
-        } else if(message.text == "/login" || clientManager.isClientBeingPromptedByServer(message.connection.id)) {
-            Message responseMessage = clientManager.promptLogin(message);
-            server.sendSingleMessage(responseMessage);
-        } else {
-            result << message.connection.id << "> " << message.text << endl;
         }
+        if(!parseCommand(message, clientManager, server))
+            result << message.connection.id << "> " << message.text << endl;
+
+//        else if(message.text == "/login" || clientManager.isClientBeingPromptedByServer(message.connection.id)) {
+//            Message responseMessage = clientManager.promptLogin(message);
+//            server.sendSingleMessage(responseMessage);
+//        }
+//        else {
+//            result << message.connection.id << "> " << message.text << endl;
+//        }
+
     }
 
     return clientManager.buildOutgoing(result.str());
