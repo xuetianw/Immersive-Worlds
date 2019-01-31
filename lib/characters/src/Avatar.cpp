@@ -11,14 +11,14 @@ void Avatar::takeObject(InventoryItem inventoryItem) {
 
 void Avatar::putObject(InventoryItem inventoryItem, ContainerItem containerObject) {
 //TODO fix this when you pull Lucy's code
-	//	 InventoryItem removedItem = characterInventory.removeItem(inventoryItem);
+	InventoryItem removedItem = characterInventory.removeItem(inventoryItem);
 
 }
 
 void Avatar::dropObject(InventoryItem inventoryItem) {
 //	TODO: uncomment these lines after pulling Lucy's code and after implementing an inventory in a room
-//	InventoryItem removedItem = characterInventory.removeItem(inventoryItem);
-//	currentRoom.inventory.addItem(removedItem);
+	InventoryItem removedItem = characterInventory.removeItem(inventoryItem);
+	currentRoom..addItem(removedItem);
 }
 
 InventoryItem Avatar::giveObject(InventoryItem inventoryItem) {
