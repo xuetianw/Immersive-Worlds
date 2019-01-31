@@ -7,12 +7,14 @@
 #include "Server.h"
 #include "vector"
 #include "boost/algorithm/string/split.hpp"
-#include <boost/algorithm/string/classification.hpp>
+#include "boost/algorithm/string/classification.hpp"
 
 #include "iostream"
 
 using namespace networking;
 using namespace std;
+
+std::map<command , std::string> mapCommands;
 
 //first we parse string using delimiter " "
 void parseCommand(Message message)

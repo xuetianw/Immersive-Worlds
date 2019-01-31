@@ -1,5 +1,7 @@
 add_executable(gameserver
-    GameServer.cpp)
+    GameServer.cpp
+        commandProcessor.cpp
+        )
 
 set_target_properties(gameserver
         PROPERTIES
