@@ -7,13 +7,17 @@
 
 #include "string"
 #include "map"
+#include "Server.h"
 using namespace std;
+using namespace networking;
 
 enum class command{
     LOGIN,
     LOGOUT,
+    QUIT,
+    SHUTDOWN,
     ESCAPE,
-    LIST,
+    HELP,
     GO,
     TELL,
     YELL,
@@ -25,5 +29,8 @@ enum class command{
 
 // maps input command to enum value, which in turn points to a specific API
 map<string,command> commandMap;
+
+
+void parseCommand(Message message);
 
 #endif //WEBSOCKETNETWORKING_COMMANDPROCESSOR_H

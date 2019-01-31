@@ -34,7 +34,7 @@ main(int argc, char* argv[]) {
   ChatWindow chatWindow(onTextEntry);
   chatWindow.displayText("Welcome to our game!\n"
                          "Enter /login to login\n"
-                         "Enter /list to display a list of console commands\n");
+                         "Enter /help to display a list of console commands\n");
   while (!done && !client.isDisconnected()) {
     try {
       client.update();

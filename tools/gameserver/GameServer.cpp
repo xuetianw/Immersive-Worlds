@@ -11,6 +11,7 @@
 
 #include "Server.h"
 #include "ClientManager.h"
+#include "../commandprocessor/commandProcessor.h"
 
 #include <iostream>
 #include <fstream>
