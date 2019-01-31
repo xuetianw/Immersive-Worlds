@@ -9,13 +9,9 @@
 #include "Server.h"
 #include "string"
 #include "map"
-
-
-using std::string;
-using std::map;
-using networking::Message;
-using networking::Server;
-
+#include "Server.h"
+using namespace std;
+using namespace networking;
 
 enum class command{
     LOGIN,
@@ -38,5 +34,7 @@ bool parseCommand(Message message, ClientManager &clientManager, Server& server)
 bool isCommand(Message message);
 
 void handleEscape(const Message message, ClientManager &clientManager);
+
+bool isCommand(Message message);
 
 #endif //WEBSOCKETNETWORKING_COMMANDPROCESSOR_H
