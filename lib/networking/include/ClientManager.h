@@ -55,7 +55,7 @@ public:
      *
      * returns true if the client is responding to a previous server prompt, false otherwise
      */
-    bool isClientPromptingLogin(Connection connection) const;
+    bool isClientPromptingLogin(const Connection &connection) const;
 
     /*
      * desc: Prompt user for username and password during login
@@ -75,7 +75,7 @@ public:
      *
      * returns true if the client exists, false otherwise
      */
-    bool isLoggedIn(uintptr_t connectionId) const;
+    bool isLoggedIn(const uintptr_t connectionId) const;
 
     /*
      * desc: This function is called to logout a user
@@ -84,7 +84,7 @@ public:
      *
      * returns true if user is able to successfully logout, false otherwise
      */
-    Message logoutClient(Message message);
+    Message logoutClient(const Message &message);
 
     /*
      * desc: Registers a client when connected
@@ -93,7 +93,7 @@ public:
      *
      * returns the registered client, null if failed to register
      */
-    bool registerClient(Connection connection);
+    bool registerClient(const Connection &connection);
 
     /*
      * desc: Unregisters a client when disconnected
@@ -102,7 +102,12 @@ public:
      *
      * returns the registered client, null if failed to register
      */
-    bool unregisterClient(Connection connection);
+    bool unregisterClient(const Connection &connection);
+
+    /*
+     * desc: Lets the user esscape the process he is currently in
+     */
+    Message escapeLogin(const Message &message);
 
 private:
     // A map to store currently registered users

@@ -20,7 +20,7 @@ using namespace std;
 
 //////////////////////////////////////////////PUBLIC///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::isClientPromptingLogin(Connection connection) const {
+bool ClientManager::isClientPromptingLogin(const Connection &connection) const {
     auto userIter = _connectedUserMap.find(connection.id);
     if(userIter != _connectedUserMap.end()) {
         return userIter->second.state == State::LOGGING_IN_USER ||
@@ -31,7 +31,7 @@ bool ClientManager::isClientPromptingLogin(Connection connection) const {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::isLoggedIn(uintptr_t connectionId) const {
+bool ClientManager::isLoggedIn(const uintptr_t connectionId) const {
     auto userIter = _connectedUserMap.find(connectionId);
     if(userIter != _connectedUserMap.end()) {
         return userIter->second.state == State::LOGGED_IN;
@@ -87,7 +87,7 @@ Message ClientManager::promptLogin(const Message& message) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Message ClientManager::logoutClient(Message message){
+Message ClientManager::logoutClient(const Message &message){
     string response;
     auto connectionId = message.connection.id;
     if(isLoggedIn(connectionId)) {
@@ -101,7 +101,7 @@ Message ClientManager::logoutClient(Message message){
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::registerClient(Connection connection) {
+bool ClientManager::registerClient(const Connection &connection) {
     if(_connectedUserMap.find(connection.id) == _connectedUserMap.end()){
         //TODO
         // before creating another user, check if the user exists
@@ -117,11 +117,27 @@ bool ClientManager::registerClient(Connection connection) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::unregisterClient(Connection connection) {
+bool ClientManager::unregisterClient(const Connection &connection) {
     _connectedUserMap.erase(connection.id);
     return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+Message ClientManager::escapeLogin(const Message& message) {
+
+    User& user = _connectedUserMap.find(message.connection.id)->second;
+    std::ostringstream response;
+
+    //revert back to connected
+    if(isClientPromptingLogin(message.connection)){
+        user.state = State::CONNECTED;
+        response << "You have exited out of the login process\n" << message.connection.id;
+    } else{
+        response << "Invalid command. Use when trying to log in\n" << message.connection.id;
+    }
+    return Message{message.connection.id, response.str()};
+
+}
 
 
 

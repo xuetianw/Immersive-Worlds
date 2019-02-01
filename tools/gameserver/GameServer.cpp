@@ -53,11 +53,11 @@ std::deque<Message> processMessages(CommandProcessor commandProcessor,
             std::cout << "Shutting down.\n";
             quit = true;
             //// TODO: if client is logging in are they allowed commands???? Perhaps implement only /quitlogin
-        } else if (clientManager.isClientPromptingLogin(message.connection)) {
-            result.push_back(clientManager.promptLogin(message));
-        } else if (commandProcessor.isMessageCommand(message)){
+        }else if (commandProcessor.isMessageCommand(message)){
             result.push_back(commandProcessor.processMessage(message));
-        } else {
+        }else if (clientManager.isClientPromptingLogin(message.connection)) {
+            result.push_back(clientManager.promptLogin(message));
+        }else {
             result.push_back((message));
         }
     }
@@ -69,6 +69,7 @@ CommandProcessor buildCommands(){
     CommandProcessor commandProcessor;
     commandProcessor.addCommand("/logout", [](Message message){return ::clientManager.logoutClient(message);});
     commandProcessor.addCommand("/login", [](Message message){return ::clientManager.promptLogin(message);});
+    commandProcessor.addCommand("/escape", [](Message message){return ::clientManager.escapeLogin(message);});
 
     return commandProcessor;
 }
