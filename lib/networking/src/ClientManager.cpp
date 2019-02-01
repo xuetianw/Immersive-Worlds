@@ -123,6 +123,22 @@ void ClientManager::unregisterClient(const Connection& connection) {
 //    return _connectedUserMap.find(connection.id) == _connectedUserMap.end();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+Message ClientManager::escapeLogin(const Message& message) {
+
+    User& user = _connectedUserMap.find(message.connection.id)->second;
+    std::ostringstream response;
+
+    //revert back to connected
+    if(isClientPromptingLogin(message.connection)){
+        user.state = State::CONNECTED;
+        response << "You have exited out of the login process\n" << message.connection.id;
+    } else{
+        response << "Invalid command. Use when trying to log in\n" << message.connection.id;
+    }
+    return Message{message.connection.id, response.str()};
+
+}
 
 
 

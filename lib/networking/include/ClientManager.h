@@ -32,7 +32,7 @@ struct User {
     string password;
     State state;
 
-    User( State state ) : username(""), password(""), state(state) {}
+    explicit User( State state ) : username(""), password(""), state(state) {}
 };
 
 class ClientManager {
@@ -42,9 +42,9 @@ public:
      *
      * Instantiates a ClientManager
      */
-    ClientManager() { }
+    ClientManager() = default;
 
-    /*
+  /*
      * desc: Checks whether a client is currently being served or is in process.
      *       A system command (/login) requires multiple requests and responses before
      *       a client is logged in.
@@ -82,6 +82,7 @@ public:
      *
      * returns true if user is able to successfully logout, false otherwise
      */
+
     Message logoutClient(const Connection& connection);
 
     /*
@@ -91,8 +92,8 @@ public:
      *
      * returns the registered client, null if failed to register
      */
-    bool registerClient(const Connection& connection);
 
+    bool registerClient(const Connection& connection);
     /*
      * desc: Unregisters a client when disconnected
      *
@@ -101,6 +102,11 @@ public:
      * returns the registered client, null if failed to register
      */
     void unregisterClient(const Connection& connection);
+
+    /*
+     * desc: Lets the user esscape the process he is currently in
+     */
+    Message escapeLogin(const Message &message);
 
 private:
     // A map to store currently registered users
