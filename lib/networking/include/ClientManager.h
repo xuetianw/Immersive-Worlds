@@ -55,36 +55,34 @@ public:
      *
      * returns true if the client is responding to a previous server prompt, false otherwise
      */
-    bool isClientPromptingLogin(Connection connection) const;
+    bool isClientPromptingLogin(const Connection& connection);
 
     /*
      * desc: Prompt user for username and password during login
      *
      * connectionId: a unique client connection id
-     * message: request from the client, could be a system command, process message or char message
      *
      * returns the response message to the client
      */
-    Message promptLogin(const Message& message);
+    Message promptLogin(const Message &message);
 
     /*
      * desc: Checks whether a client is logged in
      *
-     * connection: a unique client connection id
-     * username: unique username to identify a specific client
+     * connectionId: a unique client connection id
      *
      * returns true if the client exists, false otherwise
      */
-    bool isLoggedIn(uintptr_t connectionId) const;
+    bool isLoggedIn(const Connection& connection);
 
     /*
-     * desc: This function is called to logout a user
+     * desc: This function is called to logoutconst a user
      *
      * connectionId: a unique client connection id
      *
      * returns true if user is able to successfully logout, false otherwise
      */
-    Message logoutClient(Message message);
+    Message logoutClient(const Connection& connection);
 
     /*
      * desc: Registers a client when connected
@@ -93,7 +91,7 @@ public:
      *
      * returns the registered client, null if failed to register
      */
-    bool registerClient(Connection connection);
+    bool registerClient(const Connection& connection);
 
     /*
      * desc: Unregisters a client when disconnected
@@ -102,7 +100,7 @@ public:
      *
      * returns the registered client, null if failed to register
      */
-    bool unregisterClient(Connection connection);
+    void unregisterClient(const Connection& connection);
 
 private:
     // A map to store currently registered users

@@ -18,7 +18,7 @@ enable_testing()
 
 ## Add your test .cpp file here
 
-add_executable(run_tests channel/channelTest.cpp MessageTest/MessageTest.cpp)
+add_executable(run_tests channel/channelTest.cpp MessageTest/MessageTest.cpp NetworkingTests/CilentManagerTests.cpp NetworkingTests/ConsoleCommandTests.cpp)
 target_link_libraries(run_tests gmock gtest gtest_main)
 
 set_target_properties(run_tests

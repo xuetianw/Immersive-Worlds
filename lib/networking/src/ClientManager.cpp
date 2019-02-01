@@ -20,19 +20,15 @@ using namespace std;
 
 //////////////////////////////////////////////PUBLIC///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::isClientPromptingLogin(Connection connection) const {
+bool ClientManager::isClientPromptingLogin(const Connection& connection) {
     auto userIter = _connectedUserMap.find(connection.id);
-    if(userIter != _connectedUserMap.end()) {
-        return userIter->second.state == State::LOGGING_IN_USER ||
-            userIter->second.state == State::LOGGING_IN_PWD;
-    }
-
-    return false;
+    return userIter != _connectedUserMap.end() && (userIter->second.state == State::LOGGING_IN_USER ||
+                                                   userIter->second.state == State::LOGGING_IN_PWD);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::isLoggedIn(uintptr_t connectionId) const {
-    auto userIter = _connectedUserMap.find(connectionId);
+bool ClientManager::isLoggedIn(const Connection& connection){
+    auto userIter = _connectedUserMap.find(connection.id);
     if(userIter != _connectedUserMap.end()) {
         return userIter->second.state == State::LOGGED_IN;
     }
@@ -41,7 +37,7 @@ bool ClientManager::isLoggedIn(uintptr_t connectionId) const {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Message ClientManager::promptLogin(const Message& message) {
+Message ClientManager::promptLogin(const Message &message) {
     auto userIter = _connectedUserMap.find(message.connection.id);
     User& user = userIter->second;
 
@@ -50,8 +46,14 @@ Message ClientManager::promptLogin(const Message& message) {
 
     switch(user.state) {
         case State::CONNECTED: {
-            user.state = State::LOGGING_IN_USER;
-            response << "Please enter your username:\n";
+            if (message.text.empty()) {
+                user.state = State::LOGGING_IN_USER;
+                response << "Please enter your username:\n";
+            } else {
+                user.username = message.text;
+                response << "Please enter your password:\n";
+                user.state = State::LOGGING_IN_PWD;
+            }
             break;
         }
         case State::LOGGING_IN_USER: {
@@ -87,21 +89,20 @@ Message ClientManager::promptLogin(const Message& message) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Message ClientManager::logoutClient(Message message){
+Message ClientManager::logoutClient(const Connection& connection){
     string response;
-    auto connectionId = message.connection.id;
-    if(isLoggedIn(connectionId)) {
-        auto userIter = _connectedUserMap.find(connectionId);
+    if(isLoggedIn(connection)) {
+        auto userIter = _connectedUserMap.find(connection.id);
         User& user = userIter->second;
         user.state = State::CONNECTED;
-        return Message{connectionId, "User successfully logged out!\n"};
+        return Message{connection.id, "User successfully logged out!\n"};
     }
-    return Message{connectionId, "User not logged in!\n"};
+    return Message{connection.id, "User not logged in!\n"};
 
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::registerClient(Connection connection) {
+bool ClientManager::registerClient(const Connection& connection) {
     if(_connectedUserMap.find(connection.id) == _connectedUserMap.end()){
         //TODO
         // before creating another user, check if the user exists
@@ -117,9 +118,9 @@ bool ClientManager::registerClient(Connection connection) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::unregisterClient(Connection connection) {
+void ClientManager::unregisterClient(const Connection& connection) {
     _connectedUserMap.erase(connection.id);
-    return true;
+//    return _connectedUserMap.find(connection.id) == _connectedUserMap.end();
 }
 
 

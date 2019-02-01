@@ -4,16 +4,17 @@
 // Created by vinshit on 31/01/19.
 //
 
-#include "ClientCommands.h"
+#include "ConsoleCommands.h"
 
 std::pair<string,string> splitCommand(const string& message_text){
   stringstream msg_stream(message_text);
-  string key_command;
+  string key_command, white_space, remainder;
   msg_stream >> key_command;
-  return std::pair<string,string>(key_command, msg_stream.str());
+  getline(msg_stream >> std::ws, remainder);
+  return std::pair<string,string>(key_command, remainder);
 }
 
-bool CommandProcessor::isMessageCommand(const Message message) {
+bool CommandProcessor::isCommand(const Message message) {
   std::pair command_message_pair = splitCommand(message.text);
   return _commands.find(command_message_pair.first) != _commands.end();
 }

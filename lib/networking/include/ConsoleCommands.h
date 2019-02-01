@@ -26,10 +26,21 @@ class CommandProcessor{
    * Helper Class to avoid manual wiring of key commands to the Game/Account method calls
    */
 public:
-  bool isMessageCommand(const Message message);
+  /*
+   * Determines if the message is a command prompt by checking if the first word is mapped to a command
+   *
+   *
+   */
+  bool isCommand(const Message message);
 
+  /*
+   * Finds the map value from the message's keyword and preforms the function with the message's remaining string
+   */
   Message processMessage(const Message message);
 
+  /*
+   * Adds a function to a keyword, the function has to be in format of Message _____(Message message)
+   */
   void addCommand(string commandKeyword, Message (*command_function)(Message));
 
   CommandProcessor(){}

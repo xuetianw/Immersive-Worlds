@@ -11,7 +11,7 @@
 
 #include "Server.h"
 #include "ClientManager.h"
-#include "ClientCommands.cpp"
+#include "ConsoleCommands.h"
 
 #include <iostream>
 #include <fstream>
@@ -29,13 +29,13 @@ using namespace std;
 ClientManager clientManager;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void onConnect(Connection c) {
+void onConnect(Connection& c) {
     std::cout << "New connection found: " << c.id << endl;
     clientManager.registerClient(c);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void onDisconnect(Connection c) {
+void onDisconnect(Connection& c) {
     std::cout << "Connection lost: " << c.id << endl;
     clientManager.unregisterClient(c);
 }
@@ -55,7 +55,7 @@ std::deque<Message> processMessages(CommandProcessor commandProcessor,
             //// TODO: if client is logging in are they allowed commands???? Perhaps implement only /quitlogin
         } else if (clientManager.isClientPromptingLogin(message.connection)) {
             result.push_back(clientManager.promptLogin(message));
-        } else if (commandProcessor.isMessageCommand(message)){
+        } else if (commandProcessor.isCommand(message)){
             result.push_back(commandProcessor.processMessage(message));
         } else {
             result.push_back((message));
@@ -67,7 +67,8 @@ std::deque<Message> processMessages(CommandProcessor commandProcessor,
 
 CommandProcessor buildCommands(){
     CommandProcessor commandProcessor;
-    commandProcessor.addCommand("/logout", [](Message message){return ::clientManager.logoutClient(message);});
+    commandProcessor.addCommand("/logout", [](Message message){::clientManager.logoutClient(message.connection);
+                                                                return Message{message.connection, "Logging out."};});
     commandProcessor.addCommand("/login", [](Message message){return ::clientManager.promptLogin(message);});
 
     return commandProcessor;
