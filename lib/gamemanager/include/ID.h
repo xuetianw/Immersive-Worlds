@@ -23,7 +23,7 @@ public:
     */
     ID(UUIDGen& generator);
 
-    UUID getID() const;
+    const UUID& getID() const;
 
 private:
     UUID _uuid;
