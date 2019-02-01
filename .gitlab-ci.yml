@@ -10,3 +10,4 @@ my_job:
     - cd my-build
     - cmake ..
     - make
+    - ./bin/run_tests
