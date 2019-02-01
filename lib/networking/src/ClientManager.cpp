@@ -20,17 +20,8 @@ using namespace std;
 
 //////////////////////////////////////////////PUBLIC///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-std::deque<Message> ClientManager::buildOutgoing(const std::string& log) const {
-    std::deque<Message> outgoing;
-    for (auto userIter : _connectedUserMap) {
-        outgoing.push_back({userIter.first, log});
-    }
-    return outgoing;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::isClientBeingPromptedByServer(uintptr_t connectionId) const {
-    auto userIter = _connectedUserMap.find(connectionId);
+bool ClientManager::isClientPromptingLogin(Connection connection) const {
+    auto userIter = _connectedUserMap.find(connection.id);
     if(userIter != _connectedUserMap.end()) {
         return userIter->second.state == State::LOGGING_IN_USER ||
             userIter->second.state == State::LOGGING_IN_PWD;
@@ -90,36 +81,44 @@ Message ClientManager::promptLogin(const Message& message) {
             response << "> " << message.text + "\n";
     }
 
+    // TODO: Imeplement a quit on this
+
     return Message{message.connection.id, response.str()};
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::logoutClient(uintptr_t connectionId) {
-    auto userIter = _connectedUserMap.find(connectionId);
-    User& user = userIter->second;
-    user.state = State::CONNECTED;
-    return true;
+Message ClientManager::logoutClient(Message message){
+    string response;
+    auto connectionId = message.connection.id;
+    if(isLoggedIn(connectionId)) {
+        auto userIter = _connectedUserMap.find(connectionId);
+        User& user = userIter->second;
+        user.state = State::CONNECTED;
+        return Message{connectionId, "User successfully logged out!\n"};
+    }
+    return Message{connectionId, "User not logged in!\n"};
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::registerClient(uintptr_t connectionId) {
-    if(_connectedUserMap.find(connectionId) == _connectedUserMap.end()){
+bool ClientManager::registerClient(Connection connection) {
+    if(_connectedUserMap.find(connection.id) == _connectedUserMap.end()){
         //TODO
         // before creating another user, check if the user exists
         User user {State::CONNECTED};
-        _connectedUserMap.insert(std::make_pair(connectionId, user));
+        _connectedUserMap.insert(std::make_pair(connection.id, user));
         return true;
     }
 
     // TODO: Manage non-unique connections when database schema is defined
     // connectionId is always unique
-    std::cout << "This connection is not unique: " << connectionId << endl;
+    std::cout << "This connection is not unique: " << connection.id << endl;
     return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::unregisterClient(uintptr_t connectionId) {
-    _connectedUserMap.erase(connectionId);
+bool ClientManager::unregisterClient(Connection connection) {
+    _connectedUserMap.erase(connection.id);
     return true;
 }
 

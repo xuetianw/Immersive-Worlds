@@ -45,15 +45,6 @@ public:
     ClientManager() { }
 
     /*
-     * desc: Builds an outgoing queue of messages to be sent to every connected client
-     *
-     * log: String representing the message response
-     *
-     * returns a queue of Messages
-     */
-    std::deque<Message> buildOutgoing(const std::string& log) const;
-
-    /*
      * desc: Checks whether a client is currently being served or is in process.
      *       A system command (/login) requires multiple requests and responses before
      *       a client is logged in.
@@ -64,7 +55,7 @@ public:
      *
      * returns true if the client is responding to a previous server prompt, false otherwise
      */
-    bool isClientBeingPromptedByServer(uintptr_t connectionId) const;
+    bool isClientPromptingLogin(Connection connection) const;
 
     /*
      * desc: Prompt user for username and password during login
@@ -93,7 +84,7 @@ public:
      *
      * returns true if user is able to successfully logout, false otherwise
      */
-    bool logoutClient(uintptr_t connectionId);
+    Message logoutClient(Message message);
 
     /*
      * desc: Registers a client when connected
@@ -102,7 +93,7 @@ public:
      *
      * returns the registered client, null if failed to register
      */
-    bool registerClient(uintptr_t connectionId);
+    bool registerClient(Connection connection);
 
     /*
      * desc: Unregisters a client when disconnected
@@ -111,7 +102,7 @@ public:
      *
      * returns the registered client, null if failed to register
      */
-    bool unregisterClient(uintptr_t connectionId);
+    bool unregisterClient(Connection connection);
 
 private:
     // A map to store currently registered users

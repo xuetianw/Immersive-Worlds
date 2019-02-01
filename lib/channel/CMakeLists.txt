@@ -1,8 +1,7 @@
 add_library(channel
   src/Room.cpp
   src/Area.cpp
-  src/World.cpp
-)
+  src/World.cpp)
 
 target_include_directories(channel
   PUBLIC
