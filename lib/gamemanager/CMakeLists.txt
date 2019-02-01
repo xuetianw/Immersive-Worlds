@@ -1,6 +1,7 @@
 add_library(gamemanager
   src/WorldHandler.cpp
         src/WorldContainer.cpp
+        src/ID.cpp
 )
 
 target_include_directories(gamemanager
