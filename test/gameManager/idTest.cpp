@@ -4,7 +4,7 @@
 
 TEST(idTests, differentIDTest){
 
-    boost::uuids::random_generator generator;
+    ID::UUIDGen generator;
     ID id1 = ID(generator);
     ID id2 = ID(generator);
     ID id3 = ID(generator);

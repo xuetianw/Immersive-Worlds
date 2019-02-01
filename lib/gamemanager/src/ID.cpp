@@ -2,14 +2,14 @@
 
 
 ID::ID(){
-    boost::uuids::random_generator generator;
+    UUIDGen generator;
     _uuid = generator();
 }
 
-ID::ID(boost::uuids::random_generator &generator){
+ID::ID(UUIDGen& generator){
     _uuid = generator();
 }
 
-boost::uuids::uuid ID::getID() const {
+ID::UUID ID::getID() const {
     return _uuid;
 }

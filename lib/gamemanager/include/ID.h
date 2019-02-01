@@ -12,18 +12,21 @@ class ID {
 
 public:
 
+    using UUIDGen = boost::uuids::random_generator;
+    using UUID = boost::uuids::uuid;
+
     ID();
 
     /**
     * Generate a random, unique uuid using a given random generator
     * @param generator: boost's uuid generator
     */
-    ID(boost::uuids::random_generator &generator);
+    ID(UUIDGen& generator);
 
-    boost::uuids::uuid getID() const;
+    UUID getID() const;
 
 private:
-    boost::uuids::uuid _uuid;
+    UUID _uuid;
 };
 
 
