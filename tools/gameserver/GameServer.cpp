@@ -41,7 +41,7 @@ void onDisconnect(Connection& c) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-std::deque<Message> processMessages(CommandProcessor commandProcessor,
+std::deque<Message> processMessages(CommandProcessor &commandProcessor,
                             Server &server,
                             const std::deque<Message> &incoming,
                             bool &quit) {
