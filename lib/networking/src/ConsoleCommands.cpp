@@ -14,12 +14,12 @@ std::pair<string,string> splitCommand(const string& message_text){
   return std::pair<string,string>(key_command, remainder);
 }
 
-bool CommandProcessor::isCommand(const Message message) {
+bool CommandProcessor::isCommand(const Message &message) {
   std::pair command_message_pair = splitCommand(message.text);
   return _commands.find(command_message_pair.first) != _commands.end();
 }
 
-Message CommandProcessor::processMessage(Message message) {
+Message CommandProcessor::processMessage(const Message &message) {
   std::pair command_message_pair = splitCommand(message.text);
   auto command_function = _commands.find(command_message_pair.first);
   if(command_function != _commands.end()){

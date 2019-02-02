@@ -31,17 +31,22 @@ public:
    *
    *
    */
-  bool isCommand(const Message message);
+  bool isCommand(const Message &message);
 
   /*
    * Finds the map value from the message's keyword and preforms the function with the message's remaining string
    */
-  Message processMessage(const Message message);
+  Message processMessage(const Message &message);
 
   /*
    * Adds a function to a keyword, the function has to be in format of Message _____(Message message)
    */
   void addCommand(string commandKeyword, Message (*command_function)(Message));
+
+  /*
+   *
+   */
+  string displayCommands();
 
   CommandProcessor(){}
 

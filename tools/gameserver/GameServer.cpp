@@ -71,7 +71,7 @@ CommandProcessor buildCommands(){
     commandProcessor.addCommand("/login", [](Message message){return ::clientManager.promptLogin(message);});
     commandProcessor.addCommand("/escape", [](Message message){return ::clientManager.escapeLogin(message);});
 
-    return commandProcessor;
+    return std::move(commandProcessor);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
