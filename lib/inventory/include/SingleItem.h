@@ -14,7 +14,8 @@ class SingleItem : public InventoryItem {
 public:
     enum class ItemType {
         CLOTHING,
-        WEAPON
+        WEAPON,
+        CONSUMABLE
     };
 
     SingleItem();
@@ -28,6 +29,7 @@ public:
     std::string getShortdesc() const;
     std::string getLongdesc() const;
     std::string getDescription() const;
+    ItemType getItemType() const;
 
 private:
     int _id;

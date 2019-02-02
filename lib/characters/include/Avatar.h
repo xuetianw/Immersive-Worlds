@@ -14,8 +14,11 @@ class Avatar : public Character
 {
 private:
 	/** A unique int identifying the character*/
-	int userID; //this will eventually be a User type object
-
+	int _userID; //this will eventually be a User type object
+	/**
+	 * Clothing item that the Avatar is currently wearing
+	 */
+	SingleItem _currentClothing;
 	/**
 	 * Adds an InventoryItem to characterInventory.
 	 * @param inventoryItem item to add to inventory
@@ -42,7 +45,7 @@ private:
 	InventoryItem giveObject(InventoryItem inventoryItem);
 
 
-	int wearObject(InventoryItem inventoryItem);
+	int wearObject(SingleItem inventoryItem);
 	int removeObject(InventoryItem inventoryItem);
 	void attack(NonUserCharacter characterToAttack);
 	void kill(NonUserCharacter characterToKill);

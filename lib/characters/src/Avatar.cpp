@@ -10,7 +10,6 @@ void Avatar::takeObject(InventoryItem inventoryItem) {
 }
 
 void Avatar::putObject(InventoryItem inventoryItem, ContainerItem containerObject) {
-//TODO fix this when you pull Lucy's code
 	InventoryItem removedItem = characterInventory.removeItem(inventoryItem);
 
 }
@@ -18,18 +17,22 @@ void Avatar::putObject(InventoryItem inventoryItem, ContainerItem containerObjec
 void Avatar::dropObject(InventoryItem inventoryItem) {
 //	TODO: uncomment these lines after pulling Lucy's code and after implementing an inventory in a room
 	InventoryItem removedItem = characterInventory.removeItem(inventoryItem);
-	currentRoom..addItem(removedItem);
+//	currentRoom.inventory.addItem(removedItem);
 }
 
 InventoryItem Avatar::giveObject(InventoryItem inventoryItem) {
-//	TODO uncomment these next lines once Lucy's code is pulled
-//	Item removedItem = characterInventory.removeItem(inventoryItem);
-//	return removedItem;
+	InventoryItem removedItem = characterInventory.removeItem(inventoryItem);
+	return removedItem;
 
 }
 
-int Avatar::wearObject(InventoryItem inventoryItem) {
-	return 0;
+int Avatar::wearObject(SingleItem inventoryItem) {
+	if (inventoryItem.getItemType() == SingleItem::ItemType::CLOTHING){
+		SingleItem currentClothing = _currentClothing;
+		//TODO: fix casting here?? HOW????
+//		InventoryItem itemToWear = (SingleItem)characterInventory.removeItem(inventoryItem);
+//		_currentClothing = itemToWear;
+	}
 }
 
 int Avatar::removeObject(InventoryItem inventoryItem) {
