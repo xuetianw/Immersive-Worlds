@@ -3,7 +3,7 @@
 // Created On: January 26, 2019
 //
 // The file re-implements the chatserver with additional functionality
-// to send individual messages to each client, manage clients and process login commands
+// to send individual messages to each client, manage clients and process login _commands
 //
 // This file is distributed under the MIT License. See the LICENSE file
 // for details.
@@ -11,6 +11,7 @@
 
 #include "Server.h"
 #include "ClientManager.h"
+#include "ConsoleCommands.h"
 
 #include <iostream>
 #include <fstream>
@@ -28,45 +29,49 @@ using namespace std;
 ClientManager clientManager;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void onConnect(Connection c) {
+void onConnect(Connection& c) {
     std::cout << "New connection found: " << c.id << endl;
-    clientManager.registerClient(c.id);
+    clientManager.registerClient(c);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void onDisconnect(Connection c) {
+void onDisconnect(Connection& c) {
     std::cout << "Connection lost: " << c.id << endl;
-    clientManager.unregisterClient(c.id);
+    clientManager.unregisterClient(c);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-std::deque<Message> processMessages(Server &server,
+std::deque<Message> processMessages(CommandProcessor &commandProcessor,
+                            Server &server,
                             const std::deque<Message> &incoming,
                             bool &quit) {
-    std::ostringstream result;
+    std::deque<Message> result;
     for (auto& message : incoming) {
-        if (message.text == "quit") {
+        if (message.text == "/quit") {
             server.disconnect(message.connection);
         } else if (message.text == "shutdown") {
             std::cout << "Shutting down.\n";
             quit = true;
-        } else if(message.text == "/logout") {
-            string response;
-            if(clientManager.isLoggedIn(message.connection.id)) {
-                clientManager.logoutClient(message.connection.id);
-                response = "User successfully logged out!\n";
-            } else {
-                response = "User not logged in!\n";
-            }
-        } else if(message.text == "/login" || clientManager.isClientBeingPromptedByServer(message.connection.id)) {
-            Message responseMessage = clientManager.promptLogin(message);
-            server.sendSingleMessage(responseMessage);
-        } else {
-            result << message.connection.id << "> " << message.text << endl;
+        } else if (commandProcessor.isCommand(message)){
+            result.push_back(commandProcessor.processMessage(message));
+        } else if (clientManager.isClientPromptingLogin(message.connection)) {
+            result.push_back(clientManager.promptLogin(message));
+        }else {
+            result.push_back((message));
         }
     }
+    return result;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
-    return clientManager.buildOutgoing(result.str());
+CommandProcessor buildCommands(){
+    CommandProcessor commandProcessor;
+    commandProcessor.addCommand("/logout", [](Message message){::clientManager.logoutClient(message.connection);
+                                                                return Message{message.connection, "Logging out."};});
+    commandProcessor.addCommand("/login", [](Message message){return ::clientManager.promptLogin(message);});
+    commandProcessor.addCommand("/escape", [](Message message){return ::clientManager.escapeLogin(message);});
+
+    return std::move(commandProcessor);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,6 +99,9 @@ int main(int argc, char* argv[]) {
     bool done = false;
     unsigned short port = std::stoi(argv[1]);
     Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
+    CommandProcessor commandProcessor = buildCommands();
+
+    //TODO: Improve this loop perhaps
 
     while (!done) {
         try {
@@ -105,7 +113,7 @@ int main(int argc, char* argv[]) {
         }
 
         auto incoming = server.receive();
-        auto outgoing = processMessages(server, incoming, done);
+        auto outgoing = processMessages(commandProcessor, server, incoming, done);
         server.send(outgoing);
         sleep(1);
     }
