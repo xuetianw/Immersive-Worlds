@@ -21,7 +21,6 @@ void WorldContainer::loadFromStorage() {
     json solaceJson = debugArea();
     auto solaceArea = solaceJson.get<CusJson::Area>();
     this->_area = channel::Area(solaceArea);
-    std::cout << "test";
 }
 
 void WorldContainer::resetWorld() {
@@ -4629,4 +4628,8 @@ json WorldContainer::debugArea() {
   ]
 })"_json;
 return j;
+}
+
+std::string WorldContainer::getAreaName(const int id) {
+  return this->_area.getName(); // currently only has one area
 }

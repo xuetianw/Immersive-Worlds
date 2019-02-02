@@ -11,6 +11,7 @@
 
 #include "Server.h"
 #include "ClientManager.h"
+#include "WorldHandler.h"
 
 #include <iostream>
 #include <fstream>
@@ -26,6 +27,9 @@ using namespace std;
 
 // Manager for handling client connections and authentication
 ClientManager clientManager;
+
+// Manager for the world
+WorldHandler worldHandler;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onConnect(Connection c) {
@@ -61,6 +65,9 @@ std::deque<Message> processMessages(Server &server,
         } else if(message.text == "/login" || clientManager.isClientBeingPromptedByServer(message.connection.id)) {
             Message responseMessage = clientManager.promptLogin(message);
             server.sendSingleMessage(responseMessage);
+        } else if(message.text == "/areaName") {
+            Message areaMessage = Message{message.connection, worldHandler.getAreaName(1)};
+            server.sendSingleMessage(areaMessage);
         } else {
             result << message.connection.id << "> " << message.text << endl;
         }
@@ -85,6 +92,7 @@ std::string getHTTPMessage(const char* htmlLocation) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[]) {
+    worldHandler = WorldHandler();
     if (argc < 3) {
         std::cerr << "Usage:\n  " << argv[0] << " <port> <html response>\n"
                   << "  e.g. " << argv[0] << " 4002 ./webchat.html\n";

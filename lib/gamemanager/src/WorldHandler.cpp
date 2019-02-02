@@ -29,3 +29,7 @@ WorldHandler::WorldHandler() {
     worldContainer = WorldContainer();
     worldContainer.resetWorld();
 }
+
+std::string WorldHandler::getAreaName(const int &id) {
+    return this->worldContainer.getAreaName(id);
+}

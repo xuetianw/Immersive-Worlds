@@ -13,6 +13,7 @@ find_package(Threads REQUIRED)
 target_link_libraries(gameserver
         networking
         ${CMAKE_THREAD_LIBS_INIT}
+        gamemanager
         )
 
 install(TARGETS gameserver

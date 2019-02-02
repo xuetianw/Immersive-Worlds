@@ -26,7 +26,6 @@ Area::Area(const CusJson::Area& jsonArea)
   for (const CusJson::Room &jsonRoom : jsonArea._rooms) {
     this->addRoom(jsonRoom);
   }
-  std::cout << "test";
 }
 
 bool Area::addRoom(const Room &room) {
