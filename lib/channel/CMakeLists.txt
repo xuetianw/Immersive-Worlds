@@ -14,6 +14,7 @@ target_include_directories(channel
 
 target_link_libraries(channel
   PRIVATE
+        cusjson
   )
 
 set_target_properties(channel

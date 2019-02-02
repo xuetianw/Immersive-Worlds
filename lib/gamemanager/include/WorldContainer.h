@@ -20,9 +20,8 @@ public:
     void loadFromStorage();
     void resetWorld();
 private:
-    channel::Area area = channel::Area(0);// TODO clean up temp id
+    channel::Area _area = channel::Area(0);// TODO clean up temp id
 
-    void printOutArea(const channel::Area &area);
     json debugArea();
 };
 #endif //WEBSOCKETNETWORKING_WORLDCONTAINTER_H

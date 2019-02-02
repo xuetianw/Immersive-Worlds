@@ -14,6 +14,8 @@ namespace channel {
     class Area {
         public:
             Area(int id);
+            Area(const CusJson::Area& jsonArea);
+            string getName();
 
       Area();
 
@@ -38,8 +40,8 @@ namespace channel {
         private:
             int _id = 0; //TODO make area id unique
             unordered_map<int, Room> _rooms;
+            string _name;
     };
-    void from_json(const json &j, Area &area);
 } // namespace channel
 
 #endif //CHANNEL_AREA_H

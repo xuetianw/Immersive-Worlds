@@ -33,6 +33,10 @@ Room::Room(const string& name, const string& description)
   // TODO
 }
 
+Room::Room(const CusJson::Room &jsonForm)
+        : _id(RoomId(jsonForm._id)), _name(std::move(*std::make_unique<string>(jsonForm._name))) {
+
+}
 
 Room::Room(const Room& that) {
   // TODO copy constructor
@@ -44,7 +48,7 @@ Room::~Room() {
 
 int Room::getId() const {
   // TODO make room ID unique
-  return _id;
+  return this->_id.getId();
 }
 
 const string& Room::getName() const {
@@ -106,65 +110,14 @@ void Room::addRoom(int roomId, Room& room) {
   _doors.emplace(roomId, room);
 }
 
-void Room::setId(int &id) {
-  _id =  std::move(id);
-}
-
-void Room::setName(string name) {
-  _name = std::move(name);
-}
-
-void Room::setId(int id) {
-  _id = std::move(id);
-}
-
-
-void channel::to_json(json &j, const Room &room) {
-    j = json{{"id", room.getId()}, {"name", room.getName()}};
-  //TODO implement
-}
-
-void channel::from_json(const json &j, Room &room) {
-  // for some reason, it needs the cast
-  auto name = std::make_unique<string>(j.at("name"));
-  room.setName(j.at("name"));
-  room.setId(j.at("id"));
-  const json& descJson = j.at("desc");
-  room._jsonDesc.resize(descJson.size());
-  std::copy(descJson.begin(), descJson.end(), room._jsonDesc.begin());
-  const json& doorsJson = j.at("doors");
-  room._jsonDoors.resize(doorsJson.size());
-  std::copy(doorsJson.begin(), doorsJson.end(), room._jsonDoors.begin());
-  const json& extDescJson = j.at("extended_descriptions");
-  room._jsonDoors.resize(extDescJson.size());
-  std::copy(extDescJson.begin(), extDescJson.end(), room._jsonExtDesc.begin());
-}
-
-void channel::to_json(json &j, const jsonDoor &door) {
-  //TODO implement
-}
-
-void channel::from_json(const json &j, jsonDoor &door) {
-  door._dir = j.at("dir");
-  const json& descJson = j.at("desc");
-  door._desc.resize(descJson.size());
-  std::copy(descJson.begin(), descJson.end(), door._desc.begin());
-  const json& keywordJson = j.at("keywords");
-  door._keywords.resize(keywordJson.size());
-  std::copy(keywordJson.begin(), keywordJson.end(), door._keywords.begin());
-  door._to = j.at("to");
-}
-
-void channel::to_json(json &j, const extDesc &extDesc) {
-  //TODO implement
+channel::RoomId::RoomId(int id): _id(id) {
 
 }
 
-void channel::from_json(const json &j, extDesc &extDesc) {
-  const json& descJson = j.at("desc");
-  extDesc._desc.resize(descJson.size());
-  std::copy(descJson.begin(), descJson.end(), extDesc._desc.begin());
-  const json& keywordJson = j.at("keywords");
-  extDesc._keywords.resize(keywordJson.size());
-  std::copy(keywordJson.begin(), keywordJson.end(), extDesc._keywords.begin());
+int channel::RoomId::getId() const{
+  return this->_id;
+}
+
+channel::RoomId::RoomId() {
+
 }
