@@ -32,7 +32,7 @@ struct User {
     string password;
     State state;
 
-    User( State state ) : username(""), password(""), state(state) {}
+    explicit User( State state ) : username(""), password(""), state(state) {}
 };
 
 class ClientManager {
@@ -42,18 +42,9 @@ public:
      *
      * Instantiates a ClientManager
      */
-    ClientManager() { }
+    ClientManager() = default;
 
-    /*
-     * desc: Builds an outgoing queue of messages to be sent to every connected client
-     *
-     * log: String representing the message response
-     *
-     * returns a queue of Messages
-     */
-    std::deque<Message> buildOutgoing(const std::string& log) const;
-
-    /*
+  /*
      * desc: Checks whether a client is currently being served or is in process.
      *       A system command (/login) requires multiple requests and responses before
      *       a client is logged in.
@@ -64,36 +55,35 @@ public:
      *
      * returns true if the client is responding to a previous server prompt, false otherwise
      */
-    bool isClientBeingPromptedByServer(uintptr_t connectionId) const;
+    bool isClientPromptingLogin(const Connection& connection);
 
     /*
      * desc: Prompt user for username and password during login
      *
      * connectionId: a unique client connection id
-     * message: request from the client, could be a system command, process message or char message
      *
      * returns the response message to the client
      */
-    Message promptLogin(const Message& message);
+    Message promptLogin(const Message &message);
 
     /*
      * desc: Checks whether a client is logged in
      *
-     * connection: a unique client connection id
-     * username: unique username to identify a specific client
+     * connectionId: a unique client connection id
      *
      * returns true if the client exists, false otherwise
      */
-    bool isLoggedIn(uintptr_t connectionId) const;
+    bool isLoggedIn(const Connection& connection);
 
     /*
-     * desc: This function is called to logout a user
+     * desc: This function is called to logoutconst a user
      *
      * connectionId: a unique client connection id
      *
      * returns true if user is able to successfully logout, false otherwise
      */
-    bool logoutClient(uintptr_t connectionId);
+
+    Message logoutClient(const Connection& connection);
 
     /*
      * desc: Registers a client when connected
@@ -102,8 +92,8 @@ public:
      *
      * returns the registered client, null if failed to register
      */
-    bool registerClient(uintptr_t connectionId);
 
+    bool registerClient(const Connection& connection);
     /*
      * desc: Unregisters a client when disconnected
      *
@@ -111,7 +101,12 @@ public:
      *
      * returns the registered client, null if failed to register
      */
-    bool unregisterClient(uintptr_t connectionId);
+    void unregisterClient(const Connection& connection);
+
+    /*
+     * desc: Lets the user esscape the process he is currently in
+     */
+    Message escapeLogin(const Message &message);
 
 private:
     // A map to store currently registered users
