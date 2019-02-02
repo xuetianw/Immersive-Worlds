@@ -17,7 +17,11 @@ endif()
 enable_testing()
 
 ## Add your test .cpp file here
-add_executable(run_tests channel/channelTest.cpp MessageTest/MessageTest.cpp)
+add_executable(run_tests
+        channel/channelTest.cpp
+        MessageTest/MessageTest.cpp
+        inventory/inventoryTest.cpp)
+
 target_link_libraries(run_tests gmock gtest gtest_main)
 
 set_target_properties(run_tests
@@ -28,5 +32,5 @@ set_target_properties(run_tests
         )
 
 ##TO DO: Add Lib Here
-target_link_libraries(run_tests networking channel message cusjson Combat)
+target_link_libraries(run_tests networking channel message cusjson Combat inventory)
 add_test(NAME network_tests COMMAND run_tests)
