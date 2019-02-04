@@ -5,8 +5,8 @@
 #ifndef WEBSOCKETNETWORKING_CONTAINERITEM_H
 #define WEBSOCKETNETWORKING_CONTAINERITEM_H
 
-#include <vector>
 #include "SingleItem.h"
+#include <unordered_map>
 
 class ContainerItem : public InventoryItem {
 
@@ -15,19 +15,13 @@ class ContainerItem : public InventoryItem {
         ContainerItem();
 
         /**
-        * Get the item at index from containerItem.
-        * @param index: the index in which the InventoryItem is located in the containerItem
-        */
-        SingleItem getItemInContainer(int index) const;
-
-        /**
         * Get all items in containerItem.
         */
-        std::vector<SingleItem> getItemsInContainer() const;
+        const std::unordered_map<int, SingleItem>& getItemsInContainer() const;
 
 
     private:
-        std::vector<SingleItem> _singleItems;
+        std::unordered_map<int, SingleItem> _singleItems;
 
 };
 

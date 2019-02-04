@@ -10,18 +10,18 @@ void Avatar::takeObject(InventoryItem inventoryItem) {
 }
 
 void Avatar::putObject(InventoryItem inventoryItem, ContainerItem containerObject) {
-	InventoryItem removedItem = characterInventory.removeItem(inventoryItem);
+	InventoryItem removedItem = characterInventory.removeItem(inventoryItem.getId());
 
 }
 
 void Avatar::dropObject(InventoryItem inventoryItem) {
 //	TODO: uncomment these lines after pulling Lucy's code and after implementing an inventory in a room
-	InventoryItem removedItem = characterInventory.removeItem(inventoryItem);
+	InventoryItem removedItem = characterInventory.removeItem(inventoryItem.getId());
 //	currentRoom.inventory.addItem(removedItem);
 }
 
 InventoryItem Avatar::giveObject(InventoryItem inventoryItem) {
-	InventoryItem removedItem = characterInventory.removeItem(inventoryItem);
+	InventoryItem removedItem = characterInventory.removeItem(inventoryItem.getId());
 	return removedItem;
 
 }

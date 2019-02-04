@@ -1,6 +1,3 @@
-//
-// Created by Lucy on 2019-01-18.
-//
 
 #ifndef PROJECT_SINGLEITEM_H
 #define PROJECT_SINGLEITEM_H
@@ -24,7 +21,6 @@ public:
                   std::string aShortdesc,
                   std::string aLongdesc,
                   std::string aDescription);
-    int getId() const;
     std::string getKeyword() const;
     std::string getShortdesc() const;
     std::string getLongdesc() const;
@@ -32,7 +28,6 @@ public:
     ItemType getItemType() const;
 
 private:
-    int _id;
     ItemType _itemType;
     std::string _keyword, _shortdesc, _longdesc, _description;
 
