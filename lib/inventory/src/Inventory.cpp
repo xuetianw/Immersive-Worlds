@@ -23,6 +23,7 @@ bool Inventory::addItem(InventoryItem itemToAdd) {
     return success;
 }
 
+SingleItem
 InventoryItem Inventory::removeItem(int idToRemove) {
 
     auto itemFound = _inventoryItems.find(idToRemove);

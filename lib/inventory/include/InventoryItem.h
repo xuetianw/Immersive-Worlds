@@ -18,4 +18,4 @@ protected:
 };
 
 
-#endif //WEBSOCKETNETWORKING_INVENTORYITEM_H
+#endif

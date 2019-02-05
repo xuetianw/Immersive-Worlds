@@ -25,7 +25,7 @@ public:
     std::string getShortdesc() const;
     std::string getLongdesc() const;
     std::string getDescription() const;
-    ItemType getItemType() const;
+	ItemType getItemType() const;
 
 private:
     ItemType _itemType;
