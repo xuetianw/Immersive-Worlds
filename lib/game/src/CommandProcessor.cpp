@@ -22,23 +22,24 @@ bool CommandProcessor::isCommand(const Message &message) {
 Message CommandProcessor::processMessage(const Message &message) {
     std::pair commandMessagePair = splitCommand(message.text);
     auto fnDescriptor = _commands.find(commandMessagePair.first);
-    InputHandler inHandler;
-    string cmd;
-
-    if(fnDescriptor != _commands.end()) {
-        cmd = commandMessagePair.first;
-        inHandler = fnDescriptor->second;
-    } else {
-        cmd = "default";
-        inHandler = _commands[cmd];
-    }
-
-    if(inHandler.argCmd == nullptr) {
-        inHandler.argCmd = getCommand(cmd);
-    }
+//    InputHandler inHandler;
+//    string cmd;
+//
+//    if(fnDescriptor != _commands.end()) {
+//        cmd = commandMessagePair.first;
+//        inHandler = fnDescriptor->second;
+//    } else {
+//        cmd = "default";
+//        inHandler = _commands[cmd];
+//    }
+//
+//    if(inHandler.argCmd == nullptr) {
+//        inHandler.argCmd = getCommand(cmd);
+//    }
 
     // return fnDescriptor->second.functionPtr(fnDescriptor->second.argCmd);
-    return fnDescriptor->second.functionPtr(Message {message.connection, commandMessagePair.second});
+    if(fnDescriptor != _commands.end()) return fnDescriptor->second.functionPtr(Message {message.connection, commandMessagePair.second});
+    return Message {message.connection, "default"};
 }
 
 void CommandProcessor::addCommand(string commandKeyword, function_ptr fnPtr ) {
