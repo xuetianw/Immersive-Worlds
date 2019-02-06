@@ -4,6 +4,6 @@
 
 #include "YellCommand.h"
 
-networking::Message YellCommand::execute(GameService& actor) {
+networking::Message YellCommand::execute(GameService& service) {
     return networking::Message();
 }

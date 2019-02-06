@@ -11,7 +11,7 @@
 
 #include "Server.h"
 #include "ClientManager.h"
-#include "../../lib/game/include/CommandProcessor.h"
+#include "CommandProcessor.h"
 
 #include <iostream>
 #include <fstream>

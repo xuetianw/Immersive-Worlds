@@ -12,7 +12,7 @@ class Command {
 public:
     virtual ~Command() {}
 
-    virtual networking::Message execute(GameService& actor) = 0;
+    virtual networking::Message execute(GameService& service) = 0;
 
 protected:
     Command() {}
