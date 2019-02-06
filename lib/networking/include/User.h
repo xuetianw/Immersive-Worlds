@@ -5,51 +5,70 @@
 #ifndef WEBSOCKETNETWORKING_USER_H
 #define WEBSOCKETNETWORKING_USER_H
 
-#include "Server.h"
 #include <string>
+#include "Server.h"
 
 using networking::Message;
 using std::string;
 
 class User;
 
-class UserState;
-
-class User {
-  string username;
-  string password;
-  UserState *_state;
-
+class UserState {
 public:
-  void promptLogin();
+    virtual Message handleInput(User &user, Message &message){
+        return message;
+    }
 
-  void setToLoggedIn();
+    virtual bool isLoggedInState() { return false; }
 
-  void promptRegistration();
+    virtual bool isSubmittingResgistration() { return false; };
 
-  Message handleInput(Message &message);
-
-  bool isLoggedIn();
-
-  bool isSubmittingLoginInfo();
-
-  bool isSubmittingRegistration();
-
-  bool isLoggingIn();
-
-  bool isRegistering();
-
-  void setUsername(const string &usernavirtualme);
-
-  void setPassword(const string &password);
-
-  void setState(UserState *state);
-
-  const string &getUsername() const;
-
-  const string &getPassword() const;
-
-  User();
+    virtual bool isSubittingLoginInfo() { return false; }
 };
 
-#endif // WEBSOCKETNETWORKING_USER_H
+class LoggingInState : public UserState {
+    Message handleInput(User &user, Message &message) override;
+};
+
+class LoggedInState : public UserState {
+    Message handleInput(User &user, Message &message) override{
+        return Message{};
+    };
+
+    bool isLoggedInState() override { return true; }
+};
+
+class User {
+    string username;
+    string password;
+    UserState *_state;
+public:
+
+    void promptLogin();
+
+    void promptRegistration();
+
+    Message handleInput(Message &message);
+
+    bool isLoggedIn();
+
+    bool isSubmittingLoginInfo();
+
+    bool isSubmittingRegistration();
+
+    void setUsername(const string &username);
+
+    void setPassword(const string &password);
+
+    void set_state(UserState *_state);
+
+    const string &getUsername() const;
+
+    const string &getPassword() const;
+
+    User();
+
+};
+
+
+#endif //WEBSOCKETNETWORKING_USER_H

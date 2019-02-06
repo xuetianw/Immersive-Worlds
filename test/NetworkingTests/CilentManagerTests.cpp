@@ -161,3 +161,30 @@ TEST_F(BasicClientManagerTest, UsernameTakenClientTest) {
   EXPECT_EQ("Please enter your password:", passwordPrompt.text);
   EXPECT_EQ("Successfully logged in!", loginSuccessful.text);
 }
+
+/*
+ * Registering Test
+ */
+
+TEST_F(BasicClientManagerTest, ForwardRegisterClientTest) {
+  clientManager.connectClient(firstConnection);
+  Message userPrompt = clientManager.promptRegister(firstMessage);
+
+  Message registerPasswordPrompt = clientManager.handleInput(usernameMessage);
+  Message registerSucessful = clientManager.handleInput(passwordMessage);
+
+  EXPECT_FALSE(clientManager.isLoggedIn(firstConnection));
+
+  EXPECT_EQ("Please create your username:", userPrompt.text);
+  EXPECT_EQ("Please create your password:", registerPasswordPrompt.text);
+  EXPECT_EQ("Account Created!", registerSucessful.text);
+
+  Message passwordPrompt = clientManager.promptLogin(usernameMessage);
+
+  Message loginSuccessful = clientManager.handleInput(passwordMessage);
+
+  EXPECT_TRUE(clientManager.isLoggedIn(firstConnection));
+
+  EXPECT_EQ("Please enter your password:", passwordPrompt.text);
+  EXPECT_EQ("Successfully logged in!", loginSuccessful.text);
+}

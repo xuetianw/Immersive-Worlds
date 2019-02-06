@@ -76,6 +76,7 @@ CommandProcessor buildCommands(){
     commandProcessor.addCommand("default", [](Command* command, Message message) {return message;});
     commandProcessor.addCommand("/logout", [](Command* command, Message message) {return ::clientManager.logoutClient(message.connection);});
     commandProcessor.addCommand("/login", [](Command* command, Message message){return ::clientManager.promptLogin(message);});
+    commandProcessor.addCommand("/register", [](Command* command, Message message){return ::clientManager.promptRegister(message);});
     commandProcessor.addCommand("/escape", [](Command* command, Message message){return ::clientManager.escapeLogin(message);});
     commandProcessor.addCommand("yell", [](Command* command, Message message){return ::gameController.yell(command);});
     return std::move(commandProcessor);

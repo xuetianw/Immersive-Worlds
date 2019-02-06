@@ -30,46 +30,36 @@ public:
    */
   ClientManager() = default;
 
-  /*
-   * desc: Recieves an input from the Server and determines the correct
-   * Interaction with the message based on the User's current state.
-   *
-   * message: the message from the user, ideally before it has been processed by
-   * anything else in the server, ! Should not be used if the client is logged
-   * in via check from isLoggedIn() !
-   *
-   * returns: A message to reply back to the user describing its current
-   * interaction
-   */
-  Message handleInput(Message &message);
+
+    Message handleInput(Message &message);
 
   /*
-   * desc: Checks if the given user submitted information is valid with the
-   * given database of Account Information
-   *
-   * user: The class holding the username and passsword to be submitted
-   *
-   * returns true the information is correct
-   */
-  bool isLoginCredentialsCorrect(User &user);
+     * desc: Checks if the given user submitted information is valid with the given database of Account
+     * Information
+     *
+     * user: The class holding the username and passsword to be submitted
+     *
+     * returns true the information is correct
+     */
+    bool isLoginCredentialsCorrect(User &user);
 
-  /*
-   * desc: Prompt user for username and password during login
-   *
-   * message: Message from the user, may contain user parameter to pass in
-   *
-   * returns the response message to the client
-   */
-  Message promptLogin(Message &message);
+    /*
+     * desc: Prompt user for username and password during login
+     *
+     * message: Message from the user, may contain user parameter to pass in
+     *
+     * returns the response message to the client
+     */
+    Message promptLogin(Message &message);
 
-  /*
-   * desc: Prompt user for username and password during login
-   *
-   * message: Message from the user,
-   *
-   * returns the response message to the client
-   */
-  Message promptRegister(Message &message);
+    /*
+     * desc: Prompt user for username and password during login
+     *
+     * message: Message from the user,
+     *
+     * returns the response message to the client
+     */
+    Message promptRegister(Message &message);
 
   /*
    * desc: Checks whether a client is logged in
@@ -98,16 +88,15 @@ public:
    * returns the registered client, null if failed to register
    */
 
-  bool connectClient(const Connection &connection);
-
-  /*
-   * desc: Unregisters a client when disconnected
-   *
-   * connection: a unique client connection id
-   *
-   * returns the registered client, null if failed to register
-   */
-  void disconnectClient(const Connection &connection);
+    bool connectClient(const Connection &connection);
+    /*
+     * desc: Unregisters a client when disconnected
+     *
+     * connection: a unique client connection id
+     *
+     * returns the registered client, null if failed to register
+     */
+    void disconnectClient(const Connection &connection);
 
   /*
    * desc: Lets the user esscape the process he is currently in
