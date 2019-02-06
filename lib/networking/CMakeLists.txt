@@ -4,7 +4,7 @@ add_library(networking
     src/Client.cpp
     src/ClientManager.cpp
     src/ConsoleCommands.cpp
-)
+    src/User.cpp)
 
 find_package(Boost 1.68 COMPONENTS system REQUIRED)
 

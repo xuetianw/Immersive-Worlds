@@ -14,26 +14,11 @@
 #include <unordered_map>
 
 #include "Server.h"
+#include "User.h"
 
 using networking::Connection;
 using networking::Message;
 using std::string;
-
-// User State during a system command such as '/login'
-enum class State {
-    LOGGED_IN,
-    CONNECTED,
-    LOGGING_IN_USER,
-    LOGGING_IN_PWD
-};
-
-struct User {
-    string username;
-    string password;
-    State state;
-
-    explicit User( State state ) : username(""), password(""), state(state) {}
-};
 
 class ClientManager {
 public:
@@ -44,27 +29,36 @@ public:
      */
     ClientManager() = default;
 
+
+    Message handleInput(Message &message);
+
   /*
-     * desc: Checks whether a client is currently being served or is in process.
-     *       A system command (/login) requires multiple requests and responses before
-     *       a client is logged in.
-     *       This function indicates whether a client is responding
-     *       to a server prompt or sending a separate request.
+     * desc: Checks if the given user submitted information is valid with the given database of Account
+     * Information
      *
-     * connectionId: a unique client connection id
+     * user: The class holding the username and passsword to be submitted
      *
-     * returns true if the client is responding to a previous server prompt, false otherwise
+     * returns true the information is correct
      */
-    bool isClientPromptingLogin(const Connection& connection);
+    bool isLoginCredentialsCorrect(User &user);
 
     /*
      * desc: Prompt user for username and password during login
      *
-     * connectionId: a unique client connection id
+     * message: Message from the user, may contain user parameter to pass in
      *
      * returns the response message to the client
      */
-    Message promptLogin(const Message &message);
+    Message promptLogin(Message &message);
+
+    /*
+     * desc: Prompt user for username and password during login
+     *
+     * message: Message from the user,
+     *
+     * returns the response message to the client
+     */
+    Message promptRegister(Message &message);
 
     /*
      * desc: Checks whether a client is logged in
@@ -93,7 +87,7 @@ public:
      * returns the registered client, null if failed to register
      */
 
-    bool registerClient(const Connection& connection);
+    bool connectClient(const Connection &connection);
     /*
      * desc: Unregisters a client when disconnected
      *
@@ -101,7 +95,7 @@ public:
      *
      * returns the registered client, null if failed to register
      */
-    void unregisterClient(const Connection& connection);
+    void disconnectClient(const Connection &connection);
 
     /*
      * desc: Lets the user esscape the process he is currently in
@@ -110,7 +104,7 @@ public:
 
 private:
     // A map to store currently registered users
-    std::unordered_map<uintptr_t, User > _connectedUserMap;
+    std::unordered_map<uintptr_t, User> _connectedUserMap;
 
     // Mock dummy usernames and passwords for testing until database is added
     // TODO: Remove the mock usernames and passwords once database is added
