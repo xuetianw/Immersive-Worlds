@@ -5,9 +5,9 @@
 #ifndef WEBSOCKETNETWORKING_GAMEACTOR_H
 #define WEBSOCKETNETWORKING_GAMEACTOR_H
 
-class GameActor {
+class GameService {
 public:
-    GameActor() = default;
+    GameService() = default;
 
     // TODO: Define interface to access data
 private:

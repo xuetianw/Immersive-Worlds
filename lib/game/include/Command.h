@@ -6,13 +6,13 @@
 #define WEBSOCKETNETWORKING_COMMAND_H
 
 #include <Server.h>
-#include "GameActor.h"
+#include "GameService.h"
 
 class Command {
 public:
     virtual ~Command() {}
 
-    virtual networking::Message execute(GameActor& actor) = 0;
+    virtual networking::Message execute(GameService& actor) = 0;
 
 protected:
     Command() {}

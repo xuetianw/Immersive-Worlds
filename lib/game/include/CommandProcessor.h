@@ -50,6 +50,11 @@ public:
      */
     void addCommand(string commandKeyword, function_ptr);
 
+    /*
+     * Map a command to a class that executes
+     */
+    Command* getCommand(const string& commandKey);
+
 private:
     std::unordered_map<string, InputHandler> _commands;
 };

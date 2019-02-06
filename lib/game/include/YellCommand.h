@@ -14,7 +14,7 @@ public:
 
     ~YellCommand() {}
 
-    virtual networking::Message execute(GameActor& actor);
+    virtual networking::Message execute(GameService& actor);
 };
 
 #endif //WEBSOCKETNETWORKING_YELLCOMMAND_H
