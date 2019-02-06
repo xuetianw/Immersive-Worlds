@@ -15,86 +15,76 @@
 #include <unistd.h>
 
 #include "ClientManager.h"
+#include "User.h"
 
 using namespace std;
 
 //////////////////////////////////////////////PUBLIC///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::isClientPromptingLogin(const Connection& connection) {
-    auto userIter = _connectedUserMap.find(connection.id);
-    return userIter != _connectedUserMap.end() && (userIter->second.state == State::LOGGING_IN_USER ||
-                                                   userIter->second.state == State::LOGGING_IN_PWD);
+Message ClientManager::handleInput(Message &message) {
+    auto userIter = _connectedUserMap.find(message.connection.id);
+    string response;
+
+    if (userIter != _connectedUserMap.end()) {
+        User &user = userIter->second;
+        Message responseMessage = user.handleInput(message);
+        if (user.isSubmittingRegistration()) {
+            _userData.insert(std::make_pair(user.getUsername(), user.getPassword()));
+            response = "Account Created!";
+        } else if (user.isSubmittingLoginInfo()){
+            if(isLoginCredentialsCorrect(user)) {
+                user.set_state(new LoggedInState);
+                response = "Successfully logged in!";
+            } else {
+                user.set_state(new LoggingInState);
+                response = "Login Unsuccessful\nPlease enter your username again:";
+            }
+        } else if (!user.isLoggedIn()) {
+            return responseMessage;
+        }
+    }
+    return Message{message.connection, response};
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::isLoggedIn(const Connection& connection){
+bool ClientManager::isLoginCredentialsCorrect(User &user) {
+    auto userIter = _userData.find(user.getUsername());
+    auto foundPassword = userIter->second;
+    return userIter != _userData.end() && userIter->second == user.getPassword();
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+bool ClientManager::isLoggedIn(const Connection &connection) {
     auto userIter = _connectedUserMap.find(connection.id);
-    if(userIter != _connectedUserMap.end()) {
-        return userIter->second.state == State::LOGGED_IN;
+    if (userIter != _connectedUserMap.end()) {
+        return (userIter->second.isLoggedIn());
     }
 
     return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Message ClientManager::promptLogin(const Message &message) {
+Message ClientManager::promptLogin(Message &message) {
     auto userIter = _connectedUserMap.find(message.connection.id);
-    User& user = userIter->second;
+    User &user = userIter->second;
+    user.promptLogin();
+    return user.handleInput(message);
+}
 
-    // Response to be sent back to the specific user
-    std::ostringstream response;
-
-    switch(user.state) {
-        case State::CONNECTED: {
-            if (message.text.empty()) {
-                user.state = State::LOGGING_IN_USER;
-                response << "Please enter your username:\n";
-            } else {
-                user.username = message.text;
-                response << "Please enter your password:\n";
-                user.state = State::LOGGING_IN_PWD;
-            }
-            break;
-        }
-        case State::LOGGING_IN_USER: {
-            // TODO: Implement DBUtility to validate username for a registered user in the database
-            user.username = message.text;
-            user.state = State::LOGGING_IN_PWD;
-            response << "Please enter your password:\n";
-            break;
-        }
-        case State::LOGGING_IN_PWD: {
-            //TODO: Implement DBUtility to authenticate user
-            auto dummyUser = _userData.find(user.username);
-            if (dummyUser != _userData.end() && dummyUser->second == message.text) {
-                user.state = State::LOGGED_IN;
-                response << "Successfully logged in!\n";
-            } else {
-                user.state = State::LOGGING_IN_USER;
-                response << "Login Unsuccessful\nPlease enter your username again:\n";
-            }
-            break;
-        }
-        default:
-            // Execution should never reach here.
-            // TODO: Log the state on server
-
-            response << "Invalid Request\nPlease try logging in again\n" << message.connection.id;
-            response << "> " << message.text + "\n";
-    }
-
-    // TODO: Imeplement a quit on this
-
-    return Message{message.connection.id, response.str()};
+Message ClientManager::promptRegister(Message &message) {
+    auto userIter = _connectedUserMap.find(message.connection.id);
+    User &user = userIter->second;
+    user.promptRegistration();
+    return user.handleInput(message);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Message ClientManager::logoutClient(const Connection& connection){
+Message ClientManager::logoutClient(const Connection &connection) {
     string response;
-    if(isLoggedIn(connection)) {
+    if (isLoggedIn(connection)) {
         auto userIter = _connectedUserMap.find(connection.id);
-        User& user = userIter->second;
-        user.state = State::CONNECTED;
+        User &user = userIter->second;
+        user = User{};
         return Message{connection.id, "User successfully logged out!\n"};
     }
     return Message{connection.id, "User not logged in!\n"};
@@ -102,11 +92,11 @@ Message ClientManager::logoutClient(const Connection& connection){
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::registerClient(const Connection& connection) {
-    if(_connectedUserMap.find(connection.id) == _connectedUserMap.end()){
+bool ClientManager::connectClient(const Connection &connection) {
+    if (_connectedUserMap.find(connection.id) == _connectedUserMap.end()) {
         //TODO
         // before creating another user, check if the user exists
-        User user {State::CONNECTED};
+        User user;
         _connectedUserMap.insert(std::make_pair(connection.id, user));
         return true;
     }
@@ -118,24 +108,19 @@ bool ClientManager::registerClient(const Connection& connection) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void ClientManager::unregisterClient(const Connection& connection) {
+void ClientManager::disconnectClient(const Connection &connection) {
     _connectedUserMap.erase(connection.id);
-//    return _connectedUserMap.find(connection.id) == _connectedUserMap.end();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Message ClientManager::escapeLogin(const Message& message) {
+Message ClientManager::escapeLogin(const Message &message) {
 
-    User& user = _connectedUserMap.find(message.connection.id)->second;
+    User &user = _connectedUserMap.find(message.connection.id)->second;
     std::ostringstream response;
 
     //revert back to connected
-    if(isClientPromptingLogin(message.connection)){
-        user.state = State::CONNECTED;
-        response << "You have exited out of the login process\n" << message.connection.id;
-    } else{
-        response << "Invalid command. Use when trying to log in\n" << message.connection.id;
-    }
+    user = User{};
+    response << "You have exited out of the login process\n" << message.connection.id;
     return Message{message.connection.id, response.str()};
 
 }

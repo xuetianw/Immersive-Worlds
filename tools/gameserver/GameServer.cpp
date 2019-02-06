@@ -36,19 +36,19 @@ GameController gameController;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onConnect(Connection& c) {
     std::cout << "New connection found: " << c.id << endl;
-    clientManager.registerClient(c);
+  clientManager.connectClient(c);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onDisconnect(Connection& c) {
     std::cout << "Connection lost: " << c.id << endl;
-    clientManager.unregisterClient(c);
+  clientManager.disconnectClient(c);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 std::deque<Message> processMessages(CommandProcessor &commandProcessor,
                             Server &server,
-                            const std::deque<Message> &incoming,
+                            std::deque<Message> &incoming,
                             bool &quit) {
     std::deque<Message> result;
     for (auto& message : incoming) {
@@ -59,10 +59,12 @@ std::deque<Message> processMessages(CommandProcessor &commandProcessor,
             quit = true;
         } else if (commandProcessor.isCommand(message)){
             result.push_back(commandProcessor.processMessage(message));
-        } else if (clientManager.isClientPromptingLogin(message.connection)) {
-            result.push_back(clientManager.promptLogin(message));
         } else {
-            result.push_back((message));
+            if (clientManager.isLoggedIn(message.connection)) {
+                result.push_back((message));
+            } else {
+                result.push_back(clientManager.handleInput(message));
+            }
         }
     }
     return result;
