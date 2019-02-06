@@ -26,14 +26,14 @@ protected:
 
 
 TEST_F(ConsoleCommandTest, commandsAreCalled){
-  Message defaultResponse = commandProcessor.processMessage(dummy);
+  //Message defaultResponse = commandProcessor.processMessage(dummy);
   Message loginResponse = commandProcessor.processMessage(login);
   Message logoutResponse = commandProcessor.processMessage(logout);
 
-  EXPECT_TRUE(defaultResponse.text != loginStr && defaultResponse.text != logoutStr);
+  //EXPECT_TRUE(defaultResponse.text != loginStr && defaultResponse.text != logoutStr);
   EXPECT_TRUE(loginResponse.text == loginStr);
   EXPECT_TRUE(logoutResponse.text == logoutStr);
-  EXPECT_TRUE(defaultResponse.connection.id != loginConnection.id && defaultResponse.connection.id != logoutConnection.id);
+  //EXPECT_TRUE(defaultResponse.connection.id != loginConnection.id && defaultResponse.connection.id != logoutConnection.id);
   EXPECT_TRUE(loginResponse.connection.id == loginConnection.id);
   EXPECT_TRUE(logoutResponse.connection.id == logoutConnection.id);
 

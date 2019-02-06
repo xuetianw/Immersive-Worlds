@@ -49,5 +49,7 @@ Command* CommandProcessor::getCommand(const string &commandKey) {
     if(commandKey == "yell") {
         return new YellCommand();
     }
+
+    return nullptr;
 }
 
