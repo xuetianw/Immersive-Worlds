@@ -50,17 +50,13 @@ Message ClientManager::handleInput(Message &message) {
 bool ClientManager::isLoginCredentialsCorrect(User &user) {
     auto userIter = _userData.find(user.getUsername());
     auto foundPassword = userIter->second;
-    return userIter != _userData.end() && userIter->second == user.getPassword();
+    return userIter != _userData.end() && foundPassword == user.getPassword();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool ClientManager::isLoggedIn(const Connection &connection) {
     auto userIter = _connectedUserMap.find(connection.id);
-    if (userIter != _connectedUserMap.end()) {
-        return (userIter->second.isLoggedIn());
-    }
-
-    return false;
+    return (userIter != _connectedUserMap.end() && userIter->second.isLoggedIn());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,15 +90,10 @@ Message ClientManager::logoutClient(const Connection &connection) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool ClientManager::connectClient(const Connection &connection) {
     if (_connectedUserMap.find(connection.id) == _connectedUserMap.end()) {
-        //TODO
-        // before creating another user, check if the user exists
         User user;
         _connectedUserMap.insert(std::make_pair(connection.id, user));
         return true;
     }
-
-    // TODO: Manage non-unique connections when database schema is defined
-    // connectionId is always unique
     std::cout << "This connection is not unique: " << connection.id << endl;
     return false;
 }
@@ -114,11 +105,7 @@ void ClientManager::disconnectClient(const Connection &connection) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 Message ClientManager::escapeLogin(const Message &message) {
-
     User &user = _connectedUserMap.find(message.connection.id)->second;
-    std::ostringstream response;
-
-    //revert back to connected
     user = User{};
     response << "You have exited out of the login process\n" << message.connection.id;
     return Message{message.connection.id, response.str()};
