@@ -34,11 +34,11 @@ Room::Room(const string& name, const string& description)
 }
 
 Room::Room(const CusJson::Room &jsonForm)
-        : _id(RoomId(jsonForm._id)), _name(std::move(*std::make_unique<string>(jsonForm._name))) {
+        : _id(RoomId(jsonForm._id)), _name((jsonForm._name)) {
 
 }
 
-Room::Room(const Room& that) {
+Room::Room(const Room& that) : _id(that._id), _name(that._name) {
   // TODO copy constructor
 }
 

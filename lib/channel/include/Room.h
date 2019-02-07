@@ -70,6 +70,7 @@ namespace channel {
     vector<Room> getAllDoors() const;
 
     void addRoom(int roomId, Room& room);
+
   };
 
 }
