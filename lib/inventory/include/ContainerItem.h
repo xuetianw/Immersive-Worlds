@@ -19,7 +19,6 @@ class ContainerItem : public InventoryItem {
         */
         const std::unordered_map<int, SingleItem>& getItemsInContainer() const;
 
-
     private:
         std::unordered_map<int, SingleItem> _singleItems;
 

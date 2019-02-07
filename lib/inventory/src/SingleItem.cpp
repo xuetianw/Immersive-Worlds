@@ -24,7 +24,6 @@
 
 	std::string SingleItem::getDescription() const { return _description; }
 
-	SingleItem::ItemType SingleItem::getItemType() const { return _itemType; }
 
 
 

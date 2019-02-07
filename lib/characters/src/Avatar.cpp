@@ -5,36 +5,34 @@
 #include "Avatar.h"
 #include "ContainerItem.h"
 
-void Avatar::takeObject(InventoryItem inventoryItem) {
+void Avatar::takeItem(InventoryItem inventoryItem) {
+	inventory.addItem(inventoryItem);
+}
+
+void Avatar::putItem(InventoryItem inventoryItem, ContainerItem containerObject) {
+	//TODO once lucy implements adding to a containerItem
+	//	containerObject.addItem(inventoryItem);
 
 }
 
-void Avatar::putObject(InventoryItem inventoryItem, ContainerItem containerObject) {
-	InventoryItem removedItem = removeItem(inventoryItem.getId());
-
-}
-
-void Avatar::dropObject(InventoryItem inventoryItem) {
+void Avatar::dropItem(InventoryItem inventoryItem) {
 //	TODO: uncomment these lines after pulling Lucy's code and after implementing an inventory in a room
-	InventoryItem removedItem = characterInventory.removeItem(inventoryItem.getId());
+	InventoryItem removedItem = removeItem(inventoryItem);
 //	currentRoom.inventory.addItem(removedItem);
 }
 
-InventoryItem Avatar::giveObject(InventoryItem inventoryItem) {
-	InventoryItem removedItem = characterInventory.removeItem(inventoryItem.getId());
-	return removedItem;
 
-}
-
-int Avatar::wearObject(SingleItem inventoryItem) {
-	if (inventoryItem.getItemType() == SingleItem::ItemType::CLOTHING){
-		SingleItem currentClothing = _currentClothing;
-		//TODO: fix casting here?? HOW????
-//		InventoryItem itemToWear = (SingleItem)characterInventory.removeItem(inventoryItem);
-//		_currentClothing = itemToWear;
+bool Avatar::wearItem(InventoryItem inventoryItem) {
+	if (inventoryItem.getItemType() == InventoryItem::ItemType::CLOTHING){
+		InventoryItem clothingToRemove = _currentClothing;
+		InventoryItem clothingToWear = removeItem(inventoryItem);
+		_currentClothing = clothingToWear;
+		inventory.addItem(clothingToRemove);
+		return true;
 	}
+	return false;
 }
 
-int Avatar::removeObject(InventoryItem inventoryItem) {
-	return 0;
+InventoryItem Avatar::removeItem(InventoryItem inventoryItem) {
+	return inventory.removeItem(inventoryItem.getId());
 }
