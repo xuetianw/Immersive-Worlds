@@ -6,18 +6,17 @@
 #define WEBSOCKETNETWORKING_AVATAR_H
 
 #include <ContainerItem.h>
-#include <Inventory.h>
 #include "InventoryItem.h"
 
 class Avatar
 {
 private:
 	/** A unique int identifying the character*/
-	int userID; //this will eventually be a User type object
-
-	/** An Inventory object to store character's SingleItems and ContainerItems**/
-	Inventory inventory;
-
+	int _userID; //this will eventually be a User type object
+	/**
+	 * Clothing item that the Avatar is currently wearing
+	 */
+	SingleItem _currentClothing;
 	/**
 	 * Adds an InventoryItem to characterInventory.
 	 * @param inventoryItem item to add to inventory
@@ -37,10 +36,15 @@ private:
 	 */
 	void dropObject(InventoryItem inventoryItem);
 
-	 //TODO since giving an object to another character requires knowledge of the other character, implement that with a remove and add higher up.
+	/**
+	 * Removes an object from the character's inventory and returns it
+	 * @param inventoryItem item to remove
+	 */
+	InventoryItem giveObject(InventoryItem inventoryItem);
 
-	int wearObject(SingleItem singleItem);
-	InventoryItem removeObject(InventoryItem inventoryItem);
+
+	int wearObject(SingleItem inventoryItem);
+	int removeObject(InventoryItem inventoryItem);
 	void attack(Avatar characterToAttack);
 	void kill(Avatar characterToKill);
 	void flee();

@@ -6,26 +6,35 @@
 #include "ContainerItem.h"
 
 void Avatar::takeObject(InventoryItem inventoryItem) {
-	inventory.addItem(inventoryItem);
+
 }
 
 void Avatar::putObject(InventoryItem inventoryItem, ContainerItem containerObject) {
-//TODO fix this when you pull Lucy's code
-	//	 InventoryItem removedItem = characterInventory.removeItem(inventoryItem);
+	InventoryItem removedItem = removeItem(inventoryItem.getId());
 
 }
 
 void Avatar::dropObject(InventoryItem inventoryItem) {
 //	TODO: uncomment these lines after pulling Lucy's code and after implementing an inventory in a room
-//	InventoryItem removedItem = characterInventory.removeItem(inventoryItem);
+	InventoryItem removedItem = characterInventory.removeItem(inventoryItem.getId());
 //	currentRoom.inventory.addItem(removedItem);
 }
 
+InventoryItem Avatar::giveObject(InventoryItem inventoryItem) {
+	InventoryItem removedItem = characterInventory.removeItem(inventoryItem.getId());
+	return removedItem;
 
-int Avatar::wearObject(SingleItem singleItem) {
-	if (singleItem.getType() == SingleItem::ItemType::)
 }
 
-InventoryItem Avatar::removeObject(InventoryItem inventoryItem) {
-	return inventory.removeItem(inventoryItem);
+int Avatar::wearObject(SingleItem inventoryItem) {
+	if (inventoryItem.getItemType() == SingleItem::ItemType::CLOTHING){
+		SingleItem currentClothing = _currentClothing;
+		//TODO: fix casting here?? HOW????
+//		InventoryItem itemToWear = (SingleItem)characterInventory.removeItem(inventoryItem);
+//		_currentClothing = itemToWear;
+	}
+}
+
+int Avatar::removeObject(InventoryItem inventoryItem) {
+	return 0;
 }
