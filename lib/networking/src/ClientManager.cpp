@@ -33,7 +33,7 @@ Message ClientManager::handleInput(Message &message) {
   Message responseMessage = user.handleInput(message);
   if (user.isSubmittingRegistration()) {
     _userData.insert(std::make_pair(user.getUsername(), user.getPassword()));
-    responseMessage.text = "Account Created!";
+    responseMessage.text = "Account Created! Please re-enter your username:";
     // Reset state;
     user.promptLogin();
   } else if (user.isRegistering() && userExists(user)) {
