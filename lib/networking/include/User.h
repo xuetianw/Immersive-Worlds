@@ -24,10 +24,10 @@ public:
     virtual bool isSubmittingResgistration() { return false; };
 
     virtual bool isSubittingLoginInfo() { return false; }
-};
 
-class LoggingInState : public UserState {
-    Message handleInput(User &user, Message &message) override;
+    virtual bool isLoggingIn(){ return false; };
+
+    virtual bool isRegistering(){ return false; };
 };
 
 class LoggedInState : public UserState {
@@ -56,7 +56,11 @@ public:
 
     bool isSubmittingRegistration();
 
-    void setUsername(const string &username);
+    bool isLoggingIn();
+
+    bool isRegistering();
+
+    void setUsername(const string &usernavirtualme);
 
     void setPassword(const string &password);
 

@@ -35,7 +35,8 @@ public:
     * message: the message from the user, ideally before it has been processed by anything else in the server,
     *          ! Should not be used if the client is logged in via check from isLoggedIn() !
     *
-    * returns: A message 
+    * returns: A message to reply back to the user describing its current interaction
+    */
     Message handleInput(Message &message);
 
   /*
@@ -109,6 +110,11 @@ public:
     Message escapeLogin(const Message &message);
 
 private:
+
+    bool userExists(User &user){
+       return _userData.find(user.getUsername()) != _userData.end();
+    }
+
     // A map to store currently registered users
     std::unordered_map<uintptr_t, User> _connectedUserMap;
 

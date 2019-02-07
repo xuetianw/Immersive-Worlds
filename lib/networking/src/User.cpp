@@ -12,6 +12,21 @@ const string LOGIN_PASSWORD_PROMPT = "Please enter your password:";
 const string REGISTER_USERNAME_PROMPT = "Please create your username:";
 const string REGISTER_PASSWORD_PROMPT = "Please create your password:";
 const string NOT_SIGNED_IN_PROMPT = "Please enter login or register!";
+const string EMPTY_INPUT_PROMPT = "Invalid String - ";
+
+////////////////////HELPERS//////////////////////////////////
+
+//TODO: Add validity checks asides from empty string
+
+bool invalidString(const string &str){
+    return str.find_first_not_of(' ') == std::string::npos;
+}
+
+Message invalidStringMessage(Message oringalMessage, string prompt){
+    return Message{oringalMessage.connection, EMPTY_INPUT_PROMPT+prompt};
+}
+
+////////////////////////////////////////////////////////////
 
 class SubmitLoginState : public UserState {
     bool isSubittingLoginInfo() override {return true;}
@@ -19,32 +34,46 @@ class SubmitLoginState : public UserState {
 
 class LoginPasswordState : public UserState {
     Message handleInput(User &user, Message &message) override {
-        stringstream response;
+        if (invalidString(message.text)){
+            return invalidStringMessage(message, LOGIN_PASSWORD_PROMPT);
+        }
         user.setPassword(message.text);
         user.set_state(new SubmitLoginState{});
         return Message{message.connection};
     }
+
+    bool isLoggingIn() { return true; }
 };
 
 class LoginUsernameState : public UserState {
     Message handleInput(User &user, Message &message) override {
+        if (invalidString(message.text)){
+            return invalidStringMessage(message, LOGIN_USERNAME_PROMPT);
+        }
         user.setUsername(message.text);
         user.set_state(new LoginPasswordState{});
         return Message{message.connection, LOGIN_PASSWORD_PROMPT};
     }
+
+    bool isLoggingIn() { return true; }
 };
 
-Message LoggingInState::handleInput(User &user, Message &message) {
-    stringstream response;
-    if (message.text.empty()) {
-        user.set_state(new LoginUsernameState{});
-        return Message{message.connection, LOGIN_USERNAME_PROMPT};
-    } else {
-        user.setUsername(message.text);
-        user.set_state(new LoginPasswordState{});
-        return Message{message.connection, LOGIN_PASSWORD_PROMPT};
+class LoggingInState : public UserState {
+    Message handleInput(User &user, Message &message) {
+        stringstream response;
+        if (message.text.empty()) {
+            user.set_state(new LoginUsernameState{});
+            return Message{message.connection, LOGIN_USERNAME_PROMPT};
+        } else {
+            user.setUsername(message.text);
+            user.set_state(new LoginPasswordState{});
+            return Message{message.connection, LOGIN_PASSWORD_PROMPT};
+        }
     }
-}
+
+    bool isLoggingIn() { return true; }
+};
+
 
 class SubmitRegistrationState : public UserState{
     bool isSubmittingResgistration() override { return true;}
@@ -52,18 +81,28 @@ class SubmitRegistrationState : public UserState{
 
 class ResgisterPasswordState: public UserState{
     Message handleInput(User &user, Message &message) override {
+        if (invalidString(message.text)){
+            return invalidStringMessage(message, REGISTER_PASSWORD_PROMPT);
+        }
         user.setPassword(message.text);
         user.set_state(new SubmitRegistrationState{});
-        return Message{message.connection, REGISTER_PASSWORD_PROMPT};
+        return Message{message.connection};
     }
+
+    bool isRegistering() override { return true; };
 };
 
 class ResgisterLoginState: public UserState{
     Message handleInput(User &user, Message &message) override {
+        if (invalidString(message.text)){
+            return invalidStringMessage(message, REGISTER_USERNAME_PROMPT);
+        }
         user.setUsername(message.text);
         user.set_state(new ResgisterPasswordState);
         return Message{message.connection, REGISTER_PASSWORD_PROMPT};
     }
+
+    bool isRegistering() override { return true; };
 };
 
 class RegisteringState: public UserState{
@@ -71,6 +110,8 @@ class RegisteringState: public UserState{
         user.set_state(new ResgisterLoginState{});
         return Message{message.connection, REGISTER_USERNAME_PROMPT};
      }
+
+    bool isRegistering() override { return true; };
 };
 
 class LoggedOutState : public UserState {
@@ -80,11 +121,11 @@ class LoggedOutState : public UserState {
 };
 
 void User::promptLogin() {
-  _state = new LoggingInState;
+  _state = new LoggingInState{};
 }
 
 void User::promptRegistration() {
-  _state = new RegisteringState;
+  _state = new RegisteringState{};
 }
 
 Message User::handleInput(Message &message) {
@@ -101,6 +142,14 @@ bool User::isSubmittingLoginInfo(){
 
 bool User::isSubmittingRegistration(){
   return _state->isSubmittingResgistration();
+}
+
+bool User::isLoggingIn() {
+    return _state->isLoggingIn();
+}
+
+bool User::isRegistering() {
+    return _state->isRegistering();
 }
 
 void User::setUsername(const string &username) {

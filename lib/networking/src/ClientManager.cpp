@@ -31,13 +31,19 @@ Message ClientManager::handleInput(Message &message) {
         if (user.isSubmittingRegistration()) {
             _userData.insert(std::make_pair(user.getUsername(), user.getPassword()));
             response = "Account Created!";
+            //Reset state;
+            user = User{};
+        } else if (user.isRegistering() && userExists(user)){
+            response = "Username already exists";
+            user.promptRegistration();
+            user.handleInput(message);
         } else if (user.isSubmittingLoginInfo()){
             if(isLoginCredentialsCorrect(user)) {
                 user.set_state(new LoggedInState);
                 response = "Successfully logged in!";
             } else {
-                user.set_state(new LoggingInState);
                 response = "Login Unsuccessful\nPlease enter your username again:";
+                user.promptLogin();
             }
         } else if (!user.isLoggedIn()) {
             return responseMessage;
@@ -49,8 +55,7 @@ Message ClientManager::handleInput(Message &message) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 bool ClientManager::isLoginCredentialsCorrect(User &user) {
     auto userIter = _userData.find(user.getUsername());
-    auto foundPassword = userIter->second;
-    return userIter != _userData.end() && foundPassword == user.getPassword();
+    return userIter != _userData.end() && userIter->second == user.getPassword();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,10 +111,18 @@ void ClientManager::disconnectClient(const Connection &connection) {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 Message ClientManager::escapeLogin(const Message &message) {
     User &user = _connectedUserMap.find(message.connection.id)->second;
-    user = User{};
-    response << "You have exited out of the login process\n" << message.connection.id;
+    stringstream response;
+    if (user.isLoggingIn() || user.isRegistering()){
+        if (user.isRegistering()) {
+            response << "You have exited out of the registration process\n" << message.connection.id;
+        } else {
+            response << "You have exited out of the login process\n" << message.connection.id;
+        }
+        user = User{};
+    } else {
+        response << "You are not submitting any Account information currently";
+    }
     return Message{message.connection.id, response.str()};
-
 }
 
 

@@ -133,21 +133,27 @@ TEST_F(LoggedInClientManagerTest, isLoggedInTestWrongConnection){
  * Registering Test
  */
 
-TEST_F(BasicClientManagerTest, ForwardRegisterClientTest) {
-  clientManager.connectClient(firstConnection);
-  Message userPrompt = clientManager.promptRegister(firstMessage);
 
-  Message registerPasswordPrompt = clientManager.handleInput(usernameMessage);
+
+TEST_F(BasicClientManagerTest, UsernameTakenClientTest) {
+
+  Message newUsername{firstConnection.id, "SecondBuddy"};
+
+  clientManager.connectClient(firstConnection);
+
+  Message userPrompt = clientManager.promptRegister(firstMessage);
+  Message usernameTakenPrompt = clientManager.handleInput(usernameMessage);
+  Message registerPasswordPrompt = clientManager.handleInput(newUsername);
   Message registerSucessful = clientManager.handleInput(passwordMessage);
 
   EXPECT_FALSE(clientManager.isLoggedIn(firstConnection));
 
   EXPECT_EQ("Please create your username:", userPrompt.text);
+  EXPECT_EQ("Username already exists", usernameTakenPrompt.text);
   EXPECT_EQ("Please create your password:", registerPasswordPrompt.text);
   EXPECT_EQ("Account Created!", registerSucessful.text);
 
-  Message passwordPrompt = clientManager.promptLogin(usernameMessage);
-
+  Message passwordPrompt = clientManager.promptLogin(newUsername);
   Message loginSuccessful = clientManager.handleInput(passwordMessage);
 
   EXPECT_TRUE(clientManager.isLoggedIn(firstConnection));
