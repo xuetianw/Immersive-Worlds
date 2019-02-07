@@ -13,28 +13,7 @@ using std::string;
 
 class User;
 
-class UserState {
-public:
-  virtual Message handleInput(User &user, Message &message) { return message; }
-
-  virtual bool isLoggedInState() { return false; }
-
-  virtual bool isSubmittingRegistration() { return false; };
-
-  virtual bool isSubmittingLoginInfo() { return false; }
-
-  virtual bool isLoggingIn() { return false; };
-
-  virtual bool isRegistering() { return false; };
-};
-
-class LoggedInState : public UserState {
-  Message handleInput(User &user, Message &message) override {
-    return Message{};
-  };
-
-  bool isLoggedInState() override { return true; }
-};
+class UserState;
 
 class User {
   string username;
@@ -43,6 +22,8 @@ class User {
 
 public:
   void promptLogin();
+
+  void setToLoggedIn();
 
   void promptRegistration();
 
