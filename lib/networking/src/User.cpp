@@ -27,6 +27,28 @@ Message invalidStringMessage(Message oringalMessage, const string &prompt) {
 }
 
 ////////////////////////////////////////////////////////////
+class UserState {
+public:
+  virtual Message handleInput(User &user, Message &message) { return message; }
+
+  virtual bool isLoggedInState() { return false; }
+
+  virtual bool isSubmittingRegistration() { return false; };
+
+  virtual bool isSubmittingLoginInfo() { return false; }
+
+  virtual bool isLoggingIn() { return false; };
+
+  virtual bool isRegistering() { return false; };
+};
+
+class LoggedInState : public UserState {
+  Message handleInput(User &user, Message &message) override {
+    return Message{};
+  };
+
+  bool isLoggedInState() override { return true; }
+};
 
 class SubmitLoginState : public UserState {
   bool isSubmittingLoginInfo() override { return true; }
@@ -120,6 +142,8 @@ class LoggedOutState : public UserState {
 };
 
 void User::promptLogin() { _state = new LoggingInState{}; }
+
+void User::setToLoggedIn() { _state = new LoggedInState; }
 
 void User::promptRegistration() { _state = new RegisteringState{}; }
 
