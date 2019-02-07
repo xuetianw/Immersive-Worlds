@@ -13,6 +13,7 @@
 #include "ClientManager.h"
 #include "CommandProcessor.h"
 #include "Command.h"
+#include "GameController.h"
 
 #include <iostream>
 #include <fstream>
@@ -28,6 +29,9 @@ using namespace std;
 
 // Manager for handling client connections and authentication
 ClientManager clientManager;
+
+// Manage Game actions
+GameController gameController;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onConnect(Connection& c) {
@@ -63,14 +67,14 @@ std::deque<Message> processMessages(CommandProcessor &commandProcessor,
     }
     return result;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
 CommandProcessor buildCommands(){
     CommandProcessor commandProcessor;
     commandProcessor.addCommand("/logout", [](Command* command, Message message) {return ::clientManager.logoutClient(message.connection);});
     commandProcessor.addCommand("/login", [](Command* command, Message message){return ::clientManager.promptLogin(message);});
     commandProcessor.addCommand("/escape", [](Command* command, Message message){return ::clientManager.escapeLogin(message);});
-
+    commandProcessor.addCommand("yell", [](Command* command, Message message){return ::gameController.yell(command);});
     return std::move(commandProcessor);
 }
 
