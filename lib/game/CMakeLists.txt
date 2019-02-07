@@ -3,6 +3,7 @@ add_library(game
     src/WorldContainer.cpp
     src/ID.cpp
     src/YellCommand.cpp
+    src/AttackCommand.cpp
     src/CommandProcessor.cpp
     src/GameController.cpp)
 
