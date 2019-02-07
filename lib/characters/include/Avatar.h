@@ -6,11 +6,9 @@
 #define WEBSOCKETNETWORKING_AVATAR_H
 
 #include <ContainerItem.h>
-#include "NonUserCharacter.h"
-#include "character.h"
 #include "InventoryItem.h"
 
-class Avatar : public Character
+class Avatar
 {
 private:
 	/** A unique int identifying the character*/
@@ -44,8 +42,8 @@ private:
 
 	int wearObject(InventoryItem inventoryItem);
 	int removeObject(InventoryItem inventoryItem);
-	void attack(NonUserCharacter characterToAttack);
-	void kill(NonUserCharacter characterToKill);
+	void attack(Avatar characterToAttack);
+	void kill(Avatar characterToKill);
 	void flee();
 };
 
