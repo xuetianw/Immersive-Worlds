@@ -113,7 +113,7 @@ class ResgisterPasswordState : public UserState {
   bool isRegistering() override { return true; };
 };
 
-class ResgisterLoginState : public UserState {
+class RegisterUserState : public UserState {
   Message handleInput(User &user, Message &message) override {
     if (invalidString(message.text)) {
       return invalidStringMessage(message, REGISTER_USERNAME_PROMPT);
@@ -128,7 +128,7 @@ class ResgisterLoginState : public UserState {
 
 class RegisteringState : public UserState {
   Message handleInput(User &user, Message &message) override {
-    user.setState(new ResgisterLoginState{});
+    user.setState(new RegisterUserState{});
     return Message{message.connection, REGISTER_USERNAME_PROMPT};
   }
 
