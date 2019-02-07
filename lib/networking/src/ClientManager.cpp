@@ -21,7 +21,7 @@ using namespace std;
 
 //////////////////////////////////////////////PUBLIC///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Message ClientManager::handleInput(Message &message) {
+Message ClientManager::handleInput(Message& message) {
     auto userIter = _connectedUserMap.find(message.connection);
     string response;
 
@@ -53,38 +53,38 @@ Message ClientManager::handleInput(Message &message) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::isLoginCredentialsCorrect(User &user) {
+bool ClientManager::isLoginCredentialsCorrect(User& user) {
     auto userIter = _userData.find(user.getUsername());
     return userIter != _userData.end() && userIter->second == user.getPassword();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::isLoggedIn(const Connection &connection) {
+bool ClientManager::isLoggedIn(const Connection& connection) {
     auto userIter = _connectedUserMap.find(connection);
     return (userIter != _connectedUserMap.end() && userIter->second.isLoggedIn());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Message ClientManager::promptLogin(Message &message) {
+Message ClientManager::promptLogin(Message& message) {
     auto userIter = _connectedUserMap.find(message.connection);
-    User &user = userIter->second;
+    User& user = userIter->second;
     user.promptLogin();
     return user.handleInput(message);
 }
 
-Message ClientManager::promptRegister(Message &message) {
+Message ClientManager::promptRegister(Message& message) {
     auto userIter = _connectedUserMap.find(message.connection);
-    User &user = userIter->second;
+    User& user = userIter->second;
     user.promptRegistration();
     return user.handleInput(message);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-Message ClientManager::logoutClient(const Connection &connection) {
+Message ClientManager::logoutClient(const Connection& connection) {
     string response;
     if (isLoggedIn(connection)) {
         auto userIter = _connectedUserMap.find(connection);
-        User &user = userIter->second;
+        User& user = userIter->second;
         user = User{};
         return Message{connection.id, "User successfully logged out!\n"};
     }
@@ -93,7 +93,7 @@ Message ClientManager::logoutClient(const Connection &connection) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-bool ClientManager::connectClient(const Connection &connection) {
+bool ClientManager::connectClient(const Connection& connection) {
     if (_connectedUserMap.find(connection) == _connectedUserMap.end()) {
         User user;
         _connectedUserMap.insert(std::make_pair(connection, user));
@@ -104,13 +104,13 @@ bool ClientManager::connectClient(const Connection &connection) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void ClientManager::disconnectClient(const Connection &connection) {
+void ClientManager::disconnectClient(const Connection& connection) {
     _connectedUserMap.erase(connection);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-Message ClientManager::escapeLogin(const Message &message) {
-    User &user = _connectedUserMap.find(message.connection)->second;
+Message ClientManager::escapeLogin(const Message& message) {
+    User& user = _connectedUserMap.find(message.connection)->second;
     stringstream response;
     if (user.isLoggingIn() || user.isRegistering()){
         if (user.isRegistering()) {

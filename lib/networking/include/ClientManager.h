@@ -29,25 +29,26 @@ public:
      * Instantiates a ClientManager
      */
     ClientManager() = default;
-  /*
-    * desc: Recieves an input from the Server and determines the correct Interaction with the message
-    * based on the User's current state.
-    *
-    * message: the message from the user, ideally before it has been processed by anything else in the server,
-    *          ! Should not be used if the client is logged in via check from isLoggedIn() !
-    *
-    * returns: A message to reply back to the user describing its current interaction
-    */
+
+    /*
+      * desc: Recieves an input from the Server and determines the correct Interaction with the message
+      * based on the User's current state.
+      *
+      * message: the message from the user, ideally before it has been processed by anything else in the server,
+      *          ! Should not be used if the client is logged in via check from isLoggedIn() !
+      *
+      * returns: A message to reply back to the user describing its current interaction
+      */
     Message handleInput(Message &message);
 
-  /*
-     * desc: Checks if the given user submitted information is valid with the given database of Account
-     * Information
-     *
-     * user: The class holding the username and passsword to be submitted
-     *
-     * returns true the information is correct
-     */
+    /*
+       * desc: Checks if the given user submitted information is valid with the given database of Account
+       * Information
+       *
+       * user: The class holding the username and passsword to be submitted
+       *
+       * returns true the information is correct
+       */
     bool isLoginCredentialsCorrect(User &user);
 
     /*
@@ -95,7 +96,8 @@ public:
      * returns the registered client, null if failed to register
      */
 
-    bool connectClient(const Connection &connection);
+    bool connectClient(const Connection& connection);
+
     /*
      * desc: Unregisters a client when disconnected
      *
@@ -103,17 +105,17 @@ public:
      *
      * returns the registered client, null if failed to register
      */
-    void disconnectClient(const Connection &connection);
+    void disconnectClient(const Connection& connection);
 
     /*
      * desc: Lets the user esscape the process he is currently in
      */
-    Message escapeLogin(const Message &message);
+    Message escapeLogin(const Message& message);
 
 private:
 
-    bool userExists(User &user){
-       return _userData.find(user.getUsername()) != _userData.end();
+    bool userExists(User& user) {
+        return _userData.find(user.getUsername()) != _userData.end();
     }
 
     // A map to store currently registered users
@@ -121,11 +123,11 @@ private:
 
     // Mock dummy usernames and passwords for testing until database is added
     // TODO: Remove the mock usernames and passwords once database is added
-    std::unordered_map<string, string> _userData {
-        { "John", "password123*" },
-        { "Rex", "admin12345" },
-        { "Alex", "myPassword!" },
-        { "Garfield", "Pwd15081967@merci" }
+    std::unordered_map<string, string> _userData{
+            {"John",     "password123*"},
+            {"Rex",      "admin12345"},
+            {"Alex",     "myPassword!"},
+            {"Garfield", "Pwd15081967@merci"}
     };
 };
 
