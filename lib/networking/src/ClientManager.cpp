@@ -42,7 +42,7 @@ Message ClientManager::handleInput(Message &message) {
     user.handleInput(message);
   } else if (user.isSubmittingLoginInfo()) {
     if (isLoginCredentialsCorrect(user)) {
-      user.setState(new LoggedInState);
+      user.setToLoggedIn();
       responseMessage.text = "Successfully logged in!";
     } else {
       responseMessage.text =
