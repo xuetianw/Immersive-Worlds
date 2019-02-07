@@ -29,7 +29,7 @@ Message invalidStringMessage(Message oringalMessage, string prompt){
 ////////////////////////////////////////////////////////////
 
 class SubmitLoginState : public UserState {
-    bool isSubittingLoginInfo() override {return true;}
+    bool isSubmittingLoginInfo() override {return true;}
 };
 
 class LoginPasswordState : public UserState {
@@ -38,7 +38,7 @@ class LoginPasswordState : public UserState {
             return invalidStringMessage(message, LOGIN_PASSWORD_PROMPT);
         }
         user.setPassword(message.text);
-        user.set_state(new SubmitLoginState{});
+        user.setState(new SubmitLoginState{});
         return Message{message.connection};
     }
 
@@ -51,7 +51,7 @@ class LoginUsernameState : public UserState {
             return invalidStringMessage(message, LOGIN_USERNAME_PROMPT);
         }
         user.setUsername(message.text);
-        user.set_state(new LoginPasswordState{});
+        user.setState(new LoginPasswordState{});
         return Message{message.connection, LOGIN_PASSWORD_PROMPT};
     }
 
@@ -62,11 +62,11 @@ class LoggingInState : public UserState {
     Message handleInput(User &user, Message &message) {
         stringstream response;
         if (message.text.empty()) {
-            user.set_state(new LoginUsernameState{});
+            user.setState(new LoginUsernameState{});
             return Message{message.connection, LOGIN_USERNAME_PROMPT};
         } else {
             user.setUsername(message.text);
-            user.set_state(new LoginPasswordState{});
+            user.setState(new LoginPasswordState{});
             return Message{message.connection, LOGIN_PASSWORD_PROMPT};
         }
     }
@@ -76,7 +76,7 @@ class LoggingInState : public UserState {
 
 
 class SubmitRegistrationState : public UserState{
-    bool isSubmittingResgistration() override { return true;}
+    bool isSubmittingRegistration() override { return true;}
 };
 
 class ResgisterPasswordState: public UserState{
@@ -85,7 +85,7 @@ class ResgisterPasswordState: public UserState{
             return invalidStringMessage(message, REGISTER_PASSWORD_PROMPT);
         }
         user.setPassword(message.text);
-        user.set_state(new SubmitRegistrationState{});
+        user.setState(new SubmitRegistrationState{});
         return Message{message.connection};
     }
 
@@ -98,7 +98,7 @@ class ResgisterLoginState: public UserState{
             return invalidStringMessage(message, REGISTER_USERNAME_PROMPT);
         }
         user.setUsername(message.text);
-        user.set_state(new ResgisterPasswordState);
+        user.setState(new ResgisterPasswordState);
         return Message{message.connection, REGISTER_PASSWORD_PROMPT};
     }
 
@@ -107,7 +107,7 @@ class ResgisterLoginState: public UserState{
 
 class RegisteringState: public UserState{
     Message handleInput(User &user, Message &message) override {
-        user.set_state(new ResgisterLoginState{});
+        user.setState(new ResgisterLoginState{});
         return Message{message.connection, REGISTER_USERNAME_PROMPT};
      }
 
@@ -137,11 +137,11 @@ bool User::isLoggedIn() {
 }
 
 bool User::isSubmittingLoginInfo(){
-  return _state->isSubittingLoginInfo();
+  return _state->isSubmittingLoginInfo();
 }
 
 bool User::isSubmittingRegistration(){
-  return _state->isSubmittingResgistration();
+  return _state->isSubmittingRegistration();
 }
 
 bool User::isLoggingIn() {
@@ -160,8 +160,8 @@ void User::setPassword(const string &password) {
   User::password = password;
 }
 
-void User::set_state(UserState *_state) {
-  User::_state = _state;
+void User::setState(UserState *state) {
+  User::_state = state;
 }
 
 User::User() : username(""), password(""), _state(new LoggedOutState{}) {}
