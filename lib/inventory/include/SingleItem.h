@@ -28,6 +28,7 @@ public:
     std::string getShortdesc() const;
     std::string getLongdesc() const;
     std::string getDescription() const;
+    ItemType getType() const;
 
 private:
     int _id;

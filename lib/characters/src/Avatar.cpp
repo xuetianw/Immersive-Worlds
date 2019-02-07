@@ -6,7 +6,7 @@
 #include "ContainerItem.h"
 
 void Avatar::takeObject(InventoryItem inventoryItem) {
-
+	inventory.addItem(inventoryItem);
 }
 
 void Avatar::putObject(InventoryItem inventoryItem, ContainerItem containerObject) {
@@ -21,17 +21,11 @@ void Avatar::dropObject(InventoryItem inventoryItem) {
 //	currentRoom.inventory.addItem(removedItem);
 }
 
-InventoryItem Avatar::giveObject(InventoryItem inventoryItem) {
-//	TODO uncomment these next lines once Lucy's code is pulled
-//	Item removedItem = characterInventory.removeItem(inventoryItem);
-//	return removedItem;
 
+int Avatar::wearObject(SingleItem singleItem) {
+	if (singleItem.getType() == SingleItem::ItemType::)
 }
 
-int Avatar::wearObject(InventoryItem inventoryItem) {
-	return 0;
-}
-
-int Avatar::removeObject(InventoryItem inventoryItem) {
-	return 0;
+InventoryItem Avatar::removeObject(InventoryItem inventoryItem) {
+	return inventory.removeItem(inventoryItem);
 }
