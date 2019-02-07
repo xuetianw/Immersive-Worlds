@@ -26,7 +26,7 @@ Message CommandProcessor::processMessage(const Message &message) {
     }
 
     InputHandler& defaultHandler = _commands["default"];
-    return defaultHandler.functionPtr(defaultHandler.argCmd.get(), message);
+    return defaultHandler.functionPtr(nullptr, message);
 }
 
 std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
