@@ -5,8 +5,8 @@
 #ifndef WEBSOCKETNETWORKING_USER_H
 #define WEBSOCKETNETWORKING_USER_H
 
-#include <string>
 #include "Server.h"
+#include <string>
 
 using networking::Message;
 using std::string;
@@ -15,64 +15,60 @@ class User;
 
 class UserState {
 public:
-    virtual Message handleInput(User& user, Message& message){
-        return message;
-    }
+  virtual Message handleInput(User &user, Message &message) { return message; }
 
-    virtual bool isLoggedInState() { return false; }
+  virtual bool isLoggedInState() { return false; }
 
-    virtual bool isSubmittingRegistration() { return false; };
+  virtual bool isSubmittingRegistration() { return false; };
 
-    virtual bool isSubmittingLoginInfo() { return false; }
+  virtual bool isSubmittingLoginInfo() { return false; }
 
-    virtual bool isLoggingIn(){ return false; };
+  virtual bool isLoggingIn() { return false; };
 
-    virtual bool isRegistering(){ return false; };
+  virtual bool isRegistering() { return false; };
 };
 
 class LoggedInState : public UserState {
-    Message handleInput(User& user, Message& message) override{
-        return Message{};
-    };
+  Message handleInput(User &user, Message &message) override {
+    return Message{};
+  };
 
-    bool isLoggedInState() override { return true; }
+  bool isLoggedInState() override { return true; }
 };
 
 class User {
-    string username;
-    string password;
-    UserState *_state;
+  string username;
+  string password;
+  UserState *_state;
+
 public:
+  void promptLogin();
 
-    void promptLogin();
+  void promptRegistration();
 
-    void promptRegistration();
+  Message handleInput(Message &message);
 
-    Message handleInput(Message& message);
+  bool isLoggedIn();
 
-    bool isLoggedIn();
+  bool isSubmittingLoginInfo();
 
-    bool isSubmittingLoginInfo();
+  bool isSubmittingRegistration();
 
-    bool isSubmittingRegistration();
+  bool isLoggingIn();
 
-    bool isLoggingIn();
+  bool isRegistering();
 
-    bool isRegistering();
+  void setUsername(const string &usernavirtualme);
 
-    void setUsername(const string& usernavirtualme);
+  void setPassword(const string &password);
 
-    void setPassword(const string& password);
+  void setState(UserState *state);
 
-    void setState(UserState *state);
+  const string &getUsername() const;
 
-    const string& getUsername() const;
+  const string &getPassword() const;
 
-    const string& getPassword() const;
-
-    User();
-
+  User();
 };
 
-
-#endif //WEBSOCKETNETWORKING_USER_H
+#endif // WEBSOCKETNETWORKING_USER_H
