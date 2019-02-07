@@ -21,9 +21,9 @@ public:
 
     virtual bool isLoggedInState() { return false; }
 
-    virtual bool isSubmittingResgistration() { return false; };
+    virtual bool isSubmittingRegistration() { return false; };
 
-    virtual bool isSubittingLoginInfo() { return false; }
+    virtual bool isSubmittingLoginInfo() { return false; }
 
     virtual bool isLoggingIn(){ return false; };
 
@@ -64,7 +64,7 @@ public:
 
     void setPassword(const string &password);
 
-    void set_state(UserState *_state);
+    void setState(UserState *state);
 
     const string &getUsername() const;
 
