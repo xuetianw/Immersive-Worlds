@@ -39,7 +39,7 @@ Message ClientManager::handleInput(Message &message) {
             user.handleInput(message);
         } else if (user.isSubmittingLoginInfo()){
             if(isLoginCredentialsCorrect(user)) {
-                user.set_state(new LoggedInState);
+                user.setState(new LoggedInState);
                 response = "Successfully logged in!";
             } else {
                 response = "Login Unsuccessful\nPlease enter your username again:";
