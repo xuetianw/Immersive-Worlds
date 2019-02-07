@@ -40,6 +40,8 @@ public:
   virtual bool isLoggingIn() { return false; };
 
   virtual bool isRegistering() { return false; };
+
+  virtual ~UserState() = default;
 };
 
 class LoggedInState : public UserState {
