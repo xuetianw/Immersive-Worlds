@@ -18,6 +18,7 @@
 
 using networking::Connection;
 using networking::Message;
+using networking::ConnectionHasher;
 using std::string;
 
 class ClientManager {
@@ -116,7 +117,7 @@ private:
     }
 
     // A map to store currently registered users
-    std::unordered_map<Connection, User> _connectedUserMap;
+    std::unordered_map<Connection, User, ConnectionHasher> _connectedUserMap;
 
     // Mock dummy usernames and passwords for testing until database is added
     // TODO: Remove the mock usernames and passwords once database is added
