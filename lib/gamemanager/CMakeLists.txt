@@ -10,13 +10,12 @@ target_include_directories(gamemanager
   PUBLIC
   $<INSTALL_INTERFACE:include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        ${CMAKE_CURRENT_SOURCE_DIR}/doc
-        ${Boost_INCLUDE_DIR}
-        PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${Boost_INCLUDE_DIR}
-)
 
+  ${Boost_INCLUDE_DIR}
+  PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/src
+  ${Boost_INCLUDE_DIR}
+  )
 
 target_link_libraries(gamemanager
   PUBLIC
