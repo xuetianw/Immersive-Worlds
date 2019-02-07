@@ -25,7 +25,7 @@ Message ClientManager::handleInput(Message& message) {
     auto userIter = _connectedUserMap.find(message.connection);
     string response;
 
-    if (userIter != _connectedUserMap.end()) {
+    if (userIter == _connectedUserMap.end()) {
         return Message{message.connection, response};
     }
 
