@@ -71,6 +71,7 @@ std::deque<Message> processMessages(CommandProcessor &commandProcessor,
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 CommandProcessor buildCommands(){
     CommandProcessor commandProcessor;
+    commandProcessor.addCommand("default", [](Command* command, Message message) {return message;});
     commandProcessor.addCommand("/logout", [](Command* command, Message message) {return ::clientManager.logoutClient(message.connection);});
     commandProcessor.addCommand("/login", [](Command* command, Message message){return ::clientManager.promptLogin(message);});
     commandProcessor.addCommand("/escape", [](Command* command, Message message){return ::clientManager.escapeLogin(message);});
