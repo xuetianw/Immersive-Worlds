@@ -6,11 +6,10 @@
 #define WEBSOCKETNETWORKING_AVATAR_H
 
 #include <ContainerItem.h>
-#include "NonUserCharacter.h"
-#include "character.h"
+#include <Inventory.h>
 #include "InventoryItem.h"
 
-class Avatar : public Character
+class Avatar
 {
 private:
 	/** A unique int identifying the character*/
@@ -18,37 +17,33 @@ private:
 	/**
 	 * Clothing item that the Avatar is currently wearing
 	 */
-	SingleItem _currentClothing;
+	InventoryItem _currentClothing;
+	Inventory inventory;
 	/**
 	 * Adds an InventoryItem to characterInventory.
 	 * @param inventoryItem item to add to inventory
 	 */
-	void takeObject(InventoryItem inventoryItem);
+	void takeItem(InventoryItem inventoryItem);
 
 	/**
 	 * Puts an object into a ContainerItem
 	 * @param inventoryItem item to put into ContainerItem
 	 * @param containerObject container to place object in
 	 */
-	void putObject(InventoryItem inventoryItem, ContainerItem containerObject);
+	void putItem(InventoryItem inventoryItem, ContainerItem containerObject);
 
 	/**
 	 * Removes object from characterInventory and places it in currentRoom's inventory
 	 * @param inventoryItem item to remove from inventory
 	 */
-	void dropObject(InventoryItem inventoryItem);
+	void dropItem(InventoryItem inventoryItem);
 
-	/**
-	 * Removes an object from the character's inventory and returns it
-	 * @param inventoryItem item to remove
-	 */
-	InventoryItem giveObject(InventoryItem inventoryItem);
+	//TODO move "giving" an item up higher as it requires knowledge of another avatar
 
-
-	int wearObject(SingleItem inventoryItem);
-	int removeObject(InventoryItem inventoryItem);
-	void attack(NonUserCharacter characterToAttack);
-	void kill(NonUserCharacter characterToKill);
+	bool wearItem(InventoryItem inventoryItem);
+	InventoryItem removeItem(InventoryItem inventoryItem);
+	void attack(Avatar characterToAttack);
+	void kill(Avatar characterToKill);
 	void flee();
 };
 
