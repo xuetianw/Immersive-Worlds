@@ -116,7 +116,7 @@ private:
     }
 
     // A map to store currently registered users
-    std::unordered_map<uintptr_t, User> _connectedUserMap;
+    std::unordered_map<Connection, User> _connectedUserMap;
 
     // Mock dummy usernames and passwords for testing until database is added
     // TODO: Remove the mock usernames and passwords once database is added
