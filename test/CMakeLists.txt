@@ -18,8 +18,14 @@ enable_testing()
 
 ## Add your test .cpp file here
 
-add_executable(run_tests channel/channelTest.cpp MessageTest/MessageTest.cpp gameManager/idTest.cpp 
-NetworkingTests/CilentManagerTests.cpp NetworkingTests/ConsoleCommandTests.cpp)
+add_executable(run_tests
+    channel/channelTest.cpp
+    MessageTest/MessageTest.cpp
+    gameManager/idTest.cpp
+    NetworkingTests/CilentManagerTests.cpp
+    NetworkingTests/ConsoleCommandTests.cpp
+    NetworkingTests/ServerTests.cpp
+  )
 
 target_link_libraries(run_tests gmock gtest gtest_main)
 
