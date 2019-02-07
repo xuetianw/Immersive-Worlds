@@ -31,7 +31,7 @@ public:
     ClientManager() = default;
   /*
     * desc: Recieves an input from the Server and determines the correct Interaction with the message
-    * based on the User's current state. 
+    * based on the User's current state.
     *
     * message: the message from the user, ideally before it has been processed by anything else in the server,
     *          ! Should not be used if the client is logged in via check from isLoggedIn() !

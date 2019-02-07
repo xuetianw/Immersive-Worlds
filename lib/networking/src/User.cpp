@@ -22,7 +22,7 @@ bool invalidString(const string &str){
     return str.find_first_not_of(' ') == std::string::npos;
 }
 
-Message invalidStringMessage(Message oringalMessage, string prompt){
+Message invalidStringMessage(Message oringalMessage, const string &prompt){
     return Message{oringalMessage.connection, EMPTY_INPUT_PROMPT+prompt};
 }
 
@@ -42,7 +42,7 @@ class LoginPasswordState : public UserState {
         return Message{message.connection};
     }
 
-    bool isLoggingIn() { return true; }
+    bool isLoggingIn() override { return true; }
 };
 
 class LoginUsernameState : public UserState {
@@ -55,11 +55,11 @@ class LoginUsernameState : public UserState {
         return Message{message.connection, LOGIN_PASSWORD_PROMPT};
     }
 
-    bool isLoggingIn() { return true; }
+    bool isLoggingIn() override { return true; }
 };
 
 class LoggingInState : public UserState {
-    Message handleInput(User &user, Message &message) {
+    Message handleInput(User &user, Message &message) override {
         stringstream response;
         if (message.text.empty()) {
             user.setState(new LoginUsernameState{});
@@ -71,7 +71,7 @@ class LoggingInState : public UserState {
         }
     }
 
-    bool isLoggingIn() { return true; }
+    bool isLoggingIn() override { return true; }
 };
 
 

@@ -26,30 +26,30 @@ Message ClientManager::handleInput(Message &message) {
     string response;
 
     if (userIter != _connectedUserMap.end()) {
-        User &user = userIter->second;
-        Message responseMessage = user.handleInput(message);
-        if (user.isSubmittingRegistration()) {
-            _userData.insert(std::make_pair(user.getUsername(), user.getPassword()));
-            response = "Account Created!";
-            //Reset state;
-            user = User{};
-        } else if (user.isRegistering() && userExists(user)){
-            response = "Username already exists";
-            user.promptRegistration();
-            user.handleInput(message);
-        } else if (user.isSubmittingLoginInfo()){
-            if(isLoginCredentialsCorrect(user)) {
-                user.setState(new LoggedInState);
-                response = "Successfully logged in!";
-            } else {
-                response = "Login Unsuccessful\nPlease enter your username again:";
-                user.promptLogin();
-            }
-        } else if (!user.isLoggedIn()) {
-            return responseMessage;
+        return Message{message.connection, response};
+    }
+
+    User &user = userIter->second;
+    Message responseMessage = user.handleInput(message);
+    if (user.isSubmittingRegistration()) {
+        _userData.insert(std::make_pair(user.getUsername(), user.getPassword()));
+        responseMessage.text = "Account Created!";
+        //Reset state;
+        user.promptLogin();
+    } else if (user.isRegistering() && userExists(user)){
+        responseMessage.text = "Username already exists";
+        user.promptRegistration();
+        user.handleInput(message);
+    } else if (user.isSubmittingLoginInfo()){
+        if(isLoginCredentialsCorrect(user)) {
+            user.setState(new LoggedInState);
+            responseMessage.text = "Successfully logged in!";
+        } else {
+            responseMessage.text = "Login Unsuccessful\nPlease enter your username again:";
+            user.promptLogin();
         }
     }
-    return Message{message.connection, response};
+    return responseMessage; //
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
