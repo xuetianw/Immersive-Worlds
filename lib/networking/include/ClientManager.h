@@ -108,6 +108,11 @@ public:
      */
     Message escapeLogin(const Message &message);
 
+    /*
+     * desc: Create a minigame in that room
+     */
+    Message createMiniGame(const Message &message);
+
 private:
     // A map to store currently registered users
     std::unordered_map<uintptr_t, User > _connectedUserMap;
