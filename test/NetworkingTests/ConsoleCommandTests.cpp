@@ -16,8 +16,8 @@ public:
   Message dummy{99,"/HahaWhatAmI"};
 protected:
   virtual void SetUp() override {
-    commandProcessor.addCommand(loginCommand, [](Message message){return Message{message.connection,::loginStr};});
-    commandProcessor.addCommand(logoutCommand, [](Message message){return Message{message.connection,::logoutStr};});
+    commandProcessor.addCommand(loginCommand, [](Command*, Message message){return Message{message.connection,::loginStr};});
+    commandProcessor.addCommand(logoutCommand, [](Command*, Message message){return Message{message.connection,::logoutStr};});
   }
 
   virtual void TearDown() override {

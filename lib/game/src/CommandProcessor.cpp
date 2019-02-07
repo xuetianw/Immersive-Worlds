@@ -3,52 +3,44 @@
 //
 
 #include <utility>
+#include <boost/algorithm/string.hpp>
 #include "CommandProcessor.h"
 #include "YellCommand.h"
-
-std::pair<string,string> CommandProcessor::splitCommand(const string& message_text){
-    stringstream msg_stream(message_text);
-    string key_command, white_space, remainder;
-    msg_stream >> key_command;
-    getline(msg_stream >> std::ws, remainder);
-    return std::pair<string,string>(key_command, remainder);
-}
 
 bool CommandProcessor::isCommand(const Message &message) {
     std::pair commandMessagePair = splitCommand(message.text);
     return _commands.find(commandMessagePair.first) != _commands.end();
 }
 
+void CommandProcessor::addCommand(string commandKeyword, function_ptr fnPtr ) {
+    _commands.insert(std::make_pair(commandKeyword, InputHandler { fnPtr, commandFactory(commandKeyword) }));
+}
+
 Message CommandProcessor::processMessage(const Message &message) {
     std::pair commandMessagePair = splitCommand(message.text);
-    auto fnDescriptor = _commands.find(commandMessagePair.first);
-//    InputHandler inHandler;
-//    string cmd;
-//
-//    if(fnDescriptor != _commands.end()) {
-//        cmd = commandMessagePair.first;
-//        inHandler = fnDescriptor->second;
-//    } else {
-//        cmd = "default";
-//        inHandler = _commands[cmd];
-//    }
-//
-//    if(inHandler.argCmd == nullptr) {
-//        inHandler.argCmd = getCommand(cmd);
-//    }
+    auto commandsIter = _commands.find(commandMessagePair.first);
 
-    // return fnDescriptor->second.functionPtr(fnDescriptor->second.argCmd);
-    if(fnDescriptor != _commands.end()) return fnDescriptor->second.functionPtr(Message {message.connection, commandMessagePair.second});
-    return Message {message.connection, "default"};
+    // Assumption: default handler is always registered in the commands map
+    if(commandsIter != _commands.end()) {
+        return commandsIter->second.functionPtr(commandsIter->second.argCmd.get(), Message {message.connection, commandMessagePair.second});
+    }
+
+    InputHandler& defaultHandler = _commands["default"];
+    return defaultHandler.functionPtr(defaultHandler.argCmd.get(), message);
 }
 
-void CommandProcessor::addCommand(string commandKeyword, function_ptr fnPtr ) {
-    _commands.insert(std::make_pair(commandKeyword, InputHandler { fnPtr, nullptr }));
+std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
+    boost::trim(messageText);
+    stringstream msgStream(messageText);
+    string keyCommand, remainder;
+    msgStream >> keyCommand;
+    getline(msgStream >> std::ws, remainder);
+    return std::pair<string,string>(keyCommand, remainder);
 }
 
-Command* CommandProcessor::getCommand(const string &commandKey) {
+std::unique_ptr<Command> CommandProcessor::commandFactory(const string& commandKey) {
     if(commandKey == "yell") {
-        return new YellCommand();
+        return std::make_unique<YellCommand>();
     }
 
     return nullptr;

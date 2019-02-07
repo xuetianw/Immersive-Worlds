@@ -13,11 +13,11 @@
 #ifndef WEBSOCKETNETWORKING_COMMANDPROCESSOR_H
 #define WEBSOCKETNETWORKING_COMMANDPROCESSOR_H
 
-typedef Message (*function_ptr)(Message);
+typedef Message (*function_ptr)(Command*, Message message);
 
 struct InputHandler {
     function_ptr functionPtr;
-    Command* argCmd;
+    std::unique_ptr<Command> argCmd;
 };
 
 class CommandProcessor {
@@ -41,21 +41,21 @@ public:
     Message processMessage(const Message &message);
 
     /*
-     * Split a user message text to retrieve the command for processing
-     */
-    std::pair<string, string> splitCommand(const string& message_text);
-
-    /*
      * Adds a function to a keyword, the function has to be in format of Message _____(Message message)
      */
     void addCommand(string commandKeyword, function_ptr);
 
+private:
+    /*
+     * Split a user message text to retrieve the command for processing
+     */
+    std::pair<string, string> splitCommand(string messageText);
+
     /*
      * Map a command to a class that executes
      */
-    Command* getCommand(const string& commandKey);
+    std::unique_ptr<Command> commandFactory(const string& commandKey);
 
-private:
     std::unordered_map<string, InputHandler> _commands;
 };
 

@@ -12,6 +12,7 @@
 #include "Server.h"
 #include "ClientManager.h"
 #include "CommandProcessor.h"
+#include "Command.h"
 
 #include <iostream>
 #include <fstream>
@@ -66,10 +67,9 @@ std::deque<Message> processMessages(CommandProcessor &commandProcessor,
 
 CommandProcessor buildCommands(){
     CommandProcessor commandProcessor;
-    commandProcessor.addCommand("/logout", [](Message message){::clientManager.logoutClient(message.connection);
-                                                                return Message{message.connection, "Logging out."};});
-    commandProcessor.addCommand("/login", [](Message message){return ::clientManager.promptLogin(message);});
-    commandProcessor.addCommand("/escape", [](Message message){return ::clientManager.escapeLogin(message);});
+    commandProcessor.addCommand("/logout", [](Command* command, Message message) {return ::clientManager.logoutClient(message.connection);});
+    commandProcessor.addCommand("/login", [](Command* command, Message message){return ::clientManager.promptLogin(message);});
+    commandProcessor.addCommand("/escape", [](Command* command, Message message){return ::clientManager.escapeLogin(message);});
 
     return std::move(commandProcessor);
 }
