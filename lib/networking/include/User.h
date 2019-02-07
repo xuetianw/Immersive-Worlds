@@ -15,7 +15,7 @@ class User;
 
 class UserState {
 public:
-    virtual Message handleInput(User &user, Message &message){
+    virtual Message handleInput(User& user, Message& message){
         return message;
     }
 
@@ -31,7 +31,7 @@ public:
 };
 
 class LoggedInState : public UserState {
-    Message handleInput(User &user, Message &message) override{
+    Message handleInput(User& user, Message& message) override{
         return Message{};
     };
 
@@ -48,7 +48,7 @@ public:
 
     void promptRegistration();
 
-    Message handleInput(Message &message);
+    Message handleInput(Message& message);
 
     bool isLoggedIn();
 
@@ -60,15 +60,15 @@ public:
 
     bool isRegistering();
 
-    void setUsername(const string &usernavirtualme);
+    void setUsername(const string& usernavirtualme);
 
-    void setPassword(const string &password);
+    void setPassword(const string& password);
 
     void setState(UserState *state);
 
-    const string &getUsername() const;
+    const string& getUsername() const;
 
-    const string &getPassword() const;
+    const string& getPassword() const;
 
     User();
 
