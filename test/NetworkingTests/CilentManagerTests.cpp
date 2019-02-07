@@ -151,7 +151,7 @@ TEST_F(BasicClientManagerTest, UsernameTakenClientTest) {
   EXPECT_EQ("Please create your username:", userPrompt.text);
   EXPECT_EQ("Username already exists", usernameTakenPrompt.text);
   EXPECT_EQ("Please create your password:", registerPasswordPrompt.text);
-  EXPECT_EQ("Account Created!", registerSucessful.text);
+  EXPECT_EQ("Account Created! Please re-enter your username:", registerSucessful.text);
 
   Message passwordPrompt = clientManager.promptLogin(newUsername);
   Message loginSuccessful = clientManager.handleInput(passwordMessage);
