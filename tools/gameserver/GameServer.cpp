@@ -76,7 +76,7 @@ CommandProcessor buildCommands(){
     commandProcessor.addCommand("/login", [](Command* command, Message message){return ::clientManager.promptLogin(message);});
     commandProcessor.addCommand("/escape", [](Command* command, Message message){return ::clientManager.escapeLogin(message);});
     commandProcessor.addCommand("yell", [](Command* command, Message message){return ::gameController.yell(command);});
-    commandProcessor.addCommand("attack", [](Command* command, Message message){return ::gameController.attack(command);});
+    commandProcessor.addCommand("/attack", [](Command* command, Message message){return ::gameController.attack(command);});
     return std::move(commandProcessor);
 }
 

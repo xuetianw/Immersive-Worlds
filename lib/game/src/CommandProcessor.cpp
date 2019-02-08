@@ -43,7 +43,7 @@ std::unique_ptr<Command> CommandProcessor::commandFactory(const string& commandK
     if(commandKey == "yell") {
         return std::make_unique<YellCommand>();
     }
-    else if(commandKey == "attack"){
+    else if(commandKey == "/attack"){
         return std::make_unique<AttackCommand>();
     }
 
