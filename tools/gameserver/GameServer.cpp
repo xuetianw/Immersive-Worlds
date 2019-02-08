@@ -61,7 +61,7 @@ std::deque<Message> processMessages(CommandProcessor &commandProcessor,
             result.push_back(commandProcessor.processMessage(message));
         } else if (clientManager.isClientPromptingLogin(message.connection)) {
             result.push_back(clientManager.promptLogin(message));
-        }else {
+        } else {
             result.push_back((message));
         }
     }

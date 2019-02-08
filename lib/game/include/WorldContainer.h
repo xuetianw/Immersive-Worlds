@@ -5,6 +5,8 @@
 #ifndef WEBSOCKETNETWORKING_WORLDCONTAINTER_H
 #define WEBSOCKETNETWORKING_WORLDCONTAINTER_H
 
+#include <Area.h>
+#include <World.h>
 #include "CusJson.h"
 #include "Room.h"
 
@@ -14,16 +16,13 @@
  */
 class WorldContainer {
 public:
+    WorldContainer();
     void loadFromStorage();
-    std::string getNPCDesc(const int& roomId);
-    CusJson::NPC getNPC(const int& npcId);
-    CusJson::Area getArea(const int& areaId);
-    channel::Room getRoom(const int& roomId);
-
     void resetWorld();
+    std::string getRoomName(const int id);
 private:
-    CusJson::World world;
+    channel::Area _area = channel::Area(0);// TODO clean up temp id
 
-    void printOutWorld(const CusJson::World &world);
+    json debugArea();
 };
 #endif //WEBSOCKETNETWORKING_WORLDCONTAINTER_H
