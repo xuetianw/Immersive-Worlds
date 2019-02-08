@@ -36,6 +36,8 @@ namespace channel {
              * @returns true = inserted in the map. false = id already exists in map
              */
             bool addRoom(const Room &room);
+
+            Room getRoom(const RoomId &roomId);
       vector<Room> tempRoomContainer;
         private:
             int _id = 0; //TODO make area id unique

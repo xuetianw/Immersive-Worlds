@@ -31,5 +31,5 @@ WorldHandler::WorldHandler() {
 }
 
 std::string WorldHandler::getAreaName(const int &id) {
-    return this->worldContainer.getAreaName(id);
+    return this->worldContainer.getRoomName(id);
 }

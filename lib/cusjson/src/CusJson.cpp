@@ -29,7 +29,6 @@ namespace CusJson {
 
   void to_json(json &j, const ExtDesc &extDesc) {
     //TODO implement
-
   }
 
   void from_json(const json &j, ExtDesc &extDesc) {

@@ -19,7 +19,7 @@ public:
     WorldContainer();
     void loadFromStorage();
     void resetWorld();
-    std::string getAreaName(const int id);
+    std::string getRoomName(const int id);
 private:
     channel::Area _area = channel::Area(0);// TODO clean up temp id
 

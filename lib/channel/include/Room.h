@@ -43,11 +43,7 @@ namespace channel {
 
     Room(const string& name, const string& description);
 
-    Room(const Room& that);
-
     Room(const CusJson::Room &jsonForm);
-
-    ~Room();
 
     int getId() const;
 

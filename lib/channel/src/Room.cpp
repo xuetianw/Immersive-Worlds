@@ -24,7 +24,7 @@ using std::vector;
 using std::move;
 using std::make_pair;
 
-Room::Room() {
+Room::Room() : _id({-1}){
   // TODO default constructor
 };
 
@@ -34,16 +34,8 @@ Room::Room(const string& name, const string& description)
 }
 
 Room::Room(const CusJson::Room &jsonForm)
-        : _id(RoomId(jsonForm._id)), _name(std::move(*std::make_unique<string>(jsonForm._name))) {
+        : _id(RoomId(jsonForm._id)), _name(jsonForm._name) {
 
-}
-
-Room::Room(const Room& that) {
-  // TODO copy constructor
-}
-
-Room::~Room() {
-  // TODO destructor
 }
 
 int Room::getId() const {
