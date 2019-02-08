@@ -13,23 +13,27 @@ using testing::Return;
  * Registering
  */
 
-TEST(BasicClientManagerTest, RegisterClientTest){
-  ClientManager clientManager;
-  Connection firstConnection{0};
-  Connection secondConnection{1};
-  clientManager.registerClient(firstConnection);
-  EXPECT_FALSE(clientManager.registerClient(firstConnection));
-  EXPECT_TRUE(clientManager.registerClient(secondConnection));
+
+struct BasicClientManagerTest : testing:: Test {
+    ClientManager clientManager;
+    Connection firstConnection{0};
+    Connection secondConnection{1};
+    Message firstMessage{firstConnection,""};
+    Message usernameMessage{firstConnection,"Rex"};
+    Message passwordMessage{firstConnection,"admin12345"};
+};
+
+TEST_F(BasicClientManagerTest, RegisterClientTest){
+    clientManager.registerClient(firstConnection);
+    EXPECT_FALSE(clientManager.registerClient(firstConnection));
+    EXPECT_TRUE(clientManager.registerClient(secondConnection));
 }
 
 /*
  * Unregistering
  */
 
-TEST(BasicClientManagerTest, UnregisterClientTest){
-  ClientManager clientManager;
-  Connection firstConnection{0};
-  clientManager.registerClient(firstConnection);
+TEST_F(BasicClientManagerTest, UnregisterClientTest){
   clientManager.unregisterClient(firstConnection);
   EXPECT_TRUE(clientManager.registerClient(firstConnection));
 }
@@ -38,26 +42,18 @@ TEST(BasicClientManagerTest, UnregisterClientTest){
  * Logging out
  */
 
-TEST(BasicClientManagerTest, LogoutClientTest){
-  ClientManager clientManager;
-  Connection firstConnection{0};
+TEST_F(BasicClientManagerTest, LogoutClientTest){
   clientManager.registerClient(firstConnection);
   Message message = clientManager.logoutClient(firstConnection);
-  EXPECT_EQ(message.connection, firstConnection);
-  EXPECT_EQ(message.text, "User not logged in!\n");
+  EXPECT_EQ(firstConnection, message.connection);
+  EXPECT_EQ("User not logged in!\n", message.text);
 }
 
 /*
  * Login tests
  */
 
-TEST(BasicClientManagerTest, LoginClientTestWithoutInitalParam){
-  ClientManager clientManager;
-  Connection firstConnection{0};
-  Message firstMessage{firstConnection,""};
-  Message usernameMessage{firstConnection,"Rex"};
-  Message passwordMessage{firstConnection,"admin12345"};
-
+TEST_F(BasicClientManagerTest, LoginClientTestWithoutInitalParam){
   clientManager.registerClient(firstConnection);
   Message userPrompt = clientManager.promptLogin(firstMessage);
   EXPECT_TRUE(clientManager.isClientPromptingLogin(firstConnection));
@@ -67,15 +63,13 @@ TEST(BasicClientManagerTest, LoginClientTestWithoutInitalParam){
 
   Message loginSuccessful = clientManager.promptLogin(passwordMessage);
 
-  EXPECT_EQ(userPrompt.text, "Please enter your username:\n");
-  EXPECT_EQ(passwordPrompt.text, "Please enter your password:\n");
-  EXPECT_EQ(loginSuccessful.text, "Successfully logged in!\n");
+  EXPECT_EQ("Please enter your username:\n", userPrompt.text);
+  EXPECT_EQ("Please enter your password:\n", passwordPrompt.text);
+  EXPECT_EQ("Successfully logged in!\n", loginSuccessful.text);
 }
 
 
-TEST(BasicClientManagerTest, LoginClientTestWithInitalParam){
-  ClientManager clientManager;
-  Connection firstConnection{0};
+TEST_F(BasicClientManagerTest, LoginClientTestWithInitalParam){
   Message firstMessage{firstConnection,"Rex"};
   Message passwordMessage{firstConnection,"admin12345"};
 
@@ -85,14 +79,12 @@ TEST(BasicClientManagerTest, LoginClientTestWithInitalParam){
 
   Message loginSuccessful = clientManager.promptLogin(passwordMessage);
 
-  EXPECT_EQ(passwordPrompt.text, "Please enter your password:\n");
-  EXPECT_EQ(loginSuccessful.text, "Successfully logged in!\n");
+  EXPECT_EQ("Please enter your password:\n", passwordPrompt.text);
+  EXPECT_EQ("Successfully logged in!\n", loginSuccessful.text);
 }
 
 
-TEST(BasicClientManagerTest, LoginClientTestWithWrongInfo){
-  ClientManager clientManager;
-  Connection firstConnection{0};
+TEST_F(BasicClientManagerTest, LoginClientTestWithWrongInfo){
   Message firstMessage{firstConnection,"Rex"};
   Message passwordMessage{firstConnection,"admin123"};
 
@@ -102,8 +94,8 @@ TEST(BasicClientManagerTest, LoginClientTestWithWrongInfo){
 
   Message loginUnsuccessful = clientManager.promptLogin(passwordMessage);
 
-  EXPECT_EQ(passwordPrompt.text, "Please enter your password:\n");
-  EXPECT_EQ(loginUnsuccessful.text, "Login Unsuccessful\nPlease enter your username again:\n");
+  EXPECT_EQ("Please enter your password:\n", passwordPrompt.text);
+  EXPECT_EQ("Login Unsuccessful\nPlease enter your username again:\n", loginUnsuccessful.text);
   EXPECT_FALSE(clientManager.isLoggedIn(firstConnection));
 }
 
