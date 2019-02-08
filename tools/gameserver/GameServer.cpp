@@ -71,9 +71,6 @@ std::deque<Message> processMessages(CommandProcessor &commandProcessor,
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 CommandProcessor buildCommands(){
     CommandProcessor commandProcessor;
-    commandProcessor.addCommand("/areaName", [](Message message){
-        message.text = worldHandler.getAreaName(0);
-        return message;});
     commandProcessor.addCommand("default", [](Command* command, Message message) {return message;});
     commandProcessor.addCommand("/logout", [](Command* command, Message message) {return ::clientManager.logoutClient(message.connection);});
     commandProcessor.addCommand("/login", [](Command* command, Message message){return ::clientManager.promptLogin(message);});
@@ -98,7 +95,6 @@ std::string getHTTPMessage(const char* htmlLocation) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[]) {
-    worldHandler = WorldHandler();
     if (argc < 3) {
         std::cerr << "Usage:\n  " << argv[0] << " <port> <html response>\n"
                   << "  e.g. " << argv[0] << " 4002 ./webchat.html\n";

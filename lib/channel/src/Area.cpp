@@ -21,10 +21,10 @@ Area::~Area() {
 
 Area::Area() {}
 
-Area::Area(const CusJson::Area& jsonArea)
+Area::Area(const CusJson::Area &jsonArea)
         : _name(jsonArea._name) {
     for (const CusJson::Room &jsonRoom : jsonArea._rooms) {
-        this->addRoom(jsonRoom);
+        this->addRoom(Room(jsonRoom));
     }
 }
 
