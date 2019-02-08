@@ -1,4 +1,4 @@
-#include "CommandProcessor.h"
+#include "../../lib/tools/commandprocessor/include/CommandProcessor.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
@@ -26,9 +26,9 @@ protected:
 
 
 TEST_F(ConsoleCommandTest, commandsAreCalled){
-    Message defaultResponse = commandProcessor.processMessage(dummy);
-    Message loginResponse = commandProcessor.processMessage(login);
-    Message logoutResponse = commandProcessor.processMessage(logout);
+    Message defaultResponse = commandProcessor.processCommand(dummy);
+    Message loginResponse = commandProcessor.processCommand(login);
+    Message logoutResponse = commandProcessor.processCommand(logout);
 
     EXPECT_TRUE(defaultResponse.text != loginStr && defaultResponse.text != logoutStr);
     EXPECT_TRUE(loginResponse.text == loginStr);
