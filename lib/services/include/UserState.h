@@ -2,8 +2,8 @@
 // Created by vinshit on 05/02/19.
 //
 
-#ifndef WEBSOCKETNETWORKING_USER_H
-#define WEBSOCKETNETWORKING_USER_H
+#ifndef WEBSOCKETNETWORKING_USERSTATE_H
+#define WEBSOCKETNETWORKING_USERSTATE_H
 
 #include "Server.h"
 #include <string>
@@ -26,16 +26,6 @@ const string LOGGED_IN_PROMPT = "Successfully logged in!\n";
 const string LOGGED_OUT_PROMPT = "Logged out Successfully!\n";
 const string NOT_SIGNED_IN_PROMPT = "Please enter login or register!\n";
 const string EMPTY_INPUT_PROMPT = "Invalid String - \n";
-
-//////////////////////////////////////////////HELPERS//////////////////////////////////////////////
-// TODO: Add validity checks asides from empty string possibly move validation to DBUtility
-bool invalid(const string &str) {
-    return str.find_first_not_of(' ') == std::string::npos;
-}
-
-Message getResponseForInvalidInput(Message message, const string &prompt) {
-    return Message{message.connection, EMPTY_INPUT_PROMPT + prompt};
-}
 
 ///////////////////////////////////////////USER-STATES/////////////////////////////////////////////
 struct UnRegisteredState {};
@@ -65,64 +55,80 @@ struct User {
 
 ///////////////////////////////////////STATE-TRANSITIONS///////////////////////////////////////////
 struct StateTransitions {
-    Message operator()(UnRegisteredState& state, User& user, const Message& message) {
-        user._state = RegisterUsernameState {};
-        return Message { message.connection, REGISTER_USERNAME_PROMPT };
+    Message _currentUserResponseMessage;
+
+    /////////////////////////////////////////////HELPERS///////////////////////////////////////////
+    // TODO: Add validity checks asides from empty string possibly move validation to DBUtility
+    bool invalid(string str) {
+        return str.find_first_not_of(' ') == std::string::npos;
     }
 
-    Message operator()(RegisterUsernameState& state, User& user, const Message& message) {
+    Message getResponseForInvalidInput(Message message, string prompt) {
+        return Message{message.connection, EMPTY_INPUT_PROMPT + prompt};
+    }
+
+    ////////////////////////////////////////////VISITORS///////////////////////////////////////////
+    std::optional<UserStateVariant> operator()(UnRegisteredState& state, User& user, const Message& message) {
+        _currentUserResponseMessage = Message {message.connection, REGISTER_USERNAME_PROMPT};
+        return RegisterUsernameState {};
+    }
+
+    std::optional<UserStateVariant> operator()(RegisterUsernameState& state, User& user, const Message& message) {
         // TODO: Add the username to persistent storage for future identification
         if (invalid(message.text)) {
-            return getResponseForInvalidInput(message, REGISTER_USERNAME_FAILED_PROMPT);
+            _currentUserResponseMessage = getResponseForInvalidInput(message, REGISTER_USERNAME_FAILED_PROMPT);
+            return RegisterUsernameState {};
         }
 
-        user._state = RegisterPasswordState {};
-        return Message{message.connection, REGISTER_PASSWORD_PROMPT};
+        _currentUserResponseMessage = Message{message.connection, REGISTER_PASSWORD_PROMPT};
+        return RegisterPasswordState {};
     }
 
-    Message operator()(RegisterPasswordState& state, User& user, const Message& message) {
+    std::optional<UserStateVariant> operator()(RegisterPasswordState& state, User& user, const Message& message) {
         // TODO: Add the password to persistent storage for future authentication
         if (invalid(message.text)) {
-            return getResponseForInvalidInput(message, REGISTER_PASSWORD_FAILED_PROMPT);
+            _currentUserResponseMessage = getResponseForInvalidInput(message, REGISTER_PASSWORD_FAILED_PROMPT);
+            return RegisterPasswordState {};
         }
 
-        user._state = LoginUsernameState {};
-        return Message{message.connection, LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT};
+        _currentUserResponseMessage = Message{message.connection, LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT};
+        return LoginUsernameState {};
     }
 
-    Message operator()(ConnectedState& state, User& user, const Message& message) {
-        user._state = LoginUsernameState{};
-        return Message{message.connection, LOGIN_USERNAME_PROMPT};
+    std::optional<UserStateVariant> operator()(ConnectedState& state, User& user, const Message& message) {
+        Message{message.connection, LOGIN_USERNAME_PROMPT};
+        return LoginUsernameState{};
     }
 
-    Message operator()(LoginUsernameState& state, User& user, const Message& message) {
+    std::optional<UserStateVariant> operator()(LoginUsernameState& state, User& user, const Message& message) {
         // TODO: Verify username
         if(invalid(message.text)) {
-            return getResponseForInvalidInput(message, LOGIN_USERNAME_FAILED_PROMPT);
+            _currentUserResponseMessage = getResponseForInvalidInput(message, LOGIN_USERNAME_FAILED_PROMPT);
+            return LoginUsernameState {};
         }
 
         user._username = message.text;
-        user._state = LoginPasswordState {};
-        return Message {message.connection, LOGIN_PASSWORD_PROMPT};
+        _currentUserResponseMessage = Message {message.connection, LOGIN_PASSWORD_PROMPT};
+        return LoginPasswordState {};
     }
 
-    Message operator()(LoginPasswordState& state, User& user, const Message& message) {
+    std::optional<UserStateVariant> operator()(LoginPasswordState& state, User& user, const Message& message) {
         if(invalid(message.text)) {
-            user._state = LoginUsernameState {};
-            return getResponseForInvalidInput(message, LOGIN_PASSWORD_FAILED_PROMPT);
+            _currentUserResponseMessage = getResponseForInvalidInput(message, LOGIN_PASSWORD_FAILED_PROMPT);
+            return LoginUsernameState {};
         }
 
         user._password = message.text;
-        user._state = LoggedInState {};
-        return Message {message.connection, LOGGED_IN_PROMPT};
+        _currentUserResponseMessage = Message {message.connection, LOGGED_IN_PROMPT};
+        return LoggedInState {};
     }
 
-    Message operator()(LoggedInState& state, User& user, const Message& message) {
+    std::optional<UserStateVariant> operator()(LoggedInState& state, User& user, const Message& message) {
         user._username = "";
         user._password = "";
-        user._state = ConnectedState {};
-        return Message{message.connection, LOGGED_OUT_PROMPT};
+        _currentUserResponseMessage = Message{message.connection, LOGGED_OUT_PROMPT};
+        return ConnectedState {};
     }
 };
 
-#endif // WEBSOCKETNETWORKING_USER_H
+#endif // WEBSOCKETNETWORKING_USERSTATE_H

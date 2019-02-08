@@ -3,6 +3,6 @@
 //
 #include "GameController.h"
 
-networking::Message GameController::yell(Command* cmd) {
-    return cmd->execute(gameService);
+Message GameController::yell(Command* cmd, const Message& message) {
+    return cmd->execute(gameService, message);
 }

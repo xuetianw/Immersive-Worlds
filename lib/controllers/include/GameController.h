@@ -13,7 +13,7 @@ class GameController {
 public:
     GameController() = default;
 
-    networking::Message yell(Command* cmd);
+    networking::Message yell(Command* cmd, const Message& message);
 
 private:
     GameService gameService;

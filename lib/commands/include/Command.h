@@ -6,16 +6,16 @@
 #define WEBSOCKETNETWORKING_COMMAND_H
 
 #include <Server.h>
-#include "GameService.h"
+#include "Service.h"
 
 class Command {
 public:
-    virtual ~Command() {}
+    virtual ~Command() = default;
 
-    virtual networking::Message execute(GameService& service) = 0;
+    virtual networking::Message execute(Service& service, const Message& message) = 0;
 
 protected:
-    Command() {}
+    Command() = default;
 };
 
 #endif //WEBSOCKETNETWORKING_COMMAND_H

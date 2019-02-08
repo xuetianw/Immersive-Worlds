@@ -19,8 +19,7 @@
 using namespace std;
 
 bool UserController::isLoggedIn(const Connection &connection) {
-    auto userIter = _connectedUserMap.find(connection);
-    return (userIter != _connectedUserMap.end() && userIter->second.isLoggedIn());
+    return userService.isLoggedIn(connection);
 }
 
 void UserController::connectClient(const Connection &connection) {
@@ -31,8 +30,8 @@ void UserController::disconnectClient(const Connection &connection) {
     userService.disconnectClient(connection);
 }
 
-Message UserController::updateUserState(Command* cmd) {
-    return cmd->execute(userService);
+Message UserController::handleCommand(Command *cmd, const Message& message) {
+    return cmd->execute(userService, message);
 }
 
 //Message UserController::escapeLogin(const Message &message) {

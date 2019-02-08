@@ -26,7 +26,7 @@ class UserController {
 public:
     UserController() : userService() {};
 
-    Message updateUserState(Command* cmd);
+    Message handleCommand(Command *cmd, const Message& message);
 
     bool isLoggedIn(const Connection &connection);
 
