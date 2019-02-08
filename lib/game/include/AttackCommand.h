@@ -23,8 +23,6 @@ public:
 
     AttackCommand() = default;
 
-    ~AttackCommand(){};
-
     //need to figure out how to obtain Character
     void attackCharacter(int opponentId);
 

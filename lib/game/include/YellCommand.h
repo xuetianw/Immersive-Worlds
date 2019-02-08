@@ -12,7 +12,6 @@ class YellCommand : public Command {
 public:
     YellCommand() = default;
 
-    ~YellCommand() {}
 
     virtual networking::Message execute(GameService& service);
 };
