@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "Server.h"
-#include "ClientManager.h"
+#include "UserController.h"
 #include "CommandProcessor.h"
 #include "Command.h"
 #include "GameController.h"
@@ -28,7 +28,7 @@ using networking::Server;
 using namespace std;
 
 // Manager for handling client connections and authentication
-ClientManager clientManager;
+UserController clientManager;
 
 // Manage Game actions
 GameController gameController;
@@ -57,14 +57,11 @@ std::deque<Message> processMessages(CommandProcessor &commandProcessor,
         } else if (message.text == "shutdown") {
             std::cout << "Shutting down.\n";
             quit = true;
-        } else if (commandProcessor.isCommand(message)){
-            result.push_back(commandProcessor.processMessage(message));
         } else {
-            if (clientManager.isLoggedIn(message.connection)) {
-                result.push_back((message));
-            } else {
-                result.push_back(clientManager.handleInput(message));
-            }
+            result.push_back(commandProcessor.processCommand(
+                    message,
+                    clientManager.isLoggedIn(message.connection)
+                    ));
         }
     }
     return result;
@@ -73,12 +70,15 @@ std::deque<Message> processMessages(CommandProcessor &commandProcessor,
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 CommandProcessor buildCommands(){
     CommandProcessor commandProcessor;
-    commandProcessor.addCommand("default", [](Command* command, Message message) {return message;});
+
+    commandProcessor.addCommand("clientDefault", [](Command* command, Message message) {return message;});
+    commandProcessor.addCommand("gameDefault", [](Command* command, Message message) {return message;});
     commandProcessor.addCommand("/logout", [](Command* command, Message message) {return ::clientManager.logoutClient(message.connection);});
     commandProcessor.addCommand("/login", [](Command* command, Message message){return ::clientManager.promptLogin(message);});
     commandProcessor.addCommand("/register", [](Command* command, Message message){return ::clientManager.promptRegister(message);});
     commandProcessor.addCommand("/escape", [](Command* command, Message message){return ::clientManager.escapeLogin(message);});
     commandProcessor.addCommand("yell", [](Command* command, Message message){return ::gameController.yell(command);});
+
     return std::move(commandProcessor);
 }
 

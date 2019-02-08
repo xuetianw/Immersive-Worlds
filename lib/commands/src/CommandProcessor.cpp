@@ -12,20 +12,20 @@ bool CommandProcessor::isCommand(const Message &message) {
     return _commands.find(commandMessagePair.first) != _commands.end();
 }
 
-void CommandProcessor::addCommand(string commandKeyword, function_ptr fnPtr ) {
-    _commands.insert(std::make_pair(commandKeyword, InputHandler { fnPtr, commandFactory(commandKeyword) }));
+void CommandProcessor::addCommand(string commandKeyword, function_ptr fnPtr) {
+    _commands.insert(std::make_pair(std::move(commandKeyword), InputHandler { fnPtr, commandFactory(commandKeyword, isGameCommand) }));
 }
 
-Message CommandProcessor::processMessage(const Message &message) {
+Message CommandProcessor::processCommand(const Message &message, bool isGameCommand) {
     std::pair commandMessagePair = splitCommand(message.text);
     auto commandsIter = _commands.find(commandMessagePair.first);
 
-    // Assumption: default handler is always registered in the commands map
     if(commandsIter != _commands.end()) {
         return commandsIter->second.functionPtr(commandsIter->second.argCmd.get(), Message {message.connection, commandMessagePair.second});
     }
 
-    InputHandler& defaultHandler = _commands["default"];
+    // Assumption: default handler is always registered in the commands map
+    InputHandler& defaultHandler = isGameCommand ? _commands["gameDefault"] : _commands["clientDefault"];
     return defaultHandler.functionPtr(nullptr, message);
 }
 

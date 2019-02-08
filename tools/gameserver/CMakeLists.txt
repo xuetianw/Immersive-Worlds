@@ -9,12 +9,12 @@ set_target_properties(gameserver
     PREFIX ""
     )
 
-find_package(Threads REQUIRED)
-
 target_link_libraries(gameserver
     networking
     game
-    ${CMAKE_THREAD_LIBS_INIT}
+    user
+    commands
+    controllers
     )
 
 install(TARGETS gameserver
