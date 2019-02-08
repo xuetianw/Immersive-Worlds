@@ -1,6 +1,10 @@
 add_library(commands
     src/CommandProcessor.cpp
     src/YellCommand.cpp
+    src/RegisterCommand.cpp
+    src/LoginCommand.cpp
+    src/LogoutCommand.cpp
+    src/DefaultUserCommand.cpp
     )
 
 find_package(Boost 1.68 COMPONENTS system REQUIRED)

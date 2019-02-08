@@ -28,21 +28,21 @@ using networking::Server;
 using namespace std;
 
 // Manager for handling client connections and authentication
-UserController clientManager;
+unique_ptr<UserController> userController;
 
 // Manage Game actions
-GameController gameController;
+unique_ptr<GameController> gameController;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onConnect(Connection& c) {
     std::cout << "New connection found: " << c.id << endl;
-  clientManager.connectClient(c);
+  userController->connectClient(c);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onDisconnect(Connection& c) {
     std::cout << "Connection lost: " << c.id << endl;
-  clientManager.disconnectClient(c);
+  userController->disconnectClient(c);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ std::deque<Message> processMessages(CommandProcessor &commandProcessor,
         } else {
             result.push_back(commandProcessor.processCommand(
                     message,
-                    clientManager.isLoggedIn(message.connection)
+                    userController->isLoggedIn(message.connection)
                     ));
         }
     }
@@ -71,15 +71,15 @@ std::deque<Message> processMessages(CommandProcessor &commandProcessor,
 CommandProcessor buildCommands(){
     CommandProcessor commandProcessor;
 
-    commandProcessor.addCommand("clientDefault", [](Command* command, Message message) {return message;});
-    commandProcessor.addCommand("gameDefault", [](Command* command, Message message) {return message;});
-    commandProcessor.addCommand("/logout", [](Command* command, Message message) {return ::clientManager.logoutClient(message.connection);});
-    commandProcessor.addCommand("/login", [](Command* command, Message message){return ::clientManager.promptLogin(message);});
-    commandProcessor.addCommand("/register", [](Command* command, Message message){return ::clientManager.promptRegister(message);});
-    commandProcessor.addCommand("/escape", [](Command* command, Message message){return ::clientManager.escapeLogin(message);});
-    commandProcessor.addCommand("yell", [](Command* command, Message message){return ::gameController.yell(command);});
+    commandProcessor.addCommand("defaultUserCommand", [](Command* command, Message message) {return ::userController->handleCommand(command, message);});
+    commandProcessor.addCommand("defaultGameCommand", [](Command* command, Message message) {return message;});
+    commandProcessor.addCommand("/logout", [](Command* command, Message message) {return ::userController->handleCommand(command, message);});
+    commandProcessor.addCommand("/login", [](Command* command, Message message){return ::userController->handleCommand(command, message);});
+    commandProcessor.addCommand("/register", [](Command* command, Message message){return ::userController->handleCommand(command, message);});
+    commandProcessor.addCommand("/escape", [](Command* command, Message message){return ::userController->handleCommand(command, message);});
+    commandProcessor.addCommand("yell", [](Command* command, Message message){return ::gameController->yell(command, message);});
 
-    return std::move(commandProcessor);
+    return move(commandProcessor);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,7 +105,11 @@ int main(int argc, char* argv[]) {
     }
 
     bool done = false;
-    unsigned short port = std::stoi(argv[1]);
+    unsigned short port = static_cast<unsigned  short>(std::stoi(argv[1]));
+
+    userController = make_unique<UserController>();
+    gameController = make_unique<GameController>();
+
     Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
     CommandProcessor commandProcessor = buildCommands();
 

@@ -1,4 +1,4 @@
-#include "../../lib/tools/commandprocessor/include/CommandProcessor.h"
+#include "CommandProcessor.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
@@ -16,7 +16,7 @@ public:
     Message dummy{Connection {99},"/HahaWhatAmI"};
 protected:
     virtual void SetUp() override {
-      commandProcessor.addCommand("default", [](Command* command, Message message) {return message;});
+        commandProcessor.addCommand("defaultUserCommand", [](Command* command, Message message) {return message;});
         commandProcessor.addCommand(loginCommand, [](Command*, Message message){return Message{message.connection,::loginStr};});
         commandProcessor.addCommand(logoutCommand, [](Command*, Message message){return Message{message.connection,::logoutStr};});
     }
@@ -26,9 +26,9 @@ protected:
 
 
 TEST_F(ConsoleCommandTest, commandsAreCalled){
-    Message defaultResponse = commandProcessor.processCommand(dummy);
-    Message loginResponse = commandProcessor.processCommand(login);
-    Message logoutResponse = commandProcessor.processCommand(logout);
+    Message defaultResponse = commandProcessor.processCommand(dummy, false);
+    Message loginResponse = commandProcessor.processCommand(login, false);
+    Message logoutResponse = commandProcessor.processCommand(logout, false);
 
     EXPECT_TRUE(defaultResponse.text != loginStr && defaultResponse.text != logoutStr);
     EXPECT_TRUE(loginResponse.text == loginStr);

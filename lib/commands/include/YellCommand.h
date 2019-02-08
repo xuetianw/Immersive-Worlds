@@ -14,7 +14,7 @@ public:
 
     ~YellCommand() {}
 
-    virtual networking::Message execute(GameService& service);
+    networking::Message execute(Service& service, const Message& message) override;
 };
 
 #endif //WEBSOCKETNETWORKING_YELLCOMMAND_H

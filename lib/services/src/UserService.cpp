@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <variant>
 
 #include "UserService.h"
 
@@ -18,9 +19,17 @@ void UserService::disconnectClient(const Connection &connection) {
     _connectedUserMap.erase(connection);
 }
 
-Message UserService::getResponse(Message message) {
+Message UserService::updateUserState(const Message &message) {
     auto userIter = _connectedUserMap.find(message.connection);
-    return std::visit(StateTransitions {}, userIter->second);
+    // std::optional<UserStateVariant> newState = std::visit(StateTransitions {}, userIter->second._state);
+    auto newState = std::visit(
+            [&](auto& state) -> std::optional<UserStateVariant>
+            {
+                return transitions(state, userIter->second, message);
+            }, userIter->second._state);
+    userIter->second._state = *std::move(newState);
+
+    return transitions._currentUserResponseMessage;
 }
 
 bool UserService::isLoggedIn(const Connection &connection) {

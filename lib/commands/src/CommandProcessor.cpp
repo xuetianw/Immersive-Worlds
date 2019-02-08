@@ -5,7 +5,11 @@
 #include <utility>
 #include <boost/algorithm/string.hpp>
 #include "CommandProcessor.h"
+#include "DefaultUserCommand.h"
 #include "YellCommand.h"
+#include "RegisterCommand.h"
+#include "LoginCommand.h"
+#include "LogoutCommand.h"
 
 bool CommandProcessor::isCommand(const Message &message) {
     std::pair commandMessagePair = splitCommand(message.text);
@@ -13,7 +17,7 @@ bool CommandProcessor::isCommand(const Message &message) {
 }
 
 void CommandProcessor::addCommand(string commandKeyword, function_ptr fnPtr) {
-    _commands.insert(std::make_pair(std::move(commandKeyword), InputHandler { fnPtr, commandFactory(commandKeyword, isGameCommand) }));
+    _commands.insert(std::make_pair(std::move(commandKeyword), InputHandler { fnPtr, commandFactory(commandKeyword) }));
 }
 
 Message CommandProcessor::processCommand(const Message &message, bool isGameCommand) {
@@ -25,7 +29,7 @@ Message CommandProcessor::processCommand(const Message &message, bool isGameComm
     }
 
     // Assumption: default handler is always registered in the commands map
-    InputHandler& defaultHandler = isGameCommand ? _commands["gameDefault"] : _commands["clientDefault"];
+    InputHandler& defaultHandler = isGameCommand ? _commands["defaultGameCommand"] : _commands["defaultUserCommand"];
     return defaultHandler.functionPtr(nullptr, message);
 }
 
@@ -41,6 +45,14 @@ std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
 std::unique_ptr<Command> CommandProcessor::commandFactory(const string& commandKey) {
     if(commandKey == "yell") {
         return std::make_unique<YellCommand>();
+    } else if(commandKey == "/register") {
+        return std::make_unique<RegisterCommand>();
+    } else if(commandKey == "/login") {
+        return std::make_unique<LoginCommand>();
+    } else if(commandKey == "/logout") {
+        return std::make_unique<LogoutCommand>();
+    } else if(commandKey == "defaultUserCommand") {
+        return std::make_unique<DefaultUserCommand>();
     }
 
     return nullptr;
