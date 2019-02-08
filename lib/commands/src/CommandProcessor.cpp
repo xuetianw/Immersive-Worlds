@@ -17,7 +17,7 @@ bool CommandProcessor::isCommand(const Message &message) {
 }
 
 void CommandProcessor::addCommand(string commandKeyword, function_ptr fnPtr) {
-    _commands.insert(std::make_pair(std::move(commandKeyword), InputHandler { fnPtr, commandFactory(commandKeyword) }));
+    _commands[std::move(commandKeyword)] = InputHandler { fnPtr, commandFactory(commandKeyword) };
 }
 
 Message CommandProcessor::processCommand(const Message &message, bool isGameCommand) {
