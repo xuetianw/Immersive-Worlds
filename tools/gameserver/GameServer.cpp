@@ -70,7 +70,6 @@ CommandProcessor buildCommands(){
                                                                 return Message{message.connection, "Logging out."};});
     commandProcessor.addCommand("/login", [](Message message){return ::clientManager.promptLogin(message);});
     commandProcessor.addCommand("/escape", [](Message message){return ::clientManager.escapeLogin(message);});
-    commandProcessor.addCommand("/minigame", [](Message message){return ::clientManager.createMiniGame(message);});
 
     return std::move(commandProcessor);
 }
