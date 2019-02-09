@@ -10,9 +10,9 @@ Welcome to adventure2019's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   structure
-   commands
-   functions
+   gameDocs/structure
+   gameDocs/commands
+   gameDocs/functions
 
 
 .. add new doc files above this
