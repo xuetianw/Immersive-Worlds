@@ -6,3 +6,7 @@
 networking::Message GameController::yell(Command* cmd) {
     return cmd->execute(gameService);
 }
+
+networking::Message GameController::attack(Command *cmd) {
+    return cmd->execute(gameService);
+}

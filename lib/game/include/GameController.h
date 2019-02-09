@@ -14,6 +14,7 @@ public:
     GameController() = default;
 
     networking::Message yell(Command* cmd);
+    networking::Message attack(Command* cmd);
 
 private:
     GameService gameService;

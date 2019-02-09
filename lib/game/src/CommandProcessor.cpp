@@ -4,6 +4,7 @@
 
 #include <utility>
 #include <boost/algorithm/string.hpp>
+#include <AttackCommand.h>
 #include "CommandProcessor.h"
 #include "YellCommand.h"
 
@@ -41,6 +42,9 @@ std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
 std::unique_ptr<Command> CommandProcessor::commandFactory(const string& commandKey) {
     if(commandKey == "yell") {
         return std::make_unique<YellCommand>();
+    }
+    else if(commandKey == "/attack"){
+        return std::make_unique<AttackCommand>();
     }
 
     return nullptr;
