@@ -8,12 +8,13 @@
 #include "Area.h"
 #include "RoomConnection.h"
 #include <Server.h>
+#include "CusJson.h"
 
 #include "GameService.h"
 
 class GameService {
 public:
-    GameService() = default;
+    GameService();
 
     // TODO: Define interface to access data
 private:
@@ -24,6 +25,8 @@ private:
     std::unordered_map<int, std::vector<channel::RoomConnection>> _roomIdToConnections;
     channel::Room getRoom(const channel::RoomId &roomId);
     channel::Room getUserRoom(const networking::Connection &connection);
+    void loadFromStorage();
+    json getTestingArea();
 public:
 
   /**
