@@ -7,6 +7,9 @@
 
 #include "Area.h"
 #include "RoomConnection.h"
+#include <Server.h>
+
+#include "GameService.h"
 
 class GameService {
 public:
@@ -22,8 +25,17 @@ private:
     channel::Room getRoom(const channel::RoomId &roomId);
     channel::Room getUserRoom(const networking::Connection &connection);
 public:
+
+  /**
+   * It is assumed that the user is in a room, and the room has a list of connections(can be blank).
+   */
     bool moveUser(const networking::Connection &connection, const std::string keywordString);
-    bool userYell(const networking::Connection &connection, const std::string messageString)
+
+    bool userYell(const networking::Connection &connection, const std::string messageString);
+
+    bool placeUserInStartRoom(const networking::Connection &connection);
+
+    string getCurrentRoomName(const networking::Connection &connection);
 
 };
 

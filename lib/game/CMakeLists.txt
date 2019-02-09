@@ -4,7 +4,8 @@ add_library(game
     src/ID.cpp
     src/YellCommand.cpp
     src/CommandProcessor.cpp
-    src/GameController.cpp)
+    src/GameController.cpp
+    src/GameService.cpp)
 
 find_package(Boost 1.68 COMPONENTS system REQUIRED)
 

@@ -17,17 +17,17 @@ namespace channel {
     public:
         RoomConnection(const RoomId &_to, const RoomId &_from, const string &_keyword);
 
-        const RoomId &get_to() const;
+        const RoomId &getTo() const;
 
-        void set_to(const RoomId &_to);
+        void setTo(const RoomId &_to);
 
-        const RoomId &get_from() const;
+        const RoomId &getFrom() const;
 
-        void set_from(const RoomId &_from);
+        void setFrom(const RoomId &_from);
 
-        const string &get_keyword() const;
+        const string &getKeyword() const;
 
-        void set_keyword(const string &_keyword);
+        void setKeyword(const string &_keyword);
 
 //private:
 //    int state; // TODO this is left empty for now as design for making doors active or not is unknown/tbd later
