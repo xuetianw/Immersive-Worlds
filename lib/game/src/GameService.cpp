@@ -43,11 +43,12 @@ void GameService::loadFromStorage() {
 
   for (const CusJson::Room &jsonRoom : solaceAreaJson._rooms) {
     _roomIdToRoom.emplace(jsonRoom._id, channel::Room(jsonRoom));
+    vector<channel::RoomConnection> connectingRooms;
     for (const auto &jsonDoor : jsonRoom._jsonDoors) {
-        _roomIdToConnections.emplace (jsonRoom._id, channel::RoomConnection(jsonDoor._to, jsonRoom._id, jsonDoor._keywords.at(0))); // Complete debug mode
+      connectingRooms.emplace_back(channel::RoomId(jsonDoor._to), channel::RoomId(jsonRoom._id), jsonDoor._dir); // Complete debug mode
     }
+    _roomIdToConnections.emplace(jsonRoom._id, connectingRooms);
   }
-
 }
 
 json GameService::getTestingArea() {
