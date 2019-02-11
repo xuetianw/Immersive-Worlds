@@ -13,7 +13,7 @@ public:
     YellCommand() = default;
 
 
-    virtual networking::Message execute(GameService& service);
+    virtual networking::Message execute(GameService &service, const networking::Message &message);
 };
 
 #endif //WEBSOCKETNETWORKING_YELLCOMMAND_H

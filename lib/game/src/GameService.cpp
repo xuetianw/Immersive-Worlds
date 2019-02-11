@@ -37,6 +37,12 @@ bool GameService::placeUserInStartRoom(const networking::Connection &connection)
   return true;
 }
 
+bool GameService::placeUserInStartRoomDebug(const networking::Connection &connection, int id) {
+  auto userId = connection.id;
+  _connectionIdToRoomId.emplace((int)userId, channel::RoomId(id));
+  return true;
+}
+
 void GameService::loadFromStorage() {
   json solaceJson = getTestingArea();
   auto solaceAreaJson = solaceJson.get<CusJson::Area>();
@@ -141,7 +147,7 @@ json GameService::getTestingArea() {
     },
     {
       "id": 10609,
-      "name": "Marketplace.",
+      "name": "Marketplace2.",
       "desc": [
         "This is the Marketplace of Solace. Where the farmers come to sell their",
         "crops. The smell of vegetables and fruit fill the air. There are a couple",

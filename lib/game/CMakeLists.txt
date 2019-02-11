@@ -4,6 +4,7 @@ add_library(game
     src/ID.cpp
     src/YellCommand.cpp
     src/AttackCommand.cpp
+    src/MoveCommand.cpp
     src/CommandProcessor.cpp
     src/GameController.cpp
     src/GameService.cpp)

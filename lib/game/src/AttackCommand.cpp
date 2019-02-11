@@ -12,6 +12,6 @@ void AttackCommand::attackCharacter(int opponentId){
 }
 
 //find a way to access details of the character to be attacked
-networking::Message AttackCommand::execute(GameService &service) {
+networking::Message AttackCommand::execute(GameService &service, const networking::Message &message) {
     return networking::Message();
 }

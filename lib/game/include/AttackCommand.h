@@ -26,7 +26,7 @@ public:
     //need to figure out how to obtain Character
     void attackCharacter(int opponentId);
 
-    virtual networking::Message execute(GameService &service) override;
+    virtual networking::Message execute(GameService &service, const networking::Message &message) override;
 
 };
 

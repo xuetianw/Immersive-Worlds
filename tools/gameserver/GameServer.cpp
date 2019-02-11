@@ -37,6 +37,7 @@ GameController gameController;
 void onConnect(Connection& c) {
     std::cout << "New connection found: " << c.id << endl;
     clientManager.registerClient(c);
+    gameController.spawnUser(c);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,8 +76,12 @@ CommandProcessor buildCommands(){
     commandProcessor.addCommand("/logout", [](Command* command, Message message) {return ::clientManager.logoutClient(message.connection);});
     commandProcessor.addCommand("/login", [](Command* command, Message message){return ::clientManager.promptLogin(message);});
     commandProcessor.addCommand("/escape", [](Command* command, Message message){return ::clientManager.escapeLogin(message);});
-    commandProcessor.addCommand("yell", [](Command* command, Message message){return ::gameController.yell(command);});
-    commandProcessor.addCommand("/attack", [](Command* command, Message message){return ::gameController.attack(command);});
+    commandProcessor.addCommand("yell", [](Command* command, Message message){return ::gameController.yell(command,
+                                                                                                           message);});
+    commandProcessor.addCommand("/attack", [](Command* command, Message message){return ::gameController.attack(command,
+                                                                                                                message);});
+    commandProcessor.addCommand("/move", [](Command* command, Message message){return ::gameController.move(command,
+                                                                                                              message);});
     return std::move(commandProcessor);
 }
 

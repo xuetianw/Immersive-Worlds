@@ -13,8 +13,12 @@ class GameController {
 public:
     GameController() = default;
 
-    networking::Message yell(Command* cmd);
-    networking::Message attack(Command* cmd);
+    networking::Message yell(Command *cmd, const networking::Message &message);
+    networking::Message attack(Command *cmd, const networking::Message &message);
+    networking::Message move(Command *cmd, const networking::Message &message);
+
+    void spawnUser(const Connection &connection);
+    void spawnUser(const networking::Connection& connection, int debugRoomId);
 
 private:
     GameService gameService;
