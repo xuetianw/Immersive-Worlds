@@ -17,7 +17,7 @@ public:
     networking::Message attack(Command *cmd, const networking::Message &message);
     networking::Message move(Command *cmd, const networking::Message &message);
 
-    void spawnUser(const Connection &connection);
+    void spawnUser(const networking::Connection &connection);
     void spawnUser(const networking::Connection& connection, int debugRoomId);
 
 private:
