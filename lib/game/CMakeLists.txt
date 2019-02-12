@@ -26,6 +26,7 @@ target_link_libraries(game
     cusjson
     networking
     channel
+    datastorage
     )
 
 set_target_properties(game

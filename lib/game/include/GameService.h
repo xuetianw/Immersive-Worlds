@@ -9,7 +9,7 @@
 #include "RoomConnection.h"
 #include <Server.h>
 #include "CusJson.h"
-
+#include "DataStorage.h"
 #include "GameService.h"
 
 class GameService {
@@ -24,13 +24,13 @@ private:
     std::unordered_map<int, channel::RoomId> _connectionIdToRoomId;
     std::unordered_map<int, std::vector<channel::RoomConnection>> _roomIdToConnections;
 
+    DataStorage _dataStorage = DataStorage();
+
     channel::Room getRoom(const channel::RoomId &roomId);
 
     channel::Room getUserRoom(const networking::Connection &connection);
 
     void loadFromStorage();
-
-    json getTestingArea();
 
 public:
 
