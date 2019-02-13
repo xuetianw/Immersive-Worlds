@@ -16,13 +16,12 @@ class GameService {
 public:
     GameService();
 
-    // TODO: Define interface to access data
 private:
     // TODO: Add data models
     std::vector<channel::Area> _areas;
     std::unordered_map<int, channel::Room> _roomIdToRoom;
     std::unordered_map<int, channel::RoomId> _connectionIdToRoomId;
-    std::unordered_map<int, std::vector<channel::RoomConnection>> _roomIdToConnections;
+    std::unordered_map<int, std::vector<channel::RoomConnection>> _roomIdToRoomConnectionsList;
 
     DataStorage _dataStorage = DataStorage();
 

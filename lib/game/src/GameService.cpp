@@ -10,7 +10,7 @@
 bool GameService::moveUser(const networking::Connection &connection, const std::string keywordString) {
   auto userId = connection.id;
   auto roomId = _connectionIdToRoomId.at((int)userId);
-  auto connectedRoomList = _roomIdToConnections.at(roomId.getId());
+  auto connectedRoomList = _roomIdToRoomConnectionsList.at(roomId.getId());
   auto connectedRoom = std::find_if(connectedRoomList.begin(), connectedRoomList.end(), [keywordString](const channel::RoomConnection &roomConnection) -> bool {
     return roomConnection.getKeyword() == keywordString;
   });
@@ -48,7 +48,7 @@ void GameService::loadFromStorage() {
         _roomIdToRoom.emplace(room.getId(), room);
     }
     for (const std::pair<int, std::vector<channel::RoomConnection>> &roomConnection : _dataStorage.getRoomConnectionsPairs()) {
-        _roomIdToConnections.insert(roomConnection); //
+        _roomIdToRoomConnectionsList.insert(roomConnection); //
     }
 }
 
