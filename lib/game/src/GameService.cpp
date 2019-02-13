@@ -47,8 +47,8 @@ void GameService::loadFromStorage() {
     for (const channel::Room &room : _dataStorage.getRooms()) {
         _roomIdToRoom.emplace(room.getId(), room);
     }
-    for (const std::vector<channel::RoomConnection> &roomConnection : _dataStorage.getRoomConnection()) {
-        _roomIdToConnections.emplace(roomConnection.at(0).getFrom().getId(), roomConnection); //
+    for (const std::pair<int, std::vector<channel::RoomConnection>> &roomConnection : _dataStorage.getRoomConnectionsPairs()) {
+        _roomIdToConnections.insert(roomConnection); //
     }
 }
 

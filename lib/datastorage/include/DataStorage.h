@@ -20,10 +20,9 @@ public:
     std::vector<channel::Room> getRooms();
 
     /**
-     * parses through the json and per each room, creates a vector of RoomConnections based on the door
-     * @return a vector of vectors of Room connections grouped by _from parameter of RoomConnection
+     * @return a list of pairs where the int is the roomId, and the second is a list of RoomConnections for that roomId
      */
-    std::vector<std::vector<channel::RoomConnection>> getRoomConnection();
+    std::vector<std::pair<int, std::vector<channel::RoomConnection>>> getRoomConnectionsPairs();
 };
 
 
