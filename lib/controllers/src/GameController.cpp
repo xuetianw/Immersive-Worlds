@@ -3,8 +3,8 @@
 //
 #include "GameController.h"
 
-Message GameController::yell(Command* cmd, const Message& message) {
-    return cmd->execute(message);
+Message GameController::yell(const Message& message) {
+    return Message{};
 }
 
 pair<bool, Message> GameController::respondToMessage(const Message &message) {

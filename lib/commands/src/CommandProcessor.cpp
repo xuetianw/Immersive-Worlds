@@ -23,7 +23,7 @@ Message CommandProcessor::processCommand(const Message &message) {
         return commandsIter->second.functionPtr(Message {message.connection, commandMessagePair.second});
     }
 
-    return Message{message.connection, "Internal error: isCommandCheck Failed!"};
+    return Message{message.connection, "Internal error: isCommand Check Failed!"};
 }
 
 std::pair<string,string> CommandProcessor::splitCommand(string messageText) {

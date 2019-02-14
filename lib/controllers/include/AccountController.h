@@ -14,7 +14,6 @@
 #include <unordered_map>
 
 #include "Server.h"
-#include "Command.h"
 #include "UserService.h"
 #include "AbstractController.h"
 

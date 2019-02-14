@@ -7,7 +7,6 @@
 #include <unordered_map>
 #include "string"
 #include "Server.h"
-#include "Command.h"
 
 #ifndef WEBSOCKETNETWORKING_COMMANDPROCESSOR_H
 #define WEBSOCKETNETWORKING_COMMANDPROCESSOR_H
