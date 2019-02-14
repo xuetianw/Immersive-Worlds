@@ -19,7 +19,7 @@ enable_testing()
 ## Add your test .cpp file here
 
 add_executable(run_tests channel/channelTest.cpp MessageTest/MessageTest.cpp gameManager/idTest.cpp 
-NetworkingTests/CilentManagerTests.cpp NetworkingTests/ConsoleCommandTests.cpp)
+NetworkingTests/CilentManagerTests.cpp NetworkingTests/ConsoleCommandTests.cpp databaseTest/DatabaseTest.cpp)
 
 target_link_libraries(run_tests gmock gtest gtest_main)
 
@@ -31,5 +31,5 @@ set_target_properties(run_tests
         )
 
 ##TO DO: Add Lib Here
-target_link_libraries(run_tests networking channel message cusjson Combat game)
+target_link_libraries(run_tests networking channel message cusjson Combat game database)
 add_test(NAME network_tests COMMAND run_tests)

@@ -8,6 +8,10 @@ text username
 text password
 text state
 
+//to create table
+CREATE TABLE Users(id INT PRIMARY KEY , username VARCHAR, password VARCHAR);
+
+
 ///////////////
 
 Table Characters
