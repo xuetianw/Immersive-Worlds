@@ -15,6 +15,7 @@ public:
     WorldHandler();
     std::string processCommand(const std::string& command);
     std::string processCommand(const std::deque<networking::Message>& messages);
+    std::string getAreaName(const int & id);
 private:
     WorldContainer worldContainer;
 };

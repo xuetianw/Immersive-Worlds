@@ -12,35 +12,66 @@ using json = nlohmann::json;
 
 namespace CusJson {
 
-    class Area {
-    public:
-        std::string name;
-    };
-    class NPC {
-    public:
-        int id;
-        std::vector<std::string> keywords;
-        std::string shortdesc;
-        std::vector<std::string> longdesc;
-        std::vector<std::string> description;
-    };
-    class World {
-    public:
-        CusJson::Area area;
-        std::vector<NPC> NPCS;
-    };
+  class JsonDoor {
+  public:
+    JsonDoor();
+    std::string _dir;
+    std::vector<std::string> _desc;
+    std::vector<std::string> _keywords;
+    int _to;
+  };
 
-    void to_json(json& j, const Area& p);
+  class ExtDesc {
+  public:
+    ExtDesc();
+    std::vector<std::string> _keywords;
+    std::vector<std::string> _desc;
+  };
 
-    void from_json(const json& j, Area& p);
+  class NPC {
+  public:
+    int id;
+    std::vector<std::string> keywords;
+    std::string shortdesc;
+    std::vector<std::string> longdesc;
+    std::vector<std::string> description;
+  };
 
-    void to_json(json& j, const World& p);
+  class Room {
+  public:
+    int _id = 0;
+    std::string _name;
+    std::vector<std::string>_jsonDesc;
+    std::vector<JsonDoor> _jsonDoors;
+    std::vector<ExtDesc> _jsonExtDesc;
+  };
 
-    void from_json(const json& j, World& p);
+  class Area {
+  public:
+    std::string _name;
+    std::vector<NPC> _npcs;
+    std::vector<Room> _rooms;
+  };
 
-    void to_json(json& j, const NPC& p);
+  void to_json(json &j, const JsonDoor &door);
 
-    void from_json(const json& j, NPC& p);
+  void from_json(const json &j, JsonDoor &door);
+
+  void to_json(json &j, const ExtDesc &extDesc);
+
+  void from_json(const json &j, ExtDesc &extDesc);
+
+  void to_json(json& j, const NPC& p);
+
+  void from_json(const json& j, NPC& p);
+
+  void to_json(json &j, const Room &room);
+
+  void from_json(const json &j, Room &room);
+
+  void to_json(json& j, const Area& p);
+
+  void from_json(const json& j, Area& p);
 }
 
 #endif //WEBSOCKETNETWORKING_CUSJSON_H

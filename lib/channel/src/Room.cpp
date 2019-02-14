@@ -1,5 +1,7 @@
 #include <utility>
 
+#include <utility>
+
 //
 // Created by Jacky Lui on 2019-01-18.
 //
@@ -9,8 +11,12 @@
 #include <iostream>
 #include <string>
 #include <deque>
+#include <Room.h>
+#include <nlohmann/json.hpp>
 
 using channel::Room;
+using nlohmann::json;
+
 using std::string;
 using std::deque;
 using std::unordered_map;
@@ -18,7 +24,7 @@ using std::vector;
 using std::move;
 using std::make_pair;
 
-Room::Room() {
+Room::Room() : _id({-1}){
   // TODO default constructor
 };
 
@@ -27,25 +33,22 @@ Room::Room(const string& name, const string& description)
   // TODO
 }
 
+Room::Room(const CusJson::Room &jsonForm)
+        : _id(RoomId(jsonForm._id)), _name(jsonForm._name) {
 
-Room::Room(const Room& that) {
-  // TODO copy constructor
-}
-
-Room::~Room() {
-  // TODO destructor
 }
 
 int Room::getId() const {
   // TODO make room ID unique
-  return _id;
+  return this->_id.getId();
 }
 
 const string& Room::getName() const {
   return _name;
 }
 
-void Room::setName(string& name) {
+void Room::setName(
+    string &name) {
   _name = move(name);
 }
 
@@ -97,4 +100,16 @@ vector<Room> Room::getAllDoors() const {
 
 void Room::addRoom(int roomId, Room& room) {
   _doors.emplace(roomId, room);
+}
+
+channel::RoomId::RoomId(int id): _id(id) {
+
+}
+
+int channel::RoomId::getId() const{
+  return this->_id;
+}
+
+channel::RoomId::RoomId() {
+
 }

@@ -14,7 +14,12 @@ namespace channel {
     class Area {
         public:
             Area(int id);
-            ~Area();
+            Area(const CusJson::Area& jsonArea);
+            string getName();
+
+      Area();
+
+      ~Area();
 
             /**
              * Gets the Id of the area
@@ -30,11 +35,14 @@ namespace channel {
              * 
              * @returns true = inserted in the map. false = id already exists in map
              */
-            bool addRoom(Room room);
+            bool addRoom(const Room &room);
 
+            Room getRoom(const RoomId &roomId);
+      vector<Room> tempRoomContainer;
         private:
             int _id = 0; //TODO make area id unique
             unordered_map<int, Room> _rooms;
+            string _name;
     };
 } // namespace channel
 
