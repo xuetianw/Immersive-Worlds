@@ -9,14 +9,25 @@
 
 bool DBUtil::openConnection() {
 
-    char * filename = "../adventure.db";
-    int status = sqlite3_open(filename,&database);
+    //DBUtil::dbName = "../adventure.db";
 
-    if(status!=SQLITE_OK){
-        //error handling
-        cout<<"Error occured";
-        return false;
-    }
+    sqlite3* temp;
+
+    //int status = sqlite3_open(dbName , &temp);
+
+    //int status = sqlite3_open(dbName, &temp);
+
+//    if(status!=SQLITE_OK){
+//        //error handling
+//        cout<<"Error occured";
+//        return false;
+//    }
 
     return true;
+}
+
+
+
+DBUtil::DBUtil() {
+
 }

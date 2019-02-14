@@ -6,24 +6,31 @@
 #define WEBSOCKETNETWORKING_DBUTIL_H
 
 #include <stdio.h>
-#include "iostream";
+#include "string"
 #include "sqlite3.h"
 using namespace std;
 
 //database Utility class
 class DBUtil{
 
-private:
-    static sqlite3* database;
-    static char* dbName;
+//private:
+
 
 public:
+
+    //static sqlite3* database;
+    static char* dbName;
+
     //creates non existent tables
     void createTables();
 
-    bool openConnection();
+    static bool openConnection();
+
+    DBUtil();
 
 };
+
+char* DBUtil::dbName = "lib/database/adventure.db";
 
 
 #endif //WEBSOCKETNETWORKING_DBUTIL_H
