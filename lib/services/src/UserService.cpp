@@ -9,14 +9,19 @@
 
 void UserService::connect(const Connection& connection) {
     if (_connectedUserMap.find(connection) == _connectedUserMap.end()) {
-        _connectedUserMap.insert(std::make_pair(connection, User {"", "", ConnectedState {}}));
+        _connectedUserMap.insert(std::make_pair(connection, User{}));
     }
-
-    std::cout << "This connection is not unique: " << connection.id << std::endl;
+    else {
+        std::cout << "This connection is not unique: " << connection.id << std::endl;
+    }
 }
 
 void UserService::disconnectClient(const Connection &connection) {
     _connectedUserMap.erase(connection);
+}
+
+User& UserService::getUser(Connection& connection){
+    return _connectedUserMap.find(connection)->second;
 }
 
 Message UserService::updateUserState(const Message &message) {

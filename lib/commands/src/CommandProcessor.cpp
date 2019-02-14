@@ -5,11 +5,6 @@
 #include <utility>
 #include <boost/algorithm/string.hpp>
 #include "CommandProcessor.h"
-#include "DefaultUserCommand.h"
-#include "YellCommand.h"
-#include "RegisterCommand.h"
-#include "LoginCommand.h"
-#include "LogoutCommand.h"
 
 bool CommandProcessor::isCommand(const Message &message) {
     std::pair commandMessagePair = splitCommand(message.text);
@@ -17,20 +12,18 @@ bool CommandProcessor::isCommand(const Message &message) {
 }
 
 void CommandProcessor::addCommand(string commandKeyword, function_ptr fnPtr) {
-    _commands[std::move(commandKeyword)] = InputHandler { fnPtr, commandFactory(commandKeyword) };
+    _commands[std::move(commandKeyword)] = InputHandler { fnPtr };
 }
 
-Message CommandProcessor::processCommand(const Message &message, bool isGameCommand) {
+Message CommandProcessor::processCommand(const Message &message) {
     std::pair commandMessagePair = splitCommand(message.text);
     auto commandsIter = _commands.find(commandMessagePair.first);
 
     if(commandsIter != _commands.end()) {
-        return commandsIter->second.functionPtr(commandsIter->second.argCmd.get(), Message {message.connection, commandMessagePair.second});
+        return commandsIter->second.functionPtr(Message {message.connection, commandMessagePair.second});
     }
 
-    // Assumption: default handler is always registered in the commands map
-    InputHandler& defaultHandler = isGameCommand ? _commands["defaultGameCommand"] : _commands["defaultUserCommand"];
-    return defaultHandler.functionPtr(nullptr, message);
+    return Message{message.connection, "Internal error: isCommandCheck Failed!"};
 }
 
 std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
@@ -40,21 +33,5 @@ std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
     msgStream >> keyCommand;
     getline(msgStream >> std::ws, remainder);
     return std::pair<string,string>(keyCommand, remainder);
-}
-
-std::unique_ptr<Command> CommandProcessor::commandFactory(const string& commandKey) {
-    if(commandKey == "yell") {
-        return std::make_unique<YellCommand>();
-    } else if(commandKey == "/register") {
-        return std::make_unique<RegisterCommand>();
-    } else if(commandKey == "/login") {
-        return std::make_unique<LoginCommand>();
-    } else if(commandKey == "/logout") {
-        return std::make_unique<LogoutCommand>();
-    } else if(commandKey == "defaultUserCommand") {
-        return std::make_unique<DefaultUserCommand>();
-    }
-
-    return nullptr;
 }
 

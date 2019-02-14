@@ -2,7 +2,7 @@
 // Authors: Asim, Nirag, Vincent
 // Created On: January 26, 2019
 //
-// This file defines the interface for UserController.
+// This file defines the interface for AccountController.
 //
 // This file is distributed under the MIT License. See the LICENSE file
 // for details.
@@ -16,19 +16,26 @@
 #include "Server.h"
 #include "Command.h"
 #include "UserService.h"
+#include "AbstractController.h"
 
 using Connection = networking::Connection;
 using ConnectionHasher = networking::ConnectionHasher;
 using Message = networking::Message;
 using string = std::string;
 
-class UserController {
+class AccountController : public AbstractController {
 public:
-    UserController() : userService() {};
+    AccountController() : userService() {};
 
-    Message handleCommand(Command *cmd, const Message& message);
+    Message startLogin(Message& message);
 
-    bool isLoggedIn(const Connection &connection);
+    Message startRegister(Message& message);
+
+    Message logoutUser(Message& message);
+
+    Message escapeLogin(Message& message);
+
+    pair<bool, Message> respondToMessage(const Message& message);
 
     void connectClient(const Connection &connection);
 

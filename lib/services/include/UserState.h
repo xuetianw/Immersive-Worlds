@@ -50,6 +50,8 @@ typedef std::variant<
 struct User {
     std::string _username;
     std::string _password;
+    bool isLoggingIn = false;
+    bool isRegistering = false;
     UserStateVariant _state = ConnectedState {};
 };
 
@@ -96,8 +98,18 @@ struct StateTransitions {
     }
 
     std::optional<UserStateVariant> operator()(ConnectedState& state, User& user, const Message& message) {
-        Message{message.connection, LOGIN_USERNAME_PROMPT};
-        return LoginUsernameState{};
+        if(!(user.isLoggingIn || user.isRegistering)){
+            _currentUserResponseMessage = Message{message.connection, NOT_SIGNED_IN_PROMPT};
+            return ConnectedState {};
+        }
+        _currentUserResponseMessage = user.isLoggingIn? Message{message.connection, LOGIN_USERNAME_PROMPT} :
+                                      Message{message.connection, REGISTER_USERNAME_PROMPT};
+        // the ? : operator doesnt want to work here?
+        if (user.isLoggingIn) {
+            return LoginUsernameState{};
+        } else {
+            return RegisterUsernameState{};
+        }
     }
 
     std::optional<UserStateVariant> operator()(LoginUsernameState& state, User& user, const Message& message) {

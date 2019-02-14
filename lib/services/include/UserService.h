@@ -7,21 +7,22 @@
 
 #include "Server.h"
 #include "UserState.h"
-#include "Service.h"
 
 using Message = networking::Message;
 using Connection = networking::Connection;
 using ConnectionHasher = networking::ConnectionHasher;
 
-class UserService : public Service {
+class UserService{ 
 public:
-    Message updateUserState(const Message &message) override;
+    Message updateUserState(const Message &message) ;
+    
+    User& getUser(Connection& connection);
 
-    void connect(const Connection &connection) override;
+    void connect(const Connection &connection) ;
 
-    void disconnectClient(const Connection& connection) override;
+    void disconnectClient(const Connection& connection) ;
 
-    bool isLoggedIn(const Connection& connection) override;
+    bool isLoggedIn(const Connection& connection) ;
 
 private:
     // A map to store currently registered users

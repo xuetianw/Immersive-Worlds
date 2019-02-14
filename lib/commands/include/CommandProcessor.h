@@ -16,11 +16,10 @@ using string = std::string;
 using stringstream = std::stringstream;
 using Message = networking::Message;
 
-typedef Message (*function_ptr)(Command*, Message message);
+typedef Message (*function_ptr)(Message message);
 
 struct InputHandler {
     function_ptr functionPtr;
-    std::unique_ptr<Command> argCmd;
 };
 
 class CommandProcessor {
@@ -38,7 +37,7 @@ public:
     /*
      * Finds the map value from the message's keyword and preforms the function with the message's remaining string
      */
-    Message processCommand(const Message &message, bool isGameCommand);
+    Message processCommand(const Message &message);
 
     /*
      * Adds a function to a keyword, the function has to be in format of Message _____(Message message)
@@ -54,7 +53,6 @@ private:
     /*
      * Map a command to a class that executes
      */
-    std::unique_ptr<Command> commandFactory(const string& commandKey);
 
     std::unordered_map<string, InputHandler> _commands;
 };

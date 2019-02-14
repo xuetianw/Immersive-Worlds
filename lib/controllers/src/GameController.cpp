@@ -4,5 +4,9 @@
 #include "GameController.h"
 
 Message GameController::yell(Command* cmd, const Message& message) {
-    return cmd->execute(gameService, message);
+    return cmd->execute(message);
+}
+
+pair<bool, Message> GameController::respondToMessage(const Message &message) {
+    return {true, Message{message.connection, "Default Message"}};
 }

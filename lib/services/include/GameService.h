@@ -5,9 +5,7 @@
 #ifndef WEBSOCKETNETWORKING_GAMESERVICE_H
 #define WEBSOCKETNETWORKING_GAMESERVICE_H
 
-#include "Service.h"
-
-class GameService : public Service {
+class GameService {
 public:
     GameService() = default;
 

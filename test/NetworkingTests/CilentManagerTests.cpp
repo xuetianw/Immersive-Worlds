@@ -2,7 +2,7 @@
 // Created by vinshit on 31/01/19.
 //
 
-#include "UserController.h"
+#include "AccountController.h"
 #include "Server.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -10,7 +10,7 @@
 using testing::Return;
 
 //struct BasicClientManagerTest : testing:: Test {
-//    UserController userController;
+//    AccountController accountController;
 //    Connection firstConnection{0};
 //    Connection secondConnection{1};
 //    Message firstMessage{firstConnection,""};
@@ -23,8 +23,8 @@ using testing::Return;
 // */
 //
 //TEST_F(BasicClientManagerTest, LogoutClientTest){
-//  userController.connectClient(firstConnection);
-//  Message message = userController.logoutClient(firstConnection);
+//  accountController.connectClient(firstConnection);
+//  Message message = accountController.logoutClient(firstConnection);
 //  EXPECT_EQ(firstConnection, message.connection);
 //  EXPECT_EQ("User not logged in!\n", message.text);
 //}
@@ -34,13 +34,13 @@ using testing::Return;
 // */
 //
 //TEST_F(BasicClientManagerTest, LoginClientTestWithoutInitalParam){
-//  userController.connectClient(firstConnection);
-//  Message userPrompt = userController.promptLogin(firstMessage);
+//  accountController.connectClient(firstConnection);
+//  Message userPrompt = accountController.promptLogin(firstMessage);
 //
-//  Message passwordPrompt = userController.promptLogin(usernameMessage);
-//  Message loginSuccessful = userController.handleInput(passwordMessage);
+//  Message passwordPrompt = accountController.promptLogin(usernameMessage);
+//  Message loginSuccessful = accountController.handleInput(passwordMessage);
 //
-//  EXPECT_TRUE(userController.isLoggedIn(firstConnection));
+//  EXPECT_TRUE(accountController.isLoggedIn(firstConnection));
 //
 //  EXPECT_EQ("Please enter your username:", userPrompt.text);
 //  EXPECT_EQ("Please enter your password:", passwordPrompt.text);
@@ -52,12 +52,12 @@ using testing::Return;
 //  Message firstMessage{firstConnection,"Rex"};
 //  Message passwordMessage{firstConnection,"admin12345"};
 //
-//  userController.connectClient(firstConnection);
-//  Message passwordPrompt = userController.promptLogin(firstMessage);
+//  accountController.connectClient(firstConnection);
+//  Message passwordPrompt = accountController.promptLogin(firstMessage);
 //
-//  Message loginSuccessful = userController.handleInput(passwordMessage);
+//  Message loginSuccessful = accountController.handleInput(passwordMessage);
 //
-//  EXPECT_TRUE(userController.isLoggedIn(firstConnection));
+//  EXPECT_TRUE(accountController.isLoggedIn(firstConnection));
 //
 //  EXPECT_EQ("Please enter your password:", passwordPrompt.text);
 //  EXPECT_EQ("Successfully logged in!", loginSuccessful.text);
@@ -68,14 +68,14 @@ using testing::Return;
 //  Message firstMessage{firstConnection,"Rex"};
 //  Message passwordMessage{firstConnection,"admin123"};
 //
-//  userController.connectClient(firstConnection);
-//  Message passwordPrompt = userController.promptLogin(firstMessage);
+//  accountController.connectClient(firstConnection);
+//  Message passwordPrompt = accountController.promptLogin(firstMessage);
 //
-//  Message loginUnsuccessful = userController.handleInput(passwordMessage);
+//  Message loginUnsuccessful = accountController.handleInput(passwordMessage);
 //
 //  EXPECT_EQ("Please enter your password:", passwordPrompt.text);
 //  EXPECT_EQ("Login Unsuccessful\nPlease enter your username again:", loginUnsuccessful.text);
-//  EXPECT_FALSE(userController.isLoggedIn(firstConnection));
+//  EXPECT_FALSE(accountController.isLoggedIn(firstConnection));
 //}
 
 ///*
@@ -84,7 +84,7 @@ using testing::Return;
 //
 //class LoggedInClientManagerTest : public ::testing::Test {
 //public:
-//  UserController clientManager;
+//  AccountController clientManager;
 //  Connection firstConnection{0};
 //  Message firstMessage{firstConnection, "Rex"};
 //  Message passwordMessage{firstConnection, "admin12345"};
@@ -119,24 +119,24 @@ using testing::Return;
 //
 //  Message newUsername{firstConnection.id, "SecondBuddy"};
 //
-//  userController.connectClient(firstConnection);
+//  accountController.connectClient(firstConnection);
 //
-//  Message userPrompt = userController.promptRegister(firstMessage);
-//  Message usernameTakenPrompt = userController.handleInput(usernameMessage);
-//  Message registerPasswordPrompt = userController.handleInput(newUsername);
-//  Message registerSucessful = userController.handleInput(passwordMessage);
+//  Message userPrompt = accountController.promptRegister(firstMessage);
+//  Message usernameTakenPrompt = accountController.handleInput(usernameMessage);
+//  Message registerPasswordPrompt = accountController.handleInput(newUsername);
+//  Message registerSucessful = accountController.handleInput(passwordMessage);
 //
-//  EXPECT_FALSE(userController.isLoggedIn(firstConnection));
+//  EXPECT_FALSE(accountController.isLoggedIn(firstConnection));
 //
 //  EXPECT_EQ("Please create your username:", userPrompt.text);
 //  EXPECT_EQ("Username already exists", usernameTakenPrompt.text);
 //  EXPECT_EQ("Please create your password:", registerPasswordPrompt.text);
 //  EXPECT_EQ("Account Created! Please re-enter your username:", registerSucessful.text);
 //
-//  Message passwordPrompt = userController.promptLogin(newUsername);
-//  Message loginSuccessful = userController.handleInput(passwordMessage);
+//  Message passwordPrompt = accountController.promptLogin(newUsername);
+//  Message loginSuccessful = accountController.handleInput(passwordMessage);
 //
-//  EXPECT_TRUE(userController.isLoggedIn(firstConnection));
+//  EXPECT_TRUE(accountController.isLoggedIn(firstConnection));
 //
 //  EXPECT_EQ("Please enter your password:", passwordPrompt.text);
 //  EXPECT_EQ("Successfully logged in!", loginSuccessful.text);

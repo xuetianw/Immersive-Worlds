@@ -6,13 +6,14 @@
 #define WEBSOCKETNETWORKING_COMMAND_H
 
 #include <Server.h>
-#include "Service.h"
+
+using networking::Message;
 
 class Command {
 public:
     virtual ~Command() = default;
 
-    virtual networking::Message execute(Service& service, const Message& message) = 0;
+    virtual Message execute(const Message& message) = 0;
 
 protected:
     Command() = default;
