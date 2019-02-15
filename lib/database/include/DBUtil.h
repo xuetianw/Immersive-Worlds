@@ -10,6 +10,8 @@
 #include "sqlite3.h"
 using namespace std;
 
+//create all SQL query here
+
 //database Utility class
 class DBUtil{
 
@@ -18,19 +20,32 @@ class DBUtil{
 
 public:
 
-    //static sqlite3* database;
+    static sqlite3* database;
     static char* dbName;
 
     //creates non existent tables
-    void createTables();
+    static int my_special_callback(void *unused, int count, char **data, char **columns);
 
     static bool openConnection();
+
+    /*
+     * function to create new tables if need be
+     */
+    static bool createTables();
+
+    /*
+     *
+     * Function to drop all pre existing tables
+     * Modify if required
+     */
+    static bool dropTables();
 
     DBUtil();
 
 };
 
-char* DBUtil::dbName = "lib/database/adventure.db";
+
+//char* DBUtil::dbName = "lib/database/adventure.db";
 
 
 #endif //WEBSOCKETNETWORKING_DBUTIL_H

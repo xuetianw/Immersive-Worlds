@@ -12,7 +12,8 @@ struct DatabaseTests : testing:: Test {
 
 };
 
-TEST_F(DatabaseTests ,connectionTest){
+TEST_F(DatabaseTests ,databaseTest){
     EXPECT_EQ(true, DBUtil::openConnection());
+    EXPECT_EQ(true, DBUtil::createTables());
 
 }
