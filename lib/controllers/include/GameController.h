@@ -14,7 +14,7 @@ public:
     GameController() = default;
 
     networking::Message yell(const Message& message);
-    
+
     pair<bool, Message> respondToMessage(const Message& message);
 
 private:

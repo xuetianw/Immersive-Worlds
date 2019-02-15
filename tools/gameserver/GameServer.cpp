@@ -59,8 +59,7 @@ std::deque<Message> processMessages(CommandProcessor &commandProcessor,
             quit = true;
         } else if (commandProcessor.isCommand(message)){
             result.push_back(commandProcessor.processCommand(message));
-        }
-        else {
+        } else {
             // If we can put the controllers into a set and lamda 'if( responseToMessage() -> first ) { push_back && break }
             // It would be nice and we could make a serverController and move its commands in there (:
 

@@ -53,6 +53,9 @@ private:
      * Map a command to a class that executes
      */
 
+    /*
+     *  Holds all the commands added to the map
+     */
     std::unordered_map<string, InputHandler> _commands;
 };
 
