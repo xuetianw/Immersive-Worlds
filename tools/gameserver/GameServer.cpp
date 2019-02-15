@@ -37,7 +37,7 @@ GameController gameController;
 void onConnect(Connection& c) {
     std::cout << "New connection found: " << c.id << endl;
     clientManager.registerClient(c);
-    gameController.spawnUser(c);
+    gameController.spawnUserInStartRoom(c);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

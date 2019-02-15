@@ -13,9 +13,9 @@ namespace channel {
     private:
         channel::RoomId _to;
         channel::RoomId _from;
-        std::string _keyword;
+        std::string _userInputDirKey;
     public:
-        RoomConnection(const RoomId &_to, const RoomId &_from, const string &_keyword);
+        RoomConnection(const RoomId &_to, const RoomId &_from, const string &_userInputDirKey);
 
         const RoomId &getTo() const;
 
@@ -25,9 +25,9 @@ namespace channel {
 
         void setFrom(const RoomId &_from);
 
-        const string &getKeyword() const;
+        const string &getUserInputDirKey() const;
 
-        void setKeyword(const string &_keyword);
+        void setUserInputDirKey(const string &_keyword);
 
 //private:
 //    int state; // TODO this is left empty for now as design for making doors active or not is unknown/tbd later

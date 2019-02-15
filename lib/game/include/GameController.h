@@ -12,16 +12,16 @@
 class GameController {
 public:
     GameController() = default;
-
+    GameController(GameService gameService);
     networking::Message yell(Command *cmd, const networking::Message &message);
     networking::Message attack(Command *cmd, const networking::Message &message);
     networking::Message move(Command *cmd, const networking::Message &message);
 
-    void spawnUser(const networking::Connection &connection);
-    void spawnUser(const networking::Connection& connection, int debugRoomId);
+    void spawnUserInStartRoom(const networking::Connection &connection);
+    void spawnUserInRoom(const networking::Connection &connection, int debugRoomId);
 
 private:
-    GameService gameService;
+    GameService _gameService;
 };
 
 #endif //WEBSOCKETNETWORKING_GAMECONTROLLER_H

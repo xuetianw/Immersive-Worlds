@@ -17,10 +17,9 @@ public:
     GameService();
 
 private:
-    // TODO: Add data models
     std::vector<channel::Area> _areas;
     std::unordered_map<int, channel::Room> _roomIdToRoom;
-    std::unordered_map<int, channel::RoomId> _connectionIdToRoomId;
+    std::unordered_map<networking::Connection, channel::RoomId, networking::ConnectionHash> _connectionToRoomId;
     std::unordered_map<int, std::vector<channel::RoomConnection>> _roomIdToRoomConnectionsList;
 
     DataStorage _dataStorage = DataStorage();
@@ -40,9 +39,9 @@ public:
 
     bool userYell(const networking::Connection &connection, const std::string messageString);
 
-    bool placeUserInStartRoom(const networking::Connection &connection);
+    bool spawnUserInStartRoom(const networking::Connection &connection);
 
-    bool placeUserInStartRoomDebug(const networking::Connection &connection, int id);
+    bool spawnUserInRoom(const networking::Connection &connection, int id);
 
     string getCurrentRoomName(const networking::Connection &connection);
 
