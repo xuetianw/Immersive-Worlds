@@ -2,7 +2,7 @@
 // Authors: Asim, Nirag, Vincent
 // Created On: January 26, 2019
 //
-// This file defines the interface for AccountController.
+// This file defines the interface for UserController.
 //
 // This file is distributed under the MIT License. See the LICENSE file
 // for details.
@@ -22,9 +22,9 @@ using ConnectionHasher = networking::ConnectionHasher;
 using Message = networking::Message;
 using string = std::string;
 
-class AccountController : public AbstractController {
+class UserController : public AbstractController {
 public:
-    AccountController() : userService() {};
+    UserController() : userService() {};
 
     Message startLogin(Message& message);
 

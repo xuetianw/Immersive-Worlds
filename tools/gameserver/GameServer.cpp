@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "Server.h"
-#include "AccountController.h"
+#include "UserController.h"
 #include "CommandProcessor.h"
 #include "GameController.h"
 
@@ -28,7 +28,7 @@ using networking::Server;
 using namespace std;
 
 // Manager for handling client connections and authentication
-unique_ptr<AccountController> accountController;
+unique_ptr<UserController> accountController;
 
 // Manage Game actions
 unique_ptr<GameController> gameController;
@@ -113,7 +113,7 @@ int main(int argc, char* argv[]) {
     bool done = false;
     unsigned short port = static_cast<unsigned  short>(std::stoi(argv[1]));
 
-    accountController = make_unique<AccountController>();
+    accountController = make_unique<UserController>();
     gameController = make_unique<GameController>();
 
     Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
