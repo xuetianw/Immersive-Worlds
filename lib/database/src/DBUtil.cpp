@@ -16,7 +16,7 @@ bool DBUtil::openConnection() {
     //DBUtil::dbName = "../adventure.db";
 
     //use DB path
-    int status = sqlite3_open_v2(DBUtil::dbName,& (DBUtil::database), SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE , NULL);
+    int status = sqlite3_open_v2("adventure.db",& (DBUtil::database), SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE , NULL);
 
 
     if(status!=SQLITE_OK){

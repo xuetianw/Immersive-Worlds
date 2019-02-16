@@ -12,11 +12,12 @@ using namespace std;
 
 
 //db name
-const char* DB_NAME = "adventure.db";
+static const char* DB_NAME = "adventure.db";
 
 //create all SQL query here
-const char* CREATE_USER = "CREATE TABLE IF NOT EXISTS User(id INT PRIMARY KEY, username VARCHAR(20), password VARCHAR(20));";
-const char* DROP_USER_TABLE = "DROP TABLE IF EXISTS User;";
+
+static const char* CREATE_USER = "CREATE TABLE IF NOT EXISTS User(id INT PRIMARY KEY, username VARCHAR(20), password VARCHAR(20));";
+static const char* DROP_USER_TABLE = "DROP TABLE IF EXISTS User;";
 
 
 //database Utility class
