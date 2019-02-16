@@ -42,7 +42,7 @@ Message AccountController::logoutUser(Message &message) {
         return Message{message.connection, "You have logged out"};
     }
 
-    return Message{message.connection, "You are not logged in!"};
+    return Message{message.connection, NOT_LOGIN_MESSAGE};
 }
 
 Message AccountController::escapeLogin(Message &message) {

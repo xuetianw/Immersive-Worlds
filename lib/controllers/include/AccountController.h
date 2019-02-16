@@ -11,6 +11,8 @@
 #ifndef WEBSOCKETNETWORKING_CLIENTMANAGER_H
 #define WEBSOCKETNETWORKING_CLIENTMANAGER_H
 
+static const char *const NOT_LOGIN_MESSAGE = "You are not logged in!";
+
 #include <unordered_map>
 
 #include "Server.h"
