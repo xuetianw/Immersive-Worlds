@@ -8,13 +8,15 @@
 
 //declaring static field outside header file
 sqlite3* DBUtil::database;
+char* DBUtil::dbName = const_cast<char *>(DB_NAME);
+char* DBUtil::errorMessage;
 
 bool DBUtil::openConnection() {
 
     //DBUtil::dbName = "../adventure.db";
 
     //use DB path
-    int status = sqlite3_open("/home/nirag/CLionProjects/adventure2019/lib/database/adventure.db",& (DBUtil::database));
+    int status = sqlite3_open_v2(DBUtil::dbName,& (DBUtil::database), SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE , NULL);
 
 
     if(status!=SQLITE_OK){
@@ -29,25 +31,30 @@ bool DBUtil::openConnection() {
 bool DBUtil::createTables() {
 
 
+    //for now we keep the tables to retain data
     DBUtil::dropTables();
 
+
     int status = sqlite3_exec( DBUtil::database,"CREATE TABLE IF NOT EXISTS User(id INT PRIMARY KEY, username VARCHAR(20), password VARCHAR(20));",
-            DBUtil::my_special_callback, NULL , NULL );
+            NULL, NULL , &DBUtil::errorMessage );
 
     if(status!=0){
         //error handling
+
         return false;
     }
 
-    sqlite3_close(DBUtil::database);
+    DBUtil::closeConnection();
 
     return true;
 
 }
 
 bool DBUtil::dropTables() {
+
+
     int status = sqlite3_exec( DBUtil::database,"DROP TABLE IF EXISTS User;",
-                                            DBUtil::my_special_callback, NULL , NULL );
+                                            NULL, NULL , &DBUtil::errorMessage );
 
     if(status!=0){
         return false;
@@ -58,24 +65,30 @@ bool DBUtil::dropTables() {
 /*
  * Arguments:
  *
- *   unused - Ignored in this case, see the documentation for sqlite3_exec
- *    count - The number of columns in the result set
- *     data - The row's data
- *  columns - The column names
+ *   data - pointer
+ *   argc - The number of columns in the result set
+ *   data - The row's data
+ *   azColName - The column names
  */
-int DBUtil::my_special_callback(void *unused, int count, char **data, char **columns)
+int DBUtil::callback(void* data, int argc, char** argv, char** azColName)
 {
-    int idx;
+    int i;
+    fprintf(stderr, "%s: ", (const char*)data);
 
-    printf("There are %d column(s)\n", count);
-
-    for (idx = 0; idx < count; idx++) {
-        printf("The data in column \"%s\" is: %s\n", columns[idx], data[idx]);
+    for (i = 0; i < argc; i++) {
+        printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
     }
 
     printf("\n");
-
     return 0;
+}
+
+//implement callbacak functionss to retrieve data from DB
+
+
+void DBUtil::closeConnection() {
+
+    sqlite3_close(DBUtil::database);
 }
 
 
