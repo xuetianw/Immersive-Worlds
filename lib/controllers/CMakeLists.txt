@@ -3,7 +3,7 @@ add_library(controllers
     src/WorldContainer.cpp
     src/ID.cpp
     src/GameController.cpp
-        src/UserController.cpp
+        src/AccountController.cpp
         )
 
 find_package(Boost 1.68 COMPONENTS system REQUIRED)

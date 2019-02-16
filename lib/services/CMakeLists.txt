@@ -1,6 +1,6 @@
 
 add_library(services
-    src/UserService.cpp
+        src/AccountService.cpp
     )
 
 find_package(Boost 1.68 COMPONENTS system REQUIRED)

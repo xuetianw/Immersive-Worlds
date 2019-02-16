@@ -12,7 +12,7 @@ using Message = networking::Message;
 using Connection = networking::Connection;
 using ConnectionHasher = networking::ConnectionHasher;
 
-class UserService{ 
+class AccountService{
 public:
     Message updateUserState(const Message &message) ;
     

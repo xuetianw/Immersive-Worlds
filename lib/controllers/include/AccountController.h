@@ -2,7 +2,7 @@
 // Authors: Asim, Nirag, Vincent
 // Created On: January 26, 2019
 //
-// This file defines the interface for UserController.
+// This file defines the interface for AccountController.
 //
 // This file is distributed under the MIT License. See the LICENSE file
 // for details.
@@ -14,7 +14,7 @@
 #include <unordered_map>
 
 #include "Server.h"
-#include "UserService.h"
+#include "AccountService.h"
 #include "AbstractController.h"
 
 using Connection = networking::Connection;
@@ -22,9 +22,9 @@ using ConnectionHasher = networking::ConnectionHasher;
 using Message = networking::Message;
 using string = std::string;
 
-class UserController : public AbstractController {
+class AccountController : public AbstractController {
 public:
-    UserController() : userService() {};
+    AccountController() : userService() {};
 
     Message startLogin(Message& message);
 
@@ -41,7 +41,7 @@ public:
     void disconnectClient(const Connection &connection);
 
 private:
-    UserService userService;
+    AccountService userService;
 };
 
 #endif // WEBSOCKETNETWORKING_CLIENTMANAGER_H

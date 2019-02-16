@@ -2,7 +2,7 @@
 // Created by vinshit on 31/01/19.
 //
 
-#include "UserController.h"
+#include "AccountController.h"
 #include "Server.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -10,7 +10,7 @@
 using testing::Return;
 
 //struct BasicClientManagerTest : testing:: Test {
-//    UserController accountController;
+//    AccountController accountController;
 //    Connection firstConnection{0};
 //    Connection secondConnection{1};
 //    Message firstMessage{firstConnection,""};
@@ -84,7 +84,7 @@ using testing::Return;
 //
 //class LoggedInClientManagerTest : public ::testing::Test {
 //public:
-//  UserController clientManager;
+//  AccountController clientManager;
 //  Connection firstConnection{0};
 //  Message firstMessage{firstConnection, "Rex"};
 //  Message passwordMessage{firstConnection, "admin12345"};

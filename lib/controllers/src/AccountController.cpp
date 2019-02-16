@@ -2,7 +2,7 @@
 // Authors: Asim, Nirag, Vincent
 // Created On: January 26, 2019
 //
-// The file implements UserController which is responsible for managing clients
+// The file implements AccountController which is responsible for managing clients
 // connected to the server and users registered with the application.
 //
 // This file is distributed under the MIT License. See the LICENSE file
@@ -13,14 +13,14 @@
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
-#include <UserController.h>
+#include <AccountController.h>
 
 
-#include "UserController.h"
+#include "AccountController.h"
 
 using namespace std;
 
-Message UserController::startLogin(Message &message) {
+Message AccountController::startLogin(Message &message) {
     if(userService.isLoggedIn(message.connection)) {
         return Message{message.connection, "You are logged in - logout to preform this command"};
     }
@@ -28,7 +28,7 @@ Message UserController::startLogin(Message &message) {
     return userService.updateUserState(message);
 }
 
-Message UserController::startRegister(Message &message) {
+Message AccountController::startRegister(Message &message) {
     if(userService.isLoggedIn(message.connection)) {
         return Message{message.connection, "You are logged in - logout to preform this command"};
     }
@@ -36,7 +36,7 @@ Message UserController::startRegister(Message &message) {
     return userService.updateUserState(message);
 }
 
-Message UserController::logoutUser(Message &message) {
+Message AccountController::logoutUser(Message &message) {
     if(userService.isLoggedIn(message.connection)) {
         userService.getUser(message.connection) = User{};
         return Message{message.connection, "You have logged out"};
@@ -45,7 +45,7 @@ Message UserController::logoutUser(Message &message) {
     return Message{message.connection, "You are not logged in!"};
 }
 
-Message UserController::escapeLogin(Message &message) {
+Message AccountController::escapeLogin(Message &message) {
     User &user = userService.getUser(message.connection);
     stringstream response;
     if (user.isLoggingIn || user.isRegistering) {
@@ -63,15 +63,15 @@ Message UserController::escapeLogin(Message &message) {
     return Message{message.connection.id, response.str()};
 }
 
-void UserController::connectClient(const Connection &connection) {
+void AccountController::connectClient(const Connection &connection) {
     userService.connect(connection);
 }
 
-void UserController::disconnectClient(const Connection &connection) {
+void AccountController::disconnectClient(const Connection &connection) {
     userService.disconnectClient(connection);
 }
 
-pair<bool, Message> UserController::respondToMessage(const Message &message) {
+pair<bool, Message> AccountController::respondToMessage(const Message &message) {
     if (userService.isLoggedIn(message.connection)){
         return pair<bool, Message> (false, Message{});
     }
