@@ -8,7 +8,7 @@
 
 //declaring static field outside header file
 sqlite3* DBUtil::database;
-char* DBUtil::dbName = const_cast<char *>(DB_NAME);
+char* DBUtil::dbName;
 char* DBUtil::errorMessage;
 
 bool DBUtil::openConnection() {
@@ -35,7 +35,7 @@ bool DBUtil::createTables() {
     DBUtil::dropTables();
 
 
-    int status = sqlite3_exec( DBUtil::database,"CREATE TABLE IF NOT EXISTS User(id INT PRIMARY KEY, username VARCHAR(20), password VARCHAR(20));",
+    int status = sqlite3_exec( DBUtil::database,"CREATE TABLE IF NOT EXISTS User(id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(20), password VARCHAR(20));",
             NULL, NULL , &DBUtil::errorMessage );
 
     if(status!=0){
@@ -44,9 +44,42 @@ bool DBUtil::createTables() {
         return false;
     }
 
-    DBUtil::closeConnection();
+
 
     return true;
+
+}
+
+bool DBUtil::registerUser(string username, string password) {
+
+    string sqlStatement = "INSERT INTO User(username , password) VALUES('"
+                          + username + "','"
+                          + password +
+                          "');";
+
+    int status = sqlite3_exec( DBUtil::database, sqlStatement.c_str() ,
+                               NULL, NULL , &DBUtil::errorMessage );
+
+
+    if(status!=0){
+        return false;
+    }
+    return true;
+
+}
+
+bool DBUtil::deleteUser(string username) {
+
+    string sqlStatement = "DELETE FROM User WHERE username ='" + username + "';";
+
+    int status = sqlite3_exec( DBUtil::database, sqlStatement.c_str() ,
+                               NULL, NULL , &DBUtil::errorMessage );
+
+    if(status!=0){
+        return false;
+    }
+    return true;
+
 
 }
 

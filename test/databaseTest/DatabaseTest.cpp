@@ -15,5 +15,9 @@ struct DatabaseTests : testing:: Test {
 TEST_F(DatabaseTests ,databaseTest){
     EXPECT_EQ(true, DBUtil::openConnection());
     EXPECT_EQ(true, DBUtil::createTables());
+    EXPECT_EQ(true, DBUtil::registerUser("Josh","abcdefg"));
+    EXPECT_EQ(true, DBUtil::registerUser("Karan","hijklmn"));
+    EXPECT_EQ(true, DBUtil::deleteUser("Josh"));
+
 
 }

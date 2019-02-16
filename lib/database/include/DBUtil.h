@@ -10,16 +10,6 @@
 #include "sqlite3.h"
 using namespace std;
 
-
-//db name
-static const char* DB_NAME = "adventure.db";
-
-//create all SQL query here
-
-static const char* CREATE_USER = "CREATE TABLE IF NOT EXISTS User(id INT PRIMARY KEY, username VARCHAR(20), password VARCHAR(20));";
-static const char* DROP_USER_TABLE = "DROP TABLE IF EXISTS User;";
-
-
 //database Utility class
 class DBUtil{
 
@@ -34,6 +24,11 @@ public:
 
     //creates non existent tables
     static int callback(void* data, int argc, char** argv, char** azColName);
+
+    static bool registerUser(string username, string password);
+
+
+    static bool deleteUser(string username);
 
     static bool openConnection();
 
