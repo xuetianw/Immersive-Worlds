@@ -11,7 +11,8 @@ using testing::Return;
 
 struct BasicClientManagerTest : testing:: Test {
     AccountController accountController;
-    Connection firstConnection{0};
+    const std::uintptr_t ID1 = 1233;
+    Connection firstConnection{ID1};
     Connection secondConnection{1};
     Message firstMessage{firstConnection,""};
     Message usernameMessage{firstConnection,"random_name"};
@@ -20,9 +21,8 @@ struct BasicClientManagerTest : testing:: Test {
 
 // user logout without logging in
 TEST_F(BasicClientManagerTest, LogoutTest){
-  accountController.connectClient(firstConnection);
   Message message = accountController.logoutUser(firstMessage);
-  EXPECT_EQ(firstConnection.id, message.connection.id);
+  EXPECT_EQ(ID1, message.connection.id);
   EXPECT_EQ(NOT_LOGIN_MESSAGE, message.text);
 }
 
@@ -37,7 +37,7 @@ TEST_F(BasicClientManagerTest, LoginTest){
   ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
   EXPECT_EQ(LOGIN_PASSWORD_PROMPT, passwordPrompt.text);
   ASSERT_TRUE(accountControllerResponse.first);
-  EXPECT_EQ(firstConnection.id, accountControllerResponse.second.connection.id);
+  EXPECT_EQ(ID1, accountControllerResponse.second.connection.id);
   EXPECT_EQ(LOGGED_IN_PROMPT, accountControllerResponse.second.text);
 }
 
@@ -54,7 +54,7 @@ TEST_F(BasicClientManagerTest, LoginlogoutSequenceTest){
   ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
   EXPECT_EQ(LOGIN_PASSWORD_PROMPT, passwordPrompt.text);
   ASSERT_TRUE(accountControllerResponse.first);
-  EXPECT_EQ(firstConnection.id, accountControllerResponse.second.connection.id);
+  EXPECT_EQ(ID1, accountControllerResponse.second.connection.id);
   EXPECT_EQ(LOGGED_IN_PROMPT, accountControllerResponse.second.text);
   EXPECT_EQ(LOGOUT_MESSAGE, message.text);
 }
@@ -68,9 +68,9 @@ TEST_F(BasicClientManagerTest, RegisterTest){
   pair<bool, Message> accountControllerResponse = accountController.respondToMessage(passwordMessage);
 
     ASSERT_EQ(REGISTER_USERNAME_PROMPT, message.text);
-    EXPECT_EQ(firstConnection.id, message.connection.id);
+    EXPECT_EQ(ID1, message.connection.id);
     ASSERT_TRUE(accountControllerResponse.first);
-    EXPECT_EQ(firstConnection.id, accountControllerResponse.second.connection.id);
+    EXPECT_EQ(ID1, accountControllerResponse.second.connection.id);
     EXPECT_EQ(LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT, accountControllerResponse.second.text);
 }
 
