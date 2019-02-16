@@ -19,13 +19,11 @@ Message CommandProcessor::processCommand(const Message &message) {
     std::pair commandMessagePair = splitCommand(message.text);
     auto commandsIter = _commands.find(commandMessagePair.first);
 
-    assert(commandsIter != _commands.end());
-
     if(commandsIter != _commands.end()) {
         return commandsIter->second.functionPtr(Message {message.connection, commandMessagePair.second});
     }
 
-    return Message{message.connection, "Internal error: isCommand Check Failed!"};
+    return Message{message.connection, "Attempted Command Not Found."};
 }
 
 std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
