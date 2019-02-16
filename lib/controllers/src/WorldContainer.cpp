@@ -29,7 +29,7 @@ void WorldContainer::resetWorld() {
 
 
 WorldContainer::WorldContainer() {
-  _area = channel::Area();
+    _area = channel::Area();
 }
 
 json WorldContainer::debugArea() {
@@ -289,9 +289,9 @@ json WorldContainer::debugArea() {
     }
 
 ]})"_json;
-return j;
+    return j;
 }
 
 std::string WorldContainer::getRoomName(const int id) {
-  return this->_area.getRoom({10500}).getName(); // currently uses constant id
+    return this->_area.getRoom({10500}).getName(); // currently uses constant id
 }

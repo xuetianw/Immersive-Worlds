@@ -10,9 +10,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "Server.h"
-#include "ClientManager.h"
+#include "AccountController.h"
 #include "CommandProcessor.h"
-#include "Command.h"
 #include "GameController.h"
 
 #include <iostream>
@@ -20,6 +19,7 @@
 #include <sstream>
 #include <unistd.h>
 #include <vector>
+#include <set>
 
 using networking::Connection;
 using networking::Message;
@@ -28,27 +28,27 @@ using networking::Server;
 using namespace std;
 
 // Manager for handling client connections and authentication
-ClientManager clientManager;
+unique_ptr<AccountController> accountController;
 
 // Manage Game actions
-GameController gameController;
+unique_ptr<GameController> gameController;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onConnect(Connection& c) {
     std::cout << "New connection found: " << c.id << endl;
-    clientManager.registerClient(c);
+  accountController->connectClient(c);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onDisconnect(Connection& c) {
     std::cout << "Connection lost: " << c.id << endl;
-    clientManager.unregisterClient(c);
+  accountController->disconnectClient(c);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 std::deque<Message> processMessages(CommandProcessor &commandProcessor,
                             Server &server,
-                            const std::deque<Message> &incoming,
+                            std::deque<Message> &incoming,
                             bool &quit) {
     std::deque<Message> result;
     for (auto& message : incoming) {
@@ -58,11 +58,18 @@ std::deque<Message> processMessages(CommandProcessor &commandProcessor,
             std::cout << "Shutting down.\n";
             quit = true;
         } else if (commandProcessor.isCommand(message)){
-            result.push_back(commandProcessor.processMessage(message));
-        } else if (clientManager.isClientPromptingLogin(message.connection)) {
-            result.push_back(clientManager.promptLogin(message));
+            result.push_back(commandProcessor.processCommand(message));
         } else {
-            result.push_back((message));
+            // If we can put the controllers into a set and lamda 'if( responseToMessage() -> first ) { push_back && break }
+            // It would be nice and we could make a serverController and move its commands in there (:
+
+            pair<bool, Message> accountControllerResponse = accountController->respondToMessage(message);
+            if(accountControllerResponse.first){
+                result.push_back(accountControllerResponse.second);
+            } else {
+                pair<bool, Message> gameControllerResponse = gameController->respondToMessage(message);
+                result.push_back(gameControllerResponse.second);
+            }
         }
     }
     return result;
@@ -71,13 +78,14 @@ std::deque<Message> processMessages(CommandProcessor &commandProcessor,
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 CommandProcessor buildCommands(){
     CommandProcessor commandProcessor;
-    commandProcessor.addCommand("default", [](Command* command, Message message) {return message;});
-    commandProcessor.addCommand("/logout", [](Command* command, Message message) {return ::clientManager.logoutClient(message.connection);});
-    commandProcessor.addCommand("/login", [](Command* command, Message message){return ::clientManager.promptLogin(message);});
-    commandProcessor.addCommand("/escape", [](Command* command, Message message){return ::clientManager.escapeLogin(message);});
-    commandProcessor.addCommand("yell", [](Command* command, Message message){return ::gameController.yell(command);});
-    commandProcessor.addCommand("/attack", [](Command* command, Message message){return ::gameController.attack(command);});
-    return std::move(commandProcessor);
+
+    commandProcessor.addCommand("/logout", [](Message message) {return ::accountController->logoutUser(message);});
+    commandProcessor.addCommand("/login", [](Message message){return ::accountController->startLogin(message);});
+    commandProcessor.addCommand("/register", [](Message message){return ::accountController->startRegister(message);});
+    commandProcessor.addCommand("/escape", [](Message message){return ::accountController->escapeLogin(message);});
+//    commandProcessor.addCommand("/yell", [](Message message){return ::gameController->yell(message);});
+
+    return move(commandProcessor);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,7 +111,11 @@ int main(int argc, char* argv[]) {
     }
 
     bool done = false;
-    unsigned short port = std::stoi(argv[1]);
+    unsigned short port = static_cast<unsigned  short>(std::stoi(argv[1]));
+
+    accountController = make_unique<AccountController>();
+    gameController = make_unique<GameController>();
+
     Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
     CommandProcessor commandProcessor = buildCommands();
 

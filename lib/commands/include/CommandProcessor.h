@@ -6,18 +6,19 @@
 #include <sstream>
 #include <unordered_map>
 #include "string"
-#include "ClientManager.h"
 #include "Server.h"
-#include "Command.h"
 
 #ifndef WEBSOCKETNETWORKING_COMMANDPROCESSOR_H
 #define WEBSOCKETNETWORKING_COMMANDPROCESSOR_H
 
-typedef Message (*function_ptr)(Command*, Message message);
+using string = std::string;
+using stringstream = std::stringstream;
+using Message = networking::Message;
+
+typedef Message (*function_ptr)(Message message);
 
 struct InputHandler {
     function_ptr functionPtr;
-    std::unique_ptr<Command> argCmd;
 };
 
 class CommandProcessor {
@@ -25,9 +26,6 @@ class CommandProcessor {
      * Helper Class to avoid manual wiring of key commands to the Game/Account method calls
      */
 public:
-    using string = std::string;
-    using stringstream = std::stringstream;
-
     CommandProcessor() = default;
 
     /*
@@ -38,7 +36,7 @@ public:
     /*
      * Finds the map value from the message's keyword and preforms the function with the message's remaining string
      */
-    Message processMessage(const Message &message);
+    Message processCommand(const Message &message);
 
     /*
      * Adds a function to a keyword, the function has to be in format of Message _____(Message message)
@@ -54,7 +52,6 @@ private:
     /*
      * Map a command to a class that executes
      */
-    std::unique_ptr<Command> commandFactory(const string& commandKey);
 
     /*
      *  Holds all the commands added to the map
