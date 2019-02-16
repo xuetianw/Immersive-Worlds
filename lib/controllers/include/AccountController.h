@@ -13,6 +13,8 @@
 
 static const char *const NOT_LOGIN_MESSAGE = "You are not logged in!";
 
+static const char *const LOGOUT_MESSAGE = "You have logged out";
+
 #include <unordered_map>
 
 #include "Server.h"

@@ -39,7 +39,7 @@ Message AccountController::startRegister(Message &message) {
 Message AccountController::logoutUser(Message &message) {
     if(userService.isLoggedIn(message.connection)) {
         userService.getUser(message.connection) = User{};
-        return Message{message.connection, "You have logged out"};
+        return Message{message.connection, LOGOUT_MESSAGE};
     }
 
     return Message{message.connection, NOT_LOGIN_MESSAGE};

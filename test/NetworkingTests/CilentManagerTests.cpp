@@ -18,21 +18,15 @@ struct BasicClientManagerTest : testing:: Test {
     Message passwordMessage{firstConnection,"random_passworld"};
 };
 
-/*
- * Logging out
- */
-
-TEST_F(BasicClientManagerTest, LogoutClientTest){
+// user logout without logging in
+TEST_F(BasicClientManagerTest, LogoutTest){
   accountController.connectClient(firstConnection);
   Message message = accountController.logoutUser(firstMessage);
-  EXPECT_EQ(firstConnection, message.connection);
+  EXPECT_EQ(firstConnection.id, message.connection.id);
   EXPECT_EQ(NOT_LOGIN_MESSAGE, message.text);
 }
 
-/*
- * Login tests
- */
-
+//user login
 TEST_F(BasicClientManagerTest, LoginTest){
   accountController.connectClient(firstConnection);
   Message userPrompt = accountController.startLogin(firstMessage);
@@ -40,14 +34,66 @@ TEST_F(BasicClientManagerTest, LoginTest){
   Message passwordPrompt = accountController.startLogin(usernameMessage);
   pair<bool, Message> accountControllerResponse = accountController.respondToMessage(passwordMessage);
 
+  ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
+  EXPECT_EQ(LOGIN_PASSWORD_PROMPT, passwordPrompt.text);
+  ASSERT_TRUE(accountControllerResponse.first);
+  EXPECT_EQ(firstConnection.id, accountControllerResponse.second.connection.id);
+  EXPECT_EQ(LOGGED_IN_PROMPT, accountControllerResponse.second.text);
+}
+
+//user login first and logout
+TEST_F(BasicClientManagerTest, LoginlogoutSequenceTest){
+  accountController.connectClient(firstConnection);
+  Message userPrompt = accountController.startLogin(firstMessage);
+
+  Message passwordPrompt = accountController.startLogin(usernameMessage);
+  pair<bool, Message> accountControllerResponse = accountController.respondToMessage(passwordMessage);
+
+  Message message = accountController.logoutUser(firstMessage);
 
   ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
   EXPECT_EQ(LOGIN_PASSWORD_PROMPT, passwordPrompt.text);
   ASSERT_TRUE(accountControllerResponse.first);
-  EXPECT_EQ(firstConnection, accountControllerResponse.second.connection);
+  EXPECT_EQ(firstConnection.id, accountControllerResponse.second.connection.id);
   EXPECT_EQ(LOGGED_IN_PROMPT, accountControllerResponse.second.text);
-
+  EXPECT_EQ(LOGOUT_MESSAGE, message.text);
 }
+
+//register without logging in
+TEST_F(BasicClientManagerTest, RegisterTest){
+    accountController.connectClient(firstConnection);
+    Message message = accountController.startRegister(firstMessage);
+
+  Message passwordPrompt = accountController.startLogin(usernameMessage);
+  pair<bool, Message> accountControllerResponse = accountController.respondToMessage(passwordMessage);
+
+    ASSERT_EQ(REGISTER_USERNAME_PROMPT, message.text);
+    EXPECT_EQ(firstConnection.id, message.connection.id);
+    ASSERT_TRUE(accountControllerResponse.first);
+    EXPECT_EQ(firstConnection.id, accountControllerResponse.second.connection.id);
+    EXPECT_EQ(LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT, accountControllerResponse.second.text);
+}
+
+//register withinvalid password
+
+
+
+////register after logging in
+//TEST_F(BasicClientManagerTest, LoginTest){
+//  accountController.connectClient(firstConnection);
+//  Message userPrompt = accountController.startLogin(firstMessage);
+//
+//  Message passwordPrompt = accountController.startLogin(usernameMessage);
+//  pair<bool, Message> accountControllerResponse = accountController.respondToMessage(passwordMessage);
+//
+//  ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
+//  EXPECT_EQ(LOGIN_PASSWORD_PROMPT, passwordPrompt.text);
+//  ASSERT_TRUE(accountControllerResponse.first);
+//  EXPECT_EQ(firstConnection.id, accountControllerResponse.second.connection.id);
+//  EXPECT_EQ(LOGGED_IN_PROMPT, accountControllerResponse.second.text);
+//}
+
+
 //
 //
 //TEST_F(BasicClientManagerTest, LoginClientTestWithInitalParam){
