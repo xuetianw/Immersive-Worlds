@@ -89,8 +89,8 @@ TEST_F(UserServiceManagementTEST, RegisterTest){
     EXPECT_EQ(ID1, message.connection.id);
 
     ASSERT_TRUE(accountControllerFirstResponse.first);
-    EXPECT_EQ(ID1, accountControllerFirstResponse.second.connection.id);
-    EXPECT_EQ(REGISTER_PASSWORD_PROMPT, accountControllerFirstResponse.second.text);
+    ASSERT_EQ(ID1, accountControllerFirstResponse.second.connection.id);
+    ASSERT_EQ(REGISTER_PASSWORD_PROMPT, accountControllerFirstResponse.second.text);
 
     ASSERT_TRUE(accountControllerSecondResponse.first);
     EXPECT_EQ(ID1, accountControllerSecondResponse.second.connection.id);
@@ -157,6 +157,15 @@ TEST_F(UserServiceManagementTEST, LoginEscapeTest){
     EXPECT_EQ(LOGGING_IN_ESCAPE_MESSAGE + to_string(ID1), escapeMessage.text);
 }
 
+//user escape without logingin
+TEST_F(UserServiceManagementTEST, LoginEscape_WithoutLoginTest){
+    accountController.connectClient(connection);
+    Message userPrompt = accountController.escapeLogin(firstMessage);
+
+    Message escapeMessage = accountController.escapeLogin(firstMessage);
+    EXPECT_EQ(ID1, escapeMessage.connection.id);
+    EXPECT_EQ(ESCAPE_WHILE_NOT_LOGIN_MESSAGE, escapeMessage.text);
+}
 
 //
 //

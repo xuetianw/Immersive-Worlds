@@ -23,6 +23,8 @@ static const char *const ESCAPE_WHILE_REGISTERING_MESSAGE = "You have exited out
 
 static const char *const LOGGING_IN_ESCAPE_MESSAGE = "You have exited out of the login process\n";
 
+static const char *const ESCAPE_WHILE_NOT_LOGIN_MESSAGE = "You are not submitting any Account information currently";
+
 #include <unordered_map>
 
 #include "Server.h"

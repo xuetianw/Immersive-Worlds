@@ -58,7 +58,7 @@ Message AccountController::escapeLogin(Message &message) {
         }
         user = User{};
     } else {
-        response << "You are not submitting any Account information currently";
+        response << ESCAPE_WHILE_NOT_LOGIN_MESSAGE;
     }
     return Message{message.connection.id, response.str()};
 }
