@@ -12,6 +12,7 @@
 #define WEBSOCKETNETWORKING_CLIENTMANAGER_H
 
 #include <unordered_map>
+#include <CommandProcessor.h>
 
 #include "Server.h"
 #include "AccountService.h"
@@ -34,6 +35,8 @@ public:
 
     Message escapeLogin(Message& message);
 
+    void onCompleteLogin(function_ptr fnPtr);
+
     pair<bool, Message> respondToMessage(const Message& message);
 
     void connectClient(const Connection &connection);
@@ -42,6 +45,7 @@ public:
 
 private:
     AccountService userService;
+    function_ptr onLoginFunction;
 };
 
 #endif // WEBSOCKETNETWORKING_CLIENTMANAGER_H

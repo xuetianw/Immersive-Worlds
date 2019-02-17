@@ -52,6 +52,7 @@ struct User {
     std::string _password;
     bool isLoggingIn = false;
     bool isRegistering = false;
+    bool hasSpawned = false;
     UserStateVariant _state = ConnectedState {};
 };
 

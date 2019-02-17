@@ -102,6 +102,7 @@ void Room::addRoom(int roomId, Room& room) {
   _doors.emplace(roomId, room);
 }
 
+// TODO think about moving this to its own file
 channel::RoomId::RoomId(int id): _id(id) {
 
 }
