@@ -13,12 +13,19 @@ class GameController : AbstractController {
 public:
     GameController() = default;
 
-    networking::Message yell(const Message& message);
+    explicit GameController(GameService gameService);
 
-    pair<bool, Message> respondToMessage(const Message& message);
+    Message move(const networking::Message &message);
+
+    pair<bool, Message> respondToMessage(const Message& message) override;
+
+    void addUser(const networking::Connection &connection);
+
+    Message spawnUserInStartRoom(const networking::Connection &connection);
+    void spawnUserInRoom(const networking::Connection &connection, int debugRoomId);
 
 private:
-    GameService gameService;
+    GameService _gameService;
 };
 
 #endif //WEBSOCKETNETWORKING_GAMECONTROLLER_H
