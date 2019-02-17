@@ -22,7 +22,7 @@ using namespace std;
 
 Message AccountController::startLogin(Message &message) {
     if(userService.isLoggedIn(message.connection)) {
-        return Message{message.connection, "You are logged in - logout to preform this command"};
+        return Message{message.connection, ALREADY_LOGIN_MESSAGE};
     }
     userService.getUser(message.connection).isLoggingIn = true;
     return userService.updateUserState(message);
@@ -30,7 +30,7 @@ Message AccountController::startLogin(Message &message) {
 
 Message AccountController::startRegister(Message &message) {
     if(userService.isLoggedIn(message.connection)) {
-        return Message{message.connection, "You are logged in - logout to preform this command"};
+        return Message{message.connection, LOGOUT_BEFORE_REGISTER_MESSAGE};
     }
     userService.getUser(message.connection).isRegistering = true;
     return userService.updateUserState(message);
@@ -50,10 +50,10 @@ Message AccountController::escapeLogin(Message &message) {
     stringstream response;
     if (user.isLoggingIn || user.isRegistering) {
         if (user.isRegistering) {
-            response << "You have exited out of the registration process\n"
+            response << ESCAPE_WHILE_REGISTERING_MESSAGE
                      << message.connection.id;
         } else {
-            response << "You have exited out of the login process\n"
+            response << LOGGING_IN_ESCAPE_MESSAGE
                      << message.connection.id;
         }
         user = User{};
