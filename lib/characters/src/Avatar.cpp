@@ -6,7 +6,7 @@
 #include "ContainerItem.h"
 
 void Avatar::takeItem(InventoryItem inventoryItem) {
-	inventory.addItem(inventoryItem);
+	_inventory.addItem(inventoryItem);
 }
 
 void Avatar::putItem(InventoryItem inventoryItem, ContainerItem containerObject) {
@@ -25,12 +25,12 @@ bool Avatar::wearItem(InventoryItem inventoryItem) {
 		InventoryItem clothingToRemove = _currentClothing;
 		InventoryItem clothingToWear = removeItem(inventoryItem);
 		_currentClothing = clothingToWear;
-		inventory.addItem(clothingToRemove);
+        _inventory.addItem(clothingToRemove);
 		return true;
 	}
 	return false;
 }
 
 InventoryItem Avatar::removeItem(InventoryItem inventoryItem) {
-	return inventory.removeItem(inventoryItem.getId());
+	return _inventory.removeItem(inventoryItem.getId());
 }
