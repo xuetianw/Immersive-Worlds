@@ -14,6 +14,7 @@
 #include <sstream>
 #include <unistd.h>
 #include <AccountController.h>
+#include <CommandProcessor.h>
 
 
 #include "AccountController.h"
@@ -76,7 +77,18 @@ pair<bool, Message> AccountController::respondToMessage(const Message &message) 
         return pair<bool, Message> (false, Message{});
     }
 
-    return pair<bool, Message>(true, userService.updateUserState(message));
+    Message response = userService.updateUserState(message);
+    if(userService.isLoggedIn(message.connection)){
+        Message onLoginResponse = onLoginFunction(message);
+        cout << onLoginResponse.text << "\n";
+        response.text = response.text + "\n" + onLoginResponse.text;
+    }
+
+    return pair<bool, Message>(true, response);
+}
+
+void AccountController::onCompleteLogin(function_ptr fnPtr){
+    onLoginFunction = fnPtr;
 }
 
 

@@ -28,6 +28,7 @@ constexpr char LOGGING_IN_ESCAPE_MESSAGE[] = "You have exited out of the login p
 constexpr char ESCAPE_WHILE_NOT_LOGIN_MESSAGE[] = "You are not submitting any Account information currently";
 
 #include <unordered_map>
+#include <CommandProcessor.h>
 
 #include "Server.h"
 #include "AccountService.h"
@@ -50,6 +51,8 @@ public:
 
     Message escapeLogin(Message& message);
 
+    void onCompleteLogin(function_ptr fnPtr);
+
     pair<bool, Message> respondToMessage(const Message& message);
 
     void connectClient(const Connection &connection);
@@ -58,6 +61,7 @@ public:
 
 private:
     AccountService userService;
+    function_ptr onLoginFunction;
 };
 
 #endif // WEBSOCKETNETWORKING_CLIENTMANAGER_H
