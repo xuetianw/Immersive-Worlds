@@ -140,17 +140,3 @@ Message ClientManager::escapeLogin(const Message& message) {
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-Message ClientManager::createMiniGame(const Message& message) {
-    User& user = _connectedUserMap.find(message.connection.id)->second;
-    std::ostringstream response;
-
-    if(isLoggedIn(message.connection)) {
-        response << "Starting Minigame\n";
-    } else {
-        response << "Invalid command. Must be logged in.\n";
-    }
-
-    return Message{message.connection.id, response.str()};
-}
-

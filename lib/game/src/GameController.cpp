@@ -10,3 +10,8 @@ networking::Message GameController::yell(Command* cmd) {
 networking::Message GameController::attack(Command *cmd) {
     return cmd->execute(gameService);
 }
+
+networking::Message GameController::miniGame(Command *cmd) {
+    return cmd->execute(gameService);
+    //return cmd->test(gameService, message);
+}

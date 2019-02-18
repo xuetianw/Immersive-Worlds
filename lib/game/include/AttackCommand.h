@@ -11,6 +11,7 @@ const int HEARTBEATS_PER_ROUND= 5;
 
 #include "Command.h"
 #include "Server.h"
+#include "ClientManager.h"
 
 class AttackCommand : public Command {
 

@@ -77,6 +77,7 @@ CommandProcessor buildCommands(){
     commandProcessor.addCommand("/escape", [](Command* command, Message message){return ::clientManager.escapeLogin(message);});
     commandProcessor.addCommand("yell", [](Command* command, Message message){return ::gameController.yell(command);});
     commandProcessor.addCommand("/attack", [](Command* command, Message message){return ::gameController.attack(command);});
+    commandProcessor.addCommand("/minigame", [](Command* command, Message message){return ::gameController.miniGame(command);});
     return std::move(commandProcessor);
 }
 

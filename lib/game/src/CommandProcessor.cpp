@@ -7,6 +7,7 @@
 #include <AttackCommand.h>
 #include "CommandProcessor.h"
 #include "YellCommand.h"
+#include "MiniGameCommand.h"
 
 bool CommandProcessor::isCommand(const Message &message) {
     std::pair commandMessagePair = splitCommand(message.text);
@@ -46,7 +47,9 @@ std::unique_ptr<Command> CommandProcessor::commandFactory(const string& commandK
     else if(commandKey == "/attack"){
         return std::make_unique<AttackCommand>();
     }
-
+    else if(commandKey == "/minigame") {
+        return std::make_unique<MiniGameCommand>();
+    }
     return nullptr;
 }
 

@@ -8,6 +8,7 @@
 #include <Server.h>
 #include "Command.h"
 #include "GameService.h"
+#include "Message.h"
 
 class GameController {
 public:
@@ -15,6 +16,7 @@ public:
 
     networking::Message yell(Command* cmd);
     networking::Message attack(Command* cmd);
+    networking::Message miniGame(Command* cmd);
 
 private:
     GameService gameService;
