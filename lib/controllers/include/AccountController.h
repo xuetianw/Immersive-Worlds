@@ -11,7 +11,6 @@
 #ifndef WEBSOCKETNETWORKING_CLIENTMANAGER_H
 #define WEBSOCKETNETWORKING_CLIENTMANAGER_H
 
-#include <string>
 
 constexpr char NOT_LOGIN_MESSAGE[] = "You are not logged in!";
 

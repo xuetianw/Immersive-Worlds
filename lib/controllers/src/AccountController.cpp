@@ -78,12 +78,11 @@ pair<bool, Message> AccountController::respondToMessage(const Message &message) 
     }
 
     Message response = userService.updateUserState(message);
-    if(userService.isLoggedIn(message.connection)){
-        if (onLoginFunction != NULL) {
-            Message onLoginResponse = onLoginFunction(message);
-            cout << onLoginResponse.text << "\n";
-            response.text = response.text + "\n" + onLoginResponse.text;
-        }
+    if (userService.isLoggedIn(message.connection) && (onLoginFunction != NULL)){
+
+        Message onLoginResponse = onLoginFunction(message);
+        cout << onLoginResponse.text << "\n";
+        response.text = response.text + "\n" + onLoginResponse.text;
     }
 
     return pair<bool, Message>(true, response);
