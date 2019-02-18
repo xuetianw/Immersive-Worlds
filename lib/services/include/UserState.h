@@ -8,6 +8,7 @@
 #include "Server.h"
 #include <string>
 #include <variant>
+#include <optional>
 
 using Message = networking::Message;
 using string = std::string;
