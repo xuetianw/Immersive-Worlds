@@ -22,6 +22,7 @@ private:
     std::unordered_map<int, channel::Room> _roomIdToRoom;
     std::unordered_map<networking::Connection, channel::RoomId, networking::ConnectionHash> _connectionToRoomId;
     std::unordered_map<int, std::vector<channel::RoomConnection>> _roomIdToRoomConnectionsList;
+    std::unordered_map<int, channel::MiniGame> _roomIdToMiniGameConnectionsList;
 
     DataStorage _dataStorage = DataStorage();
 
@@ -47,6 +48,8 @@ public:
     string getCurrentRoomName(const networking::Connection &connection);
 
     channel::MiniGame getMiniGame(const networking::Connection &connection, const std::string keywordString);
+    
+    bool verifyAnswer(const networking::Connection &connection, const int input);
 };
 
 #endif //WEBSOCKETNETWORKING_GAMESERVICE_H

@@ -24,7 +24,7 @@ namespace channel {
             MiniGame(std::string question, int answer);
 
             void addAnswer(std::string answer);
-            bool checkAnswer(int answer);
+            bool checkAnswer(const int answer) const;
             std::string getQuestion();
             std::vector<std::string> getAnswers();
         private:

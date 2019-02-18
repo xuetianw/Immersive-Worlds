@@ -26,6 +26,7 @@ public:
     void spawnUserInRoom(const networking::Connection &connection, int debugRoomId);
 
     networking::Message createMinigame(const networking::Message &message);
+    networking::Message verifyMinigameAnswer(const networking::Message &message);
 
 private:
     GameService _gameService;

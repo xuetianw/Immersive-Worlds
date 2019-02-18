@@ -53,22 +53,27 @@ GameService::GameService() {
 }
 
 channel::MiniGame GameService::getMiniGame(const networking::Connection &connection, const std::string keywordString) {
-  /*
-  auto roomId = _connectionToRoomId.at(connection);
-  auto connectedRoomList = _roomIdToRoomConnectionsList.at(roomId.getId());
-  auto connectedRoom = std::find_if(connectedRoomList.begin(), connectedRoomList.end(), [keywordString](const channel::RoomConnection &roomConnection) -> bool {
-    return roomConnection.getUserInputDirKey() == keywordString;
-  });
-  if (connectedRoom != connectedRoomList.end()) {
-    _connectionToRoomId.find(connection)->second = connectedRoom.base()->getTo();
-  }
-  return connectedRoom != connectedRoomList.end();
-  */
-
-  // TODO: GET CURRENT ROOM ID, CHECK MINIGAME MAP IF MINIGAME EXISTS, CHECK IF USER LOGGED IN
+  // TODO: CHECK MINIGAME MAP IF MINIGAME EXISTS, CHECK IF USER LOGGED IN
   channel::MiniGame miniGame = channel::MiniGame("This is the question", 0);
   miniGame.addAnswer("Correct Answer");
   miniGame.addAnswer("Wrong Answer");
 
+  auto roomId = _connectionToRoomId.at(connection);
+  std::pair<int, channel::MiniGame> pair (roomId.getId(), miniGame);
+  _roomIdToMiniGameConnectionsList.emplace(pair);
+
   return miniGame;
+}
+
+bool GameService::verifyAnswer(const networking::Connection &connection, const int input) { 
+  auto roomId = _connectionToRoomId.at(connection);
+
+  std::unordered_map<int, channel::MiniGame>::const_iterator got = _roomIdToMiniGameConnectionsList.find(roomId.getId());
+
+  bool found = (got != _roomIdToMiniGameConnectionsList.end());
+  if(found && got->second.checkAnswer(input)) {
+    return true;
+  } 
+
+  return false;
 }

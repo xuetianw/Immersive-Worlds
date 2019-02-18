@@ -12,7 +12,7 @@ void MiniGame::addAnswer(std::string answer) {
     _answers.push_back(answer);
 }
 
-bool MiniGame::checkAnswer(int answer) { 
+bool MiniGame::checkAnswer(const int answer) const { 
     return answer == _correctAnswer;
 }
 

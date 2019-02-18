@@ -63,9 +63,24 @@ networking::Message GameController::createMinigame(const networking::Message &me
     for(int i = 0; i < questions.size(); i++, letter++) {
         std::string question = questions.at(i);
 
-        ss << letter << ') ' << question << endl; 
+        ss << letter << ") " << question << endl; 
     }
 
     newMessage.text = ss.str();
+    return newMessage;
+}
+
+
+networking::Message GameController::verifyMinigameAnswer(const networking::Message &message) {
+    // TODO: figure out a better way to get the input. EX. maybe they type a number, should throw error or something
+    char letter = (message.text).at(0);
+    int input = letter - 'a';
+
+    bool result = _gameService.verifyAnswer(message.connection, input);
+
+    networking::Message newMessage = networking::Message();
+    newMessage.connection = message.connection;
+    newMessage.text = (result) ? "DING DING DING" : "WRONG";
+
     return newMessage;
 }
