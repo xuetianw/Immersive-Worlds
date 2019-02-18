@@ -20,11 +20,13 @@ enum class MiniGameType {
 namespace channel {
     class MiniGame {
         public:
+            MiniGame();
             MiniGame(std::string question, int answer);
-            ~MiniGame();
 
-            void insertAnswer(std::string answer);
+            void addAnswer(std::string answer);
             bool checkAnswer(int answer);
+            std::string getQuestion();
+            std::vector<std::string> getAnswers();
         private:
             std::vector<std::string> _answers;
             std::string _question;

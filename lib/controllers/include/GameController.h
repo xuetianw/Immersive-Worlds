@@ -8,6 +8,7 @@
 #include <Server.h>
 #include "GameService.h"
 #include "AbstractController.h"
+#include <sstream>
 
 class GameController : AbstractController {
 public:
@@ -23,6 +24,8 @@ public:
 
     Message spawnUserInStartRoom(const networking::Connection &connection);
     void spawnUserInRoom(const networking::Connection &connection, int debugRoomId);
+
+    networking::Message createMinigame(const networking::Message &message);
 
 private:
     GameService _gameService;

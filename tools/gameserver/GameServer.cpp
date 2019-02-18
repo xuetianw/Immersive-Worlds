@@ -84,6 +84,7 @@ CommandProcessor buildCommands() {
     commandProcessor.addCommand("/register", [](Message message) { return ::accountController->startRegister(message); });
     commandProcessor.addCommand("/escape", [](Message message) { return ::accountController->escapeLogin(message); });
     commandProcessor.addCommand("/move", [](Message message) { return ::gameController->move(message); });
+    commandProcessor.addCommand("/minigame", [](Message message) { return ::gameController->createMinigame(message); });
     //commandProcessor.addCommand("/yell", [](Message message){return ::gameController->yell(message);});
 
     return move(commandProcessor);

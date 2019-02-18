@@ -2,7 +2,8 @@ add_library(channel
   src/Room.cpp
   src/Area.cpp
   src/World.cpp
-  src/RoomConnection.cpp)
+  src/RoomConnection.cpp
+  src/MiniGame.cpp)
 
 target_include_directories(channel
   PUBLIC

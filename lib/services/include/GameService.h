@@ -11,6 +11,7 @@
 #include "CusJson.h"
 #include "DataStorage.h"
 #include "GameService.h"
+#include "MiniGame.h"
 
 class GameService {
 public:
@@ -45,6 +46,7 @@ public:
 
     string getCurrentRoomName(const networking::Connection &connection);
 
+    channel::MiniGame getMiniGame(const networking::Connection &connection, const std::string keywordString);
 };
 
 #endif //WEBSOCKETNETWORKING_GAMESERVICE_H

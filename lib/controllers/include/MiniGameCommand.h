@@ -6,8 +6,6 @@
 #define WEBSOCKETNETWORKING_MINIGAMECOMMAND_H
 
 #include "Command.h"
-#include "Server.h"
-#include "ClientManager.h"
 
 class MiniGameCommand : public Command {
 public:
