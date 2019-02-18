@@ -31,14 +31,16 @@ TEST_F(UserServiceManagementTEST, LoginTest){
   accountController.connectClient(connection);
   Message userPrompt = accountController.startLogin(firstMessage);
 
-  Message passwordPrompt = accountController.startLogin(usernameMessage);
-  pair<bool, Message> accountControllerResponse = accountController.respondToMessage(passwordMessage);
+    pair<bool, Message> accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
+    pair<bool, Message> accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
 
-  ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
-  EXPECT_EQ(LOGIN_PASSWORD_PROMPT, passwordPrompt.text);
-  ASSERT_TRUE(accountControllerResponse.first);
-  EXPECT_EQ(ID1, accountControllerResponse.second.connection.id);
-  EXPECT_EQ(LOGGED_IN_PROMPT, accountControllerResponse.second.text);
+    ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
+    ASSERT_TRUE(accountControllerFirstResponse.first);
+    EXPECT_EQ(LOGIN_PASSWORD_PROMPT, accountControllerFirstResponse.second.text);
+    EXPECT_EQ(ID1, accountControllerFirstResponse.second.connection.id);
+    ASSERT_TRUE(accountControllerSecondResponse.first);
+    EXPECT_EQ(LOGGED_IN_PROMPT, accountControllerSecondResponse.second.text);
+    ASSERT_TRUE(accountControllerSecondResponse.second.connection.id);
 }
 
 //same user login twice
