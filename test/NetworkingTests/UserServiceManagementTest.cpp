@@ -9,7 +9,7 @@
 
 using testing::Return;
 
-struct UserServiceManagementTEST : testing:: Test {
+struct UserServiceManagementTest : testing:: Test {
     AccountController accountController;
     const std::uintptr_t ID1 = rand() % 1000000;
     Connection connection{ID1};
@@ -20,14 +20,14 @@ struct UserServiceManagementTEST : testing:: Test {
 };
 
 // user logout without logging in
-TEST_F(UserServiceManagementTEST, LogoutTest){
+TEST_F(UserServiceManagementTest, LogoutTest){
   Message message = accountController.logoutUser(firstMessage);
   EXPECT_EQ(ID1, message.connection.id);
   EXPECT_EQ(NOT_LOGIN_MESSAGE, message.text);
 }
 
 //user login
-TEST_F(UserServiceManagementTEST, LoginTest){
+TEST_F(UserServiceManagementTest, LoginTest){
   accountController.connectClient(connection);
   Message userPrompt = accountController.startLogin(firstMessage);
 
@@ -47,7 +47,7 @@ TEST_F(UserServiceManagementTEST, LoginTest){
 }
 
 //same user login twice
-TEST_F(UserServiceManagementTEST, LoginTwiceTest){
+TEST_F(UserServiceManagementTest, LoginTwiceTest){
 
     accountController.connectClient(connection);
     Message userPrompt = accountController.startLogin(firstMessage);
@@ -74,7 +74,7 @@ TEST_F(UserServiceManagementTEST, LoginTwiceTest){
 }
 
 //user login first and logout
-TEST_F(UserServiceManagementTEST, LoginlogoutSequenceTest){
+TEST_F(UserServiceManagementTest, LoginlogoutSequenceTest){
 
     accountController.connectClient(connection);
     Message userPrompt = accountController.startLogin(firstMessage);
@@ -100,7 +100,7 @@ TEST_F(UserServiceManagementTEST, LoginlogoutSequenceTest){
 }
 
 //register without logging in
-TEST_F(UserServiceManagementTEST, RegisterTest){
+TEST_F(UserServiceManagementTest, RegisterTest){
     accountController.connectClient(connection);
     Message message = accountController.startRegister(firstMessage);
 
@@ -124,7 +124,7 @@ TEST_F(UserServiceManagementTEST, RegisterTest){
 
 
 //register after logging in
-TEST_F(UserServiceManagementTEST, LoginRegisterTest){
+TEST_F(UserServiceManagementTest, LoginRegisterTest){
     accountController.connectClient(connection);
     Message userPrompt = accountController.startLogin(firstMessage);
 
@@ -150,7 +150,7 @@ TEST_F(UserServiceManagementTEST, LoginRegisterTest){
 
 //register and excape
 
-TEST_F(UserServiceManagementTEST, RegisterEscapeTest){
+TEST_F(UserServiceManagementTest, RegisterEscapeTest){
 
     accountController.connectClient(connection);
     Message message = accountController.startRegister(firstMessage);
@@ -174,7 +174,7 @@ TEST_F(UserServiceManagementTEST, RegisterEscapeTest){
 }
 
 //login and escape
-TEST_F(UserServiceManagementTEST, LoginEscapeTest){
+TEST_F(UserServiceManagementTest, LoginEscapeTest){
 
     accountController.connectClient(connection);
     Message userPrompt = accountController.startLogin(firstMessage);
@@ -198,7 +198,7 @@ TEST_F(UserServiceManagementTEST, LoginEscapeTest){
 }
 
 //user escape without logingin
-TEST_F(UserServiceManagementTEST, LoginEscape_WithoutLoginTest){
+TEST_F(UserServiceManagementTest, LoginEscape_WithoutLoginTest){
     accountController.connectClient(connection);
     Message escapeMessage = accountController.escapeLogin(firstMessage);
     EXPECT_EQ(ID1, escapeMessage.connection.id);
@@ -207,7 +207,7 @@ TEST_F(UserServiceManagementTEST, LoginEscape_WithoutLoginTest){
 
 //
 //
-//TEST_F(UserServiceManagementTEST, LoginClientTestWithInitalParam){
+//TEST_F(UserServiceManagementTest, LoginClientTestWithInitalParam){
 //  Message firstMessage{connection,"Rex"};
 //  Message passwordMessage{connection,"admin12345"};
 //
@@ -223,7 +223,7 @@ TEST_F(UserServiceManagementTEST, LoginEscape_WithoutLoginTest){
 //}
 //
 //
-//TEST_F(UserServiceManagementTEST, LoginClientTestWithWrongInfo){
+//TEST_F(UserServiceManagementTest, LoginClientTestWithWrongInfo){
 //  Message firstMessage{connection,"Rex"};
 //  Message passwordMessage{connection,"admin123"};
 //
@@ -274,7 +274,7 @@ TEST_F(UserServiceManagementTEST, LoginEscape_WithoutLoginTest){
 //
 //
 //
-//TEST_F(UserServiceManagementTEST, UsernameTakenClientTest) {
+//TEST_F(UserServiceManagementTest, UsernameTakenClientTest) {
 //
 //  Message newUsername{connection.id, "SecondBuddy"};
 //
