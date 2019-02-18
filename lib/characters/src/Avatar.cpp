@@ -25,7 +25,7 @@ void Avatar::dropItem(InventoryItem inventoryItem) {
 
 
 bool Avatar::wearItem(InventoryItem inventoryItem) {
-	if (inventoryItem.getItemType() == InventoryItem::ItemType::CLOTHING){
+	if (inventoryItem.getItemType() == InventoryItem::ItemType::CLOTHING) {
 		InventoryItem clothingToRemove = _currentClothing;
 		InventoryItem clothingToWear = removeItem(inventoryItem);
 		_currentClothing = clothingToWear;
@@ -43,7 +43,6 @@ bool Avatar::isPlayable() {
 	return _avatarType == AvatarType::PLAYABLE;
 }
 
-Avatar::Avatar(const Avatar::AvatarType avatarType, int userId) : _avatarType(avatarType), _userID(userId){
-	//TODO implement an _inventory on construction (?)
-	_inventory = new Inventory(_userID);
+Avatar::Avatar(const Avatar::AvatarType avatarType, int userId)
+		: _avatarType(avatarType), _userID(userId), _inventory(Inventory(_userID)) {
 }

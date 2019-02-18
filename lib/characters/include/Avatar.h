@@ -9,10 +9,9 @@
 #include <Inventory.h>
 #include "InventoryItem.h"
 
-class Avatar
-{
+class Avatar {
 private:
-	enum class AvatarType{
+	enum class AvatarType {
 		NON_PLAYABLE,
 		PLAYABLE
 	};
@@ -24,6 +23,7 @@ private:
 	 */
 	InventoryItem _currentClothing;
 	Inventory _inventory;
+
 	/**
 	 * Adds an InventoryItem to characterInventory.
 	 * @param inventoryItem item to add to inventory
@@ -46,13 +46,18 @@ private:
 	//TODO move "giving" an item up higher as it requires knowledge of another avatar
 
 	bool wearItem(InventoryItem inventoryItem);
+
 	InventoryItem removeItem(InventoryItem inventoryItem);
+
 	void attack(Avatar characterToAttack);
+
 	void kill(Avatar characterToKill);
+
 	void flee();
 
 public:
 	Avatar(const AvatarType avatarType, int userId);
+
 	bool isPlayable();
 };
 
