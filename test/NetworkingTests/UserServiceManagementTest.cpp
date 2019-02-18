@@ -165,8 +165,6 @@ TEST_F(UserServiceManagementTEST, LoginEscapeTest){
 //user escape without logingin
 TEST_F(UserServiceManagementTEST, LoginEscape_WithoutLoginTest){
     accountController.connectClient(connection);
-    Message userPrompt = accountController.escapeLogin(firstMessage);
-
     Message escapeMessage = accountController.escapeLogin(firstMessage);
     EXPECT_EQ(ID1, escapeMessage.connection.id);
     EXPECT_EQ(ESCAPE_WHILE_NOT_LOGIN_MESSAGE, escapeMessage.text);
