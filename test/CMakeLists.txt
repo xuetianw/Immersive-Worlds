@@ -23,7 +23,7 @@ add_executable(run_tests
     channel/channelTest.cpp
     MessageTest/MessageTest.cpp
     gameManager/idTest.cpp
-    NetworkingTests/CilentManagerTests.cpp
+        NetworkingTests/UserServiceManagementTest.cpp
     NetworkingTests/ConsoleCommandTests.cpp
     NetworkingTests/ServerTests.cpp
     databaseTest/DatabaseTest.cpp
