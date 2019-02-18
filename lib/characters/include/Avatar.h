@@ -7,7 +7,13 @@
 
 #include <ContainerItem.h>
 #include <Inventory.h>
+#include <Room.h>
 #include "InventoryItem.h"
+
+
+const int MAX_HP = 200;
+const int MAX_MANA = 150;
+
 
 class Avatar {
 private:
@@ -23,6 +29,13 @@ private:
 	 */
 	InventoryItem _currentClothing;
 	Inventory _inventory;
+	std::string name;
+	unsigned int _hp = MAX_HP;
+	unsigned int _mana = MAX_MANA;
+	channel::Room _currentRoom;
+	char *_shortDesc;
+	char *_longDesc;
+	char *_tellCommandMessages; //eventually should be a buffer of Message objects for character-to-character messaging
 
 	/**
 	 * Adds an InventoryItem to characterInventory.

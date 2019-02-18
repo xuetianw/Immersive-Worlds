@@ -1,7 +1,8 @@
 add_library(channel
   src/Room.cpp
   src/Area.cpp
-  src/World.cpp)
+  src/World.cpp
+  src/RoomConnection.cpp)
 
 target_include_directories(channel
   PUBLIC
@@ -12,7 +13,8 @@ target_include_directories(channel
 )
 
 target_link_libraries(channel
-  PRIVATE
+  PUBLIC
+        cusjson
   )
 
 set_target_properties(channel
