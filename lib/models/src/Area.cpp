@@ -7,7 +7,7 @@
 
 #include "Area.h"
 
-using channel::Area;
+using models::Area;
 using std::move;
 
 Area::Area(int id)
@@ -44,7 +44,7 @@ string Area::getName() {
     return _name;
 }
 
-channel::Room channel::Area::getRoom(const channel::RoomId &roomId) {
+models::Room models::Area::getRoom(const models::RoomId &roomId) {
     try {
         auto room = _rooms.at(roomId.getId());
         return room;

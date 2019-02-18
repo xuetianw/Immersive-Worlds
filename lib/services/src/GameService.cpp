@@ -10,7 +10,7 @@
 bool GameService::moveUser(const networking::Connection &connection, const std::string keywordString) {
   auto roomId = _connectionToRoomId.at(connection);
   auto connectedRoomList = _roomIdToRoomConnectionsList.at(roomId.getId());
-  auto connectedRoom = std::find_if(connectedRoomList.begin(), connectedRoomList.end(), [keywordString](const channel::RoomConnection &roomConnection) -> bool {
+  auto connectedRoom = std::find_if(connectedRoomList.begin(), connectedRoomList.end(), [keywordString](const models::RoomConnection &roomConnection) -> bool {
     return roomConnection.getUserInputDirKey() == keywordString;
   });
   if (connectedRoom != connectedRoomList.end()) {
@@ -30,20 +30,20 @@ string GameService::getCurrentRoomName(const networking::Connection &connection)
 }
 
 bool GameService::spawnUserInStartRoom(const networking::Connection &connection) {
-  _connectionToRoomId.emplace(connection, channel::RoomId(10500)); // DEBUG starting room is in Lexia's shop
+  _connectionToRoomId.emplace(connection, models::RoomId(10500)); // DEBUG starting room is in Lexia's shop
   return true;
 }
 
 bool GameService::spawnUserInRoom(const networking::Connection &connection, int id) {
-  _connectionToRoomId.emplace(connection, channel::RoomId(id));
+  _connectionToRoomId.emplace(connection, models::RoomId(id));
   return true;
 }
 
 void GameService::loadFromStorage() {
-    for (const channel::Room &room : _dataStorage.getRooms()) {
+    for (const models::Room &room : _dataStorage.getRooms()) {
         _roomIdToRoom.emplace(room.getId(), room);
     }
-    for (const std::pair<int, std::vector<channel::RoomConnection>> &roomConnection : _dataStorage.getRoomConnectionsPairs()) {
+    for (const std::pair<int, std::vector<models::RoomConnection>> &roomConnection : _dataStorage.getRoomConnectionsPairs()) {
         _roomIdToRoomConnectionsList.insert(roomConnection);
     }
 }

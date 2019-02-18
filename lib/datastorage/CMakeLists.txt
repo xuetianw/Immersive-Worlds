@@ -20,7 +20,7 @@ target_link_libraries(datastorage
         PUBLIC
         cusjson
         networking
-        channel
+        models
         )
 
 install(TARGETS datastorage

@@ -18,7 +18,7 @@ target_include_directories(services
 target_link_libraries(services
 
     PUBLIC
-        channel
+        models
         networking
         datastorage
     )

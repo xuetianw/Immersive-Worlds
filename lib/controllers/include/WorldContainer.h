@@ -21,7 +21,7 @@ public:
     void resetWorld();
     std::string getRoomName(const int id);
 private:
-    channel::Area _area = channel::Area(0);// TODO clean up temp id
+    models::Area _area = models::Area(0);// TODO clean up temp id
 
     json debugArea();
 };

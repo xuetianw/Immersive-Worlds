@@ -2,7 +2,7 @@
 // Created by vinshit on 20/01/19.
 //
 
-#include "channelTest.h"
+#include "modelsTest.h"
 #include "Area.h"
 #include "Client.h"
 #include "Room.h"
@@ -10,9 +10,9 @@
 #include "World.h"
 #include "gtest/gtest.h"
 
-using channel::Area;
-using channel::Room;
-using channel::World;
+using models::Area;
+using models::Room;
+using models::World;
 
 // this just a sample test
 class BasicTest : public ::testing::Test {
@@ -37,7 +37,7 @@ TEST_F(BasicTest, Test_Nothing) {
 }
 
 /**
- * Channel Tests: Area
+ * Models Tests: Area
  */
 
 struct AreaTests : testing:: Test {

@@ -14,7 +14,7 @@
 #include <Room.h>
 #include <nlohmann/json.hpp>
 
-using channel::Room;
+using models::Room;
 using nlohmann::json;
 
 using std::string;
@@ -103,14 +103,14 @@ void Room::addRoom(int roomId, Room& room) {
 }
 
 // TODO think about moving this to its own file
-channel::RoomId::RoomId(int id): _id(id) {
+models::RoomId::RoomId(int id): _id(id) {
 
 }
 
-int channel::RoomId::getId() const{
+int models::RoomId::getId() const{
   return this->_id;
 }
 
-channel::RoomId::RoomId() {
+models::RoomId::RoomId() {
 
 }

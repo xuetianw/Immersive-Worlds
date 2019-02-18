@@ -17,12 +17,12 @@ private:
 
 public:
     DataStorage();
-    std::vector<channel::Room> getRooms();
+    std::vector<models::Room> getRooms();
 
     /**
      * @return a list of pairs where the int is the roomId, and the second is a list of RoomConnections for that roomId
      */
-    std::vector<std::pair<int, std::vector<channel::RoomConnection>>> getRoomConnectionsPairs();
+    std::vector<std::pair<int, std::vector<models::RoomConnection>>> getRoomConnectionsPairs();
 };
 
 
