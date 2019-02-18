@@ -12,8 +12,9 @@ set_target_properties(gameserver
 find_package(Threads REQUIRED)
 
 target_link_libraries(gameserver
-        networking
-    game
+    networking
+    commands
+    controllers
     ${CMAKE_THREAD_LIBS_INIT}
     )
 
