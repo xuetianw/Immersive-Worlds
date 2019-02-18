@@ -20,7 +20,7 @@ struct UserServiceManagementTest : testing:: Test {
 };
 
 // user logout without logging in
-TEST_F(UserServiceManagementTest, LogoutTest){
+TEST_F(UserServiceManagementTest, LogoutWithoutLoggingInTest){
   Message message = accountController.logoutUser(firstMessage);
   EXPECT_EQ(ID1, message.connection.id);
   EXPECT_EQ(NOT_LOGIN_MESSAGE, message.text);
@@ -67,14 +67,14 @@ TEST_F(UserServiceManagementTest, LoginTwiceTest){
     ASSERT_EQ(LOGGED_IN_PROMPT, accountControllerSecondResponse.second.text);
     ASSERT_TRUE(accountControllerSecondResponse.second.connection.id);
 
-    Message secondPromp = accountController.startLogin(firstMessage);
-    EXPECT_EQ(ID1, secondPromp.connection.id);
-    EXPECT_EQ(ALREADY_LOGIN_MESSAGE, secondPromp.text);
+    Message secondPrompt = accountController.startLogin(firstMessage);
+    EXPECT_EQ(ID1, secondPrompt.connection.id);
+    EXPECT_EQ(ALREADY_LOGIN_MESSAGE, secondPrompt.text);
 
 }
 
 //user login first and logout
-TEST_F(UserServiceManagementTest, LoginlogoutSequenceTest){
+TEST_F(UserServiceManagementTest, LoginLogoutSequenceTest){
 
     accountController.connectClient(connection);
     Message userPrompt = accountController.startLogin(firstMessage);
