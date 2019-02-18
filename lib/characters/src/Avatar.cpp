@@ -2,23 +2,25 @@
 // Created by Owner on 1/18/2019.
 //
 
+#include <Avatar.h>
+
 #include "Avatar.h"
 #include "ContainerItem.h"
 
 void Avatar::takeItem(InventoryItem inventoryItem) {
-	inventory.addItem(inventoryItem);
+	_inventory.addItem(inventoryItem);
 }
 
 void Avatar::putItem(InventoryItem inventoryItem, ContainerItem containerObject) {
-	//TODO once lucy implements adding to a containerItem
+	//TODO complete once adding to a containerItem is implemented
 	//	containerObject.addItem(inventoryItem);
 
 }
 
 void Avatar::dropItem(InventoryItem inventoryItem) {
-//	TODO: uncomment these lines after pulling Lucy's code and after implementing an inventory in a room
+//	TODO: complete after implementing an _inventory in a room
 	InventoryItem removedItem = removeItem(inventoryItem);
-//	currentRoom.inventory.addItem(removedItem);
+//	currentRoom._inventory.addItem(removedItem);
 }
 
 
@@ -27,12 +29,21 @@ bool Avatar::wearItem(InventoryItem inventoryItem) {
 		InventoryItem clothingToRemove = _currentClothing;
 		InventoryItem clothingToWear = removeItem(inventoryItem);
 		_currentClothing = clothingToWear;
-		inventory.addItem(clothingToRemove);
+		_inventory.addItem(clothingToRemove);
 		return true;
 	}
 	return false;
 }
 
 InventoryItem Avatar::removeItem(InventoryItem inventoryItem) {
-	return inventory.removeItem(inventoryItem.getId());
+	return _inventory.removeItem(inventoryItem.getId());
+}
+
+bool Avatar::isPlayable() {
+	return _avatarType == AvatarType::PLAYABLE;
+}
+
+Avatar::Avatar(const Avatar::AvatarType avatarType, int userId) : _avatarType(avatarType), _userID(userId){
+	//TODO implement an _inventory on construction (?)
+	_inventory = new Inventory(_userID);
 }

@@ -12,13 +12,18 @@
 class Avatar
 {
 private:
+	enum class AvatarType{
+		NON_PLAYABLE,
+		PLAYABLE
+	};
+	AvatarType _avatarType;
 	/** A unique int identifying the character*/
 	int _userID; //this will eventually be a User type object
 	/**
 	 * Clothing item that the Avatar is currently wearing
 	 */
 	InventoryItem _currentClothing;
-	Inventory inventory;
+	Inventory _inventory;
 	/**
 	 * Adds an InventoryItem to characterInventory.
 	 * @param inventoryItem item to add to inventory
@@ -45,6 +50,10 @@ private:
 	void attack(Avatar characterToAttack);
 	void kill(Avatar characterToKill);
 	void flee();
+
+public:
+	Avatar(const AvatarType avatarType, int userId);
+	bool isPlayable();
 };
 
 
