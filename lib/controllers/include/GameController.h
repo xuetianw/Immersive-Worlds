@@ -24,6 +24,13 @@ public:
     Message spawnUserInStartRoom(const networking::Connection &connection);
     void spawnUserInRoom(const networking::Connection &connection, int debugRoomId);
 
+    /**
+     * Displays to the user info about their current location.
+     * @param message
+     * @return current location info
+     */
+    Message outputCurrentLocationInfo(Message& message);
+
 private:
     GameService _gameService;
 };

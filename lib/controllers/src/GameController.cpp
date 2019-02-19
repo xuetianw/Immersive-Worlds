@@ -36,3 +36,13 @@ GameController::GameController(GameService gameService) : _gameService(gameServi
 void GameController::addUser(const networking::Connection &connection) {
 
 }
+
+Message GameController::outputCurrentLocationInfo(Message& message) {
+    networking::Connection& currentConnection = message.connection;
+    string currentRoom = _gameService.getCurrentRoomName(currentConnection);
+    string responseText = "You are currently located in " + currentRoom;
+
+    Message response{currentConnection, responseText};
+
+    return response;
+}
