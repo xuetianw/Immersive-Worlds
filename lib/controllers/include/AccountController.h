@@ -40,7 +40,11 @@ using string = std::string;
 
 class AccountController : public AbstractController {
 public:
-    AccountController() : userService() {};
+    AccountController() : userService() {
+        // onLoginFunction initially set to null.
+        // Caller is responsible for setting this up through onCompleteLogin()
+        onLoginFunction = nullptr;
+    };
 
     Message startLogin(Message& message);
 
