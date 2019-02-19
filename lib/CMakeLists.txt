@@ -1,6 +1,6 @@
 add_subdirectory(networking)
 add_subdirectory(inventory)
-add_subdirectory(channel)
+add_subdirectory(models)
 add_subdirectory(message)
 add_subdirectory(datastorage)
 add_subdirectory(characters)

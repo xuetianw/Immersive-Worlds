@@ -20,7 +20,7 @@ using namespace std;
 void WorldContainer::loadFromStorage() {
     json solaceJson = debugArea();
     auto solaceArea = solaceJson.get<CusJson::Area>();
-    this->_area = channel::Area(solaceArea);
+    this->_area = models::Area(solaceArea);
 }
 
 void WorldContainer::resetWorld() {
@@ -29,7 +29,7 @@ void WorldContainer::resetWorld() {
 
 
 WorldContainer::WorldContainer() {
-    _area = channel::Area();
+    _area = models::Area();
 }
 
 json WorldContainer::debugArea() {

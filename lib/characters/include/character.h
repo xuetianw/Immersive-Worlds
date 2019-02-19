@@ -19,7 +19,7 @@ protected:
 	unsigned int hp = MAX_HP;
 	unsigned int mana = MAX_MANA;
 
-	channel::Room currentRoom;
+	models::Room currentRoom;
 	char* shortDesc;
 	char* longDesc;
 	Inventory characterInventory;

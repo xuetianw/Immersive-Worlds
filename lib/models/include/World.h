@@ -2,15 +2,15 @@
 // Created by Jan Ycasas on 2019-01-24.
 //
 
-#ifndef CHANNEL_WORLD_H
-#define CHANNEL_WORLD_H
+#ifndef MODELS_WORLD_H
+#define MODELS_WORLD_H
 
 #include <unordered_map>
 #include <Area.h>
 
 using std::unordered_map;
 
-namespace channel {
+namespace models {
     class World {
         public:
             World(int id);
@@ -36,6 +36,6 @@ namespace channel {
             int _id = 0; //TODO make world id unique
             unordered_map<int, Area> _areas;
     };
-} // namespace channel
+} // namespace models
 
-#endif //CHANNEL_WORLD_H
+#endif //MODELS_WORLD_H
