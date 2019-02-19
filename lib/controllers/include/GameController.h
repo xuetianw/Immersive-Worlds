@@ -5,6 +5,10 @@
 #ifndef WEBSOCKETNETWORKING_GAMECONTROLLER_H
 #define WEBSOCKETNETWORKING_GAMECONTROLLER_H
 
+constexpr char INITIAL_ROOM_START_MESSAGE[] = "User has spawned in initial room";
+
+constexpr char USER_CURRENTLY_LOCATED_MESSAGE[] = "You are currently located in ";
+
 #include <Server.h>
 #include "GameService.h"
 #include "AbstractController.h"

@@ -27,7 +27,8 @@ add_executable(run_tests
     NetworkingTests/ConsoleCommandTests.cpp
     NetworkingTests/ServerTests.cpp
     databaseTest/DatabaseTest.cpp
-  )
+    controllersTest/GameControllerTest.cpp
+    )
 
 target_link_libraries(run_tests gmock gtest gtest_main)
 
