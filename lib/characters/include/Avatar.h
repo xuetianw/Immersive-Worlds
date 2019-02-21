@@ -32,7 +32,7 @@ private:
 	std::string name;
 	unsigned int _hp = MAX_HP;
 	unsigned int _mana = MAX_MANA;
-	channel::Room _currentRoom;
+	models::Room _currentRoom;
 	char *_shortDesc;
 	char *_longDesc;
 	char *_tellCommandMessages; //eventually should be a buffer of Message objects for character-to-character messaging
