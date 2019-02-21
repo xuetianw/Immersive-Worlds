@@ -2,8 +2,8 @@
 // Created by Jacky Lui on 2019-01-18.
 //
 
-#ifndef CHANNEL_ROOM_H
-#define CHANNEL_ROOM_H
+#ifndef MODELS_ROOM_H
+#define MODELS_ROOM_H
 
 #include <utility>
 #include <string>
@@ -20,7 +20,7 @@ using std::deque;
 using std::unordered_map;
 using std::vector;
 
-namespace channel {
+namespace models {
   class RoomId {
   private:
     int _id;
@@ -71,4 +71,4 @@ namespace channel {
 
 }
 
-#endif //CHANNEL_ROOM_H
+#endif //MODELS_ROOM_H

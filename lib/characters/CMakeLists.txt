@@ -22,5 +22,5 @@ install(TARGETS characters
 
 target_link_libraries(characters
         PUBLIC
-        channel
+        models
         inventory)

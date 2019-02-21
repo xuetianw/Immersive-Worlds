@@ -1,10 +1,10 @@
-add_library(channel
+add_library(models
   src/Room.cpp
   src/Area.cpp
   src/World.cpp
   src/RoomConnection.cpp)
 
-target_include_directories(channel
+target_include_directories(models
   PUBLIC
   $<INSTALL_INTERFACE:include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -12,17 +12,17 @@ target_include_directories(channel
   ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_link_libraries(channel
+target_link_libraries(models
   PUBLIC
         cusjson
   )
 
-set_target_properties(channel
+set_target_properties(models
   PROPERTIES
   LINKER_LANGUAGE CXX
   CXX_STANDARD 17
   )
 
-install(TARGETS channel
+install(TARGETS models
   ARCHIVE DESTINATION lib
   )
