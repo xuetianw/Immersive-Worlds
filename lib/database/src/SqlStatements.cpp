@@ -14,6 +14,7 @@ const char* SqlStatements::createUserTableString = "CREATE TABLE IF NOT EXISTS U
 //queries
 sqlite3_stmt* SqlStatements::createUserTableStmt;
 sqlite3_stmt* SqlStatements::registerUserStmt;
+sqlite3_stmt* SqlStatements::deleteUserStmt;
 
 void SqlStatements::createUserTable() {
 
@@ -39,6 +40,16 @@ void SqlStatements::registerUser(string username, string password) {
     }
 }
 
+void SqlStatements::deleteUser(string username) {
+
+    string deleteUserString = "DELETE FROM User WHERE username ='" + username + "';";
+
+    int status = sqlite3_prepare_v2(DBUtil::database, deleteUserString.c_str(), -1, &deleteUserStmt, NULL);
+
+    if(status!=SQLITE_OK){
+        printf("Failed to delete User");
+    }
+}
 
 void SqlStatements::prepareSQLStatements() {
 

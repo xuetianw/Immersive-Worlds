@@ -46,7 +46,6 @@ public:
      */
     static bool dropTables();
 
-    DBUtil();
 
 };
 

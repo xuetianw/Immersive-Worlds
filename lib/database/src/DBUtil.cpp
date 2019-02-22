@@ -60,23 +60,22 @@ bool DBUtil::registerUser(string username, string password) {
         return false;
     }
 
-
     return true;
 
 }
 
 bool DBUtil::deleteUser(string username) {
 
-    string sqlStatement = "DELETE FROM User WHERE username ='" + username + "';";
+    SqlStatements::deleteUser(username);
+    int status = sqlite3_step(SqlStatements::deleteUserStmt);
 
-    int status = sqlite3_exec( DBUtil::database, sqlStatement.c_str() ,
-                               NULL, NULL , &DBUtil::errorMessage );
+    if(status!=SQLITE_DONE){
+        //error handling
 
-    if(status!=0){
         return false;
     }
-    return true;
 
+    return true;
 
 }
 
@@ -124,9 +123,4 @@ bool DBUtil::closeConnection() {
         return false;
 
     return true;
-}
-
-
-DBUtil::DBUtil() {
-
 }
