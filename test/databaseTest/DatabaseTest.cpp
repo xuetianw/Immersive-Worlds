@@ -19,5 +19,5 @@ TEST_F(DatabaseTests ,databaseTest){
     EXPECT_EQ(true, DBUtil::registerUser("Karan","hijklmn"));
     EXPECT_EQ(true, DBUtil::deleteUser("Josh"));
 
-
+    EXPECT_EQ(true, DBUtil::closeConnection());
 }

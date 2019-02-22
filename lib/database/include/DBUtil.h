@@ -32,7 +32,7 @@ public:
 
     static bool openConnection();
 
-    static void closeConnection();
+    static bool closeConnection();
 
     /*
      * function to create new tables if need be
