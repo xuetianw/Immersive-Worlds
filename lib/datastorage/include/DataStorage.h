@@ -13,16 +13,16 @@
 class DataStorage {
 private:
     CusJson::Area _jsonArea;
+public:
+    const CusJson::Area &get_jsonArea() const;
+
+    void set_jsonArea(const CusJson::Area &_jsonArea);
+
+private:
     json getTestingArea();
 
 public:
     DataStorage();
-    std::vector<models::Room> getRooms();
-
-    /**
-     * @return a list of pairs where the int is the roomId, and the second is a list of RoomConnections for that roomId
-     */
-    std::vector<std::pair<int, std::vector<models::RoomConnection>>> getRoomConnectionsPairs();
 };
 
 

@@ -39,12 +39,26 @@ bool GameService::spawnUserInRoom(const networking::Connection &connection, int 
   return true;
 }
 
+
 void GameService::loadFromStorage() {
-    for (const models::Room &room : _dataStorage.getRooms()) {
-        _roomIdToRoom.emplace(room.getId(), room);
+  // load _roomIdToRoom
+  for (const CusJson::Room &room:_dataStorage.get_jsonArea()._rooms) {
+    _roomIdToRoom.emplace(room._id, models::Room(room));
+  }
+
+
+  // load _roomIdToRoomConnectionsList
+  std::vector<std::pair<int, std::vector<models::RoomConnection>> > roomIdToRoomConnectionListPairList;
+  for (const CusJson::Room &room:_dataStorage.get_jsonArea()._rooms) {
+      std::vector<models::RoomConnection> roomConnectionVector;
+      for (const CusJson::JsonDoor& jsonDoor : room._jsonDoors) {
+        roomConnectionVector.emplace_back(models::RoomId(jsonDoor._to), models::RoomId(room._id), jsonDoor._dir);
+      }
+      roomIdToRoomConnectionListPairList.emplace_back(room._id, roomConnectionVector);
     }
-    for (const std::pair<int, std::vector<models::RoomConnection>> &roomConnection : _dataStorage.getRoomConnectionsPairs()) {
-        _roomIdToRoomConnectionsList.insert(roomConnection);
+
+    for (const auto &roomConnection: roomIdToRoomConnectionListPairList) {
+      _roomIdToRoomConnectionsList.insert(roomConnection);
     }
 }
 
