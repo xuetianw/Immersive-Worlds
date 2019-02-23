@@ -27,6 +27,7 @@ bool DBUtil::openConnection() {
     return true;
 }
 
+//adddd all tables to create here
 bool DBUtil::createTables() {
 
     SqlStatements::prepareSQLStatements();
@@ -79,16 +80,18 @@ bool DBUtil::deleteUser(string username) {
 
 }
 
+//add all tables to drop here
 bool DBUtil::dropTables() {
 
+    int status = sqlite3_step(SqlStatements::createUserTableStmt);
 
-    int status = sqlite3_exec( DBUtil::database,"DROP TABLE IF EXISTS User;",
-                                            NULL, NULL , &DBUtil::errorMessage );
+    if(status!=SQLITE_DONE){
+        //error handling
 
-    if(status!=0)
         return false;
-
+    }
     return true;
+
 }
 
 /*
@@ -116,6 +119,9 @@ int DBUtil::callback(void* data, int argc, char** argv, char** azColName)
 
 
 bool DBUtil::closeConnection() {
+
+    //destroy all prepared SQL statements to prevent memory leaks
+    SqlStatements::destroySQLStatements();
 
     int status = sqlite3_close_v2(DBUtil::database);
 

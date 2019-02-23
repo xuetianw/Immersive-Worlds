@@ -10,9 +10,11 @@
 
 //const char strings
 const char* SqlStatements::createUserTableString = "CREATE TABLE IF NOT EXISTS User(id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(20), password VARCHAR(20));";
+const char* SqlStatements::dropUserTableString = "DROP TABLE IF EXISTS User;";
 
 //queries
 sqlite3_stmt* SqlStatements::createUserTableStmt;
+sqlite3_stmt* SqlStatements::dropUserTableStmt;
 sqlite3_stmt* SqlStatements::registerUserStmt;
 sqlite3_stmt* SqlStatements::deleteUserStmt;
 
@@ -23,7 +25,14 @@ void SqlStatements::createUserTable() {
     if(status!=SQLITE_OK){
         printf("Failed to create User Table");
     }
+}
 
+void SqlStatements::dropUserTable() {
+    int status = sqlite3_prepare_v2(DBUtil::database, dropUserTableString, -1, &dropUserTableStmt, NULL);
+
+    if(status!=SQLITE_OK){
+        printf("Failed to drop/delete User Table");
+    }
 }
 
 void SqlStatements::registerUser(string username, string password) {
@@ -51,8 +60,17 @@ void SqlStatements::deleteUser(string username) {
     }
 }
 
+//only prepares those queries that don't depend on User input
 void SqlStatements::prepareSQLStatements() {
 
     //call all functions to prepare sql queries
     createUserTable();
+    dropUserTable();
+}
+
+void SqlStatements::destroySQLStatements() {
+    sqlite3_finalize(createUserTableStmt);
+    sqlite3_finalize(dropUserTableStmt);
+    sqlite3_finalize(registerUserStmt);
+    sqlite3_finalize(deleteUserStmt);
 }
