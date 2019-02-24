@@ -20,11 +20,12 @@ networking::Message GameController::move(const networking::Message &message) {
 }
 
 Message GameController::spawnUserInStartRoom(const networking::Connection &connection) {
-    _gameService.spawnUserInStartRoom(connection);
-
-    return Message{connection, "User has spawned in initial room"};
+    if (_gameService.spawnUserInStartRoom(connection)) {
+        return Message{connection, ROOM_SPAWN_SUCCESS_MESSAGE};
+    } else {
+        return Message{connection, ROOM_SPAWN_FAIL_MESSAGE};
+    }
 }
-
 void GameController::spawnUserInRoom(const networking::Connection &connection, int debugRoomId) {
     _gameService.spawnUserInRoom(connection, debugRoomId);
 }

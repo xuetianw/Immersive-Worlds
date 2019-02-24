@@ -5,6 +5,10 @@
 #ifndef WEBSOCKETNETWORKING_GAMECONTROLLER_H
 #define WEBSOCKETNETWORKING_GAMECONTROLLER_H
 
+static const char *const ROOM_SPAWN_SUCCESS_MESSAGE = "User has spawned in initial room";
+
+static const char *const ROOM_SPAWN_FAIL_MESSAGE = "User failed to be spawned in a room";
+
 #include <Server.h>
 #include "GameService.h"
 #include "AbstractController.h"
