@@ -27,6 +27,8 @@ add_executable(run_tests
     NetworkingTests/ConsoleCommandTests.cpp
     NetworkingTests/ServerTests.cpp
     databaseTest/DatabaseTest.cpp
+        areaTests.cpp
+        inventory/inventoryTest.cpp
   )
 
 
@@ -40,5 +42,5 @@ set_target_properties(run_tests
         )
 
 ##TO DO: Add Lib Here
-target_link_libraries(run_tests networking models message cusjson Combat controllers database)
+target_link_libraries(run_tests networking models message cusjson Combat controllers database inventory)
 add_test(NAME network_tests COMMAND run_tests)
