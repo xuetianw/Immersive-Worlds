@@ -1,7 +1,5 @@
 add_library(characters
         src/Avatar.cpp
-        src/character.cpp
-        src/NonUserCharacter.cpp
         )
 
 

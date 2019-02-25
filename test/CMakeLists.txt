@@ -29,6 +29,7 @@ add_executable(run_tests
     databaseTest/DatabaseTest.cpp
   )
 
+
 target_link_libraries(run_tests gmock gtest gtest_main)
 
 set_target_properties(run_tests
