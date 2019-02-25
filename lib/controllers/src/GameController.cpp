@@ -11,11 +11,19 @@ networking::Message GameController::move(const networking::Message &message) {
 
     networking::Message newMessage = networking::Message();
     newMessage.connection = message.connection;
+    if (!check_message(message)) {
+        newMessage.text = WRONG_DIRECTION_MESSAGE;
+        return newMessage;
+    }
     std::string beforeMoveRoomName = _gameService.getCurrentRoomName(message.connection);
-    _gameService.moveUser(message.connection, message.text);
-    std::string afterMoveRoomName = _gameService.getCurrentRoomName(message.connection);
-    std::string output = "command /move " + message.text + " called\n" + "before move: " + beforeMoveRoomName + "\nafter move: " + afterMoveRoomName;
-    newMessage.text = output;
+    if (_gameService.moveUser(message.connection, message.text)) {
+        std::string afterMoveRoomName = _gameService.getCurrentRoomName(message.connection);
+        std::string output = "command /move " + message.text + " called\n" + "before move: " + beforeMoveRoomName + "\nafter move: " + afterMoveRoomName;
+        newMessage.text = output;
+    } else {
+        newMessage.text = "user did not move";
+    }
+
     return newMessage;
 }
 
@@ -30,10 +38,16 @@ void GameController::spawnUserInRoom(const networking::Connection &connection, i
     _gameService.spawnUserInRoom(connection, debugRoomId);
 }
 
-GameController::GameController(GameService gameService) : _gameService(gameService){
+GameController::GameController(GameService &gameService) : _gameService(gameService){
 
 }
 
 void GameController::addUser(const networking::Connection &connection) {
 
+}
+
+bool GameController::check_message(const Message &message) {
+    std::vector<std::string>::iterator it;
+    it = std::find (directions.begin(), directions.end(), message.text);
+    return it != directions.end();
 }
