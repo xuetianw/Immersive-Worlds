@@ -13,27 +13,27 @@ TEST_F(InventoryTests, Test_Inventory_GetPlayerId){
 }
 
 TEST_F(InventoryTests, Test_Inventory_hasItem){
-    EXPECT_FALSE(inventory->hasItem(testItemID));
+    ASSERT_FALSE(inventory->hasItem(testItemID));
     bool successInsert = inventory->addItem(*item);
-    EXPECT_TRUE(successInsert);
-    EXPECT_TRUE(inventory->hasItem(testItemID));
+    ASSERT_TRUE(successInsert);
+    ASSERT_TRUE(inventory->hasItem(testItemID));
 }
 
 TEST_F(InventoryTests, Test_Inventory_Size_and_Insert){
-    EXPECT_EQ(0, inventory->getSize());
+    ASSERT_EQ(0, inventory->getSize());
     bool successInsert = inventory->addItem(*item);
-    EXPECT_TRUE(successInsert);
-    EXPECT_EQ(1, inventory->getSize());
+    ASSERT_TRUE(successInsert);
+    ASSERT_EQ(1, inventory->getSize());
 }
 
 TEST_F(InventoryTests, Test_Inventory_Remove){
-    EXPECT_EQ(0, inventory->getSize());
+    ASSERT_EQ(0, inventory->getSize());
     bool successInsert = inventory->addItem(*item);
-    EXPECT_TRUE(successInsert);
-    EXPECT_EQ(1, inventory->getSize());
+    ASSERT_TRUE(successInsert);
+    ASSERT_EQ(1, inventory->getSize());
 
     auto deletedItem = inventory->removeItem(testItemID);
-    EXPECT_EQ(deletedItem.getId(), item->getId());
+    ASSERT_EQ(deletedItem.getId(), item->getId());
     //remove item that doesn't exist...TODO
     auto deletedSameItem = inventory->removeItem(testItemID);
 //    EXPECT_TRUE(deletedItem2 == NULL);
