@@ -12,17 +12,17 @@
 
 class DataStorage {
 private:
-    CusJson::Area _jsonArea;
+    CusJson::Area jsonArea;
 public:
-    const CusJson::Area &get_jsonArea() const;
+    DataStorage();
+    const CusJson::Area &getJsonArea() const;
 
-    void set_jsonArea(const CusJson::Area &_jsonArea);
+    void setJsonArea(const CusJson::Area &jsonArea);
 
 private:
     json getTestingArea();
 
-public:
-    DataStorage();
+
 };
 
 

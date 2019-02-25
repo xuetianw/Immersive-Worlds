@@ -42,14 +42,15 @@ bool GameService::spawnUserInRoom(const networking::Connection &connection, int 
 
 void GameService::loadFromStorage() {
   // load _roomIdToRoom
-  for (const CusJson::Room &room:_dataStorage.get_jsonArea()._rooms) {
+  for (const CusJson::Room &room:_dataStorage.getJsonArea()._rooms) {
     _roomIdToRoom.emplace(room._id, models::Room(room));
   }
 
 
   // load _roomIdToRoomConnectionsList
-  std::vector<std::pair<int, std::vector<models::RoomConnection>> > roomIdToRoomConnectionListPairList;
-  for (const CusJson::Room &room:_dataStorage.get_jsonArea()._rooms) {
+  using RoomIdConnectionsPair = std::pair<int, std::vector<models::RoomConnection>>;
+  std::vector<RoomIdConnectionsPair> roomIdToRoomConnectionListPairList;
+  for (const CusJson::Room &room:_dataStorage.getJsonArea()._rooms) {
       std::vector<models::RoomConnection> roomConnectionVector;
       for (const CusJson::JsonDoor& jsonDoor : room._jsonDoors) {
         roomConnectionVector.emplace_back(models::RoomId(jsonDoor._to), models::RoomId(room._id), jsonDoor._dir);

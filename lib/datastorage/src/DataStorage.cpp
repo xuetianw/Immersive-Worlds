@@ -8,7 +8,7 @@
 
 DataStorage::DataStorage() {
     json solaceJson = getTestingArea();
-    _jsonArea = solaceJson.get<CusJson::Area>();
+    jsonArea = solaceJson.get<CusJson::Area>();
 }
 
 
@@ -127,10 +127,10 @@ json DataStorage::getTestingArea() {
 }
 
 
-const CusJson::Area &DataStorage::get_jsonArea() const {
-    return _jsonArea;
+const CusJson::Area &DataStorage::getJsonArea() const {
+    return jsonArea;
 }
 
-void DataStorage::set_jsonArea(const CusJson::Area &_jsonArea) {
-    DataStorage::_jsonArea = _jsonArea;
+void DataStorage::setJsonArea(const CusJson::Area &jsonArea) {
+    DataStorage::jsonArea = jsonArea;
 }
