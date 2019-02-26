@@ -27,6 +27,7 @@ add_executable(run_tests
     NetworkingTests/ConsoleCommandTests.cpp
     NetworkingTests/ServerTests.cpp
     databaseTest/DatabaseTest.cpp
+    controllersTest/GameControllerTest.cpp
         areaTests.cpp
         inventory/inventoryTest.cpp
   )
