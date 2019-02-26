@@ -28,13 +28,12 @@ Room::Room() : _id({-1}){
   // TODO default constructor
 };
 
-Room::Room(const string& name, const string& description)
-        : _name(name), _description(description) {
-  // TODO
-}
+models::Room::Room(const models::RoomId &_id, const string &_name,
+                   const vector<string> &_description) : _id(_id),
+                                                         _name(_name), _description(_description) {}
 
 Room::Room(const CusJson::Room &jsonForm)
-        : _id(RoomId(jsonForm._id)), _name(jsonForm._name) {
+        : _id(RoomId(jsonForm._id)), _name(jsonForm._name), _description(jsonForm._jsonDesc) {
 
 }
 
@@ -52,12 +51,12 @@ void Room::setName(
   _name = move(name);
 }
 
-const string& Room::getDescription() const {
+const vector<string> &models::Room::get_description() const {
   return _description;
 }
 
-void Room::setDescription(string& description) {
-  _description = move(description);
+void models::Room::set_description(const vector<string> &_description) {
+  Room::_description = _description;
 }
 
 vector<string> Room::getAllAvatars() const {
