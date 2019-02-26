@@ -26,7 +26,7 @@ TEST(AreaTest, Test_Area_GetId_Fail) {
 
 TEST(AreaTest, Test_Area_Add_Room) {
   std::string name = "room_name";
-  std::string desc = "description";
+  std::vector<std::string> desc = {"description1", "description2"};
 
   models::Room *room = new models::Room(name, desc);
 
@@ -39,9 +39,9 @@ TEST(AreaTest, Test_Area_Add_Room) {
 
 TEST(AreaTest, Test_Area_Add_Room_Fail) {
   std::string name = "room_name";
-  std::string desc = "description";
+  std::vector<std::string> descs = {"description1", "description2"};
 
-  models::Room *room = new models::Room(name, desc);
+  models::Room *room = new models::Room(name, descs);
 
   int id = 1;
   models::Area *area = new models::Area(id);

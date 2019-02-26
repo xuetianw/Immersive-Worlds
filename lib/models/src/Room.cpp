@@ -32,6 +32,10 @@ models::Room::Room(const models::RoomId &_id, const string &_name,
                    const vector<string> &_description) : _id(_id),
                                                          _name(_name), _description(_description) {}
 
+models::Room::Room( const string &_name,
+                   const vector<string> &_description) :
+                                                         _name(_name), _description(_description) {}
+
 Room::Room(const CusJson::Room &jsonForm)
         : _id(RoomId(jsonForm._id)), _name(jsonForm._name), _description(jsonForm._jsonDesc) {
 

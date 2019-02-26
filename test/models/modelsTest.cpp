@@ -41,8 +41,9 @@ TEST_F(BasicTest, Test_Nothing) {
  */
 
 struct AreaTests : testing:: Test {
+    std::vector<std::string> descs = {"description1", "description2"};
     std::unique_ptr<Area> area = std :: make_unique<Area>(1);
-    std::unique_ptr<Room> room = std :: make_unique<Room>("room_name", "description");
+    std::unique_ptr<Room> room = std :: make_unique<Room>("room_name", descs);
 };
 
 TEST_F(AreaTests, Test_Area_GetId) {

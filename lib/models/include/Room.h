@@ -42,7 +42,10 @@ namespace models {
   public:
       Room();
 
-    Room(const RoomId &_id, const string &_name, const vector<string> &_description);
+      Room(const models::RoomId &_id, const string &_name,
+                         const vector<string> &_description);
+
+    Room(const string &_name, const vector<string> &_description);
 
     explicit Room(const CusJson::Room &jsonForm);
 
