@@ -56,7 +56,7 @@ public:
 
     void onCompleteLogin(function_ptr fnPtr);
 
-    pair<bool, Message> respondToMessage(const Message& message);
+    pair<bool, Message> respondToMessage(const Message& message) override;
 
     void connectClient(const Connection &connection);
 

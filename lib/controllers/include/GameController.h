@@ -5,6 +5,10 @@
 #ifndef WEBSOCKETNETWORKING_GAMECONTROLLER_H
 #define WEBSOCKETNETWORKING_GAMECONTROLLER_H
 
+constexpr char INITIAL_ROOM_START_MESSAGE[] = "User has spawned in initial room";
+
+constexpr char USER_CURRENTLY_LOCATED_MESSAGE[] = "You are currently located in ";
+
 #include <Server.h>
 #include "GameService.h"
 #include "AbstractController.h"
@@ -23,6 +27,13 @@ public:
 
     Message spawnUserInStartRoom(const networking::Connection &connection);
     void spawnUserInRoom(const networking::Connection &connection, int debugRoomId);
+
+    /**
+     * Displays to the user info about their current location.
+     * @param message
+     * @return current location info
+     */
+    Message outputCurrentLocationInfo(Message& message);
 
 private:
     GameService _gameService;
