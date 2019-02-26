@@ -11,7 +11,7 @@ networking::Message GameController::move(const networking::Message &message) {
 
     networking::Message newMessage = networking::Message();
     newMessage.connection = message.connection;
-    if (!check_message(message)) {
+    if (!checkIsDirectionMessage(message)) {
         newMessage.text = WRONG_DIRECTION_MESSAGE;
         return newMessage;
     }
@@ -46,7 +46,7 @@ void GameController::addUser(const networking::Connection &connection) {
 
 }
 
-bool GameController::check_message(const Message &message) {
+bool GameController::checkIsDirectionMessage(const Message &message) {
     std::vector<std::string>::iterator it;
     it = std::find (directions.begin(), directions.end(), message.text);
     return it != directions.end();

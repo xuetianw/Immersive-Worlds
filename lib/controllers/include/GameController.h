@@ -43,7 +43,7 @@ private:
     GameService _gameService;
     std::vector<std::string> directions = {"east", "west", "south", "north"};
 
-    bool check_message(const Message &message);
+    bool checkIsDirectionMessage(const Message &message);
 };
 
 #endif //WEBSOCKETNETWORKING_GAMECONTROLLER_H
