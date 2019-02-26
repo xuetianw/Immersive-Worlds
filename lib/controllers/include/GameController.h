@@ -5,11 +5,13 @@
 #ifndef WEBSOCKETNETWORKING_GAMECONTROLLER_H
 #define WEBSOCKETNETWORKING_GAMECONTROLLER_H
 
-static const char *const ROOM_SPAWN_SUCCESS_MESSAGE = "User has spawned in initial room";
+constexpr char INITIAL_ROOM_START_MESSAGE[] = "User has spawned in initial room";
 
-static const char *const ROOM_SPAWN_FAIL_MESSAGE = "User failed to be spawned in a room";
+constexpr char USER_CURRENTLY_LOCATED_MESSAGE[] = "You are currently located in ";
 
-static const char *const WRONG_DIRECTION_MESSAGE = "wrong message for direction";
+constexpr char ROOM_SPAWN_FAIL_MESSAGE[] = "User failed to be spawned in a room";
+
+constexpr char WRONG_DIRECTION_MESSAGE[] = "wrong message for direction";
 
 #include <Server.h>
 #include "GameService.h"
@@ -29,6 +31,13 @@ public:
 
     Message spawnUserInStartRoom(const networking::Connection &connection);
     void spawnUserInRoom(const networking::Connection &connection, int debugRoomId);
+
+    /**
+     * Displays to the user info about their current location.
+     * @param message
+     * @return current location info
+     */
+    Message outputCurrentLocationInfo(Message& message);
 
 private:
     GameService _gameService;

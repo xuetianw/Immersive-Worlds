@@ -29,7 +29,7 @@ networking::Message GameController::move(const networking::Message &message) {
 
 Message GameController::spawnUserInStartRoom(const networking::Connection &connection) {
     if (_gameService.spawnUserInStartRoom(connection)) {
-        return Message{connection, ROOM_SPAWN_SUCCESS_MESSAGE};
+        return Message{connection, INITIAL_ROOM_START_MESSAGE};
     } else {
         return Message{connection, ROOM_SPAWN_FAIL_MESSAGE};
     }
@@ -50,4 +50,14 @@ bool GameController::check_message(const Message &message) {
     std::vector<std::string>::iterator it;
     it = std::find (directions.begin(), directions.end(), message.text);
     return it != directions.end();
+}
+
+Message GameController::outputCurrentLocationInfo(Message& message) {
+    networking::Connection& currentConnection = message.connection;
+    string currentRoom = _gameService.getCurrentRoomName(currentConnection);
+    string responseText = USER_CURRENTLY_LOCATED_MESSAGE + currentRoom;
+
+    Message response{currentConnection, responseText};
+
+    return response;
 }
