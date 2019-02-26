@@ -1,5 +1,6 @@
 add_library(database
         src/DBUtil.cpp
+        src/SqlStatements.cpp
         )
 
 #find_library(SQLITE3_LIBRARY NAMES sqlite3)

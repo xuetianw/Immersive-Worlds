@@ -22,7 +22,7 @@ networking::Message GameController::move(const networking::Message &message) {
 Message GameController::spawnUserInStartRoom(const networking::Connection &connection) {
     _gameService.spawnUserInStartRoom(connection);
 
-    return Message{connection, "User has spawned in initial room"};
+    return Message{connection, INITIAL_ROOM_START_MESSAGE};
 }
 
 void GameController::spawnUserInRoom(const networking::Connection &connection, int debugRoomId) {
@@ -35,4 +35,14 @@ GameController::GameController(GameService gameService) : _gameService(gameServi
 
 void GameController::addUser(const networking::Connection &connection) {
 
+}
+
+Message GameController::outputCurrentLocationInfo(Message& message) {
+    networking::Connection& currentConnection = message.connection;
+    string currentRoom = _gameService.getCurrentRoomName(currentConnection);
+    string responseText = USER_CURRENTLY_LOCATED_MESSAGE + currentRoom;
+
+    Message response{currentConnection, responseText};
+
+    return response;
 }
