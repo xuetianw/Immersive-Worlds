@@ -28,7 +28,9 @@ add_executable(run_tests
     NetworkingTests/ServerTests.cpp
     databaseTest/DatabaseTest.cpp
     controllersTest/GameControllerTest.cpp
-    )
+        areaTests.cpp
+        inventory/inventoryTest.cpp
+  )
 
 
 target_link_libraries(run_tests gmock gtest gtest_main)
@@ -41,5 +43,5 @@ set_target_properties(run_tests
         )
 
 ##TO DO: Add Lib Here
-target_link_libraries(run_tests networking models message cusjson Combat controllers database)
+target_link_libraries(run_tests networking models message cusjson Combat controllers database inventory)
 add_test(NAME network_tests COMMAND run_tests)
