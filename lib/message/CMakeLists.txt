@@ -1,5 +1,5 @@
 add_library(message
-  src/Message.cpp
+  include/Message.h
 )
 
 target_include_directories(message
@@ -12,6 +12,8 @@ target_include_directories(message
 
 target_link_libraries(message
   PRIVATE
+        user
+        networking
   )
 
 set_target_properties(message

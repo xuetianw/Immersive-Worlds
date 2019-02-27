@@ -7,19 +7,19 @@
 
 #include "GameService.h"
 
-bool GameService::moveUser(const networking::Connection &connection, const std::string keywordString) {
-  auto roomId = _connectionToRoomId.at(connection);
+bool GameService::moveUser(User& user, const std::string keywordString) {
+  auto roomId = _connectionToRoomId.at(user.getConnection());
   auto connectedRoomList = _roomIdToRoomConnectionsList.at(roomId.getId());
   auto connectedRoom = std::find_if(connectedRoomList.begin(), connectedRoomList.end(), [keywordString](const models::RoomConnection &roomConnection) -> bool {
     return roomConnection.getUserInputDirKey() == keywordString;
   });
   if (connectedRoom != connectedRoomList.end()) {
-    _connectionToRoomId.find(connection)->second = connectedRoom.base()->getTo();
+    _connectionToRoomId.find(user.getConnection())->second = connectedRoom.base()->getTo();
   }
   return connectedRoom != connectedRoomList.end();
 }
 
-bool GameService::userYell(const networking::Connection &connection, const std::string messageString) {
+bool GameService::userYell(User& user, const std::string messageString) {
   return false;
 }
 

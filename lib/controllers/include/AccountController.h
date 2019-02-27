@@ -29,22 +29,20 @@ constexpr char ESCAPE_WHILE_NOT_LOGIN_MESSAGE[] = "You are not submitting any Ac
 #include <unordered_map>
 #include <CommandProcessor.h>
 
-#include "Server.h"
+#include "User.h"
 #include "AccountService.h"
 #include "AbstractController.h"
 
-using Connection = networking::Connection;
-using ConnectionHasher = networking::ConnectionHasher;
-using Message = networking::Message;
 using string = std::string;
 
 class AccountController : public AbstractController {
 public:
-    AccountController() : userService() {
+
+    AccountController() : accountService() {
         // onLoginFunction initially set to null.
         // Caller is responsible for setting this up through onCompleteLogin()
         onLoginFunction = nullptr;
-    };
+};
 
     Message startLogin(Message& message);
 
@@ -56,14 +54,14 @@ public:
 
     void onCompleteLogin(function_ptr fnPtr);
 
-    pair<bool, Message> respondToMessage(const Message& message) override;
+    pair<bool, Message> respondToMessage(Message &message) override;
 
-    void connectClient(const Connection &connection);
+    void connectClient(User &user);
 
-    void disconnectClient(const Connection &connection);
+    void disconnectClient(User &user);
 
 private:
-    AccountService userService;
+    AccountService accountService;
     function_ptr onLoginFunction;
 };
 

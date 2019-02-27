@@ -23,7 +23,7 @@ private:
 	};
 	AvatarType _avatarType;
 	/** A unique int identifying the character*/
-	int _userID; //this will eventually be a User type object
+	int _userID; //this will eventually be a Account type object
 	/**
 	 * Clothing item that the Avatar is currently wearing
 	 */
@@ -35,7 +35,7 @@ private:
 	models::Room _currentRoom;
 	char *_shortDesc;
 	char *_longDesc;
-	char *_tellCommandMessages; //eventually should be a buffer of Message objects for character-to-character messaging
+	char *_tellCommandMessages; //eventually should be a buffer of ServerMessage objects for character-to-character messaging
 
 
 public:

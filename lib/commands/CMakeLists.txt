@@ -1,6 +1,6 @@
 add_library(commands
     src/CommandProcessor.cpp
-        )
+        include/Command.h)
 
 find_package(Boost 1.68 COMPONENTS system REQUIRED)
 
@@ -17,6 +17,8 @@ target_include_directories(commands
 target_link_libraries(commands
     networking
     services
+    user
+    message
     )
 
 set_target_properties(commands

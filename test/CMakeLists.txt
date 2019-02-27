@@ -21,7 +21,6 @@ enable_testing()
 
 add_executable(run_tests
     models/modelsTest.cpp
-    MessageTest/MessageTest.cpp
     gameManager/idTest.cpp
         NetworkingTests/UserServiceManagementTest.cpp
     NetworkingTests/ConsoleCommandTests.cpp

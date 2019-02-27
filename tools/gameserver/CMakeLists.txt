@@ -15,6 +15,7 @@ target_link_libraries(gameserver
     networking
     commands
     controllers
+    user
     ${CMAKE_THREAD_LIBS_INIT}
     )
 
