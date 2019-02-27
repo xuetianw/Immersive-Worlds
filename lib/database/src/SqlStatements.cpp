@@ -17,6 +17,7 @@ sqlite3_stmt* SqlStatements::createUserTableStmt;
 sqlite3_stmt* SqlStatements::dropUserTableStmt;
 sqlite3_stmt* SqlStatements::registerUserStmt;
 sqlite3_stmt* SqlStatements::deleteUserStmt;
+sqlite3_stmt* SqlStatements::findUserStmt;
 
 void SqlStatements::createUserTable() {
 
@@ -60,6 +61,17 @@ void SqlStatements::deleteUser(string username) {
     }
 }
 
+void SqlStatements::findUser(string username) {
+
+    string findUserString = "SELECT * FROM User WHERE username ='" + username + "';";
+
+    int status = sqlite3_prepare_v2(DBUtil::database, findUserString.c_str(), -1, &findUserStmt, NULL);
+
+    if(status!=SQLITE_OK){
+        printf("Failed to SELECT User");
+    }
+}
+
 //only prepares those queries that don't depend on User input
 void SqlStatements::prepareSQLStatements() {
 
@@ -73,4 +85,5 @@ void SqlStatements::destroySQLStatements() {
     sqlite3_finalize(dropUserTableStmt);
     sqlite3_finalize(registerUserStmt);
     sqlite3_finalize(deleteUserStmt);
+    sqlite3_finalize(findUserStmt);
 }

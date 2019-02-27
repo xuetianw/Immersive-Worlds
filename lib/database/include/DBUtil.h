@@ -27,8 +27,9 @@ public:
 
     static bool registerUser(string username, string password);
 
-
     static bool deleteUser(string username);
+
+    static bool userExists(string username);
 
     static bool openConnection();
 

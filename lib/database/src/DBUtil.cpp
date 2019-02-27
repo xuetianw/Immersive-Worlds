@@ -1,6 +1,8 @@
 //
 // Created by nirag on 12/02/19.
 //
+#include <DBUtil.h>
+
 #include "DBUtil.h"
 #include "SqlStatements.h"
 
@@ -30,11 +32,10 @@ bool DBUtil::openConnection() {
 //adddd all tables to create here
 bool DBUtil::createTables() {
 
-    SqlStatements::prepareSQLStatements();
-
     //for now we keep the tables to retain data
     DBUtil::dropTables();
 
+    SqlStatements::prepareSQLStatements();
 
     int status = sqlite3_step(SqlStatements::createUserTableStmt);
 
@@ -80,14 +81,25 @@ bool DBUtil::deleteUser(string username) {
 
 }
 
+bool DBUtil::userExists(string username) {
+
+    SqlStatements::findUser(username);
+    int status = sqlite3_step(SqlStatements::findUserStmt);
+
+    if(status == SQLITE_ROW)
+        return true;
+
+    return false;
+
+}
+
 //add all tables to drop here
 bool DBUtil::dropTables() {
 
-    int status = sqlite3_step(SqlStatements::createUserTableStmt);
+    int status = sqlite3_step(SqlStatements::dropUserTableStmt);
 
     if(status!=SQLITE_DONE){
         //error handling
-
         return false;
     }
     return true;

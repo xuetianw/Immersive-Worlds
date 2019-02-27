@@ -23,6 +23,7 @@ public:
 
     static sqlite3_stmt *registerUserStmt;
     static sqlite3_stmt *deleteUserStmt;
+    static sqlite3_stmt *findUserStmt;
 
 //methods to create the statements (both: User dependent and independent)
     static void createUserTable();
@@ -33,6 +34,7 @@ public:
 
     static void registerUser(string username, string password);
     static void deleteUser(string username);
+    static void findUser(string username);
 
 
 };
