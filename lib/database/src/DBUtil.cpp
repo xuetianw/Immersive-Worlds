@@ -29,13 +29,13 @@ bool DBUtil::openConnection() {
     return true;
 }
 
-//adddd all tables to create here
+//add all tables to create here
 bool DBUtil::createTables() {
 
     //for now we keep the tables to retain data
+    SqlStatements::prepareSQLStatements();
     DBUtil::dropTables();
 
-    SqlStatements::prepareSQLStatements();
 
     int status = sqlite3_step(SqlStatements::createUserTableStmt);
 
@@ -97,22 +97,17 @@ bool DBUtil::userExists(string username) {
 bool DBUtil::getAllUsers() {
 
     int status;
-    char* username = nullptr;
-    char* password = nullptr;
     std::unordered_map<string, string> userData;
     while((status = sqlite3_step(SqlStatements::getAllUsersStmt)) == SQLITE_ROW){
 
-//        username = strdup((const char*)sqlite3_column_text(SqlStatements::findUserStmt,0));
-//        password = strdup((const char*)sqlite3_column_text(SqlStatements::findUserStmt,1));
+        string username(reinterpret_cast<const char*>( sqlite3_column_text(SqlStatements::getAllUsersStmt,0)) );
+        string passsword(reinterpret_cast<const char*>( sqlite3_column_text(SqlStatements::getAllUsersStmt,1)) );
 
-
-        //userData.insert(make_pair(username,password));
+        userData.insert(make_pair(  username,passsword));
     }
 
 
     //free memory because strdup will malloc the copy -> prevents memory leakage
-    free(username);
-    free(password);
 
     if(status!=SQLITE_DONE){
         //error with sql

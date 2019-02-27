@@ -9,7 +9,7 @@
 
 
 //const char strings
-const char* SqlStatements::createUserTableString = "CREATE TABLE IF NOT EXISTS User(id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(20), password VARCHAR(20));";
+const char* SqlStatements::createUserTableString = "CREATE TABLE IF NOT EXISTS User(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT);";
 const char* SqlStatements::dropUserTableString = "DROP TABLE IF EXISTS User;";
 const char* SqlStatements::getAllUsersString = "SELECT username, password FROM User;";
 
