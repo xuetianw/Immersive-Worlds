@@ -27,23 +27,27 @@ namespace models {
   public:
     int getId() const;
     RoomId();
-    RoomId(int i);
+
+      explicit RoomId(int i);
   };
 
   class Room {
     RoomId _id;  //TODO make room id unique
     string _name;
-    string _description;
+    std::vector<std::string> _description;
     unordered_map<int, string> _avatars;  //TODO change generic type to Avatar/Character
     unordered_map<int, string> _objects;  //TODO change generic type to ItemObject
     unordered_map<int, Room&> _doors;
 
   public:
-    Room();
+      Room();
 
-    Room(const string& name, const string& description);
+      Room(const models::RoomId &_id, const string &_name,
+                         const vector<string> &_description);
 
-    Room(const CusJson::Room &jsonForm);
+    Room(const string &_name, const vector<string> &_description);
+
+    explicit Room(const CusJson::Room &jsonForm);
 
     int getId() const;
 
@@ -51,11 +55,12 @@ namespace models {
 
     void setName(string &name);
 
-    const string& getDescription() const;
+      const vector<string> &get_description() const;
 
-    void setDescription(string& description);
+      void set_description(const vector<string> &_description);
 
-    vector<string> getAllAvatars() const;
+
+      vector<string> getAllAvatars() const;
 
     void addAvatar(int id, const string& avatar);
 

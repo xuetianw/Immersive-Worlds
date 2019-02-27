@@ -146,5 +146,5 @@ json WorldContainer::debugArea() {
 }
 
 std::string WorldContainer::getRoomName(const int id) {
-    return this->_area.getRoom({10500}).getName(); // currently uses constant id
+    return this->_area.getRoom(models::RoomId(10500)).getName(); // currently uses constant id
 }
