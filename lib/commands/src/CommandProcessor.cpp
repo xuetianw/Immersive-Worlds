@@ -12,7 +12,7 @@ bool CommandProcessor::isCommand(const Message &message) {
 }
 
 void CommandProcessor::addCommand(string commandKeyword, function_ptr fnPtr) {
-    _commands[std::move(commandKeyword)] = InputHandler { fnPtr };
+    _commands.insert(std::make_pair(commandKeyword, InputHandler { fnPtr }));
 }
 
 Message CommandProcessor::processCommand(const Message &message) {
