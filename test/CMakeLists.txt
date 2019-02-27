@@ -28,8 +28,9 @@ add_executable(run_tests
     NetworkingTests/ServerTests.cpp
     databaseTest/DatabaseTest.cpp
     controllersTest/GameControllerTest.cpp
-        areaTests.cpp
+        models/areaTests.cpp
         inventory/inventoryTest.cpp
+        models/roomTest.cpp
   )
 
 
