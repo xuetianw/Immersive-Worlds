@@ -9,6 +9,10 @@ constexpr char INITIAL_ROOM_START_MESSAGE[] = "User has spawned in initial room"
 
 constexpr char USER_CURRENTLY_LOCATED_MESSAGE[] = "You are currently located in ";
 
+constexpr char ROOM_SPAWN_FAIL_MESSAGE[] = "User failed to be spawned in a room";
+
+constexpr char WRONG_DIRECTION_MESSAGE[] = "wrong message for direction";
+
 #include <Server.h>
 #include "GameService.h"
 #include "AbstractController.h"
@@ -17,7 +21,7 @@ class GameController : AbstractController {
 public:
     GameController() = default;
 
-    explicit GameController(GameService gameService);
+    explicit GameController(GameService &gameService);
 
     Message move(const networking::Message &message);
 
@@ -37,6 +41,9 @@ public:
 
 private:
     GameService _gameService;
+    std::vector<std::string> directions = {"east", "west", "south", "north"};
+
+    bool checkIsDirectionMessage(const Message &message);
 };
 
 #endif //WEBSOCKETNETWORKING_GAMECONTROLLER_H
