@@ -93,7 +93,7 @@ CommandProcessor buildCommands() {
     commandProcessor.addCommand("/login", LOGIN, [](Message message) { return ::accountController->startLogin(message); });
     commandProcessor.addCommand("/register", REGISTER, [](Message message) { return ::accountController->startRegister(message); });
     commandProcessor.addCommand("/escape", ESCAPE, [](Message message) { return ::accountController->escapeLogin(message); });
-    commandProcessor.addCommand("/move", git sMOVE, [](Message message) { return ::gameController->move(message); });
+    commandProcessor.addCommand("/move", MOVE, [](Message message) { return ::gameController->move(message); });
 //    commandProcessor.addCommand("/yell", [](ServerMessage message){return ::gameController->yell(message);});
 
     return move(commandProcessor);
