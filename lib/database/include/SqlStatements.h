@@ -14,6 +14,7 @@ class SqlStatements {
 private:
     static const char *createUserTableString ;
     static const char *dropUserTableString ;
+    static const char *getAllUsersString ;
 
 public:
 
@@ -24,6 +25,7 @@ public:
     static sqlite3_stmt *registerUserStmt;
     static sqlite3_stmt *deleteUserStmt;
     static sqlite3_stmt *findUserStmt;
+    static sqlite3_stmt *getAllUsersStmt;
 
 //methods to create the statements (both: User dependent and independent)
     static void createUserTable();
@@ -35,6 +37,7 @@ public:
     static void registerUser(string username, string password);
     static void deleteUser(string username);
     static void findUser(string username);
+    static void getAllUsers();
 
 
 };

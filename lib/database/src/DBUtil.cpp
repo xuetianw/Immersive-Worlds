@@ -93,6 +93,35 @@ bool DBUtil::userExists(string username) {
 
 }
 
+//on server bootup acquires all users
+bool DBUtil::getAllUsers() {
+
+    int status;
+    char* username = nullptr;
+    char* password = nullptr;
+    std::unordered_map<string, string> userData;
+    while((status = sqlite3_step(SqlStatements::getAllUsersStmt)) == SQLITE_ROW){
+
+//        username = strdup((const char*)sqlite3_column_text(SqlStatements::findUserStmt,0));
+//        password = strdup((const char*)sqlite3_column_text(SqlStatements::findUserStmt,1));
+
+
+        //userData.insert(make_pair(username,password));
+    }
+
+
+    //free memory because strdup will malloc the copy -> prevents memory leakage
+    free(username);
+    free(password);
+
+    if(status!=SQLITE_DONE){
+        //error with sql
+        return false;
+    }
+    return true;
+
+}
+
 //add all tables to drop here
 bool DBUtil::dropTables() {
 
@@ -105,30 +134,6 @@ bool DBUtil::dropTables() {
     return true;
 
 }
-
-/*
- * Arguments:
- *
- *   data - pointer
- *   argc - The number of columns in the result set
- *   data - The row's data
- *   azColName - The column names
- */
-int DBUtil::callback(void* data, int argc, char** argv, char** azColName)
-{
-    int i;
-    fprintf(stderr, "%s: ", (const char*)data);
-
-    for (i = 0; i < argc; i++) {
-        printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-    }
-
-    printf("\n");
-    return 0;
-}
-
-//implement callbacak functionss to retrieve data from DB
-
 
 bool DBUtil::closeConnection() {
 

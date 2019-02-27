@@ -18,6 +18,9 @@ TEST_F(DatabaseTests ,databaseTest){
     EXPECT_EQ(true, DBUtil::registerUser("Josh","abcdefg"));
     EXPECT_EQ(true, DBUtil::registerUser("Karan","hijklmn"));
     EXPECT_EQ(true, DBUtil::registerUser("Melody","bafhsbsa"));
+    EXPECT_EQ(true, DBUtil::registerUser("pikachu","RyanReynolds"));
+    EXPECT_EQ(true, DBUtil::getAllUsers());
+
     EXPECT_EQ(true, DBUtil::deleteUser("Josh"));
     EXPECT_EQ(true, DBUtil::userExists("Melody"));
 

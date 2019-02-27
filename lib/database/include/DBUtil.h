@@ -6,6 +6,7 @@
 #define WEBSOCKETNETWORKING_DBUTIL_H
 
 #include <stdio.h>
+#include <unordered_map>
 #include "string"
 #include "sqlite3.h"
 using namespace std;
@@ -22,17 +23,36 @@ public:
     static char* dbName;
     static char* errorMessage;
 
-    //creates non existent tables
-    static int callback(void* data, int argc, char** argv, char** azColName);
+    //static functions to store, retrieve and delete data and tables
 
+    /*
+     * Register a user using username and password
+     */
     static bool registerUser(string username, string password);
 
+    /*
+     * Deletes a User using their username
+     */
     static bool deleteUser(string username);
 
+    /*
+     * Checks for the existence of a single User
+     */
     static bool userExists(string username);
 
+    /*
+     * acquires all Users on server bootup and populates datastructure
+     */
+    static bool getAllUsers();
+
+    /*
+     * open connection to sqlite database
+     */
     static bool openConnection();
 
+    /*
+     * close connection to sqlite database
+     */
     static bool closeConnection();
 
     /*
