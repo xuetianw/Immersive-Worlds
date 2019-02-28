@@ -33,10 +33,9 @@ bool DBUtil::openConnection() {
 bool DBUtil::createTables() {
 
     //for now we keep the tables to retain data
-    SqlStatements::createUserTable();
-    int status = sqlite3_step(SqlStatements::createUserTableStmt);
-
     SqlStatements::prepareSQLStatements();
+
+    int status = sqlite3_step(SqlStatements::createUserTableStmt);
 
     if(status != SQLITE_DONE){
         //error handling

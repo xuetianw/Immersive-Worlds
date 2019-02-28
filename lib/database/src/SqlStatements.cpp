@@ -89,6 +89,7 @@ void SqlStatements::findUser(string username) {
 void SqlStatements::prepareSQLStatements() {
 
     //call all functions to prepare sql queries
+    createUserTable();
     dropUserTable();
     getAllUsers();
 }
