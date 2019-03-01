@@ -91,6 +91,42 @@ json DataStorage::getTestingArea() {
         "A large two-handed sword with runes etched in it is on the floor."
       ],
       "extra": []
+    },
+    {
+      "id": 10562,
+      "keywords": [
+        "safe",
+        "deposit",
+        "box"
+      ],
+      "shortdesc": "safe deposit box",
+      "longdesc": [
+        "A strong metal box is embedded in the wall."
+      ],
+      "extra": [
+        {
+          "keywords": [
+            "safe",
+            "deposit",
+            "box"
+          ],
+          "desc": [
+            "You see a strong metal box used to keep the town deposits in."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10563,
+      "keywords": [
+        "gold",
+        "coins"
+      ],
+      "shortdesc": "alot of gold coins.",
+      "longdesc": [
+        "A lot of gold is here."
+      ],
+      "extra": []
     }
   ],
   "ROOMS": [
@@ -207,6 +243,16 @@ json DataStorage::getTestingArea() {
       "id": 0,
       "room": 10609,
       "state": "locked"
+    },
+    {
+      "action": "object",
+      "id": 10562,
+      "room": 10500
+    },
+    {
+      "action": "put",
+      "id": 10563,
+      "container": 10562
     }
   ]
 })"_json;

@@ -11,7 +11,8 @@ public:
 	enum class ItemType {
 		CLOTHING,
 		WEAPON,
-		CONSUMABLE
+		CONSUMABLE,
+		MISC
 	};
 	ItemType getItemType() const;
 
