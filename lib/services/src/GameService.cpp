@@ -54,9 +54,11 @@ GameService::GameService() {
 
 channel::MiniGame GameService::getMiniGame(const networking::Connection &connection, const std::string keywordString) {
   // TODO: CHECK MINIGAME MAP IF MINIGAME EXISTS, CHECK IF USER LOGGED IN
-  channel::MiniGame miniGame = channel::MiniGame("This is the question", 0);
+  channel::MiniGame miniGame = channel::MiniGame();
+  miniGame.addQuestion("THIS IS THE QUESTION 1");
   miniGame.addAnswer("Correct Answer");
   miniGame.addAnswer("Wrong Answer");
+  miniGame.addCorrectAnswer(0);
 
   auto roomId = _connectionToRoomId.at(connection);
   std::pair<int, channel::MiniGame> pair (roomId.getId(), miniGame);
@@ -68,12 +70,10 @@ channel::MiniGame GameService::getMiniGame(const networking::Connection &connect
 bool GameService::verifyAnswer(const networking::Connection &connection, const int input) { 
   auto roomId = _connectionToRoomId.at(connection);
 
-  std::unordered_map<int, channel::MiniGame>::const_iterator got = _roomIdToMiniGameConnectionsList.find(roomId.getId());
+  auto got = _roomIdToMiniGameConnectionsList.find(roomId.getId());
 
-  bool found = (got != _roomIdToMiniGameConnectionsList.end());
-  if(found && got->second.checkAnswer(input)) {
-    return true;
-  } 
+  auto found = (got != _roomIdToMiniGameConnectionsList.end());
+  auto correctAnswer = got->second.checkAnswer(input);
 
-  return false;
+  return found && correctAnswer;
 }

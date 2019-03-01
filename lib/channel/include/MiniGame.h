@@ -5,32 +5,30 @@
 #ifndef CHANNEL_MINIGAME_H
 #define CHANNEL_MINIGAME_H
 
-#include <vector>
 #include <Room.h>
+#include <vector>
+#include <sstream>
 
 using std::unordered_map;
-
-enum class MiniGameType {
-    MULTIPLE_CHOICE,
-    ROLL_DIE,
-    MEMORY,
-    ERROR
-};
 
 namespace channel {
     class MiniGame {
         public:
             MiniGame();
-            MiniGame(std::string question, int answer);
 
             void addAnswer(std::string answer);
+            void addQuestion(std::string question);
+            void addCorrectAnswer(int answer);
             bool checkAnswer(const int answer) const;
-            std::string getQuestion();
-            std::vector<std::string> getAnswers();
+            std::string getQuestion() const;
+            std::vector<std::string> getAnswers() const;
+            std::string printQuestion();
+            bool nextRound();
         private:
             std::vector<std::string> _answers;
-            std::string _question;
-            int _correctAnswer;
+            std::vector<std::string> _questions;
+            std::vector<int> _correctAnswers;
+            int _round;
 
     };
 } // namespace channel

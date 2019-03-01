@@ -47,8 +47,14 @@ public:
 
     string getCurrentRoomName(const networking::Connection &connection);
 
+    /** 
+     * Get the current minigame available in this room
+     */
     channel::MiniGame getMiniGame(const networking::Connection &connection, const std::string keywordString);
     
+    /** 
+     * Verify if the answer given in the minigame is the correct one.
+     */
     bool verifyAnswer(const networking::Connection &connection, const int input);
 };
 

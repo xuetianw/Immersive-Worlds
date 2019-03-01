@@ -38,35 +38,12 @@ void GameController::addUser(const networking::Connection &connection) {
 }
 
 networking::Message GameController::createMinigame(const networking::Message &message) {
-    /*
-    channel::MiniGame miniGame = channel::MiniGame("This is the question", 0);
-    miniGame.addAnswer("Correct Answer");
-    miniGame.addAnswer("Wrong Answer");
-    
-
-    networking::Message newMessage = networking::Message();
-    newMessage.connection = message.connection;
-    newMessage.text = "HI";
-    return newMessage;
-    */
-
-    networking::Message newMessage = networking::Message();
-    newMessage.connection = message.connection;
     channel::MiniGame minigame = _gameService.getMiniGame(message.connection, message.text);
 
-    std::stringstream ss;
-    ss << minigame.getQuestion() << endl;
+    networking::Message newMessage = networking::Message();
+    newMessage.connection = message.connection;
+    newMessage.text = minigame.printQuestion();
     
-    std::vector<std::string> questions = minigame.getAnswers();
-
-    char letter = 'a';
-    for(int i = 0; i < questions.size(); i++, letter++) {
-        std::string question = questions.at(i);
-
-        ss << letter << ") " << question << endl; 
-    }
-
-    newMessage.text = ss.str();
     return newMessage;
 }
 
@@ -80,7 +57,7 @@ networking::Message GameController::verifyMinigameAnswer(const networking::Messa
 
     networking::Message newMessage = networking::Message();
     newMessage.connection = message.connection;
-    newMessage.text = (result) ? "DING DING DING" : "WRONG";
+    newMessage.text = (result) ? "Correct" : "WRONG";
 
     return newMessage;
 }

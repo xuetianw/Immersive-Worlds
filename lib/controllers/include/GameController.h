@@ -8,7 +8,6 @@
 #include <Server.h>
 #include "GameService.h"
 #include "AbstractController.h"
-#include <sstream>
 
 class GameController : AbstractController {
 public:
