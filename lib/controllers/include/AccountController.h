@@ -42,7 +42,7 @@ class AccountController : public AbstractController {
 public:
     AccountController() : userService() {
         // onLoginFunction initially set to null.
-        // Caller is responsible for setting this up through onCompleteLogin()
+        // Caller is responsible for setting this up through setup_function_pointer()
         onLoginFunction = nullptr;
     };
 
@@ -54,7 +54,7 @@ public:
 
     Message escapeLogin(Message& message);
 
-    void onCompleteLogin(function_ptr fnPtr);
+    void setup_function_pointer(function_ptr fnPtr);
 
     pair<bool, Message> respondToMessage(const Message& message) override;
 

@@ -15,11 +15,8 @@ using string = std::string;
 using stringstream = std::stringstream;
 using Message = networking::Message;
 
-typedef Message (*function_ptr)(Message message);
+typedef Message (*function_ptr)(Message);
 
-struct InputHandler {
-    function_ptr functionPtr;
-};
 
 class CommandProcessor {
     /*
@@ -56,7 +53,7 @@ private:
     /*
      *  Holds all the commands added to the map
      */
-    std::unordered_map<string, InputHandler> _commands;
+    std::unordered_map<string, function_ptr> _commands;
 };
 
 #endif //WEBSOCKETNETWORKING_COMMANDPROCESSOR_H

@@ -12,7 +12,7 @@ bool CommandProcessor::isCommand(const Message &message) {
 }
 
 void CommandProcessor::addCommand(string commandKeyword, function_ptr fnPtr) {
-    _commands.insert(std::make_pair(commandKeyword, InputHandler { fnPtr }));
+    _commands.insert(std::make_pair(commandKeyword,  fnPtr));
 }
 
 Message CommandProcessor::processCommand(const Message &message) {
@@ -20,7 +20,7 @@ Message CommandProcessor::processCommand(const Message &message) {
     auto commandsIter = _commands.find(commandMessagePair.first);
 
     if(commandsIter != _commands.end()) {
-        return commandsIter->second.functionPtr(Message {message.connection, commandMessagePair.second});
+        return commandsIter->second(Message {message.connection, commandMessagePair.second});
     }
 
     return Message{message.connection, "Attempted Command Not Found."};
