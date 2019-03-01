@@ -30,6 +30,67 @@ json DataStorage::getTestingArea() {
         "There is a large bat here."
       ],
       "description": []
+    },
+    {
+      "id": 10538,
+      "keywords": [
+        "Lexie"
+      ],
+      "shortdesc": "Lexie",
+      "longdesc": [
+        "Lexie is here."
+      ],
+      "description": [
+        "Lexie is an accomplish diver. But he seems to have problems keeping",
+        "students."
+      ]
+    }
+  ],
+  "OBJECTS": [
+    {
+      "id": 10500,
+      "keywords": [
+        "chamorro",
+        "ringmail"
+      ],
+      "shortdesc": "chamorro ringmail",
+      "longdesc": [
+        "A bunch of rings sewn together with taotamoa bark is on the ground."
+      ],
+      "extra": [
+        {
+          "keywords": [
+            "ringmail"
+          ],
+          "desc": [
+            "This armor is imported from the island of Guam."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10501,
+      "keywords": [
+        "Mcbread"
+      ],
+      "shortdesc": "mcbread",
+      "longdesc": [
+        "A Mcloaf of Mcbread has been left here."
+      ],
+      "extra": []
+    },
+    {
+      "id": 10502,
+      "keywords": [
+        "enchanted",
+        "two-handed",
+        "sword"
+      ],
+      "shortdesc": "enchanted two-handed sword",
+      "longdesc": [
+        "A large two-handed sword with runes etched in it is on the floor."
+      ],
+      "extra": []
     }
   ],
   "ROOMS": [
@@ -121,8 +182,34 @@ json DataStorage::getTestingArea() {
       ],
       "extended_descriptions": []
     }
-
-]})"_json;
+  ],
+  "RESETS": [
+    {
+      "action": "npc",
+      "id": 10538,
+      "limit": 1,
+      "room": 10500
+    },
+    {
+      "action": "give",
+      "id": 10500
+    },
+    {
+      "action": "give",
+      "id": 10501
+    },
+    {
+      "action": "equip",
+      "id": 10502
+    },
+    {
+      "action": "door",
+      "id": 0,
+      "room": 10609,
+      "state": "locked"
+    }
+  ]
+})"_json;
     return j;
 }
 

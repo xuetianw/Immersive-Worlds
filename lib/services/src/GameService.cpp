@@ -24,8 +24,7 @@ bool GameService::userYell(const networking::Connection &connection, const std::
 }
 
 string GameService::getCurrentRoomName(const networking::Connection &connection) {
-  auto roomId = _connectionToRoomId.at(connection);
-  auto room = _roomIdToRoom.at(roomId.getId());
+  auto room = getUserRoom(connection);
   return room.getName();
 }
 
@@ -65,4 +64,9 @@ void GameService::loadFromStorage() {
 
 GameService::GameService() {
   loadFromStorage();
+}
+
+models::Room GameService::getUserRoom(const networking::Connection &connection) {
+  auto roomId = _connectionToRoomId.at(connection);
+  return _roomIdToRoom.at(roomId.getId());
 }
