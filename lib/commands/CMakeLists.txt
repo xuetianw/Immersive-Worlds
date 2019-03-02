@@ -17,7 +17,6 @@ target_link_libraries(commands
     networking
     services
     user
-    message
     )
 
 set_target_properties(commands

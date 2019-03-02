@@ -22,7 +22,6 @@ target_link_libraries(services
         networking
         datastorage
         user
-        message
     )
 
 set_target_properties(services

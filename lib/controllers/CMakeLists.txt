@@ -25,7 +25,6 @@ target_link_libraries(controllers
         commands
         services
         datastorage
-        message
     )
 
 set_target_properties(controllers
