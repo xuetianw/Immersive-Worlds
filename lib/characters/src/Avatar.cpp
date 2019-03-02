@@ -21,7 +21,7 @@ void Avatar::dropItem(InventoryItem inventoryItem) {
 }
 
 bool Avatar::wearItem(InventoryItem inventoryItem) {
-    if (inventoryItem.getItemType() == InventoryItem::ItemType::CLOTHING) {
+    if (inventoryItem.getItemType() == ItemType::CLOTHING) {
         InventoryItem clothingToRemove = _currentClothing;
         InventoryItem clothingToWear = removeItem(inventoryItem);
         _currentClothing = clothingToWear;
