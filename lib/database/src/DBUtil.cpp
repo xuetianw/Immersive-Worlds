@@ -1,11 +1,10 @@
 //
 // Created by nirag on 12/02/19.
 //
-#include <utility>
+
 
 #include "DBUtil.h"
 #include "SqlStatements.h"
-#include "sqlite3.h"
 
 //declaring static field outside header file
 sqlite3* DBUtil::database;
@@ -29,7 +28,6 @@ bool DBUtil::openConnection() {
 
     return true;
 }
-
 
 // TODO hash passwords
 bool DBUtil::registerUser(const string& username, const string& password) {
@@ -113,26 +111,44 @@ bool DBUtil::userExists(const string& username) {
 }
 
 //on server bootup acquires all users
-bool DBUtil::getAllUsers() {
-
+QueryResults DBUtil::getAllUsers() {
+    const string getAllUsersQueryString = "SELECT username, password FROM User;";
+    sqlite3_stmt* getAllUsersStmt;
+    QueryResults results;
     int status;
-    std::unordered_map<string, string> userData;
-    while((status = sqlite3_step(SqlStatements::getAllUsersStmt)) == SQLITE_ROW){
 
-        string username(reinterpret_cast<const char*>( sqlite3_column_text(SqlStatements::getAllUsersStmt,0)) );
-        string password(reinterpret_cast<const char*>( sqlite3_column_text(SqlStatements::getAllUsersStmt,1)) );
+    sqlite3_prepare_v2(DBUtil::database,
+                       getAllUsersQueryString.c_str(),
+                       -1,
+                       &getAllUsersStmt,
+                       nullptr
+    );
 
-        userData.insert(make_pair(username,password));
+    //execute query and build results row by row
+    while ((status = sqlite3_step(getAllUsersStmt)) == SQLITE_ROW) {
+        RowResult rowResult;
+
+        const string usernameColumn(sqlite3_column_name(getAllUsersStmt, 0));
+        const string usernameValue(reinterpret_cast<const char*>( sqlite3_column_text(getAllUsersStmt, 0)));
+
+        const string passwordColumn(sqlite3_column_name(getAllUsersStmt, 1));
+        const string passwordValue(reinterpret_cast<const char*>( sqlite3_column_text(getAllUsersStmt, 1)));
+
+        rowResult.try_emplace(usernameColumn, usernameValue);
+        rowResult.try_emplace(passwordColumn, passwordValue);
+
+        results.emplace_back(rowResult);
     }
 
+    sqlite3_finalize(getAllUsersStmt);
 
-    //free memory because strdup will malloc the copy -> prevents memory leakage
+    //return empty results of query fails
+    if (status != SQLITE_DONE) {
+        return QueryResults{};
+    }
 
-    return status == SQLITE_DONE;
-
+    return results;
 }
-
-
 
 bool DBUtil::closeConnection() {
 

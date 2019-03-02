@@ -5,16 +5,21 @@
 #ifndef WEBSOCKETNETWORKING_DBUTIL_H
 #define WEBSOCKETNETWORKING_DBUTIL_H
 
-#include <stdio.h>
+#include <utility>
+#include <vector>
 #include <unordered_map>
-#include "string"
+#include <string>
+
 #include "sqlite3.h"
-using namespace std;
+
+using string = std::string;
+
+using RowResult = std::unordered_map<string, string>;
+using QueryResults = std::vector<RowResult>;
 
 //database Utility class
 class DBUtil{
 public:
-
     static sqlite3* database;
     static char* dbName;
     static char* errorMessage;
@@ -39,7 +44,7 @@ public:
     /*
      * acquires all Users on server bootup and populates datastructure
      */
-    static bool getAllUsers();
+    static QueryResults getAllUsers();
 
     /*
      * open connection to sqlite database
