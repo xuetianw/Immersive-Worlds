@@ -25,24 +25,15 @@ bool DBUtil::openConnection() {
         return false;
     }
 
+    createTables();
     prepareSQLStatements();
+
     return true;
 }
 
-void DBUtil::prepareSQLStatements() {
-    SqlStatements::prepareSQLStatements();
-}
 
-//add all tables to create here
-bool DBUtil::createTables() {
 
-    //for now we drop all tables and then create them
-    dropTables();
-    int status = sqlite3_step(SqlStatements::createUserTableStmt);
 
-    return status == SQLITE_DONE;
-
-}
 
 bool DBUtil::registerUser(string username, string password) {
 
@@ -92,14 +83,7 @@ bool DBUtil::getAllUsers() {
 
 }
 
-//add all tables to drop here
-bool DBUtil::dropTables() {
 
-    int status = sqlite3_step(SqlStatements::dropUserTableStmt);
-
-    return status == SQLITE_DONE;
-
-}
 
 bool DBUtil::closeConnection() {
 
@@ -110,4 +94,29 @@ bool DBUtil::closeConnection() {
 
     return status == SQLITE_OK;
 
+}
+
+
+/*
+ *
+ * PRIVATE
+ *
+ */
+
+bool DBUtil::createTables() {
+    SqlStatements::prepareCreateUserTableStmt();
+    int status = sqlite3_step(SqlStatements::createUserTableStmt);
+
+    return status == SQLITE_DONE;
+}
+
+void DBUtil::prepareSQLStatements() {
+    SqlStatements::prepareSQLStatements();
+}
+
+//add all tables to drop here
+bool DBUtil::dropTables() {
+    int status = sqlite3_step(SqlStatements::dropUserTableStmt);
+
+    return status == SQLITE_DONE;
 }

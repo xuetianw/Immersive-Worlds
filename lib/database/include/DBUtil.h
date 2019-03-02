@@ -13,10 +13,6 @@ using namespace std;
 
 //database Utility class
 class DBUtil{
-
-//private:
-
-
 public:
 
     static sqlite3* database;
@@ -55,15 +51,17 @@ public:
      */
     static bool closeConnection();
 
-    /*
-     * call function to prepare non user defined SQL statements before hand
-     */
-    static void prepareSQLStatements();
 
+private:
     /*
      * function to create new tables if need be
      */
     static bool createTables();
+
+    /*
+     * call function to prepare non user defined SQL statements before hand
+     */
+    static void prepareSQLStatements();
 
     /*
      *
@@ -71,8 +69,6 @@ public:
      * Modify if required
      */
     static bool dropTables();
-
-
 };
 
 
