@@ -16,7 +16,6 @@ const char* SqlStatements::getAllUsersString = "SELECT username, password FROM U
 //queries
 sqlite3_stmt* SqlStatements::createUserTableStmt;
 sqlite3_stmt* SqlStatements::dropUserTableStmt;
-sqlite3_stmt* SqlStatements::findUserStmt;
 sqlite3_stmt* SqlStatements::getAllUsersStmt;
 
 //functions independent of user input
@@ -45,18 +44,6 @@ void SqlStatements::prepareGetAllUsersStmt() {
     }
 }
 
-
-void SqlStatements::findUser(string username) {
-
-    string findUserString = "SELECT * FROM User WHERE username ='" + username + "';";
-
-    int status = sqlite3_prepare_v2(DBUtil::database, findUserString.c_str(), -1, &findUserStmt, nullptr);
-
-    if(status!=SQLITE_OK){
-        printf("Failed to prepare Statement");
-    }
-}
-
 //only prepares those queries that don't depend on User input
 void SqlStatements::prepareSQLStatements() {
 
@@ -68,6 +55,5 @@ void SqlStatements::prepareSQLStatements() {
 void SqlStatements::destroySQLStatements() {
     sqlite3_finalize(createUserTableStmt);
     sqlite3_finalize(dropUserTableStmt);
-    sqlite3_finalize(findUserStmt);
     sqlite3_finalize(getAllUsersStmt);
 }

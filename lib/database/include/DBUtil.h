@@ -34,7 +34,7 @@ public:
     /*
      * Checks for the existence of a single User
      */
-    static bool userExists(string username);
+    static bool userExists(const string& username);
 
     /*
      * acquires all Users on server bootup and populates datastructure
