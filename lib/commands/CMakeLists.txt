@@ -1,6 +1,5 @@
 add_library(commands
-    src/CommandProcessor.cpp
-        include/Command.h)
+    src/CommandProcessor.cpp)
 
 find_package(Boost 1.68 COMPONENTS system REQUIRED)
 

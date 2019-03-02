@@ -1,5 +1,4 @@
 add_library(message
-  include/Message.h
 )
 
 target_include_directories(message
