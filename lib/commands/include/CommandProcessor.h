@@ -6,14 +6,15 @@
 #include <sstream>
 #include <unordered_map>
 #include "string"
-#include "Server.h"
+#include "User.h"
+#include "Message.h"
+
 
 #ifndef WEBSOCKETNETWORKING_COMMANDPROCESSOR_H
 #define WEBSOCKETNETWORKING_COMMANDPROCESSOR_H
 
 using string = std::string;
 using stringstream = std::stringstream;
-using Message = networking::Message;
 
 typedef Message (*function_ptr)(Message);
 
@@ -36,9 +37,10 @@ public:
     Message processCommand(const Message &message);
 
     /*
-     * Adds a function to a keyword, the function has to be in format of Message _____(Message message)
+     * Adds a function to a keyword, the function has to be in format of ServerMessage _____(ServerMessage message)
      */
-    void addCommand(string commandKeyword, function_ptr);
+    void addCommand(string keyword, Command command, function_ptr);
+
 
 private:
     /*
@@ -53,7 +55,9 @@ private:
     /*
      *  Holds all the commands added to the map
      */
-    std::unordered_map<string, function_ptr> _commands;
+    std::unordered_map<Command , function_ptr> _commands;
+    std::unordered_map<string, Command> _keywords;
 };
+
 
 #endif //WEBSOCKETNETWORKING_COMMANDPROCESSOR_H

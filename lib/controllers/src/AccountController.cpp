@@ -14,73 +14,81 @@
 #include <sstream>
 #include <unistd.h>
 #include <AccountController.h>
-#include <CommandProcessor.h>
-
-
-#include "AccountController.h"
 
 using namespace std;
 
 Message AccountController::startLogin(Message &message) {
-    if(userService.isLoggedIn(message.connection)) {
-        return Message{message.connection, ALREADY_LOGIN_MESSAGE};
+    if(message.user.getAccount().isLoggedIn) {
+        return Message{message.user, ALREADY_LOGIN_MESSAGE};
     }
-    userService.getUser(message.connection).isLoggingIn = true;
-    return userService.updateUserState(message);
+    message.user.getAccount().isLoggingIn = true;
+    
+    message.user.addCommand(ESCAPE);
+    message.user.removeCommand(REGISTER);
+    message.user.removeCommand(LOGIN);
+    
+    return accountService.updateUserState(message);
 }
 
 Message AccountController::startRegister(Message &message) {
-    if(userService.isLoggedIn(message.connection)) {
-        return Message{message.connection, LOGOUT_BEFORE_REGISTER_MESSAGE};
+    if(message.user.getAccount().isLoggedIn) {
+        return Message{message.user, LOGOUT_BEFORE_REGISTER_MESSAGE};
     }
-    userService.getUser(message.connection).isRegistering = true;
-    return userService.updateUserState(message);
+    message.user.getAccount().isRegistering = true;
+
+    message.user.addCommand(ESCAPE);
+    message.user.removeCommand(REGISTER);
+    message.user.removeCommand(LOGIN);
+    
+    return accountService.updateUserState(message);
 }
 
 Message AccountController::logoutUser(Message &message) {
-    if(userService.isLoggedIn(message.connection)) {
-        userService.getUser(message.connection) = User{};
-        return Message{message.connection, LOGOUT_MESSAGE};
+    if(message.user.getAccount().isLoggedIn) {
+        message.user.removeCommand(LOGOUT);
+        
+        disconnectClient(message.user);
+        return Message{message.user, LOGOUT_MESSAGE};
     }
 
-    return Message{message.connection, NOT_LOGIN_MESSAGE};
+    return Message{message.user, NOT_LOGIN_MESSAGE};
 }
 
 Message AccountController::escapeLogin(Message &message) {
-    User &user = userService.getUser(message.connection);
+    Account &account = message.user.getAccount();
     stringstream response;
-    if (user.isLoggingIn || user.isRegistering) {
-        if (user.isRegistering) {
+    if (account.isLoggingIn || account.isRegistering) {
+        if (account.isRegistering) {
             response << ESCAPE_WHILE_REGISTERING_MESSAGE
-                     << message.connection.id;
+                     << message.user.getConnection().id;
         } else {
             response << LOGGING_IN_ESCAPE_MESSAGE
-                     << message.connection.id;
+                     << message.user.getConnection().id;
         }
-        user = User{};
+        message.user.removeCommand(ESCAPE);
+        disconnectClient(message.user);
     } else {
         response << ESCAPE_WHILE_NOT_LOGIN_MESSAGE;
     }
-    return Message{message.connection.id, response.str()};
+    return Message{message.user, response.str()};
 }
 
-void AccountController::connectClient(const Connection &connection) {
-    userService.connect(connection);
+void AccountController::connectClient(User &user) {
+    accountService.connectUser(user);
 }
 
-void AccountController::disconnectClient(const Connection &connection) {
-    userService.disconnectClient(connection);
+void AccountController::disconnectClient(User &user) {
+    accountService.disconnectUser(user);
 }
 
-pair<bool, Message> AccountController::respondToMessage(const Message &message) {
-    if (userService.isLoggedIn(message.connection)){
-        return pair<bool, Message> (false, Message{});
+pair<bool, Message> AccountController::respondToMessage(Message &message) {
+    if (message.user.getAccount().isLoggedIn){
+        return pair<bool, Message> (false, Message{message.user, ""});
     }
 
-    Message response = userService.updateUserState(message);
-    if (userService.isLoggedIn(message.connection) && (onLoginFunction != nullptr)){
+    Message response = accountService.updateUserState(message);
+    if (message.user.getAccount().isLoggedIn && (onLoginFunction != nullptr)){
         Message onLoginResponse = onLoginFunction(message);
-        cout << onLoginResponse.text << "\n";
         response.text = response.text + "\n" + onLoginResponse.text;
     }
 
@@ -90,5 +98,6 @@ pair<bool, Message> AccountController::respondToMessage(const Message &message) 
 void AccountController::setup_function_pointer(function_ptr fnPtr){
     onLoginFunction = fnPtr;
 }
+
 
 

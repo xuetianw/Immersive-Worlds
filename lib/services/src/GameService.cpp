@@ -7,19 +7,19 @@
 
 #include "GameService.h"
 
-bool GameService::moveUser(const networking::Connection &connection, const std::string keywordString) {
-  auto roomId = _connectionToRoomId.at(connection);
+bool GameService::moveUser(User& user, const std::string keywordString) {
+  auto roomId = _connectionToRoomId.at(user.getConnection());
   auto connectedRoomList = _roomIdToRoomConnectionsList.at(roomId.getId());
   auto connectedRoom = std::find_if(connectedRoomList.begin(), connectedRoomList.end(), [keywordString](const models::RoomConnection &roomConnection) -> bool {
     return roomConnection.getUserInputDirKey() == keywordString;
   });
   if (connectedRoom != connectedRoomList.end()) {
-    _connectionToRoomId.find(connection)->second = connectedRoom.base()->getTo();
+    _connectionToRoomId.find(user.getConnection())->second = connectedRoom.base()->getTo();
   }
   return connectedRoom != connectedRoomList.end();
 }
 
-bool GameService::userYell(const networking::Connection &connection, const std::string messageString) {
+bool GameService::userYell(User& user, const std::string messageString) {
   return false;
 }
 
@@ -30,13 +30,13 @@ string GameService::getCurrentRoomName(const networking::Connection &connection)
 }
 
 bool GameService::spawnUserInStartRoom(const networking::Connection &connection) {
-  _connectionToRoomId.emplace(connection, models::RoomId(10500)); // DEBUG starting room is in Lexia's shop
-  return true;
+  auto[it,inserted] = _connectionToRoomId.insert_or_assign(connection, models::RoomId(10500)); // DEBUG starting room is in Lexia's shop
+  return it != _connectionToRoomId.end() || !inserted;
 }
 
 bool GameService::spawnUserInRoom(const networking::Connection &connection, int id) {
-  _connectionToRoomId.emplace(connection, models::RoomId(id));
-  return true;
+  auto[it,inserted] = _connectionToRoomId.insert_or_assign(connection, models::RoomId(id));
+    return it != _connectionToRoomId.end() || !inserted;
 }
 
 

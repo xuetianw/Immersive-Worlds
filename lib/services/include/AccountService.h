@@ -5,29 +5,20 @@
 #ifndef WEBSOCKETNETWORKING_USERSERVICE_H
 #define WEBSOCKETNETWORKING_USERSERVICE_H
 
-#include "Server.h"
 #include "UserState.h"
-
-using Message = networking::Message;
-using Connection = networking::Connection;
-using ConnectionHasher = networking::ConnectionHasher;
+#include "User.h"
+#include "Message.h"
 
 class AccountService{
 public:
-    Message updateUserState(const Message &message) ;
-    
-    User& getUser(Connection& connection);
+    Message updateUserState(Message &message) ;
 
-    void connect(const Connection &connection) ;
+    void connectUser(User &user) ;
 
-    void disconnectClient(const Connection& connection) ;
+    void disconnectUser(User &user);
 
-    bool isLoggedIn(const Connection& connection) ;
 
 private:
-    // A map to store currently registered users
-    std::unordered_map<Connection, User, ConnectionHasher> _connectedUserMap;
-
     StateTransitions transitions;
 
     // Mock dummy usernames and passwords for testing until database is added

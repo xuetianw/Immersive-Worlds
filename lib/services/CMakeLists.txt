@@ -2,7 +2,7 @@
 add_library(services
         src/AccountService.cpp
         src/GameService.cpp
-    )
+        )
 
 find_package(Boost 1.68 COMPONENTS system REQUIRED)
 
@@ -21,6 +21,7 @@ target_link_libraries(services
         models
         networking
         datastorage
+        user
     )
 
 set_target_properties(services
