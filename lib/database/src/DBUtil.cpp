@@ -4,7 +4,6 @@
 
 
 #include "DBUtil.h"
-#include "SqlStatements.h"
 
 //declaring static field outside header file
 sqlite3* DBUtil::database;
@@ -151,14 +150,9 @@ QueryResults DBUtil::getAllUsers() {
 }
 
 bool DBUtil::closeConnection() {
-
-    //destroy all prepared SQL statements to prevent memory leaks
-    SqlStatements::destroySQLStatements();
-
     int status = sqlite3_close_v2(DBUtil::database);
 
     return status == SQLITE_OK;
-
 }
 
 
