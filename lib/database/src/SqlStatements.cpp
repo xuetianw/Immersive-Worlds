@@ -44,14 +44,6 @@ void SqlStatements::prepareGetAllUsersStmt() {
     }
 }
 
-//only prepares those queries that don't depend on User input
-void SqlStatements::prepareSQLStatements() {
-
-    //call all functions to prepare sql queries
-    prepareDropUserTableStmt();
-    prepareGetAllUsersStmt();
-}
-
 void SqlStatements::destroySQLStatements() {
     sqlite3_finalize(createUserTableStmt);
     sqlite3_finalize(dropUserTableStmt);

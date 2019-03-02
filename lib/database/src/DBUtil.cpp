@@ -160,10 +160,6 @@ bool DBUtil::createTables() {
     return status == SQLITE_DONE;
 }
 
-void DBUtil::prepareSQLStatements() {
-    SqlStatements::prepareSQLStatements();
-}
-
 //add all tables to drop here
 bool DBUtil::dropTables() {
     int status = sqlite3_step(SqlStatements::dropUserTableStmt);
