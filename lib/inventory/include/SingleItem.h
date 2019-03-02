@@ -1,16 +1,12 @@
-
 #ifndef PROJECT_SINGLEITEM_H
 #define PROJECT_SINGLEITEM_H
 
 #include <string>
+
 #include "InventoryItem.h"
 
-
 class SingleItem : public InventoryItem {
-
 public:
-
-
     SingleItem();
     SingleItem(int anId,
                   std::string aKeyword,
@@ -24,8 +20,6 @@ public:
 
 private:
     std::string _keyword, _shortdesc, _longdesc, _description;
-
 };
-
 
 #endif //PROJECT_SINGLEITEM_H
