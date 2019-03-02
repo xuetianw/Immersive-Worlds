@@ -1,6 +1,8 @@
 add_library(cusjson
   src/CusJson.cpp
-        )
+        src/NPCJsonWrapper.cpp
+        src/GiveNPCAction.cpp src/EquipNPCAction.cpp)
+
 
 
 target_include_directories(cusjson
