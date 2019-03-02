@@ -8,70 +8,87 @@
 #include <string>
 #include <vector>
 #include <nlohmann/json.hpp>
+
 using json = nlohmann::json;
 
 namespace CusJson {
 
-  class JsonDoor {
-  public:
-    JsonDoor();
-    std::string _dir;
-    std::vector<std::string> _desc;
-    std::vector<std::string> _keywords;
-    int _to;
-  };
+    class JsonDoor {
+    public:
+        JsonDoor();
 
-  class ExtDesc {
-  public:
-    ExtDesc();
-    std::vector<std::string> _keywords;
-    std::vector<std::string> _desc;
-  };
+        std::string _dir;
+        std::vector<std::string> _desc;
+        std::vector<std::string> _keywords;
+        int _to;
+    };
 
-  class NPC {
-  public:
-    int id;
-    std::vector<std::string> keywords;
-    std::string shortdesc;
-    std::vector<std::string> longdesc;
-    std::vector<std::string> description;
-  };
+    class ExtDesc {
+    public:
+        ExtDesc();
 
-  class Room {
-  public:
-    int _id = 0;
-    std::string _name;
-    std::vector<std::string>_jsonDesc;
-    std::vector<JsonDoor> _jsonDoors;
-    std::vector<ExtDesc> _jsonExtDesc;
-  };
+        std::vector<std::string> _keywords;
+        std::vector<std::string> _desc;
+    };
 
-  class Area {
-  public:
-    std::string _name;
-    std::vector<NPC> _npcs;
-    std::vector<Room> _rooms;
-  };
+    class NPC {
+    public:
+        int id;
+        std::vector<std::string> keywords;
+        std::string shortdesc;
+        std::vector<std::string> longdesc;
+        std::vector<std::string> description;
+    };
 
-  void to_json(json &j, const JsonDoor &door);
+    class Object {
+    public:
+        int id;
+        std::vector<std::string> keywords;
+        std::string shortdesc;
+        std::vector<std::string> longdesc;
+        std::vector<ExtDesc> _jsonExtDesc;
+    };
 
-  void from_json(const json &j, JsonDoor &door);
+    class Room {
+    public:
+        int _id = 0;
+        std::string _name;
+        std::vector<std::string> _jsonDesc;
+        std::vector<JsonDoor> _jsonDoors;
+        std::vector<ExtDesc> _jsonExtDesc;
+    };
 
-  void to_json(json &j, const ExtDesc &extDesc);
+    class Area {
+    public:
+        std::string _name;
+        std::vector<NPC> _npcs;
+        std::vector<Object> _objects;
+        std::vector<Room> _rooms;
+    };
 
-  void from_json(const json &j, ExtDesc &extDesc);
+    void to_json(json &j, const JsonDoor &door);
 
-  void to_json(json& j, const NPC& p);
+    void from_json(const json &j, JsonDoor &door);
 
-  void from_json(const json& j, NPC& p);
+    void to_json(json &j, const ExtDesc &extDesc);
 
-  void to_json(json &j, const Room &room);
+    void from_json(const json &j, ExtDesc &extDesc);
 
-  void from_json(const json &j, Room &room);
+    void to_json(json &j, const NPC &p);
 
-  void to_json(json& j, const Area& p);
+    void from_json(const json &j, NPC &p);
 
-  void from_json(const json& j, Area& p);
+    void to_json(json &j, const Object &object);
+
+    void from_json(const json &j, Object &object);
+
+    void to_json(json &j, const Room &room);
+
+    void from_json(const json &j, Room &room);
+
+    void to_json(json &j, const Area &p);
+
+    void from_json(const json &j, Area &p);
 }
 
 #endif //WEBSOCKETNETWORKING_CUSJSON_H
