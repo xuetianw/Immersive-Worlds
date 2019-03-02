@@ -12,17 +12,14 @@ class SqlStatements {
 
 //define string values for sql statements
 private:
-    static const char *dropUserTableString ;
     static const char *getAllUsersString ;
 
 public:
 
 //define sqlite3 prepare statement pointers
-    static sqlite3_stmt *dropUserTableStmt;
     static sqlite3_stmt *getAllUsersStmt;
 
 //methods to create the statements (both: User dependent and independent)
-    static void prepareDropUserTableStmt();
 
     static void destroySQLStatements();
 

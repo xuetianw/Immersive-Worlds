@@ -172,7 +172,19 @@ bool DBUtil::createTables() {
 
 //add all tables to drop here
 bool DBUtil::dropTables() {
-    int status = sqlite3_step(SqlStatements::dropUserTableStmt);
+    const string dropUserTableQueryString = "DROP TABLE IF EXISTS User;";
+    sqlite3_stmt* dropTableStmt;
+
+    sqlite3_prepare_v2(DBUtil::database,
+                       dropUserTableQueryString.c_str(),
+                       -1,
+                       &dropTableStmt,
+                       nullptr
+    );
+
+    int status = sqlite3_step(dropTableStmt);
+
+    sqlite3_finalize(dropTableStmt);
 
     return status == SQLITE_DONE;
 }
