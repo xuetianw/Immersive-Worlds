@@ -24,7 +24,7 @@ public:
     /*
      * Register a user using username and password
      */
-    static bool registerUser(string username, string password);
+    static bool registerUser(const string& username, const string& password);
 
     /*
      * Deletes a User using their username

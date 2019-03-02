@@ -16,7 +16,6 @@ const char* SqlStatements::getAllUsersString = "SELECT username, password FROM U
 //queries
 sqlite3_stmt* SqlStatements::createUserTableStmt;
 sqlite3_stmt* SqlStatements::dropUserTableStmt;
-sqlite3_stmt* SqlStatements::registerUserStmt;
 sqlite3_stmt* SqlStatements::deleteUserStmt;
 sqlite3_stmt* SqlStatements::findUserStmt;
 sqlite3_stmt* SqlStatements::getAllUsersStmt;
@@ -48,20 +47,7 @@ void SqlStatements::prepareGetAllUsersStmt() {
 }
 
 
-//functions which depend on User input
-void SqlStatements::registerUser(string username, string password) {
 
-    string registerUserString = "INSERT INTO User(username , password) VALUES('"
-                         + username + "','"
-                         + password +
-                         "');";
-
-    int status = sqlite3_prepare_v2(DBUtil::database, registerUserString.c_str(), -1, &registerUserStmt, nullptr);
-
-    if(status!=SQLITE_OK){
-        printf("Failed to prepare Statement");
-    }
-}
 
 void SqlStatements::deleteUser(string username) {
 
@@ -96,7 +82,6 @@ void SqlStatements::prepareSQLStatements() {
 void SqlStatements::destroySQLStatements() {
     sqlite3_finalize(createUserTableStmt);
     sqlite3_finalize(dropUserTableStmt);
-    sqlite3_finalize(registerUserStmt);
     sqlite3_finalize(deleteUserStmt);
     sqlite3_finalize(findUserStmt);
     sqlite3_finalize(getAllUsersStmt);

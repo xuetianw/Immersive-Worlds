@@ -32,17 +32,37 @@ bool DBUtil::openConnection() {
 }
 
 
+// TODO hash passwords
+bool DBUtil::registerUser(const string& username, const string& password) {
+    const string registerUserQueryString = "INSERT INTO User (username, password) VALUES (:username, :password);";
+    sqlite3_stmt* registerUserStmt;
 
+    sqlite3_prepare_v2(DBUtil::database,
+                       registerUserQueryString.c_str(),
+                       -1,
+                       &registerUserStmt,
+                       nullptr
+    );
 
+    sqlite3_bind_text(registerUserStmt,
+                      sqlite3_bind_parameter_index(registerUserStmt, ":username"),
+                      username.c_str(),
+                      username.length(),
+                      nullptr
+    );
 
-bool DBUtil::registerUser(string username, string password) {
+    sqlite3_bind_text(registerUserStmt,
+                      sqlite3_bind_parameter_index(registerUserStmt, ":password"),
+                      password.c_str(),
+                      password.length(),
+                      nullptr
+    );
 
+    int status = sqlite3_step(registerUserStmt);
 
-    SqlStatements::registerUser(std::move(username), std::move(password));
-    int status = sqlite3_step(SqlStatements::registerUserStmt);
+    sqlite3_finalize(registerUserStmt);
 
     return status == SQLITE_DONE;
-
 }
 
 bool DBUtil::deleteUser(string username) {

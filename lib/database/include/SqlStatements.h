@@ -23,7 +23,6 @@ public:
     static sqlite3_stmt *dropUserTableStmt;
     static sqlite3_stmt *getAllUsersStmt;
 
-    static sqlite3_stmt *registerUserStmt;
     static sqlite3_stmt *deleteUserStmt;
     static sqlite3_stmt *findUserStmt;
 
@@ -34,7 +33,6 @@ public:
     static void prepareSQLStatements();
     static void destroySQLStatements();
 
-    static void registerUser(string username, string password);
     static void deleteUser(string username);
     static void findUser(string username);
     static void prepareGetAllUsersStmt();
