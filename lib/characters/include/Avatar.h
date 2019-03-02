@@ -31,9 +31,9 @@ public:
 
     const string &getName() const;
 
-    unsigned int get_hp() const;
+    int get_hp() const;
 
-    unsigned int get_mana() const;
+    int get_mana() const;
 
     const models::Room &get_currentRoom() const;
 
