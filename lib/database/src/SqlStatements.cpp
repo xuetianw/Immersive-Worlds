@@ -24,7 +24,7 @@ sqlite3_stmt* SqlStatements::getAllUsersStmt;
 //functions independent of user input
 void SqlStatements::createUserTable() {
 
-    int status = sqlite3_prepare_v2(DBUtil::database, createUserTableString, -1, &createUserTableStmt, NULL);
+    int status = sqlite3_prepare_v2(DBUtil::database, createUserTableString, -1, &createUserTableStmt, nullptr);
 
     if(status!=SQLITE_OK){
         printf("Failed to prepare Statement");
@@ -32,7 +32,7 @@ void SqlStatements::createUserTable() {
 }
 
 void SqlStatements::dropUserTable() {
-    int status = sqlite3_prepare_v2(DBUtil::database, dropUserTableString, -1, &dropUserTableStmt, NULL);
+    int status = sqlite3_prepare_v2(DBUtil::database, dropUserTableString, -1, &dropUserTableStmt, nullptr);
 
     if(status!=SQLITE_OK){
         printf("Failed to prepare Statement");
@@ -40,7 +40,7 @@ void SqlStatements::dropUserTable() {
 }
 
 void SqlStatements::getAllUsers() {
-    int status = sqlite3_prepare_v2(DBUtil::database, getAllUsersString, -1, &getAllUsersStmt, NULL);
+    int status = sqlite3_prepare_v2(DBUtil::database, getAllUsersString, -1, &getAllUsersStmt, nullptr);
 
     if(status!=SQLITE_OK){
         printf("Failed to prepare Statement");
@@ -56,7 +56,7 @@ void SqlStatements::registerUser(string username, string password) {
                          + password +
                          "');";
 
-    int status = sqlite3_prepare_v2(DBUtil::database, registerUserString.c_str(), -1, &registerUserStmt, NULL);
+    int status = sqlite3_prepare_v2(DBUtil::database, registerUserString.c_str(), -1, &registerUserStmt, nullptr);
 
     if(status!=SQLITE_OK){
         printf("Failed to prepare Statement");
@@ -67,7 +67,7 @@ void SqlStatements::deleteUser(string username) {
 
     string deleteUserString = "DELETE FROM User WHERE username ='" + username + "';";
 
-    int status = sqlite3_prepare_v2(DBUtil::database, deleteUserString.c_str(), -1, &deleteUserStmt, NULL);
+    int status = sqlite3_prepare_v2(DBUtil::database, deleteUserString.c_str(), -1, &deleteUserStmt, nullptr);
 
     if(status!=SQLITE_OK){
         printf("Failed to prepare Statement");
@@ -78,7 +78,7 @@ void SqlStatements::findUser(string username) {
 
     string findUserString = "SELECT * FROM User WHERE username ='" + username + "';";
 
-    int status = sqlite3_prepare_v2(DBUtil::database, findUserString.c_str(), -1, &findUserStmt, NULL);
+    int status = sqlite3_prepare_v2(DBUtil::database, findUserString.c_str(), -1, &findUserStmt, nullptr);
 
     if(status!=SQLITE_OK){
         printf("Failed to prepare Statement");

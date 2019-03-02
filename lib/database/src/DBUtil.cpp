@@ -1,3 +1,9 @@
+#include <utility>
+
+#include <utility>
+
+#include <utility>
+
 //
 // Created by nirag on 12/02/19.
 //
@@ -17,7 +23,8 @@ char* DBUtil::errorMessage;
 bool DBUtil::openConnection() {
 
     //use DB path
-    int status = sqlite3_open_v2("../../lib/database/adventure.db", &(DBUtil::database), SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE , NULL);
+    int status = sqlite3_open_v2("../../lib/database/adventure.db", &(DBUtil::database), SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE ,
+                                 nullptr);
 
     if(status!=SQLITE_OK){
         //error handling
@@ -40,55 +47,35 @@ bool DBUtil::createTables() {
     dropTables();
     int status = sqlite3_step(SqlStatements::createUserTableStmt);
 
-    if(status != SQLITE_DONE){
-        //error handling
+    return status == SQLITE_DONE;
 
-        return false;
-    }
-
-    return true;
 }
 
 bool DBUtil::registerUser(string username, string password) {
 
 
-    SqlStatements::registerUser(username, password);
+    SqlStatements::registerUser(std::move(username), std::move(password));
     int status = sqlite3_step(SqlStatements::registerUserStmt);
 
-    if(status!=SQLITE_DONE){
-        //error handling
-
-        return false;
-    }
-
-    return true;
+    return status == SQLITE_DONE;
 
 }
 
 bool DBUtil::deleteUser(string username) {
 
-    SqlStatements::deleteUser(username);
+    SqlStatements::deleteUser(std::move(username));
     int status = sqlite3_step(SqlStatements::deleteUserStmt);
 
-    if(status!=SQLITE_DONE){
-        //error handling
-
-        return false;
-    }
-
-    return true;
+    return status == SQLITE_DONE;
 
 }
 
 bool DBUtil::userExists(string username) {
 
-    SqlStatements::findUser(username);
+    SqlStatements::findUser(std::move(username));
     int status = sqlite3_step(SqlStatements::findUserStmt);
 
-    if(status == SQLITE_ROW)
-        return true;
-
-    return false;
+    return status == SQLITE_ROW;
 
 }
 
@@ -108,11 +95,7 @@ bool DBUtil::getAllUsers() {
 
     //free memory because strdup will malloc the copy -> prevents memory leakage
 
-    if(status!=SQLITE_DONE){
-        //error with sql
-        return false;
-    }
-    return true;
+    return status == SQLITE_DONE;
 
 }
 
@@ -121,11 +104,7 @@ bool DBUtil::dropTables() {
 
     int status = sqlite3_step(SqlStatements::dropUserTableStmt);
 
-    if(status!=SQLITE_DONE){
-        //error handling
-        return false;
-    }
-    return true;
+    return status == SQLITE_DONE;
 
 }
 
@@ -136,8 +115,6 @@ bool DBUtil::closeConnection() {
 
     int status = sqlite3_close_v2(DBUtil::database);
 
-    if(status!=SQLITE_OK)
-        return false;
+    return status == SQLITE_OK;
 
-    return true;
 }
