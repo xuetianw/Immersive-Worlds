@@ -23,14 +23,15 @@ public:
 
     explicit GameController(GameService &gameService);
 
-    Message move(const networking::Message &message);
+    Message move(const Message &message);
 
-    pair<bool, Message> respondToMessage(const Message& message) override;
+    pair<bool, Message> respondToMessage(Message& message) override;
 
     void addUser(const networking::Connection &connection);
 
-    Message spawnUserInStartRoom(const networking::Connection &connection);
-    void spawnUserInRoom(const networking::Connection &connection, int debugRoomId);
+    Message spawnUserInStartRoom(User& user);
+
+    void spawnUserInRoom(User& user, int debugRoomId);
 
     /**
      * Displays to the user info about their current location.

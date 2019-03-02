@@ -7,7 +7,7 @@
 #include <WorldContainer.h>
 #include "Server.h"
 
-using networking::Message;
+using networking::ServerMessage;
 
 //mock implementation of login system. Will change with requirements
 using namespace std;
@@ -21,8 +21,8 @@ std::string WorldHandler::processCommand(const std::string& command) {
     return "string mock process";
 }
 
-std::string WorldHandler::processCommand(const std::deque<networking::Message>& messages) {
-    return "deques<Message> mock process";
+std::string WorldHandler::processCommand(const std::deque<networking::ServerMessage>& messages) {
+    return "deques<ServerMessage> mock process";
 }
 
 WorldHandler::WorldHandler() {

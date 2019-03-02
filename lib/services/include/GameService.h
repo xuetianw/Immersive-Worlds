@@ -7,7 +7,8 @@
 
 #include "Area.h"
 #include "RoomConnection.h"
-#include <Server.h>
+#include "User.h"
+#include "Message.h"
 #include "CusJson.h"
 #include "DataStorage.h"
 #include "GameService.h"
@@ -35,9 +36,9 @@ public:
     /**
      * It is assumed that the user is in a room, and the room has a list of connections(can be blank).
      */
-    bool moveUser(const networking::Connection &connection, const std::string keywordString);
+    bool moveUser(User& user, const std::string keywordString);
 
-    bool userYell(const networking::Connection &connection, const std::string messageString);
+    bool userYell(User& user, const std::string messageString);
 
     bool spawnUserInStartRoom(const networking::Connection &connection);
 

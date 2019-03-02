@@ -5,18 +5,17 @@
 #ifndef WEBSOCKETNETWORKING_USERSTATE_H
 #define WEBSOCKETNETWORKING_USERSTATE_H
 
-#include "Server.h"
 #include <string>
 #include <variant>
 #include <optional>
 
-using Message = networking::Message;
+
 using string = std::string;
 
 ///////////////////////////////////////////USER-PROMPTS////////////////////////////////////////////
 const string LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT = "Account Created! Please re-enter your username: ";
 const string LOGIN_USERNAME_PROMPT = "Please enter your username to login: ";
-const string LOGIN_USERNAME_FAILED_PROMPT = "User does not exist!\nPlease enter a valid username: ";
+const string LOGIN_USERNAME_FAILED_PROMPT = "Account does not exist!\nPlease enter a valid username: ";
 const string LOGIN_PASSWORD_PROMPT = "Please enter your password: ";
 const string LOGIN_PASSWORD_FAILED_PROMPT = "Login Unsuccessful\nPlease enter your username again: ";
 const string REGISTER_USERNAME_PROMPT = "Please create your username: ";
@@ -48,18 +47,20 @@ typedef std::variant<
         LoggedInState> UserStateVariant;
 
 ///////////////////////////////////////////////USER////////////////////////////////////////////////
-struct User {
+struct Account {
     std::string _username;
     std::string _password;
     bool isLoggingIn = false;
+    bool isSubmittingLogin = false;
     bool isRegistering = false;
-    bool hasSpawned = false;
+    bool isSubmittingRegistration = false;
+    bool isLoggedIn = false;
     UserStateVariant _state = ConnectedState {};
 };
 
 ///////////////////////////////////////STATE-TRANSITIONS///////////////////////////////////////////
 struct StateTransitions {
-    Message _currentUserResponseMessage;
+    string _currentUserResponseMessage;
 
     /////////////////////////////////////////////HELPERS///////////////////////////////////////////
     // TODO: Add validity checks asides from empty string possibly move validation to DBUtility
@@ -67,80 +68,88 @@ struct StateTransitions {
         return str.find_first_not_of(' ') == std::string::npos;
     }
 
-    Message getResponseForInvalidInput(Message message, string prompt) {
-        return Message{message.connection, EMPTY_INPUT_PROMPT + prompt};
+    string getResponseForInvalidInput(string prompt) {
+        return EMPTY_INPUT_PROMPT + prompt;
     }
 
     ////////////////////////////////////////////VISITORS///////////////////////////////////////////
-    std::optional<UserStateVariant> operator()(UnRegisteredState& state, User& user, const Message& message) {
-        _currentUserResponseMessage = Message {message.connection, REGISTER_USERNAME_PROMPT};
+    std::optional<UserStateVariant> operator()(UnRegisteredState& state, Account& account, string message) {
+        _currentUserResponseMessage = REGISTER_USERNAME_PROMPT;
         return RegisterUsernameState {};
     }
 
-    std::optional<UserStateVariant> operator()(RegisterUsernameState& state, User& user, const Message& message) {
+    std::optional<UserStateVariant> operator()(RegisterUsernameState& state, Account& account, string message) {
         // TODO: Add the username to persistent storage for future identification
-        if (invalid(message.text)) {
-            _currentUserResponseMessage = getResponseForInvalidInput(message, REGISTER_USERNAME_FAILED_PROMPT);
+        if (invalid(message)) {
+            _currentUserResponseMessage = REGISTER_USERNAME_FAILED_PROMPT;
             return RegisterUsernameState {};
         }
 
-        _currentUserResponseMessage = Message{message.connection, REGISTER_PASSWORD_PROMPT};
+        _currentUserResponseMessage = REGISTER_PASSWORD_PROMPT;
         return RegisterPasswordState {};
     }
 
-    std::optional<UserStateVariant> operator()(RegisterPasswordState& state, User& user, const Message& message) {
+    std::optional<UserStateVariant> operator()(RegisterPasswordState& state, Account& account, string message) {
         // TODO: Add the password to persistent storage for future authentication
-        if (invalid(message.text)) {
-            _currentUserResponseMessage = getResponseForInvalidInput(message, REGISTER_PASSWORD_FAILED_PROMPT);
+        if (invalid(message)) {
+            _currentUserResponseMessage = getResponseForInvalidInput(REGISTER_PASSWORD_FAILED_PROMPT);
             return RegisterPasswordState {};
         }
-
-        _currentUserResponseMessage = Message{message.connection, LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT};
+        account.isSubmittingRegistration = true;
+        //TODO: Fill the backend for user storage.
+        _currentUserResponseMessage = LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT;
         return LoginUsernameState {};
     }
 
-    std::optional<UserStateVariant> operator()(ConnectedState& state, User& user, const Message& message) {
-        if(!(user.isLoggingIn || user.isRegistering)){
-            _currentUserResponseMessage = Message{message.connection, NOT_SIGNED_IN_PROMPT};
+    std::optional<UserStateVariant> operator()(ConnectedState& state, Account& account, string message) {
+
+        if(!(account.isLoggingIn || account.isRegistering)){
+            _currentUserResponseMessage = NOT_SIGNED_IN_PROMPT;
             return ConnectedState {};
         }
-        _currentUserResponseMessage = user.isLoggingIn? Message{message.connection, LOGIN_USERNAME_PROMPT} :
-                                      Message{message.connection, REGISTER_USERNAME_PROMPT};
-        // the ? : operator doesnt want to work here?
-        if (user.isLoggingIn) {
+        _currentUserResponseMessage = account.isLoggingIn? LOGIN_USERNAME_PROMPT : REGISTER_USERNAME_PROMPT;
+
+        if (account.isLoggingIn) {
             return LoginUsernameState{};
         } else {
             return RegisterUsernameState{};
         }
     }
 
-    std::optional<UserStateVariant> operator()(LoginUsernameState& state, User& user, const Message& message) {
+    std::optional<UserStateVariant> operator()(LoginUsernameState& state, Account& account,  string message) {
+
+
         // TODO: Verify username
-        if(invalid(message.text)) {
-            _currentUserResponseMessage = getResponseForInvalidInput(message, LOGIN_USERNAME_FAILED_PROMPT);
+        if(invalid(message)) {
+            _currentUserResponseMessage = getResponseForInvalidInput(LOGIN_USERNAME_FAILED_PROMPT);
             return LoginUsernameState {};
         }
 
-        user._username = message.text;
-        _currentUserResponseMessage = Message {message.connection, LOGIN_PASSWORD_PROMPT};
+        account._username = message;
+        _currentUserResponseMessage = LOGIN_PASSWORD_PROMPT;
         return LoginPasswordState {};
     }
 
-    std::optional<UserStateVariant> operator()(LoginPasswordState& state, User& user, const Message& message) {
-        if(invalid(message.text)) {
-            _currentUserResponseMessage = getResponseForInvalidInput(message, LOGIN_PASSWORD_FAILED_PROMPT);
+    std::optional<UserStateVariant> operator()(LoginPasswordState& state, Account& account, string message) {
+
+        if(invalid(message)) {
+            _currentUserResponseMessage = getResponseForInvalidInput(LOGIN_PASSWORD_FAILED_PROMPT);
             return LoginUsernameState {};
         }
 
-        user._password = message.text;
-        _currentUserResponseMessage = Message {message.connection, LOGGED_IN_PROMPT};
+        account._password = message;
+        account.isSubmittingLogin = true;
+
+
+        //TODO: Fill the backend for user verification.
+        _currentUserResponseMessage = LOGGED_IN_PROMPT;
         return LoggedInState {};
     }
 
-    std::optional<UserStateVariant> operator()(LoggedInState& state, User& user, const Message& message) {
-        user._username = "";
-        user._password = "";
-        _currentUserResponseMessage = Message{message.connection, LOGGED_OUT_PROMPT};
+    std::optional<UserStateVariant> operator()(LoggedInState& state, Account& account, string message) {
+        account._username = "";
+        account._password = "";
+        _currentUserResponseMessage = LOGGED_OUT_PROMPT;
         return ConnectedState {};
     }
 };

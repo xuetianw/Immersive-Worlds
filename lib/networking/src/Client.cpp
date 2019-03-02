@@ -76,7 +76,7 @@ Client::ClientImpl::connect(boost::asio::ip::tcp::resolver::iterator endpoint) {
       if (!errorCode) {
         this->handshake();
       } else {
-        reportError("Unable to connect.");
+        reportError("Unable to connectUser.");
       }
     });
 }

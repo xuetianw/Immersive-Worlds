@@ -21,7 +21,6 @@ enable_testing()
 
 add_executable(run_tests
     models/modelsTest.cpp
-    MessageTest/MessageTest.cpp
     gameManager/idTest.cpp
         NetworkingTests/UserServiceManagementTest.cpp
     NetworkingTests/ConsoleCommandTests.cpp
@@ -44,5 +43,5 @@ set_target_properties(run_tests
         )
 
 ##TO DO: Add Lib Here
-target_link_libraries(run_tests networking models message cusjson Combat controllers database inventory)
+target_link_libraries(run_tests networking models cusjson Combat controllers database inventory)
 add_test(NAME network_tests COMMAND run_tests)

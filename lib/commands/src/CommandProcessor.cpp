@@ -8,22 +8,29 @@
 
 bool CommandProcessor::isCommand(const Message &message) {
     std::pair commandMessagePair = splitCommand(message.text);
-    return _commands.find(commandMessagePair.first) != _commands.end();
+    return _keywords.find(commandMessagePair.first) != _keywords.end();
 }
 
-void CommandProcessor::addCommand(string commandKeyword, function_ptr fnPtr) {
-    _commands.insert(std::make_pair(commandKeyword, InputHandler { fnPtr }));
+void CommandProcessor::addCommand(string keyword, Command command, function_ptr fnPtr) {
+    _keywords[std::move(keyword)] = command;
+    _commands[std::move(command)] = InputHandler { fnPtr };
 }
 
 Message CommandProcessor::processCommand(const Message &message) {
     std::pair commandMessagePair = splitCommand(message.text);
-    auto commandsIter = _commands.find(commandMessagePair.first);
+    User& user = message.user;
+
+    auto keywordIter = _keywords.find(commandMessagePair.first);
+    auto commandsIter = keywordIter!=_keywords.end() ? _commands.find(keywordIter->second) : _commands.end();
 
     if(commandsIter != _commands.end()) {
-        return commandsIter->second.functionPtr(Message {message.connection, commandMessagePair.second});
+        if(message.user.canPreformCommand(commandsIter->first)){
+            return commandsIter->second.functionPtr(Message {message.user, commandMessagePair.second});
+        }
+        return Message{message.user, "You cannot preform: " + commandMessagePair.first};
     }
 
-    return Message{message.connection, "Attempted Command Not Found."};
+    return Message{message.user, "Attempted Command Not Found."};
 }
 
 std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
