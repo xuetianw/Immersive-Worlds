@@ -56,6 +56,11 @@ public:
     static bool closeConnection();
 
     /*
+     * call function to prepare non user defined SQL statements before hand
+     */
+    static void prepareSQLStatements();
+
+    /*
      * function to create new tables if need be
      */
     static bool createTables();
@@ -69,9 +74,6 @@ public:
 
 
 };
-
-
-//char* DBUtil::dbName = "lib/database/adventure.db";
 
 
 #endif //WEBSOCKETNETWORKING_DBUTIL_H

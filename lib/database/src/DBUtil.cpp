@@ -17,8 +17,7 @@ char* DBUtil::errorMessage;
 bool DBUtil::openConnection() {
 
     //use DB path
-    int status = sqlite3_open_v2("adventure.db", &(DBUtil::database), SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE , NULL);
-
+    int status = sqlite3_open_v2("../../lib/database/adventure.db", &(DBUtil::database), SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE , NULL);
 
     if(status!=SQLITE_OK){
         //error handling
@@ -26,15 +25,19 @@ bool DBUtil::openConnection() {
         return false;
     }
 
+    prepareSQLStatements();
     return true;
+}
+
+void DBUtil::prepareSQLStatements() {
+    SqlStatements::prepareSQLStatements();
 }
 
 //add all tables to create here
 bool DBUtil::createTables() {
 
-    //for now we keep the tables to retain data
-    SqlStatements::prepareSQLStatements();
-
+    //for now we drop all tables and then create them
+    dropTables();
     int status = sqlite3_step(SqlStatements::createUserTableStmt);
 
     if(status != SQLITE_DONE){
@@ -97,9 +100,9 @@ bool DBUtil::getAllUsers() {
     while((status = sqlite3_step(SqlStatements::getAllUsersStmt)) == SQLITE_ROW){
 
         string username(reinterpret_cast<const char*>( sqlite3_column_text(SqlStatements::getAllUsersStmt,0)) );
-        string passsword(reinterpret_cast<const char*>( sqlite3_column_text(SqlStatements::getAllUsersStmt,1)) );
+        string password(reinterpret_cast<const char*>( sqlite3_column_text(SqlStatements::getAllUsersStmt,1)) );
 
-        userData.insert(make_pair(  username,passsword));
+        userData.insert(make_pair(username,password));
     }
 
 

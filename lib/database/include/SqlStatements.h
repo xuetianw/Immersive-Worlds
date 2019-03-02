@@ -21,11 +21,11 @@ public:
 //define sqlite3 prepare statement pointers
     static sqlite3_stmt *createUserTableStmt;
     static sqlite3_stmt *dropUserTableStmt;
+    static sqlite3_stmt *getAllUsersStmt;
 
     static sqlite3_stmt *registerUserStmt;
     static sqlite3_stmt *deleteUserStmt;
     static sqlite3_stmt *findUserStmt;
-    static sqlite3_stmt *getAllUsersStmt;
 
 //methods to create the statements (both: User dependent and independent)
     static void createUserTable();
