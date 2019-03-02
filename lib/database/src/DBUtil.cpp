@@ -165,6 +165,8 @@ bool DBUtil::createTables() {
 
     int status = sqlite3_step(createTableStmt);
 
+    sqlite3_finalize(createTableStmt);
+
     return status == SQLITE_DONE;
 }
 
