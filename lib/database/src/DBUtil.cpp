@@ -65,10 +65,27 @@ bool DBUtil::registerUser(const string& username, const string& password) {
     return status == SQLITE_DONE;
 }
 
-bool DBUtil::deleteUser(string username) {
+bool DBUtil::deleteUser(const string& username) {
+    string deleteUserQueryString = "DELETE FROM User WHERE username = :username;";
+    sqlite3_stmt* deleteUserStmt;
 
-    SqlStatements::deleteUser(std::move(username));
-    int status = sqlite3_step(SqlStatements::deleteUserStmt);
+    sqlite3_prepare_v2(DBUtil::database,
+                       deleteUserQueryString.c_str(),
+                       -1,
+                       &deleteUserStmt,
+                       nullptr
+    );
+
+    sqlite3_bind_text(deleteUserStmt,
+                      sqlite3_bind_parameter_index(deleteUserStmt, ":username"),
+                      username.c_str(),
+                      username.length(),
+                      nullptr
+    );
+
+    int status = sqlite3_step(deleteUserStmt);
+
+    sqlite3_finalize(deleteUserStmt);
 
     return status == SQLITE_DONE;
 

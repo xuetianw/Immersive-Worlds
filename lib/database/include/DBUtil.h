@@ -29,7 +29,7 @@ public:
     /*
      * Deletes a User using their username
      */
-    static bool deleteUser(string username);
+    static bool deleteUser(const string& username);
 
     /*
      * Checks for the existence of a single User
