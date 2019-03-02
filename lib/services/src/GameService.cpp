@@ -30,13 +30,13 @@ string GameService::getCurrentRoomName(const networking::Connection &connection)
 }
 
 bool GameService::spawnUserInStartRoom(const networking::Connection &connection) {
-  _connectionToRoomId.emplace(connection, models::RoomId(10500)); // DEBUG starting room is in Lexia's shop
-  return true;
+  auto[it,inserted] = _connectionToRoomId.insert_or_assign(connection, models::RoomId(10500)); // DEBUG starting room is in Lexia's shop
+  return it != _connectionToRoomId.end() || !inserted;
 }
 
 bool GameService::spawnUserInRoom(const networking::Connection &connection, int id) {
-  _connectionToRoomId.emplace(connection, models::RoomId(id));
-  return true;
+  auto[it,inserted] = _connectionToRoomId.insert_or_assign(connection, models::RoomId(id));
+    return it != _connectionToRoomId.end() || !inserted;
 }
 
 
