@@ -1,7 +1,5 @@
 add_library(characters
         src/Avatar.cpp
-        src/character.cpp
-        src/NonUserCharacter.cpp
         )
 
 
@@ -24,5 +22,5 @@ install(TARGETS characters
 
 target_link_libraries(characters
         PUBLIC
-        channel
+        models
         inventory)

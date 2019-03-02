@@ -23,7 +23,7 @@ using namespace std;
 
 Message AccountController::startLogin(Message &message) {
     if(userService.isLoggedIn(message.connection)) {
-        return Message{message.connection, "You are logged in - logout to preform this command"};
+        return Message{message.connection, ALREADY_LOGIN_MESSAGE};
     }
     userService.getUser(message.connection).isLoggingIn = true;
     return userService.updateUserState(message);
@@ -31,7 +31,7 @@ Message AccountController::startLogin(Message &message) {
 
 Message AccountController::startRegister(Message &message) {
     if(userService.isLoggedIn(message.connection)) {
-        return Message{message.connection, "You are logged in - logout to preform this command"};
+        return Message{message.connection, LOGOUT_BEFORE_REGISTER_MESSAGE};
     }
     userService.getUser(message.connection).isRegistering = true;
     return userService.updateUserState(message);
@@ -40,10 +40,10 @@ Message AccountController::startRegister(Message &message) {
 Message AccountController::logoutUser(Message &message) {
     if(userService.isLoggedIn(message.connection)) {
         userService.getUser(message.connection) = User{};
-        return Message{message.connection, "You have logged out"};
+        return Message{message.connection, LOGOUT_MESSAGE};
     }
 
-    return Message{message.connection, "You are not logged in!"};
+    return Message{message.connection, NOT_LOGIN_MESSAGE};
 }
 
 Message AccountController::escapeLogin(Message &message) {
@@ -51,15 +51,15 @@ Message AccountController::escapeLogin(Message &message) {
     stringstream response;
     if (user.isLoggingIn || user.isRegistering) {
         if (user.isRegistering) {
-            response << "You have exited out of the registration process\n"
+            response << ESCAPE_WHILE_REGISTERING_MESSAGE
                      << message.connection.id;
         } else {
-            response << "You have exited out of the login process\n"
+            response << LOGGING_IN_ESCAPE_MESSAGE
                      << message.connection.id;
         }
         user = User{};
     } else {
-        response << "You are not submitting any Account information currently";
+        response << ESCAPE_WHILE_NOT_LOGIN_MESSAGE;
     }
     return Message{message.connection.id, response.str()};
 }
@@ -78,7 +78,7 @@ pair<bool, Message> AccountController::respondToMessage(const Message &message) 
     }
 
     Message response = userService.updateUserState(message);
-    if(userService.isLoggedIn(message.connection)){
+    if (userService.isLoggedIn(message.connection) && (onLoginFunction != nullptr)){
         Message onLoginResponse = onLoginFunction(message);
         cout << onLoginResponse.text << "\n";
         response.text = response.text + "\n" + onLoginResponse.text;

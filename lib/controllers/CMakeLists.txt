@@ -21,7 +21,7 @@ target_link_libraries(controllers
     PUBLIC
     cusjson
     networking
-    channel
+    models
     commands
     services
     datastorage

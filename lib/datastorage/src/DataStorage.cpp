@@ -8,16 +8,10 @@
 
 DataStorage::DataStorage() {
     json solaceJson = getTestingArea();
-    _jsonArea = solaceJson.get<CusJson::Area>();
+    jsonArea = solaceJson.get<CusJson::Area>();
 }
 
-std::vector<channel::Room> DataStorage::getRooms() {
-    auto roomVector = std::vector<channel::Room>();
-    for (const CusJson::Room& room : _jsonArea._rooms) {
-        roomVector.emplace_back(channel::Room(room));
-    }
-    return roomVector;
-}
+
 
 json DataStorage::getTestingArea() {
     json j = R"(
@@ -132,14 +126,11 @@ json DataStorage::getTestingArea() {
     return j;
 }
 
-std::vector<std::pair<int, std::vector<channel::RoomConnection>>> DataStorage::getRoomConnectionsPairs() {
-    auto roomIdToRoomConnectionListPairList = std::vector<std::pair<int, std::vector<channel::RoomConnection>>> ();
-    for (const CusJson::Room& jsonRoom : _jsonArea._rooms) {
-        auto roomConnectionVector = std::vector<channel::RoomConnection>();
-        for (const CusJson::JsonDoor& jsonDoor : jsonRoom._jsonDoors) {
-            roomConnectionVector.emplace_back(channel::RoomId(jsonDoor._to), channel::RoomId(jsonRoom._id), jsonDoor._dir);
-        }
-        roomIdToRoomConnectionListPairList.emplace_back(jsonRoom._id, roomConnectionVector);
-    }
-    return roomIdToRoomConnectionListPairList;
+
+const CusJson::Area &DataStorage::getJsonArea() const {
+    return jsonArea;
+}
+
+void DataStorage::setJsonArea(const CusJson::Area &jsonArea) {
+    DataStorage::jsonArea = jsonArea;
 }

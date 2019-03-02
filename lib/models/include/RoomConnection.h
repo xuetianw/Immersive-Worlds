@@ -8,11 +8,11 @@
 
 #include "Room.h"
 
-namespace channel {
+namespace models {
     class RoomConnection {
     private:
-        channel::RoomId _to;
-        channel::RoomId _from;
+        models::RoomId _to;
+        models::RoomId _from;
         std::string _userInputDirKey;
     public:
         RoomConnection(const RoomId &_to, const RoomId &_from, const string &_userInputDirKey);

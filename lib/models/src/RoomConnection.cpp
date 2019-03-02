@@ -6,24 +6,24 @@
 
 #include "RoomConnection.h"
 
-using channel::RoomConnection;
+using models::RoomConnection;
 
-RoomConnection::RoomConnection(const channel::RoomId &_to, const channel::RoomId &_from,
+RoomConnection::RoomConnection(const models::RoomId &_to, const models::RoomId &_from,
                                         const string &_userInputDirKey) : _to(_to), _from(_from), _userInputDirKey(_userInputDirKey) {}
 
-const channel::RoomId &channel::RoomConnection::getTo() const {
+const models::RoomId &models::RoomConnection::getTo() const {
     return _to;
 }
 
-void RoomConnection::setTo(const channel::RoomId &_to) {
+void RoomConnection::setTo(const models::RoomId &_to) {
     this->_to = _to;
 }
 
-const channel::RoomId &RoomConnection::getFrom() const {
+const models::RoomId &RoomConnection::getFrom() const {
     return _from;
 }
 
-void RoomConnection::setFrom(const channel::RoomId &_from) {
+void RoomConnection::setFrom(const models::RoomId &_from) {
     this->_from = _from;
 }
 

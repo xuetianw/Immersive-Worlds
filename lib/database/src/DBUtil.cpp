@@ -1,7 +1,8 @@
 //
 // Created by nirag on 12/02/19.
 //
-#include <DBUtil.h>
+#include "DBUtil.h"
+#include "SqlStatements.h"
 
 #include "DBUtil.h"
 #include "sqlite3.h"
@@ -13,10 +14,8 @@ char* DBUtil::errorMessage;
 
 bool DBUtil::openConnection() {
 
-    //DBUtil::dbName = "../adventure.db";
-
     //use DB path
-    int status = sqlite3_open_v2("adventure.db",& (DBUtil::database), SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE , NULL);
+    int status = sqlite3_open_v2("adventure.db", &(DBUtil::database), SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE , NULL);
 
 
     if(status!=SQLITE_OK){
@@ -28,22 +27,22 @@ bool DBUtil::openConnection() {
     return true;
 }
 
+//adddd all tables to create here
 bool DBUtil::createTables() {
 
+    SqlStatements::prepareSQLStatements();
 
     //for now we keep the tables to retain data
     DBUtil::dropTables();
 
 
-    int status = sqlite3_exec( DBUtil::database,"CREATE TABLE IF NOT EXISTS User(id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(20), password VARCHAR(20));",
-            NULL, NULL , &DBUtil::errorMessage );
+    int status = sqlite3_step(SqlStatements::createUserTableStmt);
 
-    if(status!=0){
+    if(status!=SQLITE_DONE){
         //error handling
 
         return false;
     }
-
 
 
     return true;
@@ -52,47 +51,47 @@ bool DBUtil::createTables() {
 
 bool DBUtil::registerUser(string username, string password) {
 
-    string sqlStatement = "INSERT INTO User(username , password) VALUES('"
-                          + username + "','"
-                          + password +
-                          "');";
 
-    int status = sqlite3_exec( DBUtil::database, sqlStatement.c_str() ,
-                               NULL, NULL , &DBUtil::errorMessage );
+    SqlStatements::registerUser(username, password);
+    int status = sqlite3_step(SqlStatements::registerUserStmt);
 
+    if(status!=SQLITE_DONE){
+        //error handling
 
-    if(status!=0){
         return false;
     }
+
     return true;
 
 }
 
 bool DBUtil::deleteUser(string username) {
 
-    string sqlStatement = "DELETE FROM User WHERE username ='" + username + "';";
+    SqlStatements::deleteUser(username);
+    int status = sqlite3_step(SqlStatements::deleteUserStmt);
 
-    int status = sqlite3_exec( DBUtil::database, sqlStatement.c_str() ,
-                               NULL, NULL , &DBUtil::errorMessage );
+    if(status!=SQLITE_DONE){
+        //error handling
 
-    if(status!=0){
         return false;
     }
-    return true;
 
+    return true;
 
 }
 
+//add all tables to drop here
 bool DBUtil::dropTables() {
 
+    int status = sqlite3_step(SqlStatements::createUserTableStmt);
 
-    int status = sqlite3_exec( DBUtil::database,"DROP TABLE IF EXISTS User;",
-                                            NULL, NULL , &DBUtil::errorMessage );
+    if(status!=SQLITE_DONE){
+        //error handling
 
-    if(status!=0){
         return false;
     }
     return true;
+
 }
 
 /*
@@ -119,12 +118,15 @@ int DBUtil::callback(void* data, int argc, char** argv, char** azColName)
 //implement callbacak functionss to retrieve data from DB
 
 
-void DBUtil::closeConnection() {
+bool DBUtil::closeConnection() {
 
-    sqlite3_close(DBUtil::database);
-}
+    //destroy all prepared SQL statements to prevent memory leaks
+    SqlStatements::destroySQLStatements();
 
+    int status = sqlite3_close_v2(DBUtil::database);
 
-DBUtil::DBUtil() {
+    if(status!=SQLITE_OK)
+        return false;
 
+    return true;
 }

@@ -18,17 +18,24 @@ public:
     GameService();
 
 private:
+    /*
     std::vector<channel::Area> _areas;
     std::unordered_map<int, channel::Room> _roomIdToRoom;
     std::unordered_map<networking::Connection, channel::RoomId, networking::ConnectionHash> _connectionToRoomId;
     std::unordered_map<int, std::vector<channel::RoomConnection>> _roomIdToRoomConnectionsList;
     std::unordered_map<int, channel::MiniGame> _roomIdToMiniGameConnectionsList;
+    */
+    std::vector<models::Area> _areas;
+    std::unordered_map<int, models::Room> _roomIdToRoom;
+    std::unordered_map<networking::Connection, models::RoomId, networking::ConnectionHash> _connectionToRoomId;
+    std::unordered_map<int, std::vector<models::RoomConnection>> _roomIdToRoomConnectionsList;
+    std::unordered_map<int, channel::MiniGame> _roomIdToMiniGameConnectionsList;
 
     DataStorage _dataStorage = DataStorage();
 
-    channel::Room getRoom(const channel::RoomId &roomId);
+    models::Room getRoom(const models::RoomId &roomId);
 
-    channel::Room getUserRoom(const networking::Connection &connection);
+    models::Room getUserRoom(const networking::Connection &connection);
 
     void loadFromStorage();
 

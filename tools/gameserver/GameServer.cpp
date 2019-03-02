@@ -88,6 +88,7 @@ CommandProcessor buildCommands() {
     commandProcessor.addCommand("/answer", [](Message message) { return ::gameController->verifyMinigameAnswer(message); });
 
     //commandProcessor.addCommand("/yell", [](Message message){return ::gameController->yell(message);});
+    commandProcessor.addCommand("/whereami", [](Message message) { return ::gameController->outputCurrentLocationInfo(message); });
 
     return move(commandProcessor);
 }

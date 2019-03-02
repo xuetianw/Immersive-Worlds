@@ -2,15 +2,15 @@
 // Created by Jan Ycasas on 2019-01-24.
 //
 
-#ifndef CHANNEL_AREA_H
-#define CHANNEL_AREA_H
+#ifndef MODELS_AREA_H
+#define MODELS_AREA_H
 
 #include <unordered_map>
 #include <Room.h>
 
 using std::unordered_map;
 
-namespace channel {
+namespace models {
     class Area {
         public:
             Area(int id);
@@ -44,6 +44,6 @@ namespace channel {
             unordered_map<int, Room> _rooms;
             string _name;
     };
-} // namespace channel
+} // namespace models
 
-#endif //CHANNEL_AREA_H
+#endif //MODELS_AREA_H
