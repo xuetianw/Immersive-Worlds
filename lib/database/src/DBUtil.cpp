@@ -1,18 +1,10 @@
-#include <utility>
-
-#include <utility>
-
-#include <utility>
-
 //
 // Created by nirag on 12/02/19.
 //
-#include <DBUtil.h>
+#include <utility>
 
 #include "DBUtil.h"
 #include "SqlStatements.h"
-
-#include "DBUtil.h"
 #include "sqlite3.h"
 
 //declaring static field outside header file
@@ -23,10 +15,10 @@ char* DBUtil::errorMessage;
 bool DBUtil::openConnection() {
 
     //use DB path
-    int status = sqlite3_open_v2("../../lib/database/adventure.db", &(DBUtil::database), SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE ,
+    int status = sqlite3_open_v2("adventure.db", &(DBUtil::database), SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
                                  nullptr);
 
-    if(status!=SQLITE_OK){
+    if (status != SQLITE_OK) {
         //error handling
 
         return false;
