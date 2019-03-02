@@ -2,7 +2,6 @@
 // Created by nirag on 12/02/19.
 //
 
-
 #include "DBUtil.h"
 
 //declaring static field outside header file
@@ -10,13 +9,16 @@ sqlite3* DBUtil::database;
 char* DBUtil::dbName;
 char* DBUtil::errorMessage;
 
-bool DBUtil::openConnection() {
+bool DBUtil::openConnection(const string& databaseFullFilePath) {
     // Open the database for reading and writing.
     // Create the database if it doesn't exist
     int databaseFlags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
 
-    int status = sqlite3_open_v2("adventure.db", &(DBUtil::database), databaseFlags,
-                                 nullptr);
+    int status = sqlite3_open_v2(databaseFullFilePath.c_str(),
+                                 &DBUtil::database,
+                                 databaseFlags,
+                                 nullptr
+    );
 
     if (status != SQLITE_OK) {
         //TODO error handling
@@ -161,7 +163,6 @@ bool DBUtil::closeConnection() {
  * PRIVATE
  *
  */
-
 bool DBUtil::createTables() {
     const string createUserTableQueryString = "CREATE TABLE IF NOT EXISTS User(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT);";
     sqlite3_stmt* createTableStmt;

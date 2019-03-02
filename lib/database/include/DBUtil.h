@@ -18,7 +18,7 @@ using RowResult = std::unordered_map<string, string>;
 using QueryResults = std::vector<RowResult>;
 
 //database Utility class
-class DBUtil{
+class DBUtil {
 public:
     static sqlite3* database;
     static char* dbName;
@@ -49,7 +49,7 @@ public:
     /*
      * open connection to sqlite database
      */
-    static bool openConnection();
+    static bool openConnection(const string& databaseFullFilePath);
 
     /*
      * close connection to sqlite database

@@ -7,25 +7,24 @@
 
 #include "DBUtil.h"
 
-
-struct DatabaseTests : testing:: Test {
-
+//TODO setup: openConnection
+//TODO teardown: close connection and delete database
+struct DatabaseTests : testing::Test {
     DBUtil dbUtil{};
-
 };
 
-TEST_F(DatabaseTests ,databaseTest){
-    EXPECT_EQ(true, DBUtil::openConnection());
-    EXPECT_EQ(true, DBUtil::registerUser("Josh","abcdefg"));
-    EXPECT_EQ(true, DBUtil::registerUser("Karan","hijklmn"));
-    EXPECT_EQ(true, DBUtil::registerUser("Melody","bafhsbsa"));
-    EXPECT_EQ(true, DBUtil::registerUser("Link","masterSword"));
-    EXPECT_EQ(true, DBUtil::registerUser("pikachu","RyanReynolds"));
+TEST_F(DatabaseTests, databaseTest) {
+    EXPECT_EQ(true, DBUtil::openConnection("adventure.db"));
+    EXPECT_EQ(true, DBUtil::registerUser("Josh", "abcdefg"));
+    EXPECT_EQ(true, DBUtil::registerUser("Karan", "hijklmn"));
+    EXPECT_EQ(true, DBUtil::registerUser("Melody", "bafhsbsa"));
+    EXPECT_EQ(true, DBUtil::registerUser("Link", "masterSword"));
+    EXPECT_EQ(true, DBUtil::registerUser("pikachu", "RyanReynolds"));
 
     QueryResults results = DBUtil::getAllUsers();
     std::vector<string> usernames;
 
-    for(RowResult& row : results) {
+    for (RowResult& row : results) {
         usernames.emplace_back(row["username"]);
     }
 
@@ -39,3 +38,5 @@ TEST_F(DatabaseTests ,databaseTest){
 
     EXPECT_EQ(true, DBUtil::closeConnection());
 }
+
+//TODO add more unit tests
