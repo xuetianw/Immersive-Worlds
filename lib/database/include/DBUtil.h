@@ -49,7 +49,7 @@ public:
     /*
      * open connection to sqlite database
      */
-    static bool openConnection(const string& databaseFullFilePath);
+    static bool openConnection(const string& databaseFullFilePath = "adventure.db");
 
     /*
      * close connection to sqlite database
