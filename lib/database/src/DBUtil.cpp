@@ -13,14 +13,15 @@ char* DBUtil::dbName;
 char* DBUtil::errorMessage;
 
 bool DBUtil::openConnection() {
+    // Open the database for reading and writing.
+    // Create the database if it doesn't exist
+    int databaseFlags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
 
-    //use DB path
-    int status = sqlite3_open_v2("adventure.db", &(DBUtil::database), SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
+    int status = sqlite3_open_v2("adventure.db", &(DBUtil::database), databaseFlags,
                                  nullptr);
 
     if (status != SQLITE_OK) {
-        //error handling
-
+        //TODO error handling
         return false;
     }
 
