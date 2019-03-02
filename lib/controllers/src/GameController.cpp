@@ -1,15 +1,15 @@
 //
 // Created by asim on 07/02/19.
 //
-#include <GameController.h>
-#include <Message.h>
+
+#include "GameController.h"
+#include "Message.h"
 
 pair<bool, Message> GameController::respondToMessage(Message& message){
 
 }
 
-Message GameController::move(const Message &message) {
-
+Message GameController::move(const Message& message) {
     Message newMessage = Message(message.user);
     if (!checkIsDirectionMessage(message)) {
         newMessage.text = WRONG_DIRECTION_MESSAGE;
@@ -27,7 +27,7 @@ Message GameController::move(const Message &message) {
     return newMessage;
 }
 
-Message GameController::spawnUserInStartRoom(User &user) {
+Message GameController::spawnUserInStartRoom(User& user) {
     if (_gameService.spawnUserInStartRoom(user.getConnection())) {
         return Message{user, INITIAL_ROOM_START_MESSAGE};
     } else {
@@ -43,11 +43,11 @@ GameController::GameController(GameService &gameService) : _gameService(gameServ
 
 }
 
-void GameController::addUser(const networking::Connection &connection) {
+void GameController::addUser(const networking::Connection& connection) {
 
 }
 
-bool GameController::checkIsDirectionMessage(const Message &message) {
+bool GameController::checkIsDirectionMessage(const Message& message) {
     std::vector<std::string>::iterator it;
     it = std::find (directions.begin(), directions.end(), message.text);
     return it != directions.end();

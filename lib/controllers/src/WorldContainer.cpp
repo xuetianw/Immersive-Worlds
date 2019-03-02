@@ -1,16 +1,15 @@
 //
 // Created by Michael on 1/23/19.
 //
+// mock implementation of login system. Will change with requirements
+
 #include <iostream>
 #include <string>
-#include "../include/WorldContainer.h"
-//mock implementation of login system. Will change with requirements
-
 #include <CusJson.h>
-
 #include <fstream>
 #include <nlohmann/json.hpp>
-#include <WorldContainer.h>
+
+#include "WorldContainer.h"
 
 #include "string"
 
