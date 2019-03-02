@@ -9,24 +9,14 @@
 
 
 //const char strings
-const char* SqlStatements::createUserTableString = "CREATE TABLE IF NOT EXISTS User(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT);";
+
 const char* SqlStatements::dropUserTableString = "DROP TABLE IF EXISTS User;";
 const char* SqlStatements::getAllUsersString = "SELECT username, password FROM User;";
 
 //queries
-sqlite3_stmt* SqlStatements::createUserTableStmt;
 sqlite3_stmt* SqlStatements::dropUserTableStmt;
 sqlite3_stmt* SqlStatements::getAllUsersStmt;
 
-//functions independent of user input
-void SqlStatements::prepareCreateUserTableStmt() {
-
-    int status = sqlite3_prepare_v2(DBUtil::database, createUserTableString, -1, &createUserTableStmt, nullptr);
-
-    if(status!=SQLITE_OK){
-        printf("Failed to prepare Statement");
-    }
-}
 
 void SqlStatements::prepareDropUserTableStmt() {
     int status = sqlite3_prepare_v2(DBUtil::database, dropUserTableString, -1, &dropUserTableStmt, nullptr);
@@ -45,7 +35,6 @@ void SqlStatements::prepareGetAllUsersStmt() {
 }
 
 void SqlStatements::destroySQLStatements() {
-    sqlite3_finalize(createUserTableStmt);
     sqlite3_finalize(dropUserTableStmt);
     sqlite3_finalize(getAllUsersStmt);
 }

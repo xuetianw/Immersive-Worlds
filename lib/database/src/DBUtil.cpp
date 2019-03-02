@@ -26,7 +26,6 @@ bool DBUtil::openConnection() {
     }
 
     createTables();
-    prepareSQLStatements();
 
     return true;
 }
@@ -154,8 +153,17 @@ bool DBUtil::closeConnection() {
  */
 
 bool DBUtil::createTables() {
-    SqlStatements::prepareCreateUserTableStmt();
-    int status = sqlite3_step(SqlStatements::createUserTableStmt);
+    const string createUserTableQueryString = "CREATE TABLE IF NOT EXISTS User(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT);";
+    sqlite3_stmt* createTableStmt;
+
+    sqlite3_prepare_v2(DBUtil::database,
+                       createUserTableQueryString.c_str(),
+                       -1,
+                       &createTableStmt,
+                       nullptr
+    );
+
+    int status = sqlite3_step(createTableStmt);
 
     return status == SQLITE_DONE;
 }

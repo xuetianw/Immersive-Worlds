@@ -59,11 +59,6 @@ private:
     static bool createTables();
 
     /*
-     * call function to prepare non user defined SQL statements before hand
-     */
-    static void prepareSQLStatements();
-
-    /*
      *
      * Function to drop all pre existing tables
      * Modify if required
