@@ -22,7 +22,7 @@ sqlite3_stmt* SqlStatements::findUserStmt;
 sqlite3_stmt* SqlStatements::getAllUsersStmt;
 
 //functions independent of user input
-void SqlStatements::createUserTable() {
+void SqlStatements::prepareCreateUserTableStmt() {
 
     int status = sqlite3_prepare_v2(DBUtil::database, createUserTableString, -1, &createUserTableStmt, nullptr);
 
@@ -31,7 +31,7 @@ void SqlStatements::createUserTable() {
     }
 }
 
-void SqlStatements::dropUserTable() {
+void SqlStatements::prepareDropUserTableStmt() {
     int status = sqlite3_prepare_v2(DBUtil::database, dropUserTableString, -1, &dropUserTableStmt, nullptr);
 
     if(status!=SQLITE_OK){
@@ -39,7 +39,7 @@ void SqlStatements::dropUserTable() {
     }
 }
 
-void SqlStatements::getAllUsers() {
+void SqlStatements::prepareGetAllUsersStmt() {
     int status = sqlite3_prepare_v2(DBUtil::database, getAllUsersString, -1, &getAllUsersStmt, nullptr);
 
     if(status!=SQLITE_OK){
@@ -89,9 +89,8 @@ void SqlStatements::findUser(string username) {
 void SqlStatements::prepareSQLStatements() {
 
     //call all functions to prepare sql queries
-    dropUserTable();
-    createUserTable();
-    getAllUsers();
+    prepareDropUserTableStmt();
+    prepareGetAllUsersStmt();
 }
 
 void SqlStatements::destroySQLStatements() {
