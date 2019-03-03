@@ -13,24 +13,25 @@
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
-#include <AccountController.h>
+
+#include "AccountController.h"
 
 using namespace std;
 
-Message AccountController::startLogin(Message &message) {
+Message AccountController::startLogin(Message& message) {
     if(message.user.getAccount().isLoggedIn) {
         return Message{message.user, ALREADY_LOGIN_MESSAGE};
     }
     message.user.getAccount().isLoggingIn = true;
-    
+
     message.user.addCommand(ESCAPE);
     message.user.removeCommand(REGISTER);
     message.user.removeCommand(LOGIN);
-    
+
     return accountService.updateUserState(message);
 }
 
-Message AccountController::startRegister(Message &message) {
+Message AccountController::startRegister(Message& message) {
     if(message.user.getAccount().isLoggedIn) {
         return Message{message.user, LOGOUT_BEFORE_REGISTER_MESSAGE};
     }
@@ -39,14 +40,14 @@ Message AccountController::startRegister(Message &message) {
     message.user.addCommand(ESCAPE);
     message.user.removeCommand(REGISTER);
     message.user.removeCommand(LOGIN);
-    
+
     return accountService.updateUserState(message);
 }
 
-Message AccountController::logoutUser(Message &message) {
+Message AccountController::logoutUser(Message& message) {
     if(message.user.getAccount().isLoggedIn) {
         message.user.removeCommand(LOGOUT);
-        
+
         disconnectClient(message.user);
         return Message{message.user, LOGOUT_MESSAGE};
     }
@@ -54,7 +55,7 @@ Message AccountController::logoutUser(Message &message) {
     return Message{message.user, NOT_LOGIN_MESSAGE};
 }
 
-Message AccountController::escapeLogin(Message &message) {
+Message AccountController::escapeLogin(Message& message) {
     Account &account = message.user.getAccount();
     stringstream response;
     if (account.isLoggingIn || account.isRegistering) {
@@ -73,15 +74,15 @@ Message AccountController::escapeLogin(Message &message) {
     return Message{message.user, response.str()};
 }
 
-void AccountController::connectClient(User &user) {
+void AccountController::connectClient(User& user) {
     accountService.connectUser(user);
 }
 
-void AccountController::disconnectClient(User &user) {
+void AccountController::disconnectClient(User& user) {
     accountService.disconnectUser(user);
 }
 
-pair<bool, Message> AccountController::respondToMessage(Message &message) {
+pair<bool, Message> AccountController::respondToMessage(Message& message) {
     if (message.user.getAccount().isLoggedIn){
         return pair<bool, Message> (false, Message{message.user, ""});
     }

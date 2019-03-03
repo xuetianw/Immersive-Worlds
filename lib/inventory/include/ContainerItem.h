@@ -5,13 +5,12 @@
 #ifndef WEBSOCKETNETWORKING_CONTAINERITEM_H
 #define WEBSOCKETNETWORKING_CONTAINERITEM_H
 
-#include "SingleItem.h"
 #include <unordered_map>
 
+#include "SingleItem.h"
+
 class ContainerItem : public InventoryItem {
-
     public:
-
         ContainerItem();
 
         /**
@@ -21,8 +20,6 @@ class ContainerItem : public InventoryItem {
 
     private:
         std::unordered_map<int, SingleItem> _singleItems;
-
 };
-
 
 #endif //WEBSOCKETNETWORKING_CONTAINERITEM_H
