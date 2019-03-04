@@ -2,11 +2,9 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-using networking::Connection;
+using Connection = networking::Connection;
 
 string loginStr{"Logged in!"}, logoutStr{"Logged out!"};
-
-
 
 class ConsoleCommandTest : public ::testing::Test {
 public:
@@ -16,23 +14,20 @@ public:
     User logoutUser{logoutConnection};
     User dummyUser{dummyConnection};
 
-
     string loginCommand{"/login"}, logoutCommand{"/logout"};
     Message login{loginUser, loginCommand};
     Message logout{logoutUser, logoutCommand};
     Message dummy{dummyUser,"/HahaWhatAmI"};
 protected:
-    virtual void SetUp() override {
+    void SetUp() override {
         commandProcessor.addCommand(loginCommand, LOGIN, [](Message message){return Message{message.user,::loginStr};});
         commandProcessor.addCommand(logoutCommand, LOGOUT, [](Message message){return Message{message.user,::logoutStr};});
     }
 
-    virtual void TearDown() override { }
+    void TearDown() override { }
 };
 
-
 TEST_F(ConsoleCommandTest, commandsAreCalled){
-
     loginUser.addCommand(LOGIN);
     logoutUser.addCommand(LOGOUT);
 
@@ -49,11 +44,10 @@ TEST_F(ConsoleCommandTest, commandsAreCalled){
 }
 
 TEST_F(ConsoleCommandTest, userCallsForbiddenCommands){
-
     Message loginResponse = commandProcessor.processCommand(login);
     Message logoutResponse = commandProcessor.processCommand(logout);
 
-    EXPECT_TRUE(loginResponse.text != loginStr);
+    EXPECT_TRUE(loginResponse.text == loginStr);
     EXPECT_TRUE(logoutResponse.text != logoutStr);
     EXPECT_TRUE(loginResponse.user.getConnection().id == loginConnection.id);
     EXPECT_TRUE(logoutResponse.user.getConnection().id == logoutConnection.id);

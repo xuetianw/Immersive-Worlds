@@ -31,19 +31,15 @@ class AccountController : public AbstractController {
 public:
     AccountController() : accountService() {}
 
-    Message startLogin(Message& message);
+    Message startLogin(const Message& message);
 
-    Message startRegister(Message& message);
+    Message startRegister(const Message& message);
 
-    Message logoutUser(Message& message);
+    Message logoutUser(const Message& message);
 
-    Message escapeLogin(Message& message);
+    Message escapeLogin(const Message& message);
 
-    pair<bool, Message> respondToMessage(Message& message) override;
-
-    void connectClient(User& user);
-
-    void disconnectClient(User& user);
+    pair<bool, Message> respondToMessage(const Message& message) override;
 
 private:
     AccountService accountService;

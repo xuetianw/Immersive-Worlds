@@ -29,8 +29,8 @@ TEST_F(UserServiceManagementTest, LogoutWithoutLoggingInTest){
 
 //user login
 TEST_F(UserServiceManagementTest, LoginTest){
-  accountController.connectClient(user);
-  Message userPrompt = accountController.startLogin(firstMessage);
+    user.reset();
+    Message userPrompt = accountController.startLogin(firstMessage);
 
     pair<bool, Message> accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
     pair<bool, Message> accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
@@ -49,8 +49,7 @@ TEST_F(UserServiceManagementTest, LoginTest){
 
 //same user login twice
 TEST_F(UserServiceManagementTest, LoginTwiceTest){
-
-    accountController.connectClient(user);
+    user.reset();
     Message userPrompt = accountController.startLogin(firstMessage);
 
     pair<bool, Message> accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
@@ -72,18 +71,15 @@ TEST_F(UserServiceManagementTest, LoginTwiceTest){
     Message secondPrompt = accountController.startLogin(firstMessage);
     EXPECT_EQ(ID1, secondPrompt.user.getConnection().id);
     EXPECT_EQ(ALREADY_LOGIN_MESSAGE, secondPrompt.text);
-
 }
 
 //user login first and logout
 TEST_F(UserServiceManagementTest, LoginLogoutSequenceTest){
-
-    accountController.connectClient(user);
+    user.reset();
     Message userPrompt = accountController.startLogin(firstMessage);
 
     pair<bool, Message> accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
     pair<bool, Message> accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
-
 
     ASSERT_EQ(ID1, userPrompt.user.getConnection().id);
     ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
@@ -104,7 +100,7 @@ TEST_F(UserServiceManagementTest, LoginLogoutSequenceTest){
 
 //register without logging in
 TEST_F(UserServiceManagementTest, RegisterTest){
-    accountController.connectClient(user);
+    user.reset();
     Message message = accountController.startRegister(firstMessage);
 
     pair<bool, Message> accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
@@ -128,7 +124,7 @@ TEST_F(UserServiceManagementTest, RegisterTest){
 
 //register after logging in
 TEST_F(UserServiceManagementTest, LoginRegisterTest){
-    accountController.connectClient(user);
+    user.reset();
     Message userPrompt = accountController.startLogin(firstMessage);
 
     pair<bool, Message> accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
@@ -155,8 +151,7 @@ TEST_F(UserServiceManagementTest, LoginRegisterTest){
 //register and excape
 
 TEST_F(UserServiceManagementTest, RegisterEscapeTest){
-
-    accountController.connectClient(user);
+    user.reset();
     Message message = accountController.startRegister(firstMessage);
 
     pair<bool, Message> accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
@@ -179,8 +174,7 @@ TEST_F(UserServiceManagementTest, RegisterEscapeTest){
 
 //login and escape
 TEST_F(UserServiceManagementTest, LoginEscapeTest){
-
-    accountController.connectClient(user);
+    user.reset();
     Message userPrompt = accountController.startLogin(firstMessage);
 
     pair<bool, Message> accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
@@ -203,7 +197,7 @@ TEST_F(UserServiceManagementTest, LoginEscapeTest){
 
 //user escape without logingin
 TEST_F(UserServiceManagementTest, LoginEscape_WithoutLoginTest){
-    accountController.connectClient(user);
+    user.reset();
     Message escapeMessage = accountController.escapeLogin(firstMessage);
     EXPECT_EQ(ID1, escapeMessage.user.getConnection().id);
     EXPECT_EQ(ESCAPE_WHILE_NOT_LOGIN_MESSAGE, escapeMessage.text);

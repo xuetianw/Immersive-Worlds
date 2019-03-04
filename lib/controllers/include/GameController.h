@@ -22,7 +22,7 @@ public:
 
     Message move(const Message &message);
 
-    pair<bool, Message> respondToMessage(Message& message) override;
+    pair<bool, Message> respondToMessage(const Message& message) override;
 
     void addUser(const networking::Connection &connection);
 
@@ -35,7 +35,7 @@ public:
      * @param message
      * @return current location info
      */
-    Message outputCurrentLocationInfo(Message& message);
+    Message outputCurrentLocationInfo(const Message& message);
 
 private:
     GameService _gameService;

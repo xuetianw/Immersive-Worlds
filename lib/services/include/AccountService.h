@@ -11,12 +11,7 @@
 
 class AccountService{
 public:
-    Message updateUserState(Message &message) ;
-
-    void connectUser(User &user) ;
-
-    void disconnectUser(User &user);
-
+    Message updateUserState(const Message& message) ;
 
 private:
     StateTransitions transitions;

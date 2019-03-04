@@ -12,7 +12,7 @@
 using namespace std;
 
 class AbstractController {
-    virtual pair<bool, Message> respondToMessage(Message& message) = 0;
+    virtual pair<bool, Message> respondToMessage(const Message& message) = 0;
 };
 
 

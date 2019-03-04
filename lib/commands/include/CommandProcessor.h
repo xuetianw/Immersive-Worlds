@@ -51,11 +51,7 @@ public:
      */
     void addCommand(string keyword, Command command, function_ptr);
 
-    void connectClient(User& user);
-
-    void disconnectClient(User& user);
-
-    Message handleDefaultMessage(Message& message);
+    Message handleDefaultMessage(const Message& message);
 
 private:
     /*

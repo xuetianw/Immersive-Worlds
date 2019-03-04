@@ -14,18 +14,10 @@ bool CommandProcessor::isCommand(const Message &message) {
 
 void CommandProcessor::addCommand(string keyword, Command command, function_ptr fnPtr) {
     _keywords[keyword] = command;
-    _commands[command] = InputHandler { fnPtr };
+    _commands[command] = InputHandler { move(fnPtr) };
 }
 
-void CommandProcessor::connectClient(User& user) {
-    accountController->connectClient(user);
-}
-
-void CommandProcessor::disconnectClient(User& user) {
-    accountController->disconnectClient(user);
-}
-
-Message CommandProcessor::processCommand(const Message &message) {
+Message CommandProcessor::processCommand(const Message& message) {
     std::pair commandMessagePair = splitCommand(message.text);
 
     auto keywordIter = _keywords.find(commandMessagePair.first);
@@ -41,7 +33,7 @@ Message CommandProcessor::processCommand(const Message &message) {
     return Message{message.user, "Attempted Command Not Found."};
 }
 
-Message CommandProcessor::handleDefaultMessage(Message& message) {
+Message CommandProcessor::handleDefaultMessage(const Message& message) {
     std::pair<bool, Message> accountControllerResponse = accountController->respondToMessage(message);
 
     return message.user.getAccount().isLoggedIn
@@ -59,7 +51,7 @@ std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
 }
 
 void CommandProcessor::buildCommands() {
-    addCommand("/whereami", WHEREAMI, [this] (Message message) { return gameController->outputCurrentLocationInfo(message); });
+    addCommand("/whereami", WHEREAMI, [&] (Message message) { return gameController->outputCurrentLocationInfo(message); });
     addCommand("/logout", LOGOUT, [this] (Message message) { return accountController->logoutUser(message); });
     addCommand("/login", LOGIN, [this] (Message message) { return accountController->startLogin(message); });
     addCommand("/register", REGISTER, [this] (Message message) { return accountController->startRegister(message); });

@@ -5,51 +5,46 @@
 #ifndef WEBSOCKETNETWORKING_User_H
 #define WEBSOCKETNETWORKING_User_H
 
-
-#include <Server.h>
-#include <Command.h>
 #include <unordered_set>
-#include <UserState.h>
 
-using networking::Connection;
-using std::unordered_set;
+#include "Server.h"
+#include "Command.h"
+#include "UserState.h"
+
+using Connection = networking::Connection;
 
 class User {
-
 private:
-    networking::Connection connection;
-    Account account;
-    // Game Character here too;
-    unordered_set<Command> allowedCommands;
+    networking::Connection _connection;
+    Account _account;
+    std::unordered_set<Command> _allowedCommands;
 
 public:
-    User(){
-        account = Account{};
-    };
+    User() = default;
 
-    User(Connection c) : connection(c){
-        account = Account{};
+    explicit User(Connection c) : _connection(c) {
+        reset();
     }
+
+    void reset();
 
     void removeCommand(Command command);
 
     void addCommand(Command command);
 
-    Connection & getConnection();
+    const Connection& getConnection() const;
 
-    void setConnection(const Connection &connection);
+    void setConnection(const Connection& connection);
 
     Account& getAccount();
 
-    void setAccount(const Account &account);
+    void setAccount(const Account& account);
 
-    const unordered_set<Command> &getAllowedCommands() const;
+    const std::unordered_set<Command>& getAllowedCommands() const;
 
-    void setAllowedCommands(const unordered_set<Command> &allowedCommands);
+    void setAllowedCommands(std::unordered_set<Command> allowedCommands);
 
     bool canPreformCommand(Command command);
 };
-
-
 
 #endif //WEBSOCKETNETWORKING_User_H

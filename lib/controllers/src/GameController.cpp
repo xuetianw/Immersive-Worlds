@@ -5,7 +5,7 @@
 #include "GameController.h"
 #include "Message.h"
 
-pair<bool, Message> GameController::respondToMessage(Message& message) {
+pair<bool, Message> GameController::respondToMessage(const Message& message) {
     string responseText = message.text + outputCurrentLocationInfo(message).text;
     return make_pair<bool, Message>(true, Message {message.user, responseText});
 }
@@ -54,8 +54,8 @@ bool GameController::checkIsDirectionMessage(const Message& message) {
     return it != directions.end();
 }
 
-Message GameController::outputCurrentLocationInfo(Message& message) {
-    networking::Connection& currentConnection = message.user.getConnection();
+Message GameController::outputCurrentLocationInfo(const Message& message) {
+    const Connection& currentConnection = message.user.getConnection();
     string currentRoom = _gameService.getCurrentRoomName(currentConnection);
     string responseText = USER_CURRENTLY_LOCATED_MESSAGE + currentRoom;
 

@@ -37,22 +37,20 @@ unordered_map<Connection , User, ConnectionHasher> users;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onConnect(Connection &c) {
     std::cout << "New connection found: " << c.id << endl;
-    User newUser(c);
-    users[c] = newUser;
-    commandProcessor->connectClient(users[c]);
+    users[c] = User {c};
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onDisconnect(Connection &c) {
     std::cout << "Connection lost: " << c.id << endl;
-    commandProcessor->disconnectClient(users[c]);
+    users.erase(c);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-std::deque<ServerMessage> processMessages(unique_ptr<CommandProcessor>& commandProcessor,
-                                    Server &server,
-                                    std::deque<ServerMessage> &incoming,
-                                    bool &quit) {
+std::deque<ServerMessage> processMessages(CommandProcessor& commandProcessor,
+                                    Server& server,
+                                    const std::deque<ServerMessage>& incoming,
+                                    bool& quit) {
     std::deque<ServerMessage> result;
     for (auto &serverMessage : incoming) {
         Message message{users[serverMessage.connection], serverMessage.text};
@@ -61,10 +59,10 @@ std::deque<ServerMessage> processMessages(unique_ptr<CommandProcessor>& commandP
         } else if (message.text == "shutdown") {
             std::cout << "Shutting down.\n";
             quit = true;
-        } else if (commandProcessor->isCommand(message)) {
-            result.push_back(commandProcessor->processCommand(message).convertToServerMessage());
+        } else if (commandProcessor.isCommand(message)) {
+            result.push_back(commandProcessor.processCommand(message).convertToServerMessage());
         } else {
-            result.push_back(commandProcessor->handleDefaultMessage(message).convertToServerMessage());
+            result.push_back(commandProcessor.handleDefaultMessage(message).convertToServerMessage());
         }
     }
 
@@ -108,7 +106,7 @@ int main(int argc, char *argv[]) {
         }
 
         auto incoming = server.receive();
-        auto outgoing = processMessages(commandProcessor, server, incoming, done);
+        auto outgoing = processMessages(*commandProcessor, server, incoming, done);
         server.send(outgoing);
         sleep(1);
     }
