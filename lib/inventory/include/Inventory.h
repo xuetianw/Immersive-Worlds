@@ -1,14 +1,11 @@
-
 #ifndef PROJECT_INVENTORY_H
 #define PROJECT_INVENTORY_H
 
-
 #include <unordered_map>
+
 #include "SingleItem.h"
 
-
 class Inventory {
-
 public:
     Inventory(int playerId);
 
@@ -36,19 +33,17 @@ public:
      */
     bool addItem(InventoryItem itemToAdd);
 
-
     /**
      * Remove an item from inventory and return the removed item.
      * @param itemToRemove: the id of the item to be removed from inventory
      */
     InventoryItem removeItem(int idToRemove);
 
-
 private:
     //TODO: change to UUID after handler is setup
     int _playerId;
+
     std::unordered_map<int, InventoryItem> _inventoryItems;
 };
-
 
 #endif //PROJECT_INVENTORY_H

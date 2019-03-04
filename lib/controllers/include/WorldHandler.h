@@ -4,12 +4,15 @@
 
 #ifndef WEBSOCKETNETWORKING_WORLDHANDLER_H
 #define WEBSOCKETNETWORKING_WORLDHANDLER_H
+
 #include <string>
 #include <deque>
+
 #include "WorldContainer.h"
 #include "Server.h"
 
 using networking::ServerMessage;
+
 class WorldHandler {
 public:
     WorldHandler();
@@ -19,4 +22,5 @@ public:
 private:
     WorldContainer worldContainer;
 };
+
 #endif //WEBSOCKETNETWORKING_WORLDHANDLER_H
