@@ -5,8 +5,9 @@
 #include "GameController.h"
 #include "Message.h"
 
-pair<bool, Message> GameController::respondToMessage(Message& message){
-
+pair<bool, Message> GameController::respondToMessage(Message& message) {
+    string responseText = message.text + outputCurrentLocationInfo(message).text;
+    return make_pair<bool, Message>(true, Message {message.user, responseText});
 }
 
 Message GameController::move(const Message& message) {

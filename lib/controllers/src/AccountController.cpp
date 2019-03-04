@@ -83,21 +83,9 @@ void AccountController::disconnectClient(User& user) {
 }
 
 pair<bool, Message> AccountController::respondToMessage(Message& message) {
-    if (message.user.getAccount().isLoggedIn){
-        return pair<bool, Message> (false, Message{message.user, ""});
-    }
-
-    Message response = accountService.updateUserState(message);
-    if (message.user.getAccount().isLoggedIn && (onLoginFunction != nullptr)){
-        Message onLoginResponse = onLoginFunction(message);
-        response.text = response.text + "\n" + onLoginResponse.text;
-    }
-
-    return pair<bool, Message>(true, response);
-}
-
-void AccountController::setupFunctionPointer(function_ptr fnPtr){
-    onLoginFunction = fnPtr;
+    return message.user.getAccount().isLoggedIn
+        ? pair<bool, Message>(true, Message {message.user, ""})
+        : pair<bool, Message>(true, accountService.updateUserState(message));
 }
 
 

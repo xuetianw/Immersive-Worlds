@@ -13,7 +13,6 @@
 
 #include <unordered_map>
 
-#include "CommandProcessor.h"
 #include "User.h"
 #include "AccountService.h"
 #include "AbstractController.h"
@@ -30,11 +29,7 @@ using string = std::string;
 
 class AccountController : public AbstractController {
 public:
-    AccountController() : accountService() {
-        // onLoginFunction initially set to null.
-        // Caller is responsible for setting this up through setupFunctionPointer()
-        onLoginFunction = nullptr;
-    }
+    AccountController() : accountService() {}
 
     Message startLogin(Message& message);
 
@@ -44,8 +39,6 @@ public:
 
     Message escapeLogin(Message& message);
 
-    void setupFunctionPointer(function_ptr fnPtr);
-
     pair<bool, Message> respondToMessage(Message& message) override;
 
     void connectClient(User& user);
@@ -54,8 +47,6 @@ public:
 
 private:
     AccountService accountService;
-
-    function_ptr onLoginFunction;
 };
 
 #endif // WEBSOCKETNETWORKING_CLIENTMANAGER_H
