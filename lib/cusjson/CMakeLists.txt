@@ -1,7 +1,7 @@
 add_library(cusjson
   src/CusJson.cpp
         src/NPCJsonWrapper.cpp
-        src/GiveNPCAction.cpp src/EquipNPCAction.cpp)
+        src/GiveNPCAction.cpp src/EquipNPCAction.cpp src/DoorStateJsonWrapper.cpp include/DoorStateJsonWrapper.h src/ContainerJsonWrapper.cpp include/ContainerJsonWrapper.h)
 
 
 

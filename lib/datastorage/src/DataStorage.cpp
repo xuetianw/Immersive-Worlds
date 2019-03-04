@@ -9,9 +9,8 @@
 DataStorage::DataStorage() {
     json solaceJson = getTestingArea();
     jsonArea = solaceJson.get<CusJson::Area>();
+    string test =  "test";
 }
-
-
 
 json DataStorage::getTestingArea() {
     json j = R"(
@@ -236,7 +235,8 @@ json DataStorage::getTestingArea() {
     },
     {
       "action": "equip",
-      "id": 10502
+      "id": 10502,
+      "slot": 16
     },
     {
       "action": "door",

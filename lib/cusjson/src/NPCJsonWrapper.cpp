@@ -11,3 +11,6 @@ void NPCJsonWrapper::addObject(int objectId) {
 void NPCJsonWrapper::addEquipment(struct Equipment equipment) {
     _givenEquipment.push_back(equipment);
 }
+
+NPCJsonWrapper::NPCJsonWrapper(int _NPCId, int _limit, int _roomId) : _NPCId(_NPCId), _limit(_limit),
+                                                                      _roomId(_roomId) {}

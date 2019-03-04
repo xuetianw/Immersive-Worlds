@@ -7,6 +7,9 @@
 
 #include <string>
 #include <vector>
+#include <NPCJsonWrapper.h>
+#include <DoorStateJsonWrapper.h>
+#include <ContainerJsonWrapper.h>
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -64,6 +67,9 @@ namespace CusJson {
         std::vector<NPC> _npcs;
         std::vector<Object> _objects;
         std::vector<Room> _rooms;
+        std::vector<NPCJsonWrapper> _npcsWrappers;
+        std::vector<DoorStateJsonWrapper> _doorStateWrappers;
+        std::vector<ContainerJsonWrapper> _containerWrappers;
     };
 
     void to_json(json &j, const JsonDoor &door);
@@ -74,9 +80,9 @@ namespace CusJson {
 
     void from_json(const json &j, ExtDesc &extDesc);
 
-    void to_json(json &j, const NPC &p);
+    void to_json(json &j, const NPC &npc);
 
-    void from_json(const json &j, NPC &p);
+    void from_json(const json &j, NPC &npc);
 
     void to_json(json &j, const Object &object);
 
@@ -86,9 +92,9 @@ namespace CusJson {
 
     void from_json(const json &j, Room &room);
 
-    void to_json(json &j, const Area &p);
+    void to_json(json &j, const Area &area);
 
-    void from_json(const json &j, Area &p);
+    void from_json(const json &j, Area &area);
 }
 
 #endif //WEBSOCKETNETWORKING_CUSJSON_H

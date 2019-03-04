@@ -13,11 +13,14 @@ namespace CusJson {
     };
 
     class NPCJsonWrapper {
-    private:
+    public:
         int _NPCId;
+        int _limit;
+        int _roomId;
         std::vector<int> _givenObject;
         std::vector<struct Equipment> _givenEquipment;
-    public:
+
+        NPCJsonWrapper(int _NPCId, int _limit, int _roomId);
         void addObject(int objectId);
         void addEquipment(struct Equipment equipment);
     };

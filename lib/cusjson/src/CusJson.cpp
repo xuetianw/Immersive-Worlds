@@ -40,30 +40,30 @@ namespace CusJson {
         std::copy(descJson.begin(), descJson.end(), extDesc._desc.begin());
     }
 
-    void to_json(json &j, const NPC &p) {
-        j = json{{"id",           p.id},
-                 {"keywords",     p.keywords},
-                 {"shortdesc",    p.shortdesc},
-                 {"longdesc",     p.longdesc},
-                 {"descriptions", p.description}};
+    void to_json(json &j, const NPC &npc) {
+        j = json{{"id",           npc.id},
+                 {"keywords",     npc.keywords},
+                 {"shortdesc",    npc.shortdesc},
+                 {"longdesc",     npc.longdesc},
+                 {"descriptions", npc.description}};
     }
 
-    void from_json(const json &j, NPC &p) {
-        j.at("id").get_to(p.id);
+    void from_json(const json &j, NPC &npc) {
+        j.at("id").get_to(npc.id);
 
         const json &keywordssj = j.at("keywords");
-        p.keywords.resize(keywordssj.size());
-        std::copy(keywordssj.begin(), keywordssj.end(), p.keywords.begin());
+        npc.keywords.resize(keywordssj.size());
+        std::copy(keywordssj.begin(), keywordssj.end(), npc.keywords.begin());
 
-        j.at("shortdesc").get_to(p.shortdesc);
+        j.at("shortdesc").get_to(npc.shortdesc);
 
         const json &longdescsj = j.at("longdesc");
-        p.longdesc.resize(longdescsj.size());
-        std::copy(longdescsj.begin(), longdescsj.end(), p.longdesc.begin());
+        npc.longdesc.resize(longdescsj.size());
+        std::copy(longdescsj.begin(), longdescsj.end(), npc.longdesc.begin());
 
         const json &descriptionsj = j.at("description");
-        p.description.resize(descriptionsj.size());
-        std::copy(descriptionsj.begin(), descriptionsj.end(), p.description.begin());
+        npc.description.resize(descriptionsj.size());
+        std::copy(descriptionsj.begin(), descriptionsj.end(), npc.description.begin());
     }
 
     void to_json(json &j, const Object &object) {
@@ -107,26 +107,58 @@ namespace CusJson {
         std::copy(extDescJson.begin(), extDescJson.end(), room._jsonExtDesc.begin());
     }
 
-    void to_json(json &j, const Area &p) {
-        j = json{{"name", p._name}};
+    void to_json(json &j, const Area &area) {
+        j = json{{"name", area._name}};
     }
 
-    void from_json(const json &j, Area &p) {
+    void from_json(const json &j, Area &area) {
         const json &areaName = j.at("AREA");
-        areaName.at("name").get_to(p._name);
+        areaName.at("name").get_to(area._name);
 
         const json &npcJson = j.at("NPCS");
-        p._npcs.resize(npcJson.size());
-        std::copy(npcJson.begin(), npcJson.end(), p._npcs.begin());
+        area._npcs.resize(npcJson.size());
+        std::copy(npcJson.begin(), npcJson.end(), area._npcs.begin());
 
         const json &objectson = j.at("OBJECTS");
-        p._objects.resize(objectson.size());
-        std::copy(objectson.begin(), objectson.end(), p._objects.begin());
+        area._objects.resize(objectson.size());
+        std::copy(objectson.begin(), objectson.end(), area._objects.begin());
 
         const json &roomJson = j.at("ROOMS");
-        p._rooms.resize(roomJson.size());
-        std::copy(roomJson.begin(), roomJson.end(), p._rooms.begin());
+        area._rooms.resize(roomJson.size());
+        std::copy(roomJson.begin(), roomJson.end(), area._rooms.begin());
 
         const json &resetJson = j.at("RESETS");
+        for (json resetJsonObject : resetJson) {
+            auto actionString = resetJsonObject["action"].get<std::string>();
+            if (actionString == "npc") {
+                area._npcsWrappers.push_back(NPCJsonWrapper(
+                        resetJsonObject["id"].get<int>(),
+                        resetJsonObject["limit"].get<int>(),
+                        resetJsonObject["room"].get<int>()
+                        ));
+            } else if (actionString == "give") {
+                area._npcsWrappers.at(area._npcsWrappers.size() - 1).addObject(resetJsonObject["id"].get<int>());
+            } else if (actionString == "equip") {
+                area._npcsWrappers.at(area._npcsWrappers.size() - 1).addEquipment({resetJsonObject["slot"].get<int>(), resetJsonObject["id"].get<int>()});
+            } else if (actionString == "door") {
+                area._doorStateWrappers.push_back(DoorStateJsonWrapper(
+                        resetJsonObject["id"].get<int>(),
+                        resetJsonObject["room"].get<int>(),
+                        resetJsonObject["state"].get<std::string>()
+                        ));
+            } else if (actionString == "object") {
+                area._containerWrappers.push_back(ContainerJsonWrapper(
+                        resetJsonObject["id"].get<int>(),
+                        resetJsonObject["room"].get<int>()
+                        ));
+            } else if (actionString == "put") {
+                auto object = std::find_if(area._containerWrappers.begin(), area._containerWrappers.end(), [resetJsonObject](ContainerJsonWrapper wrapper) {
+                    return wrapper._objectId == resetJsonObject["container"].get<int>();
+                });
+                if (object != area._containerWrappers.end()) {
+                    object.base()->addObject(resetJsonObject["id"].get<int>());
+                }
+            }
+        }
     }
 }
