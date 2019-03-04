@@ -64,21 +64,21 @@ struct StateTransitions {
 
     /////////////////////////////////////////////HELPERS///////////////////////////////////////////
     // TODO: Add validity checks asides from empty string possibly move validation to DBUtility
-    bool invalid(string str) {
+    bool invalid(const string& str) {
         return str.find_first_not_of(' ') == std::string::npos;
     }
 
-    string getResponseForInvalidInput(string prompt) {
+    string getResponseForInvalidInput(const string& prompt) {
         return EMPTY_INPUT_PROMPT + prompt;
     }
 
     ////////////////////////////////////////////VISITORS///////////////////////////////////////////
-    std::optional<UserStateVariant> operator()(UnRegisteredState& state, Account& account, string message) {
+    std::optional<UserStateVariant> operator()(UnRegisteredState& state, Account& account, const string& message) {
         _currentUserResponseMessage = REGISTER_USERNAME_PROMPT;
         return RegisterUsernameState {};
     }
 
-    std::optional<UserStateVariant> operator()(RegisterUsernameState& state, Account& account, string message) {
+    std::optional<UserStateVariant> operator()(RegisterUsernameState& state, Account& account, const string& message) {
         // TODO: Add the username to persistent storage for future identification
         if (invalid(message)) {
             _currentUserResponseMessage = REGISTER_USERNAME_FAILED_PROMPT;
@@ -89,7 +89,7 @@ struct StateTransitions {
         return RegisterPasswordState {};
     }
 
-    std::optional<UserStateVariant> operator()(RegisterPasswordState& state, Account& account, string message) {
+    std::optional<UserStateVariant> operator()(RegisterPasswordState& state, Account& account, const string& message) {
         // TODO: Add the password to persistent storage for future authentication
         if (invalid(message)) {
             _currentUserResponseMessage = getResponseForInvalidInput(REGISTER_PASSWORD_FAILED_PROMPT);
@@ -101,13 +101,13 @@ struct StateTransitions {
         return LoginUsernameState {};
     }
 
-    std::optional<UserStateVariant> operator()(ConnectedState& state, Account& account, string message) {
+    std::optional<UserStateVariant> operator()(ConnectedState& state, Account& account, const string& message) {
 
         if(!(account.isLoggingIn || account.isRegistering)){
             _currentUserResponseMessage = NOT_SIGNED_IN_PROMPT;
             return ConnectedState {};
         }
-        _currentUserResponseMessage = account.isLoggingIn? LOGIN_USERNAME_PROMPT : REGISTER_USERNAME_PROMPT;
+        _currentUserResponseMessage = account.isLoggingIn ? LOGIN_USERNAME_PROMPT : REGISTER_USERNAME_PROMPT;
 
         if (account.isLoggingIn) {
             return LoginUsernameState{};
@@ -116,7 +116,7 @@ struct StateTransitions {
         }
     }
 
-    std::optional<UserStateVariant> operator()(LoginUsernameState& state, Account& account,  string message) {
+    std::optional<UserStateVariant> operator()(LoginUsernameState& state, Account& account,  const string& message) {
 
 
         // TODO: Verify username
@@ -130,7 +130,7 @@ struct StateTransitions {
         return LoginPasswordState {};
     }
 
-    std::optional<UserStateVariant> operator()(LoginPasswordState& state, Account& account, string message) {
+    std::optional<UserStateVariant> operator()(LoginPasswordState& state, Account& account, const string& message) {
 
         if(invalid(message)) {
             _currentUserResponseMessage = getResponseForInvalidInput(LOGIN_PASSWORD_FAILED_PROMPT);
@@ -140,13 +140,12 @@ struct StateTransitions {
         account._password = message;
         account.isSubmittingLogin = true;
 
-
         //TODO: Fill the backend for user verification.
         _currentUserResponseMessage = LOGGED_IN_PROMPT;
         return LoggedInState {};
     }
 
-    std::optional<UserStateVariant> operator()(LoggedInState& state, Account& account, string message) {
+    std::optional<UserStateVariant> operator()(LoggedInState& state, Account& account, const string& message) {
         account._username = "";
         account._password = "";
         _currentUserResponseMessage = LOGGED_OUT_PROMPT;

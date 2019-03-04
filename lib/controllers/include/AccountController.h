@@ -11,9 +11,6 @@
 #ifndef WEBSOCKETNETWORKING_CLIENTMANAGER_H
 #define WEBSOCKETNETWORKING_CLIENTMANAGER_H
 
-#include <unordered_map>
-
-#include "CommandProcessor.h"
 #include "User.h"
 #include "AccountService.h"
 #include "AbstractController.h"
@@ -26,36 +23,22 @@ constexpr char ESCAPE_WHILE_REGISTERING_MESSAGE[] = "You have exited out of the 
 constexpr char LOGGING_IN_ESCAPE_MESSAGE[] = "You have exited out of the login process\n";
 constexpr char ESCAPE_WHILE_NOT_LOGIN_MESSAGE[] = "You are not submitting any Account information currently";
 
-using string = std::string;
-
 class AccountController : public AbstractController {
 public:
-    AccountController() : accountService() {
-        // onLoginFunction initially set to null.
-        // Caller is responsible for setting this up through setupFunctionPointer()
-        onLoginFunction = nullptr;
-    }
+    AccountController() : accountService() {}
 
-    Message startLogin(Message& message);
+    Message startLogin(const Message& message);
 
-    Message startRegister(Message& message);
+    Message startRegister(const Message& message);
 
-    Message logoutUser(Message& message);
+    Message logoutUser(const Message& message);
 
-    Message escapeLogin(Message& message);
+    Message escapeLogin(const Message& message);
 
-    void setupFunctionPointer(function_ptr fnPtr);
-
-    pair<bool, Message> respondToMessage(Message& message) override;
-
-    void connectClient(User& user);
-
-    void disconnectClient(User& user);
+    Message respondToMessage(const Message& message) override;
 
 private:
     AccountService accountService;
-
-    function_ptr onLoginFunction;
 };
 
 #endif // WEBSOCKETNETWORKING_CLIENTMANAGER_H

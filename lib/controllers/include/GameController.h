@@ -16,17 +16,13 @@ constexpr char WRONG_DIRECTION_MESSAGE[] = "wrong message for direction";
 
 class GameController : AbstractController {
 public:
-    GameController() = default;
-
-    explicit GameController(GameService &gameService);
+    GameController() : _gameService() {}
 
     Message move(const Message &message);
 
-    pair<bool, Message> respondToMessage(Message& message) override;
+    Message respondToMessage(const Message& message) override;
 
-    void addUser(const networking::Connection &connection);
-
-    Message spawnUserInStartRoom(User& user);
+    Message spawnUserInRoomOnLogin(User &user);
 
     void spawnUserInRoom(User& user, int debugRoomId);
 
@@ -35,7 +31,7 @@ public:
      * @param message
      * @return current location info
      */
-    Message outputCurrentLocationInfo(Message& message);
+    Message outputCurrentLocationInfo(const Message& message);
 
 private:
     GameService _gameService;

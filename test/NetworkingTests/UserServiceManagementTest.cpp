@@ -7,10 +7,11 @@
 #include "gtest/gtest.h"
 
 using testing::Return;
+using namespace std;
 
 struct UserServiceManagementTest : testing:: Test {
     AccountController accountController;
-    const std::uintptr_t ID1 = rand() % 1000000;
+    const std::uintptr_t ID1 = static_cast<unsigned int>(rand()) % 1000000;
     Connection connection{ID1};
     Connection secondConnection{1};
     User user{connection};
@@ -29,73 +30,60 @@ TEST_F(UserServiceManagementTest, LogoutWithoutLoggingInTest){
 
 //user login
 TEST_F(UserServiceManagementTest, LoginTest){
-  accountController.connectClient(user);
-  Message userPrompt = accountController.startLogin(firstMessage);
+    user.reset();
+    Message userPrompt = accountController.startLogin(firstMessage);
 
-    pair<bool, Message> accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
-    pair<bool, Message> accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
+    Message accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
+    Message accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
 
     ASSERT_EQ(ID1, userPrompt.user.getConnection().id);
     ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
 
-    ASSERT_TRUE(accountControllerFirstResponse.first);
-    EXPECT_EQ(LOGIN_PASSWORD_PROMPT, accountControllerFirstResponse.second.text);
-    EXPECT_EQ(ID1, accountControllerFirstResponse.second.user.getConnection().id);
+    EXPECT_EQ(LOGIN_PASSWORD_PROMPT, accountControllerFirstResponse.text);
+    EXPECT_EQ(ID1, accountControllerFirstResponse.user.getConnection().id);
 
-    ASSERT_TRUE(accountControllerSecondResponse.first);
-    ASSERT_TRUE(accountControllerSecondResponse.second.text.find(LOGGED_IN_PROMPT) != string::npos);
-    ASSERT_TRUE(accountControllerSecondResponse.second.user.getConnection().id);
+    ASSERT_TRUE(accountControllerSecondResponse.text.find(LOGGED_IN_PROMPT) != string::npos);
+    ASSERT_TRUE(accountControllerSecondResponse.user.getConnection().id == ID1);
 }
 
 //same user login twice
 TEST_F(UserServiceManagementTest, LoginTwiceTest){
-
-    accountController.connectClient(user);
+    user.reset();
     Message userPrompt = accountController.startLogin(firstMessage);
 
-    pair<bool, Message> accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
-    pair<bool, Message> accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
-
+    Message accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
+    Message accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
 
     ASSERT_EQ(ID1, userPrompt.user.getConnection().id);
     ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
 
-    ASSERT_TRUE(accountControllerFirstResponse.first);
-    ASSERT_EQ(LOGIN_PASSWORD_PROMPT, accountControllerFirstResponse.second.text);
-    ASSERT_EQ(ID1, accountControllerFirstResponse.second.user.getConnection().id);
+    ASSERT_EQ(LOGIN_PASSWORD_PROMPT, accountControllerFirstResponse.text);
+    ASSERT_EQ(ID1, accountControllerFirstResponse.user.getConnection().id);
 
-    ASSERT_TRUE(accountControllerSecondResponse.first);
-
-    ASSERT_TRUE(accountControllerSecondResponse.second.text.find(LOGGED_IN_PROMPT) != string::npos);
-    ASSERT_TRUE(accountControllerSecondResponse.second.user.getConnection().id);
+    ASSERT_TRUE(accountControllerSecondResponse.text.find(LOGGED_IN_PROMPT) != string::npos);
+    ASSERT_TRUE(accountControllerSecondResponse.user.getConnection().id == ID1);
 
     Message secondPrompt = accountController.startLogin(firstMessage);
     EXPECT_EQ(ID1, secondPrompt.user.getConnection().id);
     EXPECT_EQ(ALREADY_LOGIN_MESSAGE, secondPrompt.text);
-
 }
 
 //user login first and logout
 TEST_F(UserServiceManagementTest, LoginLogoutSequenceTest){
-
-    accountController.connectClient(user);
+    user.reset();
     Message userPrompt = accountController.startLogin(firstMessage);
 
-    pair<bool, Message> accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
-    pair<bool, Message> accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
-
+    Message accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
+    Message accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
 
     ASSERT_EQ(ID1, userPrompt.user.getConnection().id);
     ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
 
-    ASSERT_TRUE(accountControllerFirstResponse.first);
-    ASSERT_EQ(LOGIN_PASSWORD_PROMPT, accountControllerFirstResponse.second.text);
-    ASSERT_EQ(ID1, accountControllerFirstResponse.second.user.getConnection().id);
+    ASSERT_EQ(LOGIN_PASSWORD_PROMPT, accountControllerFirstResponse.text);
+    ASSERT_EQ(ID1, accountControllerFirstResponse.user.getConnection().id);
 
-    ASSERT_TRUE(accountControllerSecondResponse.first);
-
-    ASSERT_TRUE(accountControllerSecondResponse.second.text.find(LOGGED_IN_PROMPT) != string::npos);
-    ASSERT_TRUE(accountControllerSecondResponse.second.user.getConnection().id);
+    ASSERT_TRUE(accountControllerSecondResponse.text.find(LOGGED_IN_PROMPT) != string::npos);
+    ASSERT_TRUE(accountControllerSecondResponse.user.getConnection().id == ID1);
 
     Message message = accountController.logoutUser(firstMessage);
     EXPECT_EQ(ID1, message.user.getConnection().id);
@@ -104,48 +92,43 @@ TEST_F(UserServiceManagementTest, LoginLogoutSequenceTest){
 
 //register without logging in
 TEST_F(UserServiceManagementTest, RegisterTest){
-    accountController.connectClient(user);
+    user.reset();
     Message message = accountController.startRegister(firstMessage);
 
-    pair<bool, Message> accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
-    pair<bool, Message> accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
+    Message accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
+    Message accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
 
     ASSERT_EQ(REGISTER_USERNAME_PROMPT, message.text);
     EXPECT_EQ(ID1, message.user.getConnection().id);
 
-    ASSERT_TRUE(accountControllerFirstResponse.first);
-    ASSERT_EQ(ID1, accountControllerFirstResponse.second.user.getConnection().id);
-    ASSERT_EQ(REGISTER_PASSWORD_PROMPT, accountControllerFirstResponse.second.text);
+    ASSERT_EQ(ID1, accountControllerFirstResponse.user.getConnection().id);
+    ASSERT_EQ(REGISTER_PASSWORD_PROMPT, accountControllerFirstResponse.text);
 
-    ASSERT_TRUE(accountControllerSecondResponse.first);
-    EXPECT_EQ(ID1, accountControllerSecondResponse.second.user.getConnection().id);
-    EXPECT_EQ(LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT, accountControllerSecondResponse.second.text);
+    EXPECT_EQ(ID1, accountControllerSecondResponse.user.getConnection().id);
+    EXPECT_EQ(LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT, accountControllerSecondResponse.text);
 }
 
-//register withinvalid password
+//register with invalid password
 
 
 
 //register after logging in
 TEST_F(UserServiceManagementTest, LoginRegisterTest){
-    accountController.connectClient(user);
+    user.reset();
     Message userPrompt = accountController.startLogin(firstMessage);
 
-    pair<bool, Message> accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
-    pair<bool, Message> accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
+    Message accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
+    Message accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
 
 
     ASSERT_EQ(ID1, userPrompt.user.getConnection().id);
     ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
 
-    ASSERT_TRUE(accountControllerFirstResponse.first);
-    ASSERT_EQ(LOGIN_PASSWORD_PROMPT, accountControllerFirstResponse.second.text);
-    ASSERT_EQ(ID1, accountControllerFirstResponse.second.user.getConnection().id);
+    ASSERT_EQ(LOGIN_PASSWORD_PROMPT, accountControllerFirstResponse.text);
+    ASSERT_EQ(ID1, accountControllerFirstResponse.user.getConnection().id);
 
-    ASSERT_TRUE(accountControllerSecondResponse.first);
-
-    ASSERT_TRUE(accountControllerSecondResponse.second.text.find(LOGGED_IN_PROMPT) != string::npos);
-    ASSERT_TRUE(accountControllerSecondResponse.second.user.getConnection().id);
+    ASSERT_TRUE(accountControllerSecondResponse.text.find(LOGGED_IN_PROMPT) != string::npos);
+    ASSERT_TRUE(accountControllerSecondResponse.user.getConnection().id == ID1);
 
     Message message = accountController.startRegister(firstMessage);
     EXPECT_EQ(LOGOUT_BEFORE_REGISTER_MESSAGE, message.text);
@@ -155,23 +138,20 @@ TEST_F(UserServiceManagementTest, LoginRegisterTest){
 //register and excape
 
 TEST_F(UserServiceManagementTest, RegisterEscapeTest){
-
-    accountController.connectClient(user);
+    user.reset();
     Message message = accountController.startRegister(firstMessage);
 
-    pair<bool, Message> accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
-    pair<bool, Message> accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
+    Message accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
+    Message accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
 
     ASSERT_EQ(REGISTER_USERNAME_PROMPT, message.text);
     ASSERT_EQ(ID1, message.user.getConnection().id);
 
-    ASSERT_TRUE(accountControllerFirstResponse.first);
-    ASSERT_EQ(ID1, accountControllerFirstResponse.second.user.getConnection().id);
-    ASSERT_EQ(REGISTER_PASSWORD_PROMPT, accountControllerFirstResponse.second.text);
+    ASSERT_EQ(ID1, accountControllerFirstResponse.user.getConnection().id);
+    ASSERT_EQ(REGISTER_PASSWORD_PROMPT, accountControllerFirstResponse.text);
 
-    ASSERT_TRUE(accountControllerSecondResponse.first);
-    ASSERT_EQ(ID1, accountControllerSecondResponse.second.user.getConnection().id);
-    ASSERT_EQ(LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT, accountControllerSecondResponse.second.text);
+    ASSERT_EQ(ID1, accountControllerSecondResponse.user.getConnection().id);
+    ASSERT_EQ(LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT, accountControllerSecondResponse.text);
 
     Message escapeMessage = accountController.escapeLogin(passwordMessage);
     EXPECT_EQ(ESCAPE_WHILE_REGISTERING_MESSAGE + to_string(ID1), escapeMessage.text);
@@ -179,23 +159,20 @@ TEST_F(UserServiceManagementTest, RegisterEscapeTest){
 
 //login and escape
 TEST_F(UserServiceManagementTest, LoginEscapeTest){
-
-    accountController.connectClient(user);
+    user.reset();
     Message userPrompt = accountController.startLogin(firstMessage);
 
-    pair<bool, Message> accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
-    pair<bool, Message> accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
+    Message accountControllerFirstResponse = accountController.respondToMessage(usernameMessage);
+    Message accountControllerSecondResponse = accountController.respondToMessage(passwordMessage);
 
     ASSERT_EQ(ID1, userPrompt.user.getConnection().id);
     ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
 
-    ASSERT_TRUE(accountControllerFirstResponse.first);
-    ASSERT_EQ(LOGIN_PASSWORD_PROMPT, accountControllerFirstResponse.second.text);
-    ASSERT_EQ(ID1, accountControllerFirstResponse.second.user.getConnection().id);
+    ASSERT_EQ(LOGIN_PASSWORD_PROMPT, accountControllerFirstResponse.text);
+    ASSERT_EQ(ID1, accountControllerFirstResponse.user.getConnection().id);
 
-    ASSERT_TRUE(accountControllerSecondResponse.first);
-    ASSERT_TRUE(accountControllerSecondResponse.second.text.find(LOGGED_IN_PROMPT) != string::npos);
-    ASSERT_TRUE(accountControllerSecondResponse.second.user.getConnection().id);
+    ASSERT_TRUE(accountControllerSecondResponse.text.find(LOGGED_IN_PROMPT) != string::npos);
+    ASSERT_TRUE(accountControllerSecondResponse.user.getConnection().id == ID1);
 
     Message escapeMessage = accountController.escapeLogin(passwordMessage);
     EXPECT_EQ(LOGGING_IN_ESCAPE_MESSAGE + to_string(ID1), escapeMessage.text);
@@ -203,7 +180,7 @@ TEST_F(UserServiceManagementTest, LoginEscapeTest){
 
 //user escape without logingin
 TEST_F(UserServiceManagementTest, LoginEscape_WithoutLoginTest){
-    accountController.connectClient(user);
+    user.reset();
     Message escapeMessage = accountController.escapeLogin(firstMessage);
     EXPECT_EQ(ID1, escapeMessage.user.getConnection().id);
     EXPECT_EQ(ESCAPE_WHILE_NOT_LOGIN_MESSAGE, escapeMessage.text);

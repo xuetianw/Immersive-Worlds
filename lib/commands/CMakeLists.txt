@@ -15,6 +15,7 @@ target_include_directories(commands
 
 target_link_libraries(commands
     networking
+    controllers
     services
     user
     )

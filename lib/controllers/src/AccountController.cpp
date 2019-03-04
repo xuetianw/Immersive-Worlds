@@ -18,7 +18,7 @@
 
 using namespace std;
 
-Message AccountController::startLogin(Message& message) {
+Message AccountController::startLogin(const Message& message) {
     if(message.user.getAccount().isLoggedIn) {
         return Message{message.user, ALREADY_LOGIN_MESSAGE};
     }
@@ -31,7 +31,7 @@ Message AccountController::startLogin(Message& message) {
     return accountService.updateUserState(message);
 }
 
-Message AccountController::startRegister(Message& message) {
+Message AccountController::startRegister(const Message& message) {
     if(message.user.getAccount().isLoggedIn) {
         return Message{message.user, LOGOUT_BEFORE_REGISTER_MESSAGE};
     }
@@ -44,19 +44,19 @@ Message AccountController::startRegister(Message& message) {
     return accountService.updateUserState(message);
 }
 
-Message AccountController::logoutUser(Message& message) {
+Message AccountController::logoutUser(const Message& message) {
     if(message.user.getAccount().isLoggedIn) {
         message.user.removeCommand(LOGOUT);
 
-        disconnectClient(message.user);
+        message.user.reset();
         return Message{message.user, LOGOUT_MESSAGE};
     }
 
     return Message{message.user, NOT_LOGIN_MESSAGE};
 }
 
-Message AccountController::escapeLogin(Message& message) {
-    Account &account = message.user.getAccount();
+Message AccountController::escapeLogin(const Message& message) {
+    const Account& account = message.user.getAccount();
     stringstream response;
     if (account.isLoggingIn || account.isRegistering) {
         if (account.isRegistering) {
@@ -66,38 +66,18 @@ Message AccountController::escapeLogin(Message& message) {
             response << LOGGING_IN_ESCAPE_MESSAGE
                      << message.user.getConnection().id;
         }
-        message.user.removeCommand(ESCAPE);
-        disconnectClient(message.user);
+
+        message.user.reset();
     } else {
         response << ESCAPE_WHILE_NOT_LOGIN_MESSAGE;
     }
     return Message{message.user, response.str()};
 }
 
-void AccountController::connectClient(User& user) {
-    accountService.connectUser(user);
-}
-
-void AccountController::disconnectClient(User& user) {
-    accountService.disconnectUser(user);
-}
-
-pair<bool, Message> AccountController::respondToMessage(Message& message) {
-    if (message.user.getAccount().isLoggedIn){
-        return pair<bool, Message> (false, Message{message.user, ""});
-    }
-
-    Message response = accountService.updateUserState(message);
-    if (message.user.getAccount().isLoggedIn && (onLoginFunction != nullptr)){
-        Message onLoginResponse = onLoginFunction(message);
-        response.text = response.text + "\n" + onLoginResponse.text;
-    }
-
-    return pair<bool, Message>(true, response);
-}
-
-void AccountController::setupFunctionPointer(function_ptr fnPtr){
-    onLoginFunction = fnPtr;
+Message AccountController::respondToMessage(const Message& message) {
+    return message.user.getAccount().isLoggedIn
+        ? Message {message.user, ""}
+        : accountService.updateUserState(message);
 }
 
 

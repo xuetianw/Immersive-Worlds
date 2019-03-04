@@ -9,19 +9,17 @@
 // for details.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "Server.h"
-#include "AccountController.h"
-#include "CommandProcessor.h"
-#include "GameController.h"
-#include "User.h"
-#include "Message.h"
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <unistd.h>
 #include <vector>
 #include <set>
+
+#include "Server.h"
+#include "CommandProcessor.h"
+#include "User.h"
+#include "Message.h"
 
 using networking::Connection;
 using networking::ConnectionHasher;
@@ -30,33 +28,29 @@ using networking::Server;
 
 using namespace std;
 
-// Manager for handling client connections and authentication
-unique_ptr<AccountController> accountController;
+// Manager for handling client commands
+unique_ptr<CommandProcessor> commandProcessor;
 
-// Manage Game actions
-unique_ptr<GameController> gameController;
-
+// Store User State
 unordered_map<Connection , User, ConnectionHasher> users;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onConnect(Connection &c) {
     std::cout << "New connection found: " << c.id << endl;
-    User newUser(c);
-    users[c] = newUser;
-    accountController->connectClient(users[c]);
+    users[c] = User {c};
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onDisconnect(Connection &c) {
     std::cout << "Connection lost: " << c.id << endl;
-    accountController->disconnectClient(users[c]);
+    users.erase(c);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-std::deque<ServerMessage> processMessages(CommandProcessor &commandProcessor,
-                                    Server &server,
-                                    std::deque<ServerMessage> &incoming,
-                                    bool &quit) {
+std::deque<ServerMessage> processMessages(CommandProcessor& commandProcessor,
+                                    Server& server,
+                                    const std::deque<ServerMessage>& incoming,
+                                    bool& quit) {
     std::deque<ServerMessage> result;
     for (auto &serverMessage : incoming) {
         Message message{users[serverMessage.connection], serverMessage.text};
@@ -68,38 +62,12 @@ std::deque<ServerMessage> processMessages(CommandProcessor &commandProcessor,
         } else if (commandProcessor.isCommand(message)) {
             result.push_back(commandProcessor.processCommand(message).convertToServerMessage());
         } else {
-            // If we can put the controllers into a set and lamda 'if( responseToMessage() -> first ) { push_back && break }
-            // It would be nice and we could make a serverController and move its commands in there (:
-
-            pair<bool, Message> accountControllerResponse = accountController->respondToMessage(message);
-            if (accountControllerResponse.first) {
-                result.push_back(accountControllerResponse.second.convertToServerMessage());
-            } else {
-                pair<bool, Message> gameControllerResponse = gameController->respondToMessage(message);
-                result.push_back(gameControllerResponse.second.convertToServerMessage());
-            }
+            result.push_back(commandProcessor.handleDefaultMessage(message).convertToServerMessage());
         }
     }
+
     return result;
 }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-CommandProcessor buildCommands() {
-    CommandProcessor commandProcessor;
-
-
-    commandProcessor.addCommand("/whereami", WHEREAMI, [](Message message) { return ::gameController->outputCurrentLocationInfo(message); });
-    commandProcessor.addCommand("/logout", LOGOUT, [](Message message) { return ::accountController->logoutUser(message); });
-    commandProcessor.addCommand("/login", LOGIN, [](Message message) { return ::accountController->startLogin(message); });
-    commandProcessor.addCommand("/register", REGISTER, [](Message message) { return ::accountController->startRegister(message); });
-    commandProcessor.addCommand("/escape", ESCAPE, [](Message message) { return ::accountController->escapeLogin(message); });
-    commandProcessor.addCommand("/move", MOVE, [](Message message) { return ::gameController->move(message); });
-//    commandProcessor.addCommand("/yell", [](ServerMessage message){return ::gameController->yell(message);});
-
-    return move(commandProcessor);
-}
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 std::string getHTTPMessage(const char *htmlLocation) {
@@ -107,14 +75,12 @@ std::string getHTTPMessage(const char *htmlLocation) {
         std::ifstream infile{htmlLocation};
         return std::string{std::istreambuf_iterator<char>(infile),
                            std::istreambuf_iterator<char>()};
-
     } else {
         std::cerr << "Unable to open HTML index file:\n"
                   << htmlLocation << "\n";
         std::exit(-1);
     }
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char *argv[]) {
@@ -127,19 +93,8 @@ int main(int argc, char *argv[]) {
     bool done = false;
     unsigned short port = static_cast<unsigned short>(std::stoi(argv[1]));
 
-    accountController = make_unique<AccountController>();
-    gameController = make_unique<GameController>();
-
-    // setup onLoginFunction in AbstractController through lambda expression
-    accountController->setupFunctionPointer(
-            [](Message message) {
-                return ::gameController->spawnUserInStartRoom(message.user);
-            });
-
+    commandProcessor = make_unique<CommandProcessor>();
     Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
-    CommandProcessor commandProcessor = buildCommands();
-
-    //TODO: Improve this loop perhaps
 
     while (!done) {
         try {
@@ -151,7 +106,7 @@ int main(int argc, char *argv[]) {
         }
 
         auto incoming = server.receive();
-        auto outgoing = processMessages(commandProcessor, server, incoming, done);
+        auto outgoing = processMessages(*commandProcessor, server, incoming, done);
         server.send(outgoing);
         sleep(1);
     }
