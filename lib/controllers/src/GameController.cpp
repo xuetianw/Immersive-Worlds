@@ -10,11 +10,11 @@ Message GameController::respondToMessage(const Message& message) {
     return Message {message.user, responseText};
 }
 
-Message GameController::move(const Message& message) {
+std::vector<Message> GameController::move(const Message& message) {
     Message newMessage = Message(message.user);
     if (!checkIsDirectionMessage(message)) {
         newMessage.text = WRONG_DIRECTION_MESSAGE;
-        return newMessage;
+        return std::vector<Message>{newMessage};
     }
 
     std::string beforeMoveRoomName = _gameService.getCurrentRoomName(message.user.getConnection());
@@ -26,7 +26,7 @@ Message GameController::move(const Message& message) {
         newMessage.text = "user did not move";
     }
 
-    return newMessage;
+    return std::vector<Message>{newMessage};
 }
 
 Message GameController::spawnUserInRoomOnLogin(User &user) {
@@ -47,12 +47,12 @@ bool GameController::checkIsDirectionMessage(const Message& message) {
     return it != directions.end();
 }
 
-Message GameController::outputCurrentLocationInfo(const Message& message) {
+std::vector<Message> GameController::outputCurrentLocationInfo(const Message& message) {
     const Connection& currentConnection = message.user.getConnection();
     string currentRoom = _gameService.getCurrentRoomName(currentConnection);
     string responseText = USER_CURRENTLY_LOCATED_MESSAGE + currentRoom;
 
-    Message response{message.user, responseText};
+    std::vector<Message> response { Message{message.user, responseText} };
 
     return response;
 }

@@ -26,7 +26,7 @@ TEST_F(GameControllerTest, OutputCurrentLocationInfoTest) {
 
     // Assumption: Starting room is Lexie's shop
     gameController->spawnUserInRoomOnLogin(user);
-    Message response = gameController->outputCurrentLocationInfo(emptyMessage);
+    Message response = gameController->outputCurrentLocationInfo(emptyMessage)[0];
 
     EXPECT_EQ(string(USER_CURRENTLY_LOCATED_MESSAGE) + string(LEXIE_SHOP), response.text);
 }

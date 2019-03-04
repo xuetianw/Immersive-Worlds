@@ -7,7 +7,7 @@
 
 #include "AccountService.h"
 
-Message AccountService::updateUserState(const Message& message) {
+std::vector<Message> AccountService::updateUserState(const Message& message) {
 
     Account& userAccount = message.user.getAccount();
 
@@ -25,7 +25,7 @@ Message AccountService::updateUserState(const Message& message) {
         userAccount.isLoggedIn = true;
     }
 
-    return Message{message.user, transitions._currentUserResponseMessage};
+    return std::vector<Message>{ Message{message.user, transitions._currentUserResponseMessage} };
 }
 
 

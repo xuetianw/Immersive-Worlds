@@ -18,9 +18,9 @@
 
 using namespace std;
 
-Message AccountController::startLogin(const Message& message) {
+std::vector<Message> AccountController::startLogin(const Message& message) {
     if(message.user.getAccount().isLoggedIn) {
-        return Message{message.user, ALREADY_LOGIN_MESSAGE};
+        return std::vector<Message> { Message{message.user, ALREADY_LOGIN_MESSAGE} };
     }
     message.user.getAccount().isLoggingIn = true;
 
@@ -31,9 +31,9 @@ Message AccountController::startLogin(const Message& message) {
     return accountService.updateUserState(message);
 }
 
-Message AccountController::startRegister(const Message& message) {
+std::vector<Message> AccountController::startRegister(const Message& message) {
     if(message.user.getAccount().isLoggedIn) {
-        return Message{message.user, LOGOUT_BEFORE_REGISTER_MESSAGE};
+        return std::vector<Message> { Message{message.user, LOGOUT_BEFORE_REGISTER_MESSAGE} };
     }
     message.user.getAccount().isRegistering = true;
 
@@ -44,18 +44,18 @@ Message AccountController::startRegister(const Message& message) {
     return accountService.updateUserState(message);
 }
 
-Message AccountController::logoutUser(const Message& message) {
+std::vector<Message> AccountController::logoutUser(const Message& message) {
     if(message.user.getAccount().isLoggedIn) {
         message.user.removeCommand(LOGOUT);
 
         message.user.reset();
-        return Message{message.user, LOGOUT_MESSAGE};
+        return std::vector<Message> { Message{message.user, LOGOUT_MESSAGE} };
     }
 
-    return Message{message.user, NOT_LOGIN_MESSAGE};
+    return std::vector<Message>{ Message{message.user, NOT_LOGIN_MESSAGE} };
 }
 
-Message AccountController::escapeLogin(const Message& message) {
+std::vector<Message> AccountController::escapeLogin(const Message& message) {
     const Account& account = message.user.getAccount();
     stringstream response;
     if (account.isLoggingIn || account.isRegistering) {
@@ -71,13 +71,13 @@ Message AccountController::escapeLogin(const Message& message) {
     } else {
         response << ESCAPE_WHILE_NOT_LOGIN_MESSAGE;
     }
-    return Message{message.user, response.str()};
+    return std::vector<Message>{ Message{message.user, response.str()} };
 }
 
 Message AccountController::respondToMessage(const Message& message) {
     return message.user.getAccount().isLoggedIn
         ? Message {message.user, ""}
-        : accountService.updateUserState(message);
+        : accountService.updateUserState(message)[0];
 }
 
 

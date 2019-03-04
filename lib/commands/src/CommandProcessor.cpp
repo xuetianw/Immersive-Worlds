@@ -17,7 +17,7 @@ void CommandProcessor::addCommand(string keyword, Command command, function_ptr 
     _commands[command] = move(fnPtr);
 }
 
-Message CommandProcessor::processCommand(const Message& message) {
+std::vector<Message> CommandProcessor::processCommand(const Message& message) {
     std::pair commandMessagePair = splitCommand(message.text);
 
     auto keywordIter = _keywords.find(commandMessagePair.first);
@@ -27,10 +27,10 @@ Message CommandProcessor::processCommand(const Message& message) {
         if(message.user.canPreformCommand(commandsIter->first)){
             return commandsIter->second(Message {message.user, commandMessagePair.second});
         }
-        return Message{message.user, "You cannot preform: " + commandMessagePair.first};
+        return std::vector<Message>{ Message{message.user, "You cannot preform: " + commandMessagePair.first} };
     }
 
-    return Message{message.user, "Attempted Command Not Found."};
+    return std::vector<Message>{ Message{message.user, "Attempted Command Not Found."} };
 }
 
 Message CommandProcessor::handleDefaultMessage(const Message& message) {

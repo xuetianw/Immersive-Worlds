@@ -19,7 +19,7 @@
 using string = std::string;
 using stringstream = std::stringstream;
 
-typedef std::function<Message(Message)> function_ptr;
+typedef std::function<std::vector<Message>(Message)> function_ptr;
 
 class CommandProcessor {
     /*
@@ -39,7 +39,7 @@ public:
     /*
      * Finds the map value from the message's keyword and preforms the function with the message's remaining string
      */
-    Message processCommand(const Message &message);
+    std::vector<Message> processCommand(const Message &message);
 
     /*
      * Adds a function to a keyword, the function has to be in format of ServerMessage _____(ServerMessage message)
