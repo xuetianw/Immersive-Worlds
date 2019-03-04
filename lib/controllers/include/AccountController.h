@@ -11,8 +11,6 @@
 #ifndef WEBSOCKETNETWORKING_CLIENTMANAGER_H
 #define WEBSOCKETNETWORKING_CLIENTMANAGER_H
 
-#include <unordered_map>
-
 #include "User.h"
 #include "AccountService.h"
 #include "AbstractController.h"
@@ -24,8 +22,6 @@ constexpr char LOGOUT_BEFORE_REGISTER_MESSAGE[] = "You are logged in - please lo
 constexpr char ESCAPE_WHILE_REGISTERING_MESSAGE[] = "You have exited out of the registration process\n";
 constexpr char LOGGING_IN_ESCAPE_MESSAGE[] = "You have exited out of the login process\n";
 constexpr char ESCAPE_WHILE_NOT_LOGIN_MESSAGE[] = "You are not submitting any Account information currently";
-
-using string = std::string;
 
 class AccountController : public AbstractController {
 public:
@@ -39,7 +35,7 @@ public:
 
     Message escapeLogin(const Message& message);
 
-    pair<bool, Message> respondToMessage(const Message& message) override;
+    Message respondToMessage(const Message& message) override;
 
 private:
     AccountService accountService;

@@ -74,10 +74,10 @@ Message AccountController::escapeLogin(const Message& message) {
     return Message{message.user, response.str()};
 }
 
-pair<bool, Message> AccountController::respondToMessage(const Message& message) {
+Message AccountController::respondToMessage(const Message& message) {
     return message.user.getAccount().isLoggedIn
-        ? pair<bool, Message>(true, Message {message.user, ""})
-        : pair<bool, Message>(true, accountService.updateUserState(message));
+        ? Message {message.user, ""}
+        : accountService.updateUserState(message);
 }
 
 

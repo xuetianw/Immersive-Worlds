@@ -8,7 +8,7 @@ using testing::Return;
 constexpr char LEXIE_SHOP[] = "Lexie's Scuba Shop";
 
 struct GameControllerTest : testing::Test {
-    unique_ptr<GameController> gameController = make_unique<GameController>();
+    std::unique_ptr<GameController> gameController = std::make_unique<GameController>();
     networking::Connection connection{1};
     User user{connection};
 };

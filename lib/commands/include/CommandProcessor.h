@@ -19,20 +19,15 @@
 using string = std::string;
 using stringstream = std::stringstream;
 
-// typedef Message (*function_ptr)(Message message);
 typedef std::function<Message(Message)> function_ptr;
-
-struct InputHandler {
-    function_ptr functionPtr;
-};
 
 class CommandProcessor {
     /*
      * Helper Class to avoid manual wiring of key commands to the Game/Account method calls
      */
 public:
-    CommandProcessor() : accountController(make_unique<AccountController>()),
-                         gameController(make_unique<GameController>()) {
+    CommandProcessor() : accountController(std::make_unique<AccountController>()),
+                         gameController(std::make_unique<GameController>()) {
         buildCommands();
     }
 
@@ -67,14 +62,14 @@ private:
     /*
      *  Holds all the commands added to the map
      */
-    std::unordered_map<Command , InputHandler> _commands;
+    std::unordered_map<Command , function_ptr> _commands;
     std::unordered_map<string, Command> _keywords;
 
     // Manager for handling client connections and authentication
-    unique_ptr<AccountController> accountController;
+    std::unique_ptr<AccountController> accountController;
 
     // Manage Game actions
-    unique_ptr<GameController> gameController;
+    std::unique_ptr<GameController> gameController;
 };
 
 #endif //WEBSOCKETNETWORKING_COMMANDPROCESSOR_H
