@@ -130,7 +130,8 @@ int main(int argc, char *argv[]) {
     accountController = make_unique<AccountController>();
     gameController = make_unique<GameController>();
 
-    accountController->setup_function_pointer([](Message message) {return ::gameController->spawnUserInStartRoom(message.user);});
+    accountController->setupFunctionPointer(
+            [](Message message) { return ::gameController->spawnUserInStartRoom(message.user); });
 
     Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
     CommandProcessor commandProcessor = buildCommands();

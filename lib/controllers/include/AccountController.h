@@ -40,7 +40,7 @@ public:
 
     AccountController() : accountService() {
         // onLoginFunction initially set to null.
-        // Caller is responsible for setting this up through setup_function_pointer()
+        // Caller is responsible for setting this up through setupFunctionPointer()
         onLoginFunction = nullptr;
 };
 
@@ -52,7 +52,7 @@ public:
 
     Message escapeLogin(Message& message);
 
-    void setup_function_pointer(function_ptr fnPtr);
+    void setupFunctionPointer(function_ptr fnPtr);
 
     pair<bool, Message> respondToMessage(Message &message) override;
 
