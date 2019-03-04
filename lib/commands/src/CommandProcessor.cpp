@@ -51,7 +51,7 @@ std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
 }
 
 void CommandProcessor::buildCommands() {
-    addCommand("/whereami", WHEREAMI, [&] (Message message) { return gameController->outputCurrentLocationInfo(message); });
+    addCommand("/whereami", WHEREAMI, [this] (Message message) { return gameController->outputCurrentLocationInfo(message); });
     addCommand("/logout", LOGOUT, [this] (Message message) { return accountController->logoutUser(message); });
     addCommand("/login", LOGIN, [this] (Message message) { return accountController->startLogin(message); });
     addCommand("/register", REGISTER, [this] (Message message) { return accountController->startRegister(message); });
