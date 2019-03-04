@@ -130,7 +130,11 @@ int main(int argc, char *argv[]) {
     accountController = make_unique<AccountController>();
     gameController = make_unique<GameController>();
 
-    accountController->onCompleteLogin([](Message message) {return ::gameController->spawnUserInStartRoom(message.user);});
+    // setup onLoginFunction in AbstractController through lambda expression
+    accountController->setupFunctionPointer(
+            [](Message message) {
+                return ::gameController->spawnUserInStartRoom(message.user);
+            });
 
     Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
     CommandProcessor commandProcessor = buildCommands();

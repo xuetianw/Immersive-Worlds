@@ -13,7 +13,7 @@ bool CommandProcessor::isCommand(const Message &message) {
 
 void CommandProcessor::addCommand(string keyword, Command command, function_ptr fnPtr) {
     _keywords[std::move(keyword)] = command;
-    _commands[std::move(command)] = InputHandler { fnPtr };
+    _commands[std::move(command)] =  fnPtr;
 }
 
 Message CommandProcessor::processCommand(const Message &message) {
@@ -25,7 +25,7 @@ Message CommandProcessor::processCommand(const Message &message) {
 
     if(commandsIter != _commands.end()) {
         if(message.user.canPreformCommand(commandsIter->first)){
-            return commandsIter->second.functionPtr(Message {message.user, commandMessagePair.second});
+            return commandsIter->second(Message {message.user, commandMessagePair.second});
         }
         return Message{message.user, "You cannot preform: " + commandMessagePair.first};
     }

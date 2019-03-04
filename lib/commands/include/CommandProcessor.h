@@ -16,11 +16,8 @@
 using string = std::string;
 using stringstream = std::stringstream;
 
-typedef Message (*function_ptr)(Message message);
+typedef Message (*function_ptr)(Message);
 
-struct InputHandler {
-    function_ptr functionPtr;
-};
 
 class CommandProcessor {
     /*
@@ -58,7 +55,7 @@ private:
     /*
      *  Holds all the commands added to the map
      */
-    std::unordered_map<Command , InputHandler> _commands;
+    std::unordered_map<Command , function_ptr> _commands;
     std::unordered_map<string, Command> _keywords;
 };
 

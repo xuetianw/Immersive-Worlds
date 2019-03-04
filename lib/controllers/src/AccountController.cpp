@@ -96,7 +96,7 @@ pair<bool, Message> AccountController::respondToMessage(Message& message) {
     return pair<bool, Message>(true, response);
 }
 
-void AccountController::onCompleteLogin(function_ptr fnPtr){
+void AccountController::setupFunctionPointer(function_ptr fnPtr){
     onLoginFunction = fnPtr;
 }
 
