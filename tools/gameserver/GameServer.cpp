@@ -49,7 +49,7 @@ void onDisconnect(Connection &c) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-std::deque<ServerMessage> processMessages(CommandProcessor &commandProcessor,
+std::deque<ServerMessage> processMessages(unique_ptr<CommandProcessor>& commandProcessor,
                                     Server &server,
                                     std::deque<ServerMessage> &incoming,
                                     bool &quit) {
@@ -61,10 +61,10 @@ std::deque<ServerMessage> processMessages(CommandProcessor &commandProcessor,
         } else if (message.text == "shutdown") {
             std::cout << "Shutting down.\n";
             quit = true;
-        } else if (commandProcessor.isCommand(message)) {
-            result.push_back(commandProcessor.processCommand(message).convertToServerMessage());
+        } else if (commandProcessor->isCommand(message)) {
+            result.push_back(commandProcessor->processCommand(message).convertToServerMessage());
         } else {
-            result.push_back(commandProcessor.handleDefaultMessage(message).convertToServerMessage());
+            result.push_back(commandProcessor->handleDefaultMessage(message).convertToServerMessage());
         }
     }
 
