@@ -15,9 +15,6 @@
 #include <unistd.h>
 #include <AccountController.h>
 
-
-#include "AccountController.h"
-
 using namespace std;
 
 Message AccountController::startLogin(const Message& message) {
