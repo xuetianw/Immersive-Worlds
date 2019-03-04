@@ -31,9 +31,9 @@ TEST_F(ConsoleCommandTest, commandsAreCalled){
     loginUser.addCommand(LOGIN);
     logoutUser.addCommand(LOGOUT);
 
-    Message defaultResponse = commandProcessor.processCommand(dummy)[0];
-    Message loginResponse = commandProcessor.processCommand(login)[0];
-    Message logoutResponse = commandProcessor.processCommand(logout)[0];
+    Message defaultResponse = commandProcessor.processCommand(dummy).front();
+    Message loginResponse = commandProcessor.processCommand(login).front();
+    Message logoutResponse = commandProcessor.processCommand(logout).front();
 
     EXPECT_TRUE(defaultResponse.text != loginStr && defaultResponse.text != logoutStr);
     EXPECT_TRUE(loginResponse.text == loginStr);
@@ -44,8 +44,8 @@ TEST_F(ConsoleCommandTest, commandsAreCalled){
 }
 
 TEST_F(ConsoleCommandTest, userCallsForbiddenCommands){
-    Message loginResponse = commandProcessor.processCommand(login)[0];
-    Message logoutResponse = commandProcessor.processCommand(logout)[0];
+    Message loginResponse = commandProcessor.processCommand(login).front();
+    Message logoutResponse = commandProcessor.processCommand(logout).front();
 
     EXPECT_TRUE(loginResponse.text == loginStr);
     EXPECT_TRUE(logoutResponse.text != logoutStr);
