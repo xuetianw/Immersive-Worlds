@@ -48,7 +48,7 @@ public:
 
     bool userYell(const User& user, const string& messageString);
 
-    bool spawnUserInStartRoom(const Connection& connection);
+    bool spawnUserInRoomOnLogin(const Connection &connection);
 
     bool spawnUserInRoom(const Connection& connection, int id);
 

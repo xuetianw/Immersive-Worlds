@@ -16,7 +16,7 @@ struct GameControllerTest : testing::Test {
 
 TEST_F(GameControllerTest, SpawnUserInStartRoomTest) {
     // Assumption: Starting room is Lexie's shop
-    Message response = gameController->spawnUserInStartRoom(user);
+    Message response = gameController->spawnUserInRoomOnLogin(user);
 
     EXPECT_EQ(INITIAL_ROOM_START_MESSAGE, response.text);
 }
@@ -25,7 +25,7 @@ TEST_F(GameControllerTest, OutputCurrentLocationInfoTest) {
     Message emptyMessage = Message{user, ""};
 
     // Assumption: Starting room is Lexie's shop
-    gameController->spawnUserInStartRoom(user);
+    gameController->spawnUserInRoomOnLogin(user);
     Message response = gameController->outputCurrentLocationInfo(emptyMessage);
 
     EXPECT_EQ(string(USER_CURRENTLY_LOCATED_MESSAGE) + string(LEXIE_SHOP), response.text);

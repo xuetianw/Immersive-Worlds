@@ -6,7 +6,7 @@
 #include "Message.h"
 
 Message GameController::respondToMessage(const Message& message) {
-    string responseText = message.text + outputCurrentLocationInfo(message).text;
+    string responseText = message.text + spawnUserInRoomOnLogin(message.user).text;
     return Message {message.user, responseText};
 }
 
@@ -29,8 +29,8 @@ Message GameController::move(const Message& message) {
     return newMessage;
 }
 
-Message GameController::spawnUserInStartRoom(User& user) {
-    if (_gameService.spawnUserInStartRoom(user.getConnection())) {
+Message GameController::spawnUserInRoomOnLogin(User &user) {
+    if (_gameService.spawnUserInRoomOnLogin(user.getConnection())) {
         return Message{user, INITIAL_ROOM_START_MESSAGE};
     } else {
         return Message{user, ROOM_SPAWN_FAIL_MESSAGE};

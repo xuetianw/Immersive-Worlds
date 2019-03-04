@@ -22,7 +22,7 @@ public:
 
     Message respondToMessage(const Message& message) override;
 
-    Message spawnUserInStartRoom(User& user);
+    Message spawnUserInRoomOnLogin(User &user);
 
     void spawnUserInRoom(User& user, int debugRoomId);
 
