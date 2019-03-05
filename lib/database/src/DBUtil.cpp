@@ -1,120 +1,201 @@
-#include <utility>
-
-#include <utility>
-
-#include <utility>
-
 //
 // Created by nirag on 12/02/19.
 //
-#include <DBUtil.h>
 
 #include "DBUtil.h"
-#include "SqlStatements.h"
-
-#include "DBUtil.h"
-#include "sqlite3.h"
 
 //declaring static field outside header file
 sqlite3* DBUtil::database;
 char* DBUtil::dbName;
 char* DBUtil::errorMessage;
 
-bool DBUtil::openConnection() {
+bool DBUtil::openConnection(const string& databaseFullFilePath) {
+    // Open the database for reading and writing.
+    // Create the database if it doesn't exist
+    int databaseFlags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
 
-    //use DB path
-    int status = sqlite3_open_v2("../../lib/database/adventure.db", &(DBUtil::database), SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE ,
-                                 nullptr);
+    int status = sqlite3_open_v2(databaseFullFilePath.c_str(),
+                                 &DBUtil::database,
+                                 databaseFlags,
+                                 nullptr
+    );
 
-    if(status!=SQLITE_OK){
-        //error handling
-
+    if (status != SQLITE_OK) {
+        //TODO error handling
         return false;
     }
 
-    prepareSQLStatements();
+    createTables();
+
     return true;
 }
 
-void DBUtil::prepareSQLStatements() {
-    SqlStatements::prepareSQLStatements();
-}
+// TODO hash passwords
+bool DBUtil::registerUser(const string& username, const string& password) {
+    const string registerUserQueryString = "INSERT INTO User (username, password) VALUES (:username, :password);";
+    sqlite3_stmt* registerUserStmt;
 
-//add all tables to create here
-bool DBUtil::createTables() {
+    sqlite3_prepare_v2(DBUtil::database,
+                       registerUserQueryString.c_str(),
+                       -1,
+                       &registerUserStmt,
+                       nullptr
+    );
 
-    //for now we drop all tables and then create them
-    dropTables();
-    int status = sqlite3_step(SqlStatements::createUserTableStmt);
+    sqlite3_bind_text(registerUserStmt,
+                      sqlite3_bind_parameter_index(registerUserStmt, ":username"),
+                      username.c_str(),
+                      username.length(),
+                      nullptr
+    );
+
+    sqlite3_bind_text(registerUserStmt,
+                      sqlite3_bind_parameter_index(registerUserStmt, ":password"),
+                      password.c_str(),
+                      password.length(),
+                      nullptr
+    );
+
+    int status = sqlite3_step(registerUserStmt);
+
+    sqlite3_finalize(registerUserStmt);
 
     return status == SQLITE_DONE;
-
 }
 
-bool DBUtil::registerUser(string username, string password) {
+bool DBUtil::deleteUser(const string& username) {
+    string deleteUserQueryString = "DELETE FROM User WHERE username = :username;";
+    sqlite3_stmt* deleteUserStmt;
 
+    sqlite3_prepare_v2(DBUtil::database,
+                       deleteUserQueryString.c_str(),
+                       -1,
+                       &deleteUserStmt,
+                       nullptr
+    );
 
-    SqlStatements::registerUser(std::move(username), std::move(password));
-    int status = sqlite3_step(SqlStatements::registerUserStmt);
+    sqlite3_bind_text(deleteUserStmt,
+                      sqlite3_bind_parameter_index(deleteUserStmt, ":username"),
+                      username.c_str(),
+                      username.length(),
+                      nullptr
+    );
+
+    int status = sqlite3_step(deleteUserStmt);
+
+    sqlite3_finalize(deleteUserStmt);
 
     return status == SQLITE_DONE;
-
 }
 
-bool DBUtil::deleteUser(string username) {
+bool DBUtil::userExists(const string& username) {
+    const string selectUserQueryString = "SELECT * FROM User WHERE username = :username";
+    sqlite3_stmt* findUserStmt;
 
-    SqlStatements::deleteUser(std::move(username));
-    int status = sqlite3_step(SqlStatements::deleteUserStmt);
+    sqlite3_prepare_v2(DBUtil::database,
+                       selectUserQueryString.c_str(),
+                       -1,
+                       &findUserStmt,
+                       nullptr
+    );
 
-    return status == SQLITE_DONE;
+    sqlite3_bind_text(findUserStmt,
+                      sqlite3_bind_parameter_index(findUserStmt, ":username"),
+                      username.c_str(),
+                      username.length(),
+                      nullptr
+    );
 
-}
-
-bool DBUtil::userExists(string username) {
-
-    SqlStatements::findUser(std::move(username));
-    int status = sqlite3_step(SqlStatements::findUserStmt);
+    int status = sqlite3_step(findUserStmt);
 
     return status == SQLITE_ROW;
-
 }
 
 //on server bootup acquires all users
-bool DBUtil::getAllUsers() {
-
+QueryResults DBUtil::getAllUsers() {
+    const string getAllUsersQueryString = "SELECT username, password FROM User;";
+    sqlite3_stmt* getAllUsersStmt;
+    QueryResults results;
     int status;
-    std::unordered_map<string, string> userData;
-    while((status = sqlite3_step(SqlStatements::getAllUsersStmt)) == SQLITE_ROW){
 
-        string username(reinterpret_cast<const char*>( sqlite3_column_text(SqlStatements::getAllUsersStmt,0)) );
-        string password(reinterpret_cast<const char*>( sqlite3_column_text(SqlStatements::getAllUsersStmt,1)) );
+    sqlite3_prepare_v2(DBUtil::database,
+                       getAllUsersQueryString.c_str(),
+                       -1,
+                       &getAllUsersStmt,
+                       nullptr
+    );
 
-        userData.insert(make_pair(username,password));
+    //execute query and build results row by row
+    while ((status = sqlite3_step(getAllUsersStmt)) == SQLITE_ROW) {
+        RowResult rowResult;
+
+        const string usernameColumn(sqlite3_column_name(getAllUsersStmt, 0));
+        const string usernameValue(reinterpret_cast<const char*>( sqlite3_column_text(getAllUsersStmt, 0)));
+
+        const string passwordColumn(sqlite3_column_name(getAllUsersStmt, 1));
+        const string passwordValue(reinterpret_cast<const char*>( sqlite3_column_text(getAllUsersStmt, 1)));
+
+        rowResult.try_emplace(usernameColumn, usernameValue);
+        rowResult.try_emplace(passwordColumn, passwordValue);
+
+        results.emplace_back(rowResult);
     }
 
+    sqlite3_finalize(getAllUsersStmt);
 
-    //free memory because strdup will malloc the copy -> prevents memory leakage
+    //return empty results of query fails
+    if (status != SQLITE_DONE) {
+        return QueryResults{};
+    }
+
+    return results;
+}
+
+bool DBUtil::closeConnection() {
+    int status = sqlite3_close_v2(DBUtil::database);
+
+    return status == SQLITE_OK;
+}
+
+
+/*
+ *
+ * PRIVATE
+ *
+ */
+bool DBUtil::createTables() {
+    const string createUserTableQueryString = "CREATE TABLE IF NOT EXISTS User(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT);";
+    sqlite3_stmt* createTableStmt;
+
+    sqlite3_prepare_v2(DBUtil::database,
+                       createUserTableQueryString.c_str(),
+                       -1,
+                       &createTableStmt,
+                       nullptr
+    );
+
+    int status = sqlite3_step(createTableStmt);
+
+    sqlite3_finalize(createTableStmt);
 
     return status == SQLITE_DONE;
-
 }
 
 //add all tables to drop here
 bool DBUtil::dropTables() {
+    const string dropUserTableQueryString = "DROP TABLE IF EXISTS User;";
+    sqlite3_stmt* dropTableStmt;
 
-    int status = sqlite3_step(SqlStatements::dropUserTableStmt);
+    sqlite3_prepare_v2(DBUtil::database,
+                       dropUserTableQueryString.c_str(),
+                       -1,
+                       &dropTableStmt,
+                       nullptr
+    );
+
+    int status = sqlite3_step(dropTableStmt);
+
+    sqlite3_finalize(dropTableStmt);
 
     return status == SQLITE_DONE;
-
-}
-
-bool DBUtil::closeConnection() {
-
-    //destroy all prepared SQL statements to prevent memory leaks
-    SqlStatements::destroySQLStatements();
-
-    int status = sqlite3_close_v2(DBUtil::database);
-
-    return status == SQLITE_OK;
-
 }

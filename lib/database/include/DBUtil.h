@@ -5,20 +5,21 @@
 #ifndef WEBSOCKETNETWORKING_DBUTIL_H
 #define WEBSOCKETNETWORKING_DBUTIL_H
 
-#include <stdio.h>
+#include <utility>
+#include <vector>
 #include <unordered_map>
-#include "string"
+#include <string>
+
 #include "sqlite3.h"
-using namespace std;
+
+using string = std::string;
+
+using RowResult = std::unordered_map<string, string>;
+using QueryResults = std::vector<RowResult>;
 
 //database Utility class
-class DBUtil{
-
-//private:
-
-
+class DBUtil {
 public:
-
     static sqlite3* database;
     static char* dbName;
     static char* errorMessage;
@@ -28,38 +29,35 @@ public:
     /*
      * Register a user using username and password
      */
-    static bool registerUser(string username, string password);
+    static bool registerUser(const string& username, const string& password);
 
     /*
      * Deletes a User using their username
      */
-    static bool deleteUser(string username);
+    static bool deleteUser(const string& username);
 
     /*
      * Checks for the existence of a single User
      */
-    static bool userExists(string username);
+    static bool userExists(const string& username);
 
     /*
      * acquires all Users on server bootup and populates datastructure
      */
-    static bool getAllUsers();
+    static QueryResults getAllUsers();
 
     /*
      * open connection to sqlite database
      */
-    static bool openConnection();
+    static bool openConnection(const string& databaseFullFilePath = "adventure.db");
 
     /*
      * close connection to sqlite database
      */
     static bool closeConnection();
 
-    /*
-     * call function to prepare non user defined SQL statements before hand
-     */
-    static void prepareSQLStatements();
 
+private:
     /*
      * function to create new tables if need be
      */
@@ -71,8 +69,6 @@ public:
      * Modify if required
      */
     static bool dropTables();
-
-
 };
 
 
