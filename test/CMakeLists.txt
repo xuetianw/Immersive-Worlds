@@ -20,15 +20,13 @@ enable_testing()
 
 
 add_executable(run_tests
-    models/modelsTest.cpp
     gameManager/idTest.cpp
         NetworkingTests/UserServiceManagementTest.cpp
     NetworkingTests/ConsoleCommandTests.cpp
     NetworkingTests/ServerTests.cpp
     databaseTest/DatabaseTest.cpp
     controllersTest/GameControllerTest.cpp
-        models/areaTests.cpp
-        inventory/inventoryTest.cpp
+    inventory/inventoryTest.cpp
         models/roomTest.cpp
   )
 
