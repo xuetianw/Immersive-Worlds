@@ -37,8 +37,8 @@ Message GameController::spawnUserInRoomOnLogin(User& user) {
     }
 }
 
-void GameController::spawnUserInRoom(User& user, int debugRoomId) {
-    _gameService.spawnUserInRoom(user.getConnection(), debugRoomId);
+void GameController::spawnUserInRoom(User& user, ID roomId) {
+    _gameService.spawnUserInRoom(user.getConnection(), roomId);
 }
 
 bool GameController::checkIsDirectionMessage(const Message& message) {

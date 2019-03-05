@@ -24,7 +24,7 @@ public:
 
     Message spawnUserInRoomOnLogin(User &user);
 
-    void spawnUserInRoom(User& user, int debugRoomId);
+    void spawnUserInRoom(User& user, ID roomId);
 
     /**
      * Displays to the user info about their current location.

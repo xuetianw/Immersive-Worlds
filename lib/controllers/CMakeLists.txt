@@ -1,7 +1,4 @@
 add_library(controllers
-    src/WorldHandler.cpp
-    src/WorldContainer.cpp
-    src/ID.cpp
     src/GameController.cpp
     src/AccountController.cpp)
 
