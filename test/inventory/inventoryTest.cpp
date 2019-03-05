@@ -2,8 +2,8 @@
 #include "gtest/gtest.h"
 
 struct InventoryTests : testing:: Test {
-    int testPlayerID = 1111;
-    int testItemID = 9999;
+    ID testPlayerID;
+    ID testItemID;
     std::unique_ptr<Inventory> inventory = std::make_unique<Inventory>(testPlayerID);
     std::unique_ptr<InventoryItem> item = std::make_unique<SingleItem>(testItemID, "keyword", "shortDesc", "longDesc", "Description");
 };
@@ -34,9 +34,9 @@ TEST_F(InventoryTests, Test_Inventory_Remove){
 
     auto deletedItem = inventory->removeItem(testItemID);
     ASSERT_EQ(deletedItem.getId(), item->getId());
-    //remove item that doesn't exist...TODO
-    auto deletedSameItem = inventory->removeItem(testItemID);
-//    EXPECT_TRUE(deletedItem2 == NULL);
+    // remove item that doesn't exist...TODO
+    // auto deletedSameItem = inventory->removeItem(testItemID);
+    // EXPECT_TRUE(deletedItem2 == NULL);
 }
 
 

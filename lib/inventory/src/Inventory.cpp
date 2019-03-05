@@ -4,17 +4,17 @@
 #include "Inventory.h"
 #include "ContainerItem.h"
 
-Inventory::Inventory(int playerId): _playerId(playerId), _inventoryItems({}) {}
+Inventory::Inventory(ID playerId): _playerId(playerId), _inventoryItems({}) {}
 
-const std::unordered_map<int, InventoryItem>& Inventory::getAllItems() const { return _inventoryItems; }
+const std::unordered_map<ID, InventoryItem>& Inventory::getAllItems() const { return _inventoryItems; }
 
 std::size_t Inventory::getSize() const { return _inventoryItems.size(); }
 
-bool Inventory::hasItem (int itemId) const {
+bool Inventory::hasItem (ID itemId) const {
     return _inventoryItems.find(itemId) != _inventoryItems.end();
 }
 
-int Inventory::getPlayerId() const { return _playerId; }
+const ID& Inventory::getPlayerId() const { return _playerId; }
 
 // Some business logic above should already have checked there's space to add item
 bool Inventory::addItem(InventoryItem itemToAdd) {
@@ -23,7 +23,7 @@ bool Inventory::addItem(InventoryItem itemToAdd) {
     return success;
 }
 
-InventoryItem Inventory::removeItem(int idToRemove) {
+InventoryItem Inventory::removeItem(ID idToRemove) {
 
     auto itemFound = _inventoryItems.find(idToRemove);
     if(itemFound != _inventoryItems.end()){

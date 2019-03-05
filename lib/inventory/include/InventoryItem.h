@@ -1,6 +1,8 @@
 #ifndef WEBSOCKETNETWORKING_INVENTORYITEM_H
 #define WEBSOCKETNETWORKING_INVENTORYITEM_H
 
+#include "ID.h"
+
 enum class ItemType {
     CLOTHING,
     WEAPON,
@@ -12,13 +14,13 @@ class InventoryItem {
 public:
     ItemType getItemType() const;
 
-    int getId() const;
+    const ID& getId() const;
 
 private:
     ItemType _itemType;
 
 protected:
-    int _id; //TODO: change to UUID after handler is setup
+    ID _id;
 };
 
 #endif

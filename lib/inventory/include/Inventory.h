@@ -4,15 +4,16 @@
 #include <unordered_map>
 
 #include "SingleItem.h"
+#include "ID.h"
 
 class Inventory {
 public:
-    Inventory(int playerId);
+    explicit Inventory(ID playerId);
 
     /**
      * Get all items the inventory contains
      */
-    const std::unordered_map<int, InventoryItem>& getAllItems() const;
+    const std::unordered_map<ID, InventoryItem>& getAllItems() const;
 
     /**
      * Get the number of items in inventory
@@ -23,9 +24,9 @@ public:
      * Check if inventory contains the specified item
      * @param itemId: the item to search in inventory
      */
-    bool hasItem(int itemId) const;
+    bool hasItem(ID itemId) const;
 
-    int getPlayerId() const;
+    const ID& getPlayerId() const;
 
     /**
      * Add an item to inventory
@@ -37,13 +38,12 @@ public:
      * Remove an item from inventory and return the removed item.
      * @param itemToRemove: the id of the item to be removed from inventory
      */
-    InventoryItem removeItem(int idToRemove);
+    InventoryItem removeItem(ID idToRemove);
 
 private:
-    //TODO: change to UUID after handler is setup
-    int _playerId;
+    ID _playerId;
 
-    std::unordered_map<int, InventoryItem> _inventoryItems;
+    std::unordered_map<ID, InventoryItem> _inventoryItems;
 };
 
 #endif //PROJECT_INVENTORY_H
