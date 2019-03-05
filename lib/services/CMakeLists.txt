@@ -21,7 +21,7 @@ target_link_libraries(services
         models
         networking
         datastorage
-        user
+        utilities
     )
 
 set_target_properties(services
