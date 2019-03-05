@@ -29,7 +29,7 @@ std::vector<Message> GameController::move(const Message& message) {
     return std::vector<Message>{newMessage};
 }
 
-Message GameController::spawnUserInRoomOnLogin(User &user) {
+Message GameController::spawnUserInRoomOnLogin(User& user) {
     if (_gameService.spawnUserInRoomOnLogin(user.getConnection())) {
         return Message{user, INITIAL_ROOM_START_MESSAGE};
     } else {

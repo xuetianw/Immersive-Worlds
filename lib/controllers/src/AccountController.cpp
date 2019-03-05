@@ -18,8 +18,9 @@
 
 using namespace std;
 
+
 std::vector<Message> AccountController::startLogin(const Message& message) {
-    if(message.user.getAccount().isLoggedIn) {
+    if(isUserLoggedIn(message)) {
         return std::vector<Message> { Message{message.user, ALREADY_LOGIN_MESSAGE} };
     }
     message.user.getAccount().isLoggingIn = true;
@@ -28,11 +29,11 @@ std::vector<Message> AccountController::startLogin(const Message& message) {
     message.user.removeCommand(REGISTER);
     message.user.removeCommand(LOGIN);
 
-    return accountService.updateUserState(message);
+    return _accountService.updateUserState(message);
 }
 
 std::vector<Message> AccountController::startRegister(const Message& message) {
-    if(message.user.getAccount().isLoggedIn) {
+    if(isUserLoggedIn(message)) {
         return std::vector<Message> { Message{message.user, LOGOUT_BEFORE_REGISTER_MESSAGE} };
     }
     message.user.getAccount().isRegistering = true;
@@ -41,11 +42,11 @@ std::vector<Message> AccountController::startRegister(const Message& message) {
     message.user.removeCommand(REGISTER);
     message.user.removeCommand(LOGIN);
 
-    return accountService.updateUserState(message);
+    return _accountService.updateUserState(message);
 }
 
 std::vector<Message> AccountController::logoutUser(const Message& message) {
-    if(message.user.getAccount().isLoggedIn) {
+    if(isUserLoggedIn(message)) {
         message.user.removeCommand(LOGOUT);
 
         message.user.reset();
@@ -75,10 +76,15 @@ std::vector<Message> AccountController::escapeLogin(const Message& message) {
 }
 
 Message AccountController::respondToMessage(const Message& message) {
-    return message.user.getAccount().isLoggedIn
+    return isUserLoggedIn(message)
         ? Message {message.user, ""}
-        : accountService.updateUserState(message).front();
+        : _accountService.updateUserState(message).front();
 }
 
 
-
+/*
+ * PRIVATE METHODS
+ */
+bool AccountController::isUserLoggedIn(const Message& message) const {
+    return message.user.getAccount().isLoggedIn;
+}

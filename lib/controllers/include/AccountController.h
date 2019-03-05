@@ -25,7 +25,7 @@ constexpr char ESCAPE_WHILE_NOT_LOGIN_MESSAGE[] = "You are not submitting any Ac
 
 class AccountController : public AbstractController {
 public:
-    AccountController() : accountService() {}
+    AccountController() : _accountService() {}
 
     std::vector<Message> startLogin(const Message& message);
 
@@ -38,7 +38,10 @@ public:
     Message respondToMessage(const Message& message) override;
 
 private:
-    AccountService accountService;
+    AccountService _accountService;
+
+    // Helper method to determine is if the user inside a message is logged in
+    bool isUserLoggedIn(const Message& message) const;
 };
 
 #endif // WEBSOCKETNETWORKING_CLIENTMANAGER_H
