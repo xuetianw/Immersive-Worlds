@@ -60,7 +60,11 @@ std::deque<ServerMessage> processMessages(CommandProcessor& commandProcessor,
             std::cout << "Shutting down.\n";
             quit = true;
         } else if (commandProcessor.isCommand(message)) {
-            result.push_back(commandProcessor.processCommand(message).convertToServerMessage());
+            std::vector<Message> returnedMessages = commandProcessor.processCommand(message);
+            for (auto& message: returnedMessages){
+                result.push_back(message.convertToServerMessage());
+            }
+
         } else {
             result.push_back(commandProcessor.handleDefaultMessage(message).convertToServerMessage());
         }

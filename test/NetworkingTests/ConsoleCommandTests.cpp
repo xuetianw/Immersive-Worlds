@@ -20,8 +20,8 @@ public:
     Message dummy{dummyUser,"/HahaWhatAmI"};
 protected:
     void SetUp() override {
-        commandProcessor.addCommand(loginCommand, LOGIN, [](Message message){return Message{message.user,::loginStr};});
-        commandProcessor.addCommand(logoutCommand, LOGOUT, [](Message message){return Message{message.user,::logoutStr};});
+        commandProcessor.addCommand(loginCommand, LOGIN, [](Message message){return std::vector<Message>{ Message{message.user,::loginStr} };});
+        commandProcessor.addCommand(logoutCommand, LOGOUT, [](Message message){return std::vector<Message>{ Message{message.user,::logoutStr} };});
     }
 
     void TearDown() override { }
@@ -31,9 +31,9 @@ TEST_F(ConsoleCommandTest, commandsAreCalled){
     loginUser.addCommand(LOGIN);
     logoutUser.addCommand(LOGOUT);
 
-    Message defaultResponse = commandProcessor.processCommand(dummy);
-    Message loginResponse = commandProcessor.processCommand(login);
-    Message logoutResponse = commandProcessor.processCommand(logout);
+    Message defaultResponse = commandProcessor.processCommand(dummy).front();
+    Message loginResponse = commandProcessor.processCommand(login).front();
+    Message logoutResponse = commandProcessor.processCommand(logout).front();
 
     EXPECT_TRUE(defaultResponse.text != loginStr && defaultResponse.text != logoutStr);
     EXPECT_TRUE(loginResponse.text == loginStr);
@@ -44,8 +44,8 @@ TEST_F(ConsoleCommandTest, commandsAreCalled){
 }
 
 TEST_F(ConsoleCommandTest, userCallsForbiddenCommands){
-    Message loginResponse = commandProcessor.processCommand(login);
-    Message logoutResponse = commandProcessor.processCommand(logout);
+    Message loginResponse = commandProcessor.processCommand(login).front();
+    Message logoutResponse = commandProcessor.processCommand(logout).front();
 
     EXPECT_TRUE(loginResponse.text == loginStr);
     EXPECT_TRUE(logoutResponse.text != logoutStr);

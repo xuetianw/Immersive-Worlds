@@ -18,7 +18,7 @@ class GameController : AbstractController {
 public:
     GameController() : _gameService() {}
 
-    Message move(const Message &message);
+    std::vector<Message> move(const Message &message);
 
     Message respondToMessage(const Message& message) override;
 
@@ -31,7 +31,8 @@ public:
      * @param message
      * @return current location info
      */
-    Message outputCurrentLocationInfo(const Message& message);
+    std::vector<Message> outputCurrentLocationInfo(const Message& message);
+
 
 private:
     GameService _gameService;

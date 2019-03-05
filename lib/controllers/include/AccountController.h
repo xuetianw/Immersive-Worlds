@@ -27,13 +27,13 @@ class AccountController : public AbstractController {
 public:
     AccountController() : _accountService() {}
 
-    Message startLogin(const Message& message);
+    std::vector<Message> startLogin(const Message& message);
 
-    Message startRegister(const Message& message);
+    std::vector<Message> startRegister(const Message& message);
 
-    Message logoutUser(const Message& message);
+    std::vector<Message> logoutUser(const Message& message);
 
-    Message escapeLogin(const Message& message);
+    std::vector<Message> escapeLogin(const Message& message);
 
     Message respondToMessage(const Message& message) override;
 
