@@ -3,7 +3,9 @@
 //
 
 #include "Avatar.h"
-#include "ContainerItem.h"
+
+using models::Avatar;
+using models::AvatarType;
 
 bool Avatar::takeItem(InventoryItem inventoryItem) {
     return _inventory.addItem(inventoryItem);
@@ -38,7 +40,7 @@ bool Avatar::isPlayable() {
     return _avatarType == AvatarType::PLAYABLE;
 }
 
-Avatar::Avatar(AvatarType avatarType, int userId)
+Avatar::Avatar(AvatarType avatarType, ID userId)
         : MAX_HP(200),
           MAX_MANA(150),
           _avatarType(avatarType),
@@ -53,15 +55,11 @@ void Avatar::set_mana(unsigned int _mana) {
     Avatar::_mana = _mana;
 }
 
-void Avatar::set_currentRoom(const models::Room &_currentRoom) {
-    Avatar::_currentRoom = _currentRoom;
-}
-
 AvatarType Avatar::get_avatarType() const {
     return _avatarType;
 }
 
-int Avatar::get_userID() const {
+const ID& Avatar::get_userID() const {
     return _userID;
 }
 
@@ -83,10 +81,6 @@ int Avatar::get_hp() const {
 
 int Avatar::get_mana() const {
     return _mana;
-}
-
-const models::Room &Avatar::get_currentRoom() const {
-    return _currentRoom;
 }
 
 string Avatar::get_shortDesc() const {
