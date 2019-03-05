@@ -24,12 +24,18 @@ public:
      * Check if inventory contains the specified item
      * @param itemId: the item to search in inventory
      */
-    bool hasItem(ID itemId) const;
+    bool hasItem(const ID& itemId) const;
 
     const ID& getPlayerId() const;
 
     /**
-     * Add an item to inventory
+     * Add an item to inventory with a given ID
+     * @param itemToAdd: the item to be added into inventory
+     */
+    bool addItem(const ID& id, InventoryItem itemToAdd);
+
+    /**
+     * Add an item to inventory with a newly generated ID
      * @param itemToAdd: the item to be added into inventory
      */
     bool addItem(InventoryItem itemToAdd);
@@ -38,7 +44,7 @@ public:
      * Remove an item from inventory and return the removed item.
      * @param itemToRemove: the id of the item to be removed from inventory
      */
-    InventoryItem removeItem(ID idToRemove);
+    std::unique_ptr<InventoryItem> removeItem(const ID& idToRemove);
 
 private:
     ID _playerId;

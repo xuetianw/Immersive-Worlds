@@ -73,7 +73,7 @@ namespace models {
 
         bool wearItem(InventoryItem inventoryItem);
 
-        InventoryItem removeItem(InventoryItem inventoryItem);
+        std::unique_ptr<InventoryItem> removeItem(const InventoryItem& inventoryItem);
 
     private:
         int MAX_HP;

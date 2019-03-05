@@ -13,26 +13,23 @@ bool Avatar::takeItem(InventoryItem inventoryItem) {
 
 void Avatar::putItem(InventoryItem inventoryItem, ContainerItem containerObject) {
     // TODO: complete once adding to a containerItem is implemented
-    // containerObject.addItem(inventoryItem);
 }
 
 void Avatar::dropItem(InventoryItem inventoryItem) {
     // TODO: complete after implementing an _inventory in a room
-    InventoryItem removedItem = removeItem(inventoryItem);
-    // currentRoom._inventory.addItem(removedItem);
 }
 
 bool Avatar::wearItem(InventoryItem inventoryItem) {
     if (inventoryItem.getItemType() == ItemType::CLOTHING) {
         InventoryItem clothingToRemove = _currentClothing;
-        InventoryItem clothingToWear = removeItem(inventoryItem);
-        _currentClothing = clothingToWear;
+        std::unique_ptr<InventoryItem> clothingToWear = removeItem(inventoryItem);
+        _currentClothing = *clothingToWear;
         return _inventory.addItem(clothingToRemove);
     }
     return false;
 }
 
-InventoryItem Avatar::removeItem(InventoryItem inventoryItem) {
+std::unique_ptr<InventoryItem> Avatar::removeItem(const InventoryItem& inventoryItem) {
     return _inventory.removeItem(inventoryItem.getId());
 }
 
