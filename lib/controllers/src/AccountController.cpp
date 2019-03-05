@@ -19,7 +19,7 @@
 using namespace std;
 
 Message AccountController::startLogin(const Message& message) {
-    if(message.user.getAccount().isLoggedIn) {
+    if(isUserLoggedIn(message)) {
         return Message{message.user, ALREADY_LOGIN_MESSAGE};
     }
     message.user.getAccount().isLoggingIn = true;
@@ -28,11 +28,11 @@ Message AccountController::startLogin(const Message& message) {
     message.user.removeCommand(REGISTER);
     message.user.removeCommand(LOGIN);
 
-    return accountService.updateUserState(message);
+    return _accountService.updateUserState(message);
 }
 
 Message AccountController::startRegister(const Message& message) {
-    if(message.user.getAccount().isLoggedIn) {
+    if(isUserLoggedIn(message)) {
         return Message{message.user, LOGOUT_BEFORE_REGISTER_MESSAGE};
     }
     message.user.getAccount().isRegistering = true;
@@ -41,11 +41,11 @@ Message AccountController::startRegister(const Message& message) {
     message.user.removeCommand(REGISTER);
     message.user.removeCommand(LOGIN);
 
-    return accountService.updateUserState(message);
+    return _accountService.updateUserState(message);
 }
 
 Message AccountController::logoutUser(const Message& message) {
-    if(message.user.getAccount().isLoggedIn) {
+    if(isUserLoggedIn(message)) {
         message.user.removeCommand(LOGOUT);
 
         message.user.reset();
@@ -75,10 +75,15 @@ Message AccountController::escapeLogin(const Message& message) {
 }
 
 Message AccountController::respondToMessage(const Message& message) {
-    return message.user.getAccount().isLoggedIn
+    return isUserLoggedIn(message)
         ? Message {message.user, ""}
-        : accountService.updateUserState(message);
+        : _accountService.updateUserState(message);
 }
 
 
-
+/*
+ * PRIVATE METHODS
+ */
+bool AccountController::isUserLoggedIn(const Message& message) const {
+    return message.user.getAccount().isLoggedIn;
+}
