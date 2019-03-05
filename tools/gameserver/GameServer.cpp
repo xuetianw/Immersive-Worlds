@@ -22,7 +22,7 @@
 #include "Message.h"
 
 using networking::Connection;
-using networking::ConnectionHasher;
+using networking::ConnectionHash;
 using networking::ServerMessage;
 using networking::Server;
 
@@ -32,7 +32,7 @@ using namespace std;
 unique_ptr<CommandProcessor> commandProcessor;
 
 // Store User State
-unordered_map<Connection , User, ConnectionHasher> users;
+unordered_map<Connection, User, ConnectionHash> users;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onConnect(Connection &c) {
