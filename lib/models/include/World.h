@@ -5,36 +5,24 @@
 #ifndef MODELS_WORLD_H
 #define MODELS_WORLD_H
 
-#include <unordered_map>
-#include <Area.h>
-
-using std::unordered_map;
+#include "ID.h"
 
 namespace models {
     class World {
         public:
-            World(int id);
-            ~World();
+            explicit World(ID id) : _id(id) {}
 
             /**
              * Gets the Id of the area
              * 
              * @returns the id of the area
              */
-            int getId() const;
-
-            /**
-             * Adds a new area to the unordered_map.
-             * 
-             * @param Area area: room object that will be added to the map
-             * 
-             * @returns true = inserted in the map. false = id already exists in map
-             */
-            bool addArea(Area area);
+            const ID& getId() const {
+                return _id;
+            }
 
         private:
-            int _id = 0; //TODO make world id unique
-            unordered_map<int, Area> _areas;
+            ID _id;
     };
 } // namespace models
 

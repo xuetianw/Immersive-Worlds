@@ -17,7 +17,7 @@ target_link_libraries(commands
     networking
     controllers
     services
-    user
+    utilities
     )
 
 set_target_properties(commands

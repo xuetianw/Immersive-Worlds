@@ -5,9 +5,11 @@
 #include "Server.h"
 #include "GameService.h"
 
+using models::RoomConnection;
+
 bool GameService::moveUser(const User& user, const std::string& keywordString) {
     auto roomId = _connectionToRoomId.at(user.getConnection());
-    auto connectedRoomList = _roomIdToRoomConnectionsList.at(roomId.getId());
+    auto connectedRoomList = _roomIdToRoomConnectionsList.at(roomId);
     auto connectedRoom = std::find_if(connectedRoomList.begin(), connectedRoomList.end(), [keywordString](const models::RoomConnection &roomConnection) -> bool {
         return roomConnection.getUserInputDirKey() == keywordString;
     });
@@ -21,26 +23,30 @@ bool GameService::userYell(const User& user, const std::string& messageString) {
     return false;
 }
 
-string GameService::getCurrentRoomName(const networking::Connection &connection) {
-    auto roomId = _connectionToRoomId.at(connection);
-    auto room = _roomIdToRoom.at(roomId.getId());
-    return room.getName();
+string GameService::getCurrentRoomName(const Connection& connection) {
+    const ID& roomId = _connectionToRoomId[connection];
+    auto roomIter = _roomIdToRoom.find(roomId);
+    return roomIter != _roomIdToRoom.end() ? roomIter->second.getName() : "";
 }
 
-bool GameService::spawnUserInRoomOnLogin(const networking::Connection &connection) {
-    auto[it,inserted] = _connectionToRoomId.insert_or_assign(connection, models::RoomId(10500)); // DEBUG starting room is in Lexia's shop
-    return it != _connectionToRoomId.end() || !inserted;
+bool GameService::spawnUserInRoomOnLogin(const Connection& connection) {
+    const Room* userRoom = getRoomByName("Lexie's Scuba Shop");
+    return userRoom ? spawnUserInRoom(connection, userRoom->getId()) : false;
 }
 
-bool GameService::spawnUserInRoom(const networking::Connection &connection, int id) {
-    auto[it,inserted] = _connectionToRoomId.insert_or_assign(connection, models::RoomId(id));
-    return it != _connectionToRoomId.end() || !inserted;
+bool GameService::spawnUserInRoom(const Connection& connection, const ID& id) {
+    auto [it, inserted] = _connectionToRoomId.emplace(connection, id);
+    return it != _connectionToRoomId.end() || inserted;
 }
 
-const Room& GameService::getRoom(const RoomId& roomId) {
-    // This is just a placeholder.
-    // TODO: Implement the logic appropriately
-    return std::move(Room());
+const Room* GameService::getRoomByName(const string& roomName) const {
+    for(const auto& room : _roomIdToRoom) {
+        if(room.second.getName() == roomName) {
+            return &room.second;
+        }
+    }
+
+    return nullptr;
 }
 
 const Room& GameService::getUserRoom(const Connection& connection) {
@@ -50,27 +56,18 @@ const Room& GameService::getUserRoom(const Connection& connection) {
 }
 
 void GameService::loadFromStorage() {
-    // load _roomIdToRoom
-    for (const CusJson::Room &room:_dataStorage.getJsonArea()._rooms) {
-        _roomIdToRoom.emplace(room._id, models::Room(room));
-    }
+    // load data from cusJson
+    for (const CusJson::Room& room : _dataStorage.getJsonArea()._rooms) {
+        // Create a new models::Room from CusJson::Room
+        Room newRoom {room};
+        const ID& newRoomId = newRoom.getId();
+        _roomIdToRoom.emplace(newRoomId, newRoom);
 
-    // load _roomIdToRoomConnectionsList
-    using RoomIdConnectionsPair = std::pair<int, std::vector<models::RoomConnection>>;
-    std::vector<RoomIdConnectionsPair> roomIdToRoomConnectionListPairList;
-    for (const CusJson::Room &room:_dataStorage.getJsonArea()._rooms) {
-        std::vector<models::RoomConnection> roomConnectionVector;
+        std::vector<RoomConnection> roomConnectionVector;
         for (const CusJson::JsonDoor& jsonDoor : room._jsonDoors) {
-            roomConnectionVector.emplace_back(models::RoomId(jsonDoor._to), models::RoomId(room._id), jsonDoor._dir);
+            roomConnectionVector.emplace_back(ID(jsonDoor._to), ID(room._id), jsonDoor._dir);
         }
-        roomIdToRoomConnectionListPairList.emplace_back(room._id, roomConnectionVector);
-    }
 
-    for (const auto &roomConnection: roomIdToRoomConnectionListPairList) {
-        _roomIdToRoomConnectionsList.insert(roomConnection);
+        _roomIdToRoomConnectionsList.emplace(newRoomId, roomConnectionVector);
     }
-}
-
-GameService::GameService() {
-    loadFromStorage();
 }

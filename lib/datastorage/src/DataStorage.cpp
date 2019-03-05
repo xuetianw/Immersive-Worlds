@@ -2,16 +2,9 @@
 // Created by user on 2/11/19.
 //
 
-#include <DataStorage.h>
-
 #include "DataStorage.h"
 
-DataStorage::DataStorage() {
-    json solaceJson = getTestingArea();
-    jsonArea = solaceJson.get<CusJson::Area>();
-}
-
-
+using CusJson::Area;
 
 json DataStorage::getTestingArea() {
     json j = R"(
@@ -126,11 +119,10 @@ json DataStorage::getTestingArea() {
     return j;
 }
 
-
-const CusJson::Area &DataStorage::getJsonArea() const {
-    return jsonArea;
+const Area& DataStorage::getJsonArea() const {
+    return _jsonArea;
 }
 
-void DataStorage::setJsonArea(const CusJson::Area &jsonArea) {
-    DataStorage::jsonArea = jsonArea;
+void DataStorage::setJsonArea(const Area& jsonArea) {
+    _jsonArea = jsonArea;
 }
