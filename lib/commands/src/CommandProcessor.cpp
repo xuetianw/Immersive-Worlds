@@ -50,6 +50,24 @@ std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
     return std::pair<string,string>(keyCommand, remainder);
 }
 
+std::vector<Message> CommandProcessor::listAllowedCommands(const Message& message){
+    std::stringstream output;
+    auto allowedCommands = message.user.getAllowedCommands();
+
+    output << "Allowed Commands: \n";
+
+    for(auto keywordCommandPair : _keywords){
+
+        auto command = keywordCommandPair.second;
+        auto keyword = keywordCommandPair.first;
+        if(allowedCommands.find(command) != allowedCommands.end()){
+            output << keyword << "\n";
+        }
+    }
+
+    return std::vector<Message>{Message{message.user, output.str()}};
+}
+
 void CommandProcessor::buildCommands() {
     addCommand("/whereami", WHEREAMI, [this] (Message message) { return gameController->outputCurrentLocationInfo(message); });
     addCommand("/logout", LOGOUT, [this] (Message message) { return accountController->logoutUser(message); });
@@ -57,5 +75,6 @@ void CommandProcessor::buildCommands() {
     addCommand("/register", REGISTER, [this] (Message message) { return accountController->startRegister(message); });
     addCommand("/escape", ESCAPE, [this] (Message message) { return accountController->escapeLogin(message); });
     addCommand("/move", MOVE, [this] (Message message) { return gameController->move(message); });
+    addCommand("/help", HELP, [this] (Message message) { return listAllowedCommands(message);});
 }
 

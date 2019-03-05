@@ -24,11 +24,7 @@ std::vector<Message> AccountController::startLogin(const Message& message) {
         return std::vector<Message> { Message{message.user, ALREADY_LOGIN_MESSAGE} };
     }
     message.user.getAccount().isLoggingIn = true;
-
-    message.user.addCommand(ESCAPE);
-    message.user.removeCommand(REGISTER);
-    message.user.removeCommand(LOGIN);
-
+    
     return _accountService.updateUserState(message);
 }
 
@@ -37,11 +33,7 @@ std::vector<Message> AccountController::startRegister(const Message& message) {
         return std::vector<Message> { Message{message.user, LOGOUT_BEFORE_REGISTER_MESSAGE} };
     }
     message.user.getAccount().isRegistering = true;
-
-    message.user.addCommand(ESCAPE);
-    message.user.removeCommand(REGISTER);
-    message.user.removeCommand(LOGIN);
-
+    
     return _accountService.updateUserState(message);
 }
 

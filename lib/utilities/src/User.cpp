@@ -2,13 +2,14 @@
 // Created by vinshit on 16/02/19.
 //
 
+#include <sstream>
 #include "User.h"
 
 using std::unordered_set;
 
 void User::reset() {
     setAccount(Account{});
-    setAllowedCommands({LOGIN, REGISTER});
+    setAllowedCommands({LOGIN, REGISTER, HELP});
 }
 
 void User::removeCommand(Command command) {
@@ -46,3 +47,5 @@ void User::setAllowedCommands(unordered_set<Command> allowedCommands) {
 bool User::canPreformCommand(Command command) {
     return _allowedCommands.find(command) != _allowedCommands.end();
 }
+
+
