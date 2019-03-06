@@ -37,9 +37,14 @@ public:
     static bool deleteUser(const string& username);
 
     /*
-     * Checks for the existence of a single User
+     * Checks for the existence of a single User using its name
      */
     static bool userExists(const string& username);
+
+    /*
+     * Validates the User and password of a user with the database
+     */
+    static bool isValidCredential(string &username, string &password);
 
     /*
      * acquires all Users on server bootup and populates datastructure
@@ -55,7 +60,6 @@ public:
      * close connection to sqlite database
      */
     static bool closeConnection();
-
 
 private:
     /*

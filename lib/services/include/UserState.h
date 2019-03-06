@@ -8,24 +8,25 @@
 #include <string>
 #include <variant>
 #include <optional>
+#include "DBUtil.h"
 
 
 using string = std::string;
 
 ///////////////////////////////////////////USER-PROMPTS////////////////////////////////////////////
-const string LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT = "Account Created! Please re-enter your username: ";
-const string LOGIN_USERNAME_PROMPT = "Please enter your username to login: ";
-const string LOGIN_USERNAME_FAILED_PROMPT = "Account does not exist!\nPlease enter a valid username: ";
-const string LOGIN_PASSWORD_PROMPT = "Please enter your password: ";
-const string LOGIN_PASSWORD_FAILED_PROMPT = "Login Unsuccessful\nPlease enter your username again: ";
-const string REGISTER_USERNAME_PROMPT = "Please create your username: ";
-const string REGISTER_USERNAME_FAILED_PROMPT = "Username unavailable!\nPlease enter a different username: ";
-const string REGISTER_PASSWORD_PROMPT = "Please create your password: ";
-const string REGISTER_PASSWORD_FAILED_PROMPT = "Invalid Password!\nPlease enter a different password: ";
-const string LOGGED_IN_PROMPT = "Successfully logged in!\n";
-const string LOGGED_OUT_PROMPT = "Logged out Successfully!\n";
-const string NOT_SIGNED_IN_PROMPT = "Please enter login or register!\n";
-const string EMPTY_INPUT_PROMPT = "Invalid String - \n";
+constexpr char LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT[] = "Account Created! Please enter your new username: ";
+constexpr char LOGIN_USERNAME_PROMPT[] = "Please enter your username to login: ";
+constexpr char LOGIN_USERNAME_FAILED_PROMPT[] = "Account does not exist!\nPlease enter a valid username: ";
+constexpr char LOGIN_PASSWORD_PROMPT[] = "Please enter your password: ";
+constexpr char LOGIN_PASSWORD_FAILED_PROMPT[] = "Login Unsuccessful\nPlease enter your username again: ";
+constexpr char REGISTER_USERNAME_PROMPT[] = "Please create your username: ";
+constexpr char REGISTER_USERNAME_FAILED_PROMPT[] = "Username unavailable!\nPlease enter a different username: ";
+constexpr char REGISTER_PASSWORD_PROMPT[] = "Please create your password: ";
+constexpr char REGISTER_PASSWORD_FAILED_PROMPT[] = "Invalid Password!\nPlease enter a different password: ";
+constexpr char LOGGED_IN_PROMPT[] = "Successfully logged in!\n";
+constexpr char LOGGED_OUT_PROMPT[] = "Logged out Successfully!\n";
+constexpr char NOT_SIGNED_IN_PROMPT[] = "Please enter login or register!\n";
+constexpr char EMPTY_INPUT_PROMPT[] = "Invalid String - \n";
 
 ///////////////////////////////////////////USER-STATES/////////////////////////////////////////////
 struct UnRegisteredState {};
@@ -50,6 +51,8 @@ typedef std::variant<
 struct Account {
     std::string _username;
     std::string _password;
+    std::string _registerUsername;
+    std::string _registerPassword;
     bool isLoggingIn = false;
     bool isSubmittingLogin = false;
     bool isRegistering = false;
@@ -79,8 +82,16 @@ struct StateTransitions {
     }
 
     std::optional<UserStateVariant> operator()(RegisterUsernameState& state, Account& account, const string& message) {
-        // TODO: Add the username to persistent storage for future identification
         if (invalid(message)) {
+            _currentUserResponseMessage = REGISTER_USERNAME_FAILED_PROMPT;
+            return RegisterUsernameState {};
+        }
+
+        //check if username exists in DB
+        account._registerUsername = message;
+
+        //if username already exists, send a message saying username already taken
+        if(DBUtil::userExists(account._registerUsername)) {
             _currentUserResponseMessage = REGISTER_USERNAME_FAILED_PROMPT;
             return RegisterUsernameState {};
         }
@@ -90,13 +101,20 @@ struct StateTransitions {
     }
 
     std::optional<UserStateVariant> operator()(RegisterPasswordState& state, Account& account, const string& message) {
-        // TODO: Add the password to persistent storage for future authentication
+        // TODO: Check is password is valid or not i.e meets the criteria of a password
         if (invalid(message)) {
             _currentUserResponseMessage = getResponseForInvalidInput(REGISTER_PASSWORD_FAILED_PROMPT);
             return RegisterPasswordState {};
         }
+
+        account._registerPassword = message;
+
+        if(!DBUtil::registerUser(account._registerUsername, account._registerPassword)){
+            _currentUserResponseMessage = getResponseForInvalidInput(REGISTER_PASSWORD_FAILED_PROMPT);
+            return RegisterPasswordState {};
+        }
+
         account.isSubmittingRegistration = true;
-        //TODO: Fill the backend for user storage.
         _currentUserResponseMessage = LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT;
         return LoginUsernameState {};
     }
@@ -119,7 +137,6 @@ struct StateTransitions {
     std::optional<UserStateVariant> operator()(LoginUsernameState& state, Account& account,  const string& message) {
 
 
-        // TODO: Verify username
         if(invalid(message)) {
             _currentUserResponseMessage = getResponseForInvalidInput(LOGIN_USERNAME_FAILED_PROMPT);
             return LoginUsernameState {};
@@ -132,17 +149,25 @@ struct StateTransitions {
 
     std::optional<UserStateVariant> operator()(LoginPasswordState& state, Account& account, const string& message) {
 
+        //DBUtil::openConnection("adventure.db");
         if(invalid(message)) {
             _currentUserResponseMessage = getResponseForInvalidInput(LOGIN_PASSWORD_FAILED_PROMPT);
             return LoginUsernameState {};
         }
 
         account._password = message;
-        account.isSubmittingLogin = true;
 
-        //TODO: Fill the backend for user verification.
-        _currentUserResponseMessage = LOGGED_IN_PROMPT;
-        return LoggedInState {};
+        //verify username and password with DB
+
+        if(DBUtil::isValidCredential(account._username, account._password)){
+            account.isSubmittingLogin = true;
+            _currentUserResponseMessage = LOGGED_IN_PROMPT;
+            return LoggedInState {};
+        } else{
+            _currentUserResponseMessage = getResponseForInvalidInput(LOGIN_PASSWORD_FAILED_PROMPT);
+            return LoginUsernameState {};
+        }
+
     }
 
     std::optional<UserStateVariant> operator()(LoggedInState& state, Account& account, const string& message) {
