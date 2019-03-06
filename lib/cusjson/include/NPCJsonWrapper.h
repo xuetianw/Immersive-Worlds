@@ -6,6 +6,7 @@
 #define WEBSOCKETNETWORKING_NPCJSONWRAPPER_H
 
 #include <vector>
+
 namespace CusJson {
     struct Equipment {
         int _equidId;
@@ -21,11 +22,12 @@ namespace CusJson {
         std::vector<struct Equipment> _givenEquipment;
 
         NPCJsonWrapper(int _NPCId, int _limit, int _roomId);
+
         void addObject(int objectId);
+
         void addEquipment(struct Equipment equipment);
     };
 }
-
 
 
 #endif //WEBSOCKETNETWORKING_NPCJSONWRAPPER_H

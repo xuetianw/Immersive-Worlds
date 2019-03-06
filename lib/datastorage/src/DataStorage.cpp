@@ -9,7 +9,7 @@
 DataStorage::DataStorage() {
     json solaceJson = getTestingArea();
     jsonArea = solaceJson.get<CusJson::Area>();
-    string test =  "test";
+    string test = "test";
 }
 
 json DataStorage::getTestingArea() {
@@ -259,11 +259,10 @@ json DataStorage::getTestingArea() {
     return j;
 }
 
-
-const CusJson::Area &DataStorage::getJsonArea() const {
+const CusJson::Area& DataStorage::getJsonArea() const {
     return jsonArea;
 }
 
-void DataStorage::setJsonArea(const CusJson::Area &jsonArea) {
+void DataStorage::setJsonArea(const CusJson::Area& jsonArea) {
     DataStorage::jsonArea = jsonArea;
 }

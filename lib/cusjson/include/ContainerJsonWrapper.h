@@ -6,6 +6,7 @@
 #define WEBSOCKETNETWORKING_CONTAINERJSONWRAPPER_H
 
 #include <vector>
+
 namespace CusJson {
     class ContainerJsonWrapper {
     public:
@@ -14,6 +15,7 @@ namespace CusJson {
         std::vector<int> _containedObjectIds;
 
         ContainerJsonWrapper(int _objectId, int _roomId);
+
         void addObject(int objectId);
     };
 }

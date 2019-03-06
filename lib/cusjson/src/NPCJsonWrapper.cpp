@@ -3,7 +3,9 @@
 //
 
 #include "NPCJsonWrapper.h"
+
 using namespace CusJson;
+
 void NPCJsonWrapper::addObject(int objectId) {
     _givenObject.push_back(objectId);
 }

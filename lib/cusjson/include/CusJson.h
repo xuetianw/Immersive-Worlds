@@ -72,29 +72,29 @@ namespace CusJson {
         std::vector<ContainerJsonWrapper> _containerWrappers;
     };
 
-    void to_json(json &j, const JsonDoor &door);
+    void to_json(json& j, const JsonDoor& door);
 
-    void from_json(const json &j, JsonDoor &door);
+    void from_json(const json& j, JsonDoor& door);
 
-    void to_json(json &j, const ExtDesc &extDesc);
+    void to_json(json& j, const ExtDesc& extDesc);
 
-    void from_json(const json &j, ExtDesc &extDesc);
+    void from_json(const json& j, ExtDesc& extDesc);
 
-    void to_json(json &j, const NPC &npc);
+    void to_json(json& j, const NPC& npc);
 
-    void from_json(const json &j, NPC &npc);
+    void from_json(const json& j, NPC& npc);
 
-    void to_json(json &j, const Object &object);
+    void to_json(json& j, const Object& object);
 
-    void from_json(const json &j, Object &object);
+    void from_json(const json& j, Object& object);
 
-    void to_json(json &j, const Room &room);
+    void to_json(json& j, const Room& room);
 
-    void from_json(const json &j, Room &room);
+    void from_json(const json& j, Room& room);
 
-    void to_json(json &j, const Area &area);
+    void to_json(json& j, const Area& area);
 
-    void from_json(const json &j, Area &area);
+    void from_json(const json& j, Area& area);
 }
 
 #endif //WEBSOCKETNETWORKING_CUSJSON_H
