@@ -1,3 +1,11 @@
+#
+# There are 2 stages to the pipeline: build and test
+#
+# Build stage: the project needs to be able to build for any merge requests to be accepted
+#
+# Test stage: Unit tests are allowed to fail when making merge requests for all branches EXCEPT master
+#
+
 stages:
   - build
   - test
