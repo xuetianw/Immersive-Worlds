@@ -44,7 +44,7 @@ public:
     /*
      * Validates the User and password of a user with the database
      */
-    static bool findUserExistence(string &username, string &password);
+    static bool isValidCredential(string &username, string &password);
 
     /*
      * acquires all Users on server bootup and populates datastructure

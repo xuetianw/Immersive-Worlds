@@ -113,7 +113,7 @@ bool DBUtil::userExists(const string& username) {
     return status == SQLITE_ROW;
 }
 
-bool DBUtil::findUserExistence(string &username, string &password) {
+bool DBUtil::isValidCredential(string &username, string &password) {
 
     const string getUserQueryString = "SELECT * FROM User WHERE username = :username AND password = :password;";
     sqlite3_stmt* findUserStmt;

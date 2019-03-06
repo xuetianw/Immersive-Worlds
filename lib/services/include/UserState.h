@@ -162,7 +162,7 @@ struct StateTransitions {
 
         //verify username and password with DB
 
-        if(DBUtil::findUserExistence(account._username, account._password)){
+        if(DBUtil::isValidCredential(account._username, account._password)){
             account.isSubmittingLogin = true;
             _currentUserResponseMessage = LOGGED_IN_PROMPT;
             return LoggedInState {};

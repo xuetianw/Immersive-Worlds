@@ -26,7 +26,7 @@ TEST_F(DatabaseTests, databaseTest) {
 
     string temp1 = "abc";
     string temp2 = "abc";
-    EXPECT_TRUE(DBUtil::findUserExistence(temp1,temp2));
+    EXPECT_TRUE(DBUtil::isValidCredential(temp1, temp2));
 
     QueryResults results = DBUtil::getAllUsers();
     std::vector<string> usernames;
