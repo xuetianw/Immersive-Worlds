@@ -61,6 +61,10 @@ public:
      */
     static bool closeConnection();
 
+    /*
+     * drop table function for testing purposes only!
+     */
+    static bool testDropTables();
 
 private:
     /*

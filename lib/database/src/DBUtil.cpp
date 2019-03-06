@@ -230,3 +230,7 @@ bool DBUtil::dropTables() {
 
     return status == SQLITE_DONE;
 }
+
+bool DBUtil::testDropTables() {
+    return dropTables();
+}
