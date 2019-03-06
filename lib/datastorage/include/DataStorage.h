@@ -12,12 +12,8 @@ private:
     CusJson::Area _jsonArea;
 
 public:
-    DataStorage() {
-        json solaceJson = getTestingArea();
-        _jsonArea = solaceJson.get<CusJson::Area>();
-    }
-
-    const CusJson::Area& getJsonArea() const;
+    DataStorage();
+    const CusJson::Area &getJsonArea() const;
 
     void setJsonArea(const CusJson::Area& jsonArea);
 

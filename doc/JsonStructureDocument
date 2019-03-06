@@ -1,0 +1,57 @@
+AREA: names the json file
+HELPS: UNKNOWN???
+NPCS: Strings about a NPC
+OBJECTS: Strings about a Object
+ROOMS: Strings, and connect rooms by ID
+RESETS: Commands that link everything together in theory. Each object needs to be batched dynamically since it seems like the resets objects only make sense in groups
+SHOPS: UNKNOWN???
+Case #1 (NPCS config in RESETS):
+{
+    {
+      "action": "npc", <-- key command to create an NPC creation
+      "id": 10538, <-- id of the NPC in the NPCS JSON
+      "limit": 1, <-- an UNKNOWN limit of said npc in room???
+      "room": 10500 <-- the id that the action NPC is in
+    },
+    {
+      "action": "give", <-- key command to give (Assuming it is supposed to give to the most recent NPC action above)
+      "id": 10538 <-- id of the object to give
+    },
+    {
+      "action": "equip", <-- key command to equip (Assuming it is supposed to give to the most recent NPC action above)
+      "id": 10500 <-- id of the object to give (NOTE: There is nothing in the json that differentiates objects as equip-able or not. You could be equipping gold coins here.)
+      "slot": 5 <-- an UNKNOWN id that denotes something.
+    }
+}
+
+Case #2 (objects in rooms config in RESETS):
+{
+    {
+      "action": "object", <-- key command to spawn an object in a room
+      "id": 10562, <-- id of the object
+      "room": 10527 <-- room id where the object belongs
+    },
+    {
+      "action": "put", <-- key command to put something into something ???
+      "id": 10563, <-- id of the object
+      "container": 10562 <-- does not follow the same flow as above where it is implied the object command before is the target.
+    },
+    {
+      "action": "object", <-- and below are all repeated commands.
+      "id": 10562,
+      "room": 10527
+    },
+    {
+      "action": "put",
+      "id": 10563,
+      "container": 10562
+    }
+}
+
+Case #3 (door states config in RESETS. NOTE: These are bi-directional. From the json, it isn't possible to normally lock a door. ie. lock a door so people outside can't open but people inside can)
+{
+      "action": "door", <- key command for a door config
+      "id": 3, <-- UNKNOWN (from what I can tell, it's not the index but an ordering. North = 0, East = 1, South = 2, West = 3)
+      "room": 10526, <-- starting room I think
+      "state": "locked" <-- string to enum probably since there was a closed state as well.
+}
