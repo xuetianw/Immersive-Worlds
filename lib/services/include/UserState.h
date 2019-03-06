@@ -14,19 +14,19 @@
 using string = std::string;
 
 ///////////////////////////////////////////USER-PROMPTS////////////////////////////////////////////
-const string LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT = "Account Created! Please enter your new username: ";
-const string LOGIN_USERNAME_PROMPT = "Please enter your username to login: ";
-const string LOGIN_USERNAME_FAILED_PROMPT = "Account does not exist!\nPlease enter a valid username: ";
-const string LOGIN_PASSWORD_PROMPT = "Please enter your password: ";
-const string LOGIN_PASSWORD_FAILED_PROMPT = "Login Unsuccessful\nPlease enter your username again: ";
-const string REGISTER_USERNAME_PROMPT = "Please create your username: ";
-const string REGISTER_USERNAME_FAILED_PROMPT = "Username unavailable!\nPlease enter a different username: ";
-const string REGISTER_PASSWORD_PROMPT = "Please create your password: ";
-const string REGISTER_PASSWORD_FAILED_PROMPT = "Invalid Password!\nPlease enter a different password: ";
-const string LOGGED_IN_PROMPT = "Successfully logged in!\n";
-const string LOGGED_OUT_PROMPT = "Logged out Successfully!\n";
-const string NOT_SIGNED_IN_PROMPT = "Please enter login or register!\n";
-const string EMPTY_INPUT_PROMPT = "Invalid String - \n";
+constexpr char LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT[] = "Account Created! Please enter your new username: ";
+constexpr char LOGIN_USERNAME_PROMPT[] = "Please enter your username to login: ";
+constexpr char LOGIN_USERNAME_FAILED_PROMPT[] = "Account does not exist!\nPlease enter a valid username: ";
+constexpr char LOGIN_PASSWORD_PROMPT[] = "Please enter your password: ";
+constexpr char LOGIN_PASSWORD_FAILED_PROMPT[] = "Login Unsuccessful\nPlease enter your username again: ";
+constexpr char REGISTER_USERNAME_PROMPT[] = "Please create your username: ";
+constexpr char REGISTER_USERNAME_FAILED_PROMPT[] = "Username unavailable!\nPlease enter a different username: ";
+constexpr char REGISTER_PASSWORD_PROMPT[] = "Please create your password: ";
+constexpr char REGISTER_PASSWORD_FAILED_PROMPT[] = "Invalid Password!\nPlease enter a different password: ";
+constexpr char LOGGED_IN_PROMPT[] = "Successfully logged in!\n";
+constexpr char LOGGED_OUT_PROMPT[] = "Logged out Successfully!\n";
+constexpr char NOT_SIGNED_IN_PROMPT[] = "Please enter login or register!\n";
+constexpr char EMPTY_INPUT_PROMPT[] = "Invalid String - \n";
 
 ///////////////////////////////////////////USER-STATES/////////////////////////////////////////////
 struct UnRegisteredState {};
