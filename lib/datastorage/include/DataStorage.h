@@ -5,19 +5,23 @@
 #ifndef WEBSOCKETNETWORKING_DATASTORAGE_H
 #define WEBSOCKETNETWORKING_DATASTORAGE_H
 
+#include "SingleItem.h"
 #include "CusJson.h"
 
 class DataStorage {
 private:
     CusJson::Area _jsonArea;
+    std::unordered_map<int, SingleItem> _objectMap;
 
 public:
     DataStorage();
-    const CusJson::Area &getJsonArea() const;
+    const CusJson::Area& getJsonArea() const;
 
     void setJsonArea(const CusJson::Area& jsonArea);
+    std::unordered_map<int, SingleItem> getObjectsFromJson();
 
 private:
+    std::unordered_map<int, SingleItem> configObjectMap(const CusJson::Area& jsonArea);
     json getTestingArea();
 };
 

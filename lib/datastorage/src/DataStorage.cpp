@@ -2,12 +2,15 @@
 // Created by user on 2/11/19.
 //
 
+#include <DataStorage.h>
+
 #include "DataStorage.h"
 
 using CusJson::Area;
 DataStorage::DataStorage() {
     json solaceJson = getTestingArea();
     _jsonArea = solaceJson.get<CusJson::Area>();
+    _objectMap = configObjectMap(_jsonArea);
 }
 
 json DataStorage::getTestingArea() {
@@ -263,4 +266,22 @@ const Area& DataStorage::getJsonArea() const {
 
 void DataStorage::setJsonArea(const Area& jsonArea) {
     _jsonArea = jsonArea;
+}
+
+std::unordered_map<int, SingleItem> DataStorage::getObjectsFromJson() {
+    return _objectMap;
+}
+
+std::unordered_map<int, SingleItem> DataStorage::configObjectMap(const CusJson::Area& jsonArea) {
+    std::unordered_map<int, SingleItem> map;
+    for (CusJson::Object jsonObject : jsonArea._objects) {
+        std::vector<string> keywords = jsonObject.keywords;
+        std::vector<string> longDesc = jsonObject.longdesc;
+        for (CusJson::ExtDesc extDesc : jsonObject._jsonExtDesc) {
+            keywords.insert(keywords.begin(), extDesc._keywords.begin(), extDesc._keywords.end());
+            longDesc.insert(longDesc.begin(), extDesc._desc.begin(), extDesc._desc.end());
+        }
+        map.insert({jsonObject.id, SingleItem(ID(jsonObject.id), keywords, jsonObject.shortdesc, longDesc, "")});
+    }
+    return map;
 }
