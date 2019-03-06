@@ -2,6 +2,7 @@
 // Created by Nirag Mehta on 2019-02-13.
 //
 
+#include <stdio.h>
 #include <gtest/gtest.h>
 #include <algorithm>
 
@@ -14,19 +15,19 @@ struct DatabaseTests : testing::Test {
 };
 
 TEST_F(DatabaseTests, databaseTest) {
-    EXPECT_EQ(true, DBUtil::openConnection("adventure.db"));
-    EXPECT_EQ(true, DBUtil::testDropTables());
-    EXPECT_EQ(true, DBUtil::closeConnection());
-    EXPECT_EQ(true, DBUtil::openConnection("adventure.db"));
+
+    remove("testAdventure.db");
+
+    EXPECT_EQ(true, DBUtil::openConnection("testAdventure.db"));
     EXPECT_EQ(true, DBUtil::registerUser("Josh", "abcdefg"));
     EXPECT_EQ(true, DBUtil::registerUser("Karan", "hijklmn"));
     EXPECT_EQ(true, DBUtil::registerUser("Melody", "bafhsbsa"));
     EXPECT_EQ(true, DBUtil::registerUser("Link", "masterSword"));
     EXPECT_EQ(true, DBUtil::registerUser("abc", "abc"));
 
-    string temp1 = "abc";
-    string temp2 = "abc";
-    EXPECT_TRUE(DBUtil::isValidCredential(temp1, temp2));
+    string testUsername = "abc";
+    string testPaassword = "abc";
+    EXPECT_TRUE(DBUtil::isValidCredential(testUsername, testPaassword));
 
     QueryResults results = DBUtil::getAllUsers();
     std::vector<string> usernames;

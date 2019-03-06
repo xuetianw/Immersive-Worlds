@@ -82,8 +82,6 @@ struct StateTransitions {
     }
 
     std::optional<UserStateVariant> operator()(RegisterUsernameState& state, Account& account, const string& message) {
-        // TODO: Add the username to persistent storage for future identification
-
         if (invalid(message)) {
             _currentUserResponseMessage = REGISTER_USERNAME_FAILED_PROMPT;
             return RegisterUsernameState {};
@@ -117,7 +115,6 @@ struct StateTransitions {
         }
 
         account.isSubmittingRegistration = true;
-        //TODO: Fill the backend for user storage.
         _currentUserResponseMessage = LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT;
         return LoginUsernameState {};
     }
