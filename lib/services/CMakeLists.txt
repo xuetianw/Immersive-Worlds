@@ -21,6 +21,7 @@ target_link_libraries(services
         models
         networking
         datastorage
+        database
         utilities
     )
 

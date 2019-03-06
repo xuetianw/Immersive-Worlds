@@ -17,12 +17,13 @@
 #include <set>
 
 #include "Server.h"
+#include "DBUtil.h"
 #include "CommandProcessor.h"
 #include "User.h"
 #include "Message.h"
 
 using networking::Connection;
-using networking::ConnectionHasher;
+using networking::ConnectionHash;
 using networking::ServerMessage;
 using networking::Server;
 
@@ -32,7 +33,7 @@ using namespace std;
 unique_ptr<CommandProcessor> commandProcessor;
 
 // Store User State
-unordered_map<Connection , User, ConnectionHasher> users;
+unordered_map<Connection, User, ConnectionHash> users;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onConnect(Connection &c) {
@@ -97,6 +98,7 @@ int main(int argc, char *argv[]) {
     bool done = false;
     unsigned short port = static_cast<unsigned short>(std::stoi(argv[1]));
 
+    DBUtil::openConnection("adventure.db");
     commandProcessor = make_unique<CommandProcessor>();
     Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
 
@@ -115,5 +117,6 @@ int main(int argc, char *argv[]) {
         sleep(1);
     }
 
+    DBUtil::closeConnection();
     return 0;
 }

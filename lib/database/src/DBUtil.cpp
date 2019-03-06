@@ -89,7 +89,7 @@ bool DBUtil::deleteUser(const string& username) {
 }
 
 bool DBUtil::userExists(const string& username) {
-    const string selectUserQueryString = "SELECT * FROM User WHERE username = :username";
+    const string selectUserQueryString = "SELECT * FROM User WHERE username = :username;";
     sqlite3_stmt* findUserStmt;
 
     sqlite3_prepare_v2(DBUtil::database,
@@ -105,6 +105,35 @@ bool DBUtil::userExists(const string& username) {
                       username.length(),
                       nullptr
     );
+
+    int status = sqlite3_step(findUserStmt);
+
+    return status == SQLITE_ROW;
+}
+
+bool DBUtil::isValidCredential(string &username, string &password) {
+
+    const string getUserQueryString = "SELECT * FROM User WHERE username = :username AND password = :password;";
+    sqlite3_stmt* findUserStmt;
+
+    sqlite3_prepare_v2(DBUtil::database,
+                       getUserQueryString.c_str(),
+                       -1,
+                       &findUserStmt,
+                       nullptr
+            );
+
+    sqlite3_bind_text(findUserStmt,
+            sqlite3_bind_parameter_index(findUserStmt,":username"),
+            username.c_str(),
+            username.length(),
+            nullptr);
+
+    sqlite3_bind_text(findUserStmt,
+                      sqlite3_bind_parameter_index(findUserStmt,":password"),
+                      password.c_str(),
+                      password.length(),
+                      nullptr);
 
     int status = sqlite3_step(findUserStmt);
 
