@@ -24,10 +24,20 @@ std::vector<Message> CommandProcessor::processCommand(const Message& message) {
     auto commandsIter = keywordIter!=_keywords.end() ? _commands.find(keywordIter->second) : _commands.end();
 
     if(commandsIter != _commands.end()) {
-        if(message.user.canPreformCommand(commandsIter->first)){
-            return commandsIter->second(Message {message.user, commandMessagePair.second});
+
+        auto command = commandsIter->first;
+        auto commandFunc = commandsIter->second;
+
+        if(message.user.canPreformCommand(command)){
+            return commandFunc(Message {message.user, commandMessagePair.second});
+        } else {
+            auto disableEnd = message.user.getDisabledCommands().end();
+            auto disableIter =  message.user.getDisabledCommands().find(command);
+
+            string returnMessage = disableIter != disableEnd ? disableIter->second : "You cannot preform: " + commandMessagePair.first;
+
+            return std::vector<Message>{ Message{message.user, returnMessage} };
         }
-        return std::vector<Message>{ Message{message.user, "You cannot preform: " + commandMessagePair.first} };
     }
 
     return std::vector<Message>{ Message{message.user, "Attempted Command Not Found."} };

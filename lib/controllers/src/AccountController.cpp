@@ -24,7 +24,7 @@ std::vector<Message> AccountController::startLogin(const Message& message) {
         return std::vector<Message> { Message{message.user, ALREADY_LOGIN_MESSAGE} };
     }
     message.user.getAccount().isLoggingIn = true;
-    
+
     return _accountService.updateUserState(message);
 }
 
@@ -33,13 +33,13 @@ std::vector<Message> AccountController::startRegister(const Message& message) {
         return std::vector<Message> { Message{message.user, LOGOUT_BEFORE_REGISTER_MESSAGE} };
     }
     message.user.getAccount().isRegistering = true;
-    
+
     return _accountService.updateUserState(message);
 }
 
 std::vector<Message> AccountController::logoutUser(const Message& message) {
     if(isUserLoggedIn(message)) {
-        message.user.removeCommand(LOGOUT);
+        message.user.removeCommand(LOGOUT, "You are not logged in!");
 
         message.user.reset();
         return std::vector<Message> { Message{message.user, LOGOUT_MESSAGE} };

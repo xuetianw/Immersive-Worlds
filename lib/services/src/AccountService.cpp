@@ -7,6 +7,8 @@
 
 #include "AccountService.h"
 
+const string ESCAPEONLYMESSAGE = "You are currently logging in / registering - use /escape to restart";
+const string NOESCAPEMESSAGE = "You are not logging in / Registering";
 
 void updateUserAccountCommands(User& user) {
 
@@ -14,10 +16,10 @@ void updateUserAccountCommands(User& user) {
 
     if (userAccount.isLoggingIn || userAccount.isRegistering) {
         user.addCommand(ESCAPE);
-        user.removeCommand(REGISTER);
-        user.removeCommand(LOGIN);
+        user.removeCommand(REGISTER, ESCAPEONLYMESSAGE);
+        user.removeCommand(LOGIN, ESCAPEONLYMESSAGE);
     } else if (userAccount.isLoggedIn) {
-        user.removeCommand(ESCAPE);
+        user.removeCommand(ESCAPE, NOESCAPEMESSAGE);
         user.addCommand(LOGOUT);
     }
 }
@@ -35,10 +37,16 @@ std::vector<Message> AccountService::updateUserState(const Message& message) {
     userAccount._state = *std::move(newState);
 
     if(userAccount.isSubmittingRegistration) {
+
+        userAccount.isRegistering = false;
+        userAccount.isSubmittingRegistration = false;
+        userAccount.isLoggingIn = true; // On sucessful register
         // fill this with db method
     } else if (userAccount.isSubmittingLogin) {
         // fill in with db method
         userAccount.isLoggedIn = true;
+        userAccount.isLoggingIn = false;
+        userAccount.isSubmittingLogin = false;
     }
 
     updateUserAccountCommands(user);
