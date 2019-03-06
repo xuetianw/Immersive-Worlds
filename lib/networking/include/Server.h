@@ -32,13 +32,6 @@ struct Connection {
   }
 };
 
-
-struct ConnectionHasher {
-  std::size_t operator()(const Connection& conn) const {
-    return conn.id;
-  }
-};
-
 struct ConnectionHash {
   size_t
   operator()(Connection c) const {
