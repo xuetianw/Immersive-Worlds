@@ -17,6 +17,7 @@
 #include <set>
 
 #include "Server.h"
+#include "DBUtil.h"
 #include "CommandProcessor.h"
 #include "User.h"
 #include "Message.h"
@@ -97,6 +98,7 @@ int main(int argc, char *argv[]) {
     bool done = false;
     unsigned short port = static_cast<unsigned short>(std::stoi(argv[1]));
 
+    DBUtil::openConnection("adventure.db");
     commandProcessor = make_unique<CommandProcessor>();
     Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
 
@@ -115,5 +117,6 @@ int main(int argc, char *argv[]) {
         sleep(1);
     }
 
+    DBUtil::closeConnection();
     return 0;
 }

@@ -19,7 +19,11 @@ TEST_F(DatabaseTests, databaseTest) {
     EXPECT_EQ(true, DBUtil::registerUser("Karan", "hijklmn"));
     EXPECT_EQ(true, DBUtil::registerUser("Melody", "bafhsbsa"));
     EXPECT_EQ(true, DBUtil::registerUser("Link", "masterSword"));
-    EXPECT_EQ(true, DBUtil::registerUser("pikachu", "RyanReynolds"));
+    EXPECT_EQ(true, DBUtil::registerUser("abc", "abc"));
+
+    string temp1 = "abc";
+    string temp2 = "abc";
+    EXPECT_TRUE(DBUtil::findUserExistence(temp1,temp2));
 
     QueryResults results = DBUtil::getAllUsers();
     std::vector<string> usernames;

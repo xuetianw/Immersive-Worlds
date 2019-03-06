@@ -18,12 +18,13 @@ private:
 
     // Mock dummy usernames and passwords for testing until database is added
     // TODO: Remove the mock usernames and passwords once database is added
-    std::unordered_map<string, string> _userData{
-            {"John", "password123*"},
-            {"Rex", "admin12345"},
-            {"Alex", "myPassword!"},
-            {"Garfield", "Pwd15081967@merci"}
-    };
+
+//    std::unordered_map<string, string> _userData{
+//            {"John", "password123*"},
+//            {"Rex", "admin12345"},
+//            {"Alex", "myPassword!"},
+//            {"Garfield", "Pwd15081967@merci"}
+//    };
 };
 
 #endif //WEBSOCKETNETWORKING_USERSERVICE_H
