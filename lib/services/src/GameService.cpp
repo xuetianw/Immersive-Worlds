@@ -67,16 +67,16 @@ GameService::GameService() {
   loadFromStorage();
 }
 
-channel::MiniGame GameService::getMiniGame(const networking::Connection &connection, const std::string keywordString) {
+channel::MultipleChoice GameService::getMiniGame(const networking::Connection &connection, const std::string keywordString) {
   // TODO: CHECK MINIGAME MAP IF MINIGAME EXISTS, CHECK IF USER LOGGED IN
-  channel::MiniGame miniGame = channel::MiniGame();
+  channel::MultipleChoice miniGame = channel::MultipleChoice();
   miniGame.addQuestion("THIS IS THE QUESTION 1");
   miniGame.addAnswer("Correct Answer");
   miniGame.addAnswer("Wrong Answer");
   miniGame.addCorrectAnswer(0);
 
   auto roomId = _connectionToRoomId.at(connection);
-  std::pair<int, channel::MiniGame> pair (roomId.getId(), miniGame);
+  std::pair<int, channel::MultipleChoice> pair (roomId.getId(), miniGame);
   _roomIdToMiniGameConnectionsList.emplace(pair);
 
   return miniGame;

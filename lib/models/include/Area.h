@@ -17,9 +17,9 @@ namespace models {
             Area(const CusJson::Area& jsonArea);
             string getName();
 
-      Area();
+            Area();
 
-      ~Area();
+            ~Area();
 
             /**
              * Gets the Id of the area
@@ -38,7 +38,7 @@ namespace models {
             bool addRoom(const Room &room);
 
             Room getRoom(const RoomId &roomId);
-      vector<Room> tempRoomContainer;
+        vector<Room> tempRoomContainer;
         private:
             int _id = 0; //TODO make area id unique
             unordered_map<int, Room> _rooms;

@@ -3,6 +3,7 @@ add_library(models
   src/Area.cpp
   src/World.cpp
   src/RoomConnection.cpp
+  src/MultipleChoice.cpp
   src/MiniGame.cpp)
 
 target_include_directories(models

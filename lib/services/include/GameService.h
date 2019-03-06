@@ -11,7 +11,7 @@
 #include "CusJson.h"
 #include "DataStorage.h"
 #include "GameService.h"
-#include "MiniGame.h"
+#include "MultipleChoice.h"
 
 class GameService {
 public:
@@ -29,7 +29,7 @@ private:
     std::unordered_map<int, models::Room> _roomIdToRoom;
     std::unordered_map<networking::Connection, models::RoomId, networking::ConnectionHash> _connectionToRoomId;
     std::unordered_map<int, std::vector<models::RoomConnection>> _roomIdToRoomConnectionsList;
-    std::unordered_map<int, channel::MiniGame> _roomIdToMiniGameConnectionsList;
+    std::unordered_map<int, channel::MultipleChoice> _roomIdToMiniGameConnectionsList;
 
     DataStorage _dataStorage = DataStorage();
 
@@ -57,7 +57,7 @@ public:
     /** 
      * Get the current minigame available in this room
      */
-    channel::MiniGame getMiniGame(const networking::Connection &connection, const std::string keywordString);
+    channel::MultipleChoice getMiniGame(const networking::Connection &connection, const std::string keywordString);
     
     /** 
      * Verify if the answer given in the minigame is the correct one.

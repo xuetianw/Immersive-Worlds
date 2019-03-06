@@ -5,70 +5,15 @@
 #ifndef CHANNEL_MINIGAME_H
 #define CHANNEL_MINIGAME_H
 
-#include <Room.h>
 #include <vector>
-#include <sstream>
-
-using std::unordered_map;
 
 namespace channel {
     class MiniGame {
         public:
-            MiniGame();
-
-            /**
-             * Add possible answers.
-             * @param answer
-             */
-            void addAnswer(std::string answer);
-
-            /**
-             * Add Questions to the multiple choice game.
-             * @param question
-             */
-            void addQuestion(std::string question);
-
-            /**
-             * add the correct answer for the given round
-             * @param answer
-             */
-            void addCorrectAnswer(int answer);
-
-            /**
-             * Checks the input of the user if it is correct.
-             * @param answer
-             * @return boolean. True if answer is correct.
-             */
-            bool checkAnswer(const int answer) const;
-
-            /**
-             * Get the current question
-             * @return the question of the round
-             */
-            std::string getQuestion() const;
-
-            /**
-             * Get the list of possible answers in the round.
-             * @return vector of possible answers
-             */
-            std::vector<std::string> getAnswers() const;
-
-            /**
-             * Print the current question
-             * @return the string of the round
-             */
-            std::string printQuestion();
-
-            /**
-             * Advances the round. Returns true or false if there are no more remaining questions.
-             * @return boolean. True if no more rounds.
-             */
-            bool nextRound();
+            virtual bool execute();
+            virtual void addUser(int id);
         private:
-            std::vector<std::string> _answers;
-            std::vector<std::string> _questions;
-            std::vector<int> _correctAnswers;
-            int _round;
+            std::vector<int> _users;
 
     };
 } // namespace channel

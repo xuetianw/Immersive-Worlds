@@ -13,6 +13,7 @@ public:
 
 
     virtual networking::Message execute(GameService& service);
+
     networking::Message test(GameService& service,  const Message& message);
 };
 

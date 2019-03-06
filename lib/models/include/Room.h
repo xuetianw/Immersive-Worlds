@@ -39,6 +39,7 @@ namespace models {
     unordered_map<int, string> _avatars;  //TODO change generic type to Avatar/Character
     unordered_map<int, string> _objects;  //TODO change generic type to ItemObject
     unordered_map<int, Room&> _doors;
+    std::unique_ptr<channel::MiniGame> minigame;
 
   public:
       Room();
