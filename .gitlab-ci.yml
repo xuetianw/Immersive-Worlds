@@ -1,13 +1,59 @@
+#
+# There are 2 stages to the pipeline: build and test
+#
+# Build stage: the project needs to be able to build for any merge requests to be accepted
+#
+# Test stage: Unit tests are allowed to fail when making merge requests for all branches EXCEPT master
+#
+
 stages:
   - build
+  - test
 
-my_job:
+build_stage:
   stage: build
   tags:
     - jacky
   script:
-    - mkdir my-build
-    - cd my-build
+    - mkdir local_build/
+    - cd local_build/
     - cmake ..
     - make
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - local_build/
+  except:
+    refs:
+      - master
+      - staging
+
+test_development:
+  stage: test
+  tags:
+    - jacky
+  script:
+    - cd local_build/
     - ./bin/run_tests
+  dependencies:
+    - build_stage
+  except:
+    refs:
+      - master
+      - staging
+  allow_failure: true
+
+test_production:
+  stage: test
+  tags:
+    - jacky
+  script:
+    - cd local_build/
+    - ./bin/run_tests
+  dependencies:
+    - build_stage
+  only:
+    refs:
+      - master
+      - staging
+  allow_failure: false

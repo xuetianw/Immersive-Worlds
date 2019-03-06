@@ -5,25 +5,20 @@
 #ifndef WEBSOCKETNETWORKING_DATASTORAGE_H
 #define WEBSOCKETNETWORKING_DATASTORAGE_H
 
-
-#include <RoomConnection.h>
 #include "CusJson.h"
-#include "Room.h"
 
 class DataStorage {
 private:
-    CusJson::Area jsonArea;
+    CusJson::Area _jsonArea;
+
 public:
     DataStorage();
     const CusJson::Area &getJsonArea() const;
 
-    void setJsonArea(const CusJson::Area &jsonArea);
+    void setJsonArea(const CusJson::Area& jsonArea);
 
 private:
     json getTestingArea();
-
-
 };
-
 
 #endif //WEBSOCKETNETWORKING_DATASTORAGE_H

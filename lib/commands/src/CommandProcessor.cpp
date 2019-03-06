@@ -4,26 +4,41 @@
 
 #include <utility>
 #include <boost/algorithm/string.hpp>
+
 #include "CommandProcessor.h"
 
 bool CommandProcessor::isCommand(const Message &message) {
     std::pair commandMessagePair = splitCommand(message.text);
-    return _commands.find(commandMessagePair.first) != _commands.end();
+    return _keywords.find(commandMessagePair.first) != _keywords.end();
 }
 
-void CommandProcessor::addCommand(string commandKeyword, function_ptr fnPtr) {
-    _commands.insert(std::make_pair(commandKeyword, InputHandler { fnPtr }));
+void CommandProcessor::addCommand(string keyword, Command command, function_ptr fnPtr) {
+    _keywords[keyword] = command;
+    _commands[command] = move(fnPtr);
 }
 
-Message CommandProcessor::processCommand(const Message &message) {
+std::vector<Message> CommandProcessor::processCommand(const Message& message) {
     std::pair commandMessagePair = splitCommand(message.text);
-    auto commandsIter = _commands.find(commandMessagePair.first);
+
+    auto keywordIter = _keywords.find(commandMessagePair.first);
+    auto commandsIter = keywordIter!=_keywords.end() ? _commands.find(keywordIter->second) : _commands.end();
 
     if(commandsIter != _commands.end()) {
-        return commandsIter->second.functionPtr(Message {message.connection, commandMessagePair.second});
+        if(message.user.canPreformCommand(commandsIter->first)){
+            return commandsIter->second(Message {message.user, commandMessagePair.second});
+        }
+        return std::vector<Message>{ Message{message.user, "You cannot preform: " + commandMessagePair.first} };
     }
 
-    return Message{message.connection, "Attempted Command Not Found."};
+    return std::vector<Message>{ Message{message.user, "Attempted Command Not Found."} };
+}
+
+Message CommandProcessor::handleDefaultMessage(const Message& message) {
+    Message accountControllerResponse = accountController->respondToMessage(message);
+
+    return message.user.getAccount().isLoggedIn
+        ? gameController->respondToMessage(accountControllerResponse)
+        : accountControllerResponse;
 }
 
 std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
@@ -33,5 +48,14 @@ std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
     msgStream >> keyCommand;
     getline(msgStream >> std::ws, remainder);
     return std::pair<string,string>(keyCommand, remainder);
+}
+
+void CommandProcessor::buildCommands() {
+    addCommand("/whereami", WHEREAMI, [this] (Message message) { return gameController->outputCurrentLocationInfo(message); });
+    addCommand("/logout", LOGOUT, [this] (Message message) { return accountController->logoutUser(message); });
+    addCommand("/login", LOGIN, [this] (Message message) { return accountController->startLogin(message); });
+    addCommand("/register", REGISTER, [this] (Message message) { return accountController->startRegister(message); });
+    addCommand("/escape", ESCAPE, [this] (Message message) { return accountController->escapeLogin(message); });
+    addCommand("/move", MOVE, [this] (Message message) { return gameController->move(message); });
 }
 

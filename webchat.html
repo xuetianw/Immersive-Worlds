@@ -32,7 +32,7 @@
       var wsLocation = 'ws://' + uriPieces[2];
       $('#uri:text').val(wsLocation);
       
-      $('#connect').click(function() {
+      $('#connectUser').click(function() {
         ws = new WebSocket(uri.value);
         ws.onopen = function(ev) {
           appendText("Connected!\n");
@@ -73,13 +73,13 @@
   <h1>Web Chat</h1>
 
   Chat Server: <input id="uri" size="40">
-  <button id="connect">Connect</button>
+  <button id="connectUser">Connect</button>
   <button id="disconnect">Disconnect</button><br />
 
   <pre id="messages"></pre>
 
   <div style="margin-bottom: 5px;">
-    Enter Message:<br />
+    Enter ServerMessage:<br />
     <input id="sendMessage" size="80" value="" />
     <button id="send">Send</button>
   </div>

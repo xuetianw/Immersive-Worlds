@@ -5,28 +5,40 @@
 #ifndef WEBSOCKETNETWORKING_GAMESERVICE_H
 #define WEBSOCKETNETWORKING_GAMESERVICE_H
 
+#include <string>
+
 #include "Area.h"
 #include "RoomConnection.h"
-#include <Server.h>
+#include "User.h"
+#include "Message.h"
 #include "CusJson.h"
 #include "DataStorage.h"
-#include "GameService.h"
+#include "ID.h"
+
+using Room = models::Room;
+using RoomConnection = models::RoomConnection;
+using Connection = networking::Connection;
+using ConnectionHash = networking::ConnectionHash;
+using string = std::string;
 
 class GameService {
 public:
-    GameService();
+    GameService() : _dataStorage(DataStorage()) {
+        loadFromStorage();
+    }
 
 private:
-    std::vector<models::Area> _areas;
-    std::unordered_map<int, models::Room> _roomIdToRoom;
-    std::unordered_map<networking::Connection, models::RoomId, networking::ConnectionHash> _connectionToRoomId;
-    std::unordered_map<int, std::vector<models::RoomConnection>> _roomIdToRoomConnectionsList;
+    std::unordered_map<ID, Room> _roomIdToRoom;
 
-    DataStorage _dataStorage = DataStorage();
+    std::unordered_map<Connection, ID, ConnectionHash> _connectionToRoomId;
 
-    models::Room getRoom(const models::RoomId &roomId);
+    std::unordered_map<ID, std::vector<RoomConnection> > _roomIdToRoomConnectionsList;
 
-    models::Room getUserRoom(const networking::Connection &connection);
+    DataStorage _dataStorage;
+
+    const Room* getRoomByName(const string& roomName) const;
+
+    const Room& getUserRoom(const Connection& connection);
 
     void loadFromStorage();
 
@@ -35,16 +47,15 @@ public:
     /**
      * It is assumed that the user is in a room, and the room has a list of connections(can be blank).
      */
-    bool moveUser(const networking::Connection &connection, const std::string keywordString);
+    bool moveUser(const User& user, const string& keywordString);
 
-    bool userYell(const networking::Connection &connection, const std::string messageString);
+    bool userYell(const User& user, const string& messageString);
 
-    bool spawnUserInStartRoom(const networking::Connection &connection);
+    bool spawnUserInRoomOnLogin(const Connection& connection);
 
-    bool spawnUserInRoom(const networking::Connection &connection, int id);
+    bool spawnUserInRoom(const Connection& connection, const ID& id);
 
-    string getCurrentRoomName(const networking::Connection &connection);
-
+    string getCurrentRoomName(const Connection& connection);
 };
 
 #endif //WEBSOCKETNETWORKING_GAMESERVICE_H

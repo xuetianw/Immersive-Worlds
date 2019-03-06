@@ -14,7 +14,8 @@ find_package(Threads REQUIRED)
 target_link_libraries(gameserver
     networking
     commands
-    controllers
+    database
+    utilities
     ${CMAKE_THREAD_LIBS_INIT}
     )
 

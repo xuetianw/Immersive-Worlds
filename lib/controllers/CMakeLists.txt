@@ -1,7 +1,4 @@
 add_library(controllers
-    src/WorldHandler.cpp
-    src/WorldContainer.cpp
-    src/ID.cpp
     src/GameController.cpp
     src/AccountController.cpp)
 
@@ -19,12 +16,12 @@ target_include_directories(controllers
 
 target_link_libraries(controllers
     PUBLIC
-    cusjson
-    networking
-    models
-    commands
-    services
-    datastorage
+        cusjson
+        networking
+        models
+        commands
+        services
+        datastorage
     )
 
 set_target_properties(controllers

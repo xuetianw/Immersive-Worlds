@@ -92,9 +92,11 @@ namespace CusJson {
 
     void from_json(const json& j, Room& room);
 
-    void to_json(json& j, const Area& area);
+    void to_json(json& j, const Area& p);
 
-    void from_json(const json& j, Area& area);
+    void from_json(const json& j, Area& p);
+
+    void parseResetJsonToArea(const json& resetJson, Area& area);
 }
 
 #endif //WEBSOCKETNETWORKING_CUSJSON_H

@@ -1,8 +1,9 @@
-#include "string"
-#include "vector"
+#include <string>
+#include <vector>
 #include <fstream>
 #include <nlohmann/json.hpp>
-#include <CusJson.h>
+
+#include "CusJson.h"
 
 using json = nlohmann::json;
 
@@ -111,6 +112,8 @@ namespace CusJson {
         j = json{{"name", area._name}};
     }
 
+    void parseResetJsonToArea(const json& resetJson, const Area& area);
+
     void from_json(const json& j, Area& area) {
         const json& areaName = j.at("AREA");
         areaName.at("name").get_to(area._name);
@@ -128,8 +131,13 @@ namespace CusJson {
         std::copy(roomJson.begin(), roomJson.end(), area._rooms.begin());
 
         const json& resetJson = j.at("RESETS");
+        parseResetJsonToArea(resetJson, area);
+    }
+
+    //Manual checking/parse is required for resets, See doc/JsonStructureDocument for more info
+    void parseResetJsonToArea(const json& resetJson, Area& area) {
         for (json resetJsonObject : resetJson) {
-            auto actionString = resetJsonObject["action"].get<std::string>();
+            auto actionString = resetJsonObject["action"].get<std::__cxx11::string>();
             if (actionString == "npc") {
                 area._npcsWrappers.push_back(NPCJsonWrapper(
                         resetJsonObject["id"].get<int>(),
@@ -147,7 +155,7 @@ namespace CusJson {
                 area._doorStateWrappers.push_back(DoorStateJsonWrapper(
                         resetJsonObject["id"].get<int>(),
                         resetJsonObject["room"].get<int>(),
-                        resetJsonObject["state"].get<std::string>()
+                        resetJsonObject["state"].get<std::__cxx11::string>()
                 ));
             } else if (actionString == "object") {
                 area._containerWrappers.push_back(ContainerJsonWrapper(
@@ -155,7 +163,7 @@ namespace CusJson {
                         resetJsonObject["room"].get<int>()
                 ));
             } else if (actionString == "put") {
-                auto object = std::find_if(area._containerWrappers.begin(), area._containerWrappers.end(),
+                auto object = find_if(area._containerWrappers.begin(), area._containerWrappers.end(),
                                            [resetJsonObject](ContainerJsonWrapper wrapper) {
                                                return wrapper._objectId == resetJsonObject["container"].get<int>();
                                            });
