@@ -165,7 +165,7 @@ TEST_F(UserServiceManagementTest, LoginEscapeTest){
 
     ASSERT_EQ(LOGIN_PASSWORD_PROMPT, accountControllerFirstResponse.text);
     ASSERT_EQ(ID1, accountControllerFirstResponse.user.getConnection().id);
-    
+
     Message escapeMessage = accountController.escapeLogin(passwordMessage).front();
     EXPECT_EQ(LOGGING_IN_ESCAPE_MESSAGE + to_string(ID1), escapeMessage.text);
 }

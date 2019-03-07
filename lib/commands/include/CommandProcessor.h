@@ -65,6 +65,11 @@ private:
     void buildCommands();
 
     /*
+     * Finds the disabled command's reason for being disabled, if there has been stated any
+     */
+    Message getDisabledCommandMessage(string keyword, User& user);
+
+    /*
      *  Holds all the commands added to the map
      */
     std::unordered_map<Command , function_ptr> _commands;
