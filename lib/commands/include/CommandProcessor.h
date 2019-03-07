@@ -48,6 +48,11 @@ public:
 
     Message handleDefaultMessage(const Message& message);
 
+    /*
+     *  Lists the keywords of the allowed commands to the user
+     */
+    std::vector<Message> listAllowedCommands(const Message& message);
+
 private:
     /*
      * Split a user message text to retrieve the command for processing

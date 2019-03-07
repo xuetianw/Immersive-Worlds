@@ -18,6 +18,7 @@ private:
     networking::Connection _connection;
     Account _account;
     std::unordered_set<Command> _allowedCommands;
+    std::unordered_map<Command, string> _disabledCommands;
 
 public:
     User() = default;
@@ -30,6 +31,8 @@ public:
 
     void removeCommand(Command command);
 
+    void removeCommand(Command command, string message);
+
     void addCommand(Command command);
 
     const Connection& getConnection() const;
@@ -41,6 +44,8 @@ public:
     void setAccount(const Account& account);
 
     const std::unordered_set<Command>& getAllowedCommands() const;
+
+    const std::unordered_map<Command, string>& getDisabledCommands() const;
 
     void setAllowedCommands(std::unordered_set<Command> allowedCommands);
 
