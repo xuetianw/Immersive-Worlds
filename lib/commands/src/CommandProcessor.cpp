@@ -7,6 +7,15 @@
 
 #include "CommandProcessor.h"
 
+Message CommandProcessor::getDisabledCommandMessage(string keyword, User& user){
+    auto disableEnd = user.getDisabledCommands().end();
+    auto disableIter =  user.getDisabledCommands().find(_keywords.at(keyword));
+
+    string returnMessage = disableIter != disableEnd ? disableIter->second : "You cannot preform: " + keyword;
+
+    return Message{user, returnMessage};
+}
+
 bool CommandProcessor::isCommand(const Message &message) {
     std::pair commandMessagePair = splitCommand(message.text);
     return _keywords.find(commandMessagePair.first) != _keywords.end();
@@ -31,12 +40,7 @@ std::vector<Message> CommandProcessor::processCommand(const Message& message) {
         if(message.user.canPreformCommand(command)){
             return commandFunc(Message {message.user, commandMessagePair.second});
         } else {
-            auto disableEnd = message.user.getDisabledCommands().end();
-            auto disableIter =  message.user.getDisabledCommands().find(command);
-
-            string returnMessage = disableIter != disableEnd ? disableIter->second : "You cannot preform: " + commandMessagePair.first;
-
-            return std::vector<Message>{ Message{message.user, returnMessage} };
+            return std::vector<Message>{ getDisabledCommandMessage(commandMessagePair.first, message.user) };
         }
     }
 
