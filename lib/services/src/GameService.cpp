@@ -54,20 +54,3 @@ const Room& GameService::getUserRoom(const Connection& connection) {
     // TODO: Implement the logic appropriately
     return std::move(Room());
 }
-
-void GameService::loadFromStorage() {
-    // load data from cusJson
-    for (const CusJson::Room& room : _dataStorage.getJsonArea()._rooms) {
-        // Create a new models::Room from CusJson::Room
-        Room newRoom {room};
-        const ID& newRoomId = newRoom.getId();
-        _roomIdToRoom.emplace(newRoomId, newRoom);
-
-        std::vector<RoomConnection> roomConnectionVector;
-        for (const CusJson::JsonDoor& jsonDoor : room._jsonDoors) {
-            roomConnectionVector.emplace_back(ID(jsonDoor._to), ID(room._id), jsonDoor._dir);
-        }
-
-        _roomIdToRoomConnectionsList.emplace(newRoomId, roomConnectionVector);
-    }
-}
