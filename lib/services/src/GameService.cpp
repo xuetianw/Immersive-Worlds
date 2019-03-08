@@ -6,6 +6,7 @@
 #include <Server.h>
 
 #include "GameService.h"
+#include <iostream>
 
 bool GameService::moveUser(const networking::Connection &connection, const std::string keywordString) {
   auto roomId = _connectionToRoomId.at(connection);
@@ -67,22 +68,42 @@ GameService::GameService() {
   loadFromStorage();
 }
 
-channel::MultipleChoice GameService::getMiniGame(const networking::Connection &connection, const std::string keywordString) {
+std::unique_ptr<channel::MultipleChoice> GameService::getMiniGame(const networking::Connection &connection, const std::string keywordString) {
   // TODO: CHECK MINIGAME MAP IF MINIGAME EXISTS, CHECK IF USER LOGGED IN
-  channel::MultipleChoice miniGame = channel::MultipleChoice();
-  miniGame.addQuestion("THIS IS THE QUESTION 1");
-  miniGame.addAnswer("Correct Answer");
-  miniGame.addAnswer("Wrong Answer");
-  miniGame.addCorrectAnswer(0);
+  // call instantiate make_unique multiplechoice 
+  auto miniGame = std::make_unique<channel::MultipleChoice>();
+  miniGame->addQuestion("THIS IS THE QUESTION 1");
+  miniGame->addAnswer("Correct Answer");
+  miniGame->addAnswer("WRONG Answer");
+  miniGame->addCorrectAnswer(0);
 
-  auto roomId = _connectionToRoomId.at(connection);
-  std::pair<int, channel::MultipleChoice> pair (roomId.getId(), miniGame);
-  _roomIdToMiniGameConnectionsList.emplace(pair);
+  auto room = _connectionToRoomId.at(connection);
+  _test.insert(std::make_pair(room.getId(), std::move(miniGame)));
 
   return miniGame;
+  /*
+  channel::MultipleChoice multipleChoice = channel::MultipleChoice();
+  multipleChoice.addQuestion("THIS IS THE QUESTION 1");
+  multipleChoice.addAnswer("Correct Answer");
+  multipleChoice.addAnswer("Wrong Answer");
+  multipleChoice.addCorrectAnswer(0);
+  
+  //_multipleChoiceList.push_back(multipleChoice);
+
+  channel::MiniGame* miniGame = &multipleChoice;
+  
+  auto room = _connectionToRoomId.at(connection);
+  std::pair<int, channel::MiniGame*> pair (room.getId(), miniGame);
+  _roomIdToMiniGameConnectionsList.emplace(pair);
+
+  std::cout << miniGame->execute() << std::endl;
+
+  return miniGame;
+  */
 }
 
 bool GameService::verifyAnswer(const networking::Connection &connection, const int input) { 
+  /*
   auto roomId = _connectionToRoomId.at(connection);
 
   auto got = _roomIdToMiniGameConnectionsList.find(roomId.getId());
@@ -91,4 +112,6 @@ bool GameService::verifyAnswer(const networking::Connection &connection, const i
   auto correctAnswer = got->second.checkAnswer(input);
 
   return found && correctAnswer;
+  */
+ return true;
 }

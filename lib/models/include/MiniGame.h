@@ -6,17 +6,25 @@
 #define CHANNEL_MINIGAME_H
 
 #include <vector>
+#include <string>
 
 namespace channel {
     class MiniGame {
         public:
-            virtual bool execute();
+            virtual std::string execute() = 0;
             virtual void addUser(int id);
+            virtual ~MiniGame() {}
         private:
             std::vector<int> _users;
-
+            std::string type = "MINIGAME POINTER";
     };
 } // namespace channel
+
+namespace channel {
+    enum MiniGameType {
+        MULTIPLE_CHOICE
+    };
+}
 
 /*
     - Rewards based on level of difficulty

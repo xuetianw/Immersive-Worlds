@@ -47,11 +47,10 @@ void GameController::addUser(const networking::Connection &connection) {
 }
 
 networking::Message GameController::createMinigame(const networking::Message &message) {
-    channel::MultipleChoice minigame = _gameService.getMiniGame(message.connection, message.text);
-
+    auto minigame = _gameService.getMiniGame(message.connection, message.text);
     networking::Message newMessage = networking::Message();
     newMessage.connection = message.connection;
-    newMessage.text = minigame.printQuestion();
+    newMessage.text = minigame->execute();
     
     return newMessage;
 }

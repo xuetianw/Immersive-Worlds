@@ -9,6 +9,7 @@
 #include <MiniGame.h>
 #include <vector>
 #include <sstream>
+#include <string>
 
 using std::unordered_map;
 
@@ -65,6 +66,8 @@ namespace channel {
              * @return boolean. True if no more rounds.
              */
             bool nextRound();
+
+            virtual std::string execute() override;
         private:
             std::vector<std::string> _answers;
             std::vector<std::string> _questions;

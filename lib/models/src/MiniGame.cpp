@@ -6,10 +6,6 @@
 
 using channel::MiniGame;
 
-bool MiniGame::execute() {
-    return true;
-}
-
 void MiniGame::addUser(int id) {
     _users.push_back(id);
 }

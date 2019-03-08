@@ -38,13 +38,13 @@ std::string MultipleChoice::printQuestion() {
     std::stringstream ss;
     ss << getQuestion() << std::endl;
     
-    std::vector<std::string> questions = getAnswers();
+    std::vector<std::string> answers = getAnswers();
 
     char letter = 'a';
-    for(int i = 0; i < questions.size(); i++, letter++) {
-        std::string question = questions.at(i);
+    for(int i = 0; i < answers.size(); i++, letter++) {
+        auto answer = answers.at(i);
 
-        ss << letter << ") " << question << std::endl; 
+        ss << letter << ") " << answer << std::endl; 
     }
 
     return ss.str();
@@ -54,5 +54,9 @@ bool MultipleChoice::nextRound() {
     // TODO: NEEDS TO BE CALLED HEARTBEATS
     _round++;
     return _round == _questions.size();
+}
+
+std::string MultipleChoice::execute() {
+    return printQuestion();
 }
 
