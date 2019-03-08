@@ -32,7 +32,7 @@ void RoomConnectionService::loadFromStorage() {
     for (const CusJson::Room& jsonRoom : jsonRooms) {
         Neighbours neighbours;
 
-        buildNeighbours(tmp, jsonRoom, neighbours, 0);
+        buildNeighbours(tmp, jsonRoom, neighbours);
 
         _roomIdToNeighbours.try_emplace(tmp[jsonRoom._id], neighbours);
     }
@@ -43,7 +43,7 @@ void RoomConnectionService::buildNeighbours(const std::unordered_map<int, ID>& t
     for (const CusJson::JsonDoor& jsonDoor : jsonRoom._jsonDoors) {
         NeighbourInfo neighbourInfo;
         neighbourInfo.direction = _directions[jsonDoor._dir];
-        neighbourInfo.destinationRoomId = tmp[jsonDoor._to];
+        neighbourInfo.destinationRoomId = tmp.at(jsonDoor._to);
         neighbourInfo.descriptions = jsonDoor._desc;
 
         neighbours.emplace_back(neighbourInfo);
