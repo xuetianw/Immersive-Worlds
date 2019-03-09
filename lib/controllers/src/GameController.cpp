@@ -3,7 +3,6 @@
 //
 
 #include "GameController.h"
-#include "Message.h"
 
 Message GameController::respondToMessage(const Message& message) {
     string responseText = message.text + spawnUserInRoomOnLogin(message.user).text;

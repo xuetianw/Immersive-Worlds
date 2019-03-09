@@ -7,15 +7,15 @@
 
 #include <unordered_set>
 
-#include "Server.h"
 #include "Command.h"
 #include "UserState.h"
+#include "Server.h"
 
 using Connection = networking::Connection;
 
 class User {
 private:
-    networking::Connection _connection;
+    Connection _connection;
     Account _account;
     std::unordered_set<Command> _allowedCommands;
     std::unordered_map<Command, string> _disabledCommands;

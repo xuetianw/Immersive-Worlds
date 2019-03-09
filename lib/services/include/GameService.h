@@ -12,7 +12,7 @@
 #include "User.h"
 #include "Message.h"
 #include "CusJson.h"
-#include "DataStorage.h"
+#include "DataStorageService.h"
 #include "ID.h"
 
 using Room = models::Room;
@@ -23,7 +23,7 @@ using string = std::string;
 
 class GameService {
 public:
-    GameService() : _dataStorage(DataStorage()) {
+    GameService() : _dataStorage(DataStorageService()) {
         loadFromStorage();
     }
 
@@ -34,7 +34,7 @@ private:
 
     std::unordered_map<ID, std::vector<RoomConnection> > _roomIdToRoomConnectionsList;
 
-    DataStorage _dataStorage;
+    DataStorageService _dataStorage;
 
     const Room* getRoomByName(const string& roomName) const;
 
