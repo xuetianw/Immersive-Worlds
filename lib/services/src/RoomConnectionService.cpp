@@ -19,7 +19,7 @@ void RoomConnectionService::buildDirections() {
 
 void RoomConnectionService::loadFromStorage() {
     std::unordered_map<int, ID> tmp;
-    std::vector<CusJson::Room> jsonRooms = _dataStorage.getJsonArea()._rooms;
+    std::vector<CusJson::Room> jsonRooms = _dataStorageService.getJsonArea()._rooms;
 
     for (const CusJson::Room& jsonRoom : jsonRooms) {
         Room room{jsonRoom};
