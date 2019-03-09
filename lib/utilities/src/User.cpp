@@ -2,7 +2,8 @@
 // Created by vinshit on 16/02/19.
 //
 
-#include <User.h>
+#include "User.h"
+
 using std::unordered_set;
 
 void User::reset() {
@@ -53,7 +54,7 @@ bool User::canPreformCommand(Command command) {
     return _allowedCommands.find(command) != _allowedCommands.end();
 }
 
-const std::unordered_map<Command, string> &User::getDisabledCommands() const {
+const std::unordered_map<Command, string>& User::getDisabledCommands() const {
     return _disabledCommands;
 }
 

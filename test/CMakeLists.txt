@@ -41,5 +41,5 @@ set_target_properties(run_tests
         )
 
 ##TO DO: Add Lib Here
-target_link_libraries(run_tests networking models cusjson controllers database inventory)
+target_link_libraries(run_tests networking models cusjson controllers processors)
 add_test(NAME network_tests COMMAND run_tests)

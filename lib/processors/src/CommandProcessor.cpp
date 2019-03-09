@@ -16,7 +16,7 @@ Message CommandProcessor::getDisabledCommandMessage(string keyword, User& user){
     return Message{user, returnMessage};
 }
 
-bool CommandProcessor::isCommand(const Message &message) {
+bool CommandProcessor::isCommand(const Message& message) {
     std::pair commandMessagePair = splitCommand(message.text);
     return _keywords.find(commandMessagePair.first) != _keywords.end();
 }
