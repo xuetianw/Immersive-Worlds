@@ -8,7 +8,7 @@
 #include <unordered_set>
 
 #include "Command.h"
-#include "UserState.h"
+#include "StateTransitions.h"
 #include "Server.h"
 
 using Connection = networking::Connection;

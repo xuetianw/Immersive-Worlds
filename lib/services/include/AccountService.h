@@ -5,7 +5,7 @@
 #ifndef WEBSOCKETNETWORKING_USERSERVICE_H
 #define WEBSOCKETNETWORKING_USERSERVICE_H
 
-#include "UserState.h"
+#include "StateTransitions.h"
 #include "User.h"
 #include "Message.h"
 
