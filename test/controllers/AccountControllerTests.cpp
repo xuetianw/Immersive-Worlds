@@ -21,9 +21,10 @@ struct AccountControllerTests : testing:: Test {
     Message loginUsernameMessage{user,"Josh"};
     Message loginPasswordMessage{user,"abcdefg"};
     Message registerUsernameMessage{user, "random_username"};
-    Message registerUsernameExistsMessage{user, "Melody"};
+    Message usernameExistsMessage{user, "Melody"};
+    Message usernameNotExistsMessage{user, "username"};
     Message registerPasswordMessage{user, "random_password"};
-    Message registerWithEmptyPassword{user, ""};
+    Message emptyPassword{user, ""};
 
     void SetUp() override {
         remove("testAdventure.db");
@@ -32,8 +33,6 @@ struct AccountControllerTests : testing:: Test {
         DBUtil::registerUser("Josh", "abcdefg");
         DBUtil::registerUser("Karan", "hijklmn");
         DBUtil::registerUser("Melody", "bafhsbsa");
-        DBUtil::registerUser("Link", "masterSword");
-        DBUtil::registerUser("abc", "abc");
     }
 
     void TearDown() override {
@@ -129,12 +128,48 @@ TEST_F(AccountControllerTests, RegisterTest){
     EXPECT_EQ(LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT, accountControllerSecondResponse.text);
 }
 
+//login with non-existing username
+TEST_F(AccountControllerTests, LoginWhenUsernameExists) {
+    user.reset();
+    Message message = accountController.startLogin(firstMessage).front();
+
+    Message accountControllerFirstResponse = accountController.respondToMessage(usernameNotExistsMessage);
+
+    ASSERT_EQ(LOGIN_USERNAME_PROMPT, message.text);
+    EXPECT_EQ(ID1, message.user.getConnection().id);
+
+    ASSERT_EQ(ID1, accountControllerFirstResponse.user.getConnection().id);
+    string expected;
+    expected = expected + EMPTY_INPUT_PROMPT + LOGIN_USERNAME_FAILED_PROMPT;
+    ASSERT_EQ(expected, accountControllerFirstResponse.text);
+}
+
+//login with invalid password
+TEST_F(AccountControllerTests, LoginWithEmptyPassword) {
+    user.reset();
+    Message message = accountController.startLogin(firstMessage).front();
+
+    Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage);
+    Message accountControllerSecondResponse = accountController.respondToMessage(emptyPassword);
+
+    ASSERT_EQ(LOGIN_USERNAME_PROMPT, message.text);
+    EXPECT_EQ(ID1, message.user.getConnection().id);
+
+    ASSERT_EQ(ID1, accountControllerFirstResponse.user.getConnection().id);
+    ASSERT_EQ(LOGIN_PASSWORD_PROMPT, accountControllerFirstResponse.text);
+
+    EXPECT_EQ(ID1, accountControllerSecondResponse.user.getConnection().id);
+    string expected;
+    expected = expected + EMPTY_INPUT_PROMPT + LOGIN_PASSWORD_FAILED_PROMPT;
+    EXPECT_EQ(expected, accountControllerSecondResponse.text);
+}
+
 //register with already existing username
-TEST_F(AccountControllerTests, RegisterWith) {
+TEST_F(AccountControllerTests, RegisterWhenUsernameExists) {
     user.reset();
     Message message = accountController.startRegister(firstMessage).front();
 
-    Message accountControllerFirstResponse = accountController.respondToMessage(registerUsernameExistsMessage);
+    Message accountControllerFirstResponse = accountController.respondToMessage(usernameExistsMessage);
 
     ASSERT_EQ(REGISTER_USERNAME_PROMPT, message.text);
     EXPECT_EQ(ID1, message.user.getConnection().id);
@@ -148,13 +183,19 @@ TEST_F(AccountControllerTests, RegisterWithEmptyPassword) {
     user.reset();
     Message message = accountController.startRegister(firstMessage).front();
 
-    Message accountControllerFirstResponse = accountController.respondToMessage(registerWithEmptyPassword);
+    Message accountControllerFirstResponse = accountController.respondToMessage(registerUsernameMessage);
+    Message accountControllerSecondResponse = accountController.respondToMessage(emptyPassword);
 
     ASSERT_EQ(REGISTER_USERNAME_PROMPT, message.text);
     EXPECT_EQ(ID1, message.user.getConnection().id);
 
     ASSERT_EQ(ID1, accountControllerFirstResponse.user.getConnection().id);
-    ASSERT_EQ(REGISTER_USERNAME_FAILED_PROMPT, accountControllerFirstResponse.text);
+    ASSERT_EQ(REGISTER_PASSWORD_PROMPT, accountControllerFirstResponse.text);
+
+    EXPECT_EQ(ID1, accountControllerSecondResponse.user.getConnection().id);
+    string expected;
+    expected = expected + EMPTY_INPUT_PROMPT + REGISTER_PASSWORD_FAILED_PROMPT;
+    EXPECT_EQ(expected, accountControllerSecondResponse.text);
 }
 
 //register after logging in
@@ -214,7 +255,7 @@ TEST_F(AccountControllerTests, LoginEscapeTest){
     EXPECT_EQ(LOGGING_IN_ESCAPE_MESSAGE, escapeMessage.text);
 }
 
-//user escape without logingin
+//user escape without loggingin
 TEST_F(AccountControllerTests, LoginEscape_WithoutLoginTest){
     user.reset();
     Message escapeMessage = accountController.escapeLogin(firstMessage).front();
