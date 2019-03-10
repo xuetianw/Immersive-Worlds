@@ -11,64 +11,70 @@
 
 using std::unordered_map;
 
-namespace channel {
+namespace models {
     class MiniGame {
-        public:
-            MiniGame();
+    public:
+        MiniGame();
 
-            /**
-             * Add possible answers.
-             * @param answer
-             */
-            void addAnswer(std::string answer);
+        MiniGame(const CusJson::MiniGame& jsonMiniGame);
 
-            /**
-             * Add Questions to the multiple choice game.
-             * @param question
-             */
-            void addQuestion(std::string question);
+        /**
+         * Add possible answers.
+         * @param answer
+         */
+        void addAnswer(std::string answer);
 
-            /**
-             * add the correct answer for the given round
-             * @param answer
-             */
-            void addCorrectAnswer(int answer);
+        /**
+         * Add Questions to the multiple choice game.
+         * @param question
+         */
+        void addQuestion(std::string question);
 
-            /**
-             * Checks the input of the user if it is correct.
-             * @param answer
-             * @return boolean. True if answer is correct.
-             */
-            bool checkAnswer(const int answer) const;
+        /**
+         * add the correct answer for the given round
+         * @param answer
+         */
+        void addCorrectAnswer(int answer);
 
-            /**
-             * Get the current question
-             * @return the question of the round
-             */
-            std::string getQuestion() const;
+        /**
+         * Checks the input of the user if it is correct.
+         * @param answer
+         * @return boolean. True if answer is correct.
+         */
+        bool checkAnswer(const int answer) const;
 
-            /**
-             * Get the list of possible answers in the round.
-             * @return vector of possible answers
-             */
-            std::vector<std::string> getAnswers() const;
+        /**
+         * Get the current question
+         * @return the question of the round
+         */
+        std::string getQuestion() const;
 
-            /**
-             * Print the current question
-             * @return the string of the round
-             */
-            std::string printQuestion();
+        /**
+         * Get the list of possible answers in the round.
+         * @return vector of possible answers
+         */
+        std::vector<std::string> getAnswers() const;
 
-            /**
-             * Advances the round. Returns true or false if there are no more remaining questions.
-             * @return boolean. True if no more rounds.
-             */
-            bool nextRound();
-        private:
-            std::vector<std::string> _answers;
-            std::vector<std::string> _questions;
-            std::vector<int> _correctAnswers;
-            int _round;
+        /**
+         * Print the current question
+         * @return the string of the round
+         */
+        std::string printQuestion();
+
+        /**
+         * Advances the round. Returns true or false if there are no more remaining questions.
+         * @return boolean. True if no more rounds.
+         */
+        bool nextRound();
+
+    private:
+        int _id;
+        int _roomId;
+        std::string _type;
+        std::vector<std::string> _answers;
+        std::string _questions;
+        int _correctAnswers;
+        int _round;
 
     };
 } // namespace channel

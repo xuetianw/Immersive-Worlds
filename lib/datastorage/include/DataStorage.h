@@ -13,14 +13,20 @@
 class DataStorage {
 private:
     CusJson::Area jsonArea;
+    CusJson::MiniGameList jsonMiniGameList;
 public:
     DataStorage();
-    const CusJson::Area &getJsonArea() const;
 
-    void setJsonArea(const CusJson::Area &jsonArea);
+    const CusJson::Area& getJsonArea() const;
+
+    const CusJson::MiniGameList& getMiniGameList() const;
+
+    void setJsonArea(const CusJson::Area& jsonArea);
 
 private:
     json getTestingArea();
+
+    json getTestingMiniGameList();
 
 
 };

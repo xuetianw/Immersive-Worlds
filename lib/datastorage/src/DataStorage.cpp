@@ -5,12 +5,49 @@
 #include <DataStorage.h>
 
 #include "DataStorage.h"
+#include <iostream>
 
 DataStorage::DataStorage() {
     json solaceJson = getTestingArea();
     jsonArea = solaceJson.get<CusJson::Area>();
+
+    json miniGameList = getTestingMiniGameList();
+    jsonMiniGameList = miniGameList.get<CusJson::MiniGameList>();
 }
 
+json DataStorage::getTestingMiniGameList() {
+    json j = R"(
+  {
+    "MINIGAMES" : [
+        {
+          "id" : 1,
+          "roomId" : 10500,
+          "type" : "multiple_choice",
+          "question" : "Which spelling is correct?",
+          "answers" : [
+            "RRRR",
+            "CAT",
+            "TTTT"
+          ],
+          "correctanswer" : 1
+        },
+        {
+          "id" : 2,
+          "roomId" : 10608,
+          "type" : "multiple_choice",
+          "question" : "Which spelling is correct?",
+          "answers" : [
+            "RRRR",
+            "DOG",
+            "TTTT"
+          ],
+          "correctanswer" : 1
+        }
+    ]
+  }
+)"_json;
+    return j;
+}
 
 
 json DataStorage::getTestingArea() {
@@ -127,10 +164,14 @@ json DataStorage::getTestingArea() {
 }
 
 
-const CusJson::Area &DataStorage::getJsonArea() const {
+const CusJson::Area& DataStorage::getJsonArea() const {
     return jsonArea;
 }
 
-void DataStorage::setJsonArea(const CusJson::Area &jsonArea) {
+void DataStorage::setJsonArea(const CusJson::Area& jsonArea) {
     DataStorage::jsonArea = jsonArea;
+}
+
+const CusJson::MiniGameList& DataStorage::getMiniGameList() const {
+    return jsonMiniGameList;
 }

@@ -111,7 +111,7 @@ public:
     /*
      * desc: Create a minigame in that room
      */
-    Message createMiniGame(const Message &message);
+    Message startMiniGame(const Message &message);
 
 private:
     // A map to store currently registered users

@@ -21,30 +21,31 @@ class GameController : AbstractController {
 public:
     GameController() = default;
 
-    explicit GameController(GameService &gameService);
+    explicit GameController(GameService& gameService);
 
-    Message move(const networking::Message &message);
+    Message move(const networking::Message& message);
 
     pair<bool, Message> respondToMessage(const Message& message) override;
 
-    void addUser(const networking::Connection &connection);
+    void addUser(const networking::Connection& connection);
 
-    Message spawnUserInStartRoom(const networking::Connection &connection);
-    void spawnUserInRoom(const networking::Connection &connection, int debugRoomId);
+    Message spawnUserInStartRoom(const networking::Connection& connection);
+
+    void spawnUserInRoom(const networking::Connection& connection, int debugRoomId);
 
     /**
      * Creates a MiniGame based on the room.
      * @param message
      * @return the message that will be displayed
      */
-    networking::Message createMinigame(const networking::Message &message);
-    
+    networking::Message startMiniGame(const networking::Message& message);
+
     /**
      * Verify if the input given by the user is valid.
      * @param message
      * @return the message that will be displayed
      */
-    networking::Message verifyMinigameAnswer(const networking::Message &message);
+    networking::Message verifyMinigameAnswer(const networking::Message& message);
 
     /**
      * Displays to the user info about their current location.
@@ -57,7 +58,7 @@ private:
     GameService _gameService;
     std::vector<std::string> directions = {"east", "west", "south", "north"};
 
-    bool checkIsDirectionMessage(const Message &message);
+    bool checkIsDirectionMessage(const Message& message);
 };
 
 #endif //WEBSOCKETNETWORKING_GAMECONTROLLER_H
