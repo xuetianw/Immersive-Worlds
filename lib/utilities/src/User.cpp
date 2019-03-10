@@ -29,6 +29,7 @@ void User::setAccount(const Account& account) {
 
 void User::setCommandType(CommandType* commandType) {
     _commandType.reset(commandType);
+    _allowedCommands = _commandType->getCommands();
 }
 
 const unordered_set<Command>& User::getAllowedCommands() const {

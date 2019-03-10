@@ -28,11 +28,9 @@ protected:
 };
 
 TEST_F(ConsoleCommandTest, commandsAreCalled){
-    loginUser.addCommand(LOGIN);
-    logoutUser.addCommand(LOGOUT);
-
     Message defaultResponse = commandProcessor.processCommand(dummy).front();
     Message loginResponse = commandProcessor.processCommand(login).front();
+    logout.user.setCommandType(new GameCommands {});
     Message logoutResponse = commandProcessor.processCommand(logout).front();
 
     EXPECT_TRUE(defaultResponse.text != loginStr && defaultResponse.text != logoutStr);
