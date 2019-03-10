@@ -8,8 +8,6 @@
 using CusJson::Area;
 
 json DataStorageService::getTestingMiniGameList() {
-
-    std::cout << "RAN MINIGAME" << std::endl;
     json j = R"(
   {
     "MINIGAMES" : [

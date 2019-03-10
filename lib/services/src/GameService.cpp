@@ -57,22 +57,6 @@ const Room* GameService::getRoomByName(const string& roomName) const {
 }
 
 bool GameService::roomHaveMiniGame(const User& user) {
-    /*
-    auto roomId = _connectionToRoomId.at(user.getConnection());
-    auto found = _roomIdToMiniGameConnectionsList.find(roomId);
-
-    auto temp = _connectionToRoomId[user.getConnection()];
-    auto roomIter = _roomIdToRoom.find(temp);
-
-    if(roomIter != _roomIdToRoom.end()) {
-        std::cout << "NOT THERE" << std::endl;
-    } else {
-        std::cout << "FOUND: " << roomIter->second.getName();
-    }
-
-    return found != _roomIdToMiniGameConnectionsList.end();
-    */
-
     auto roomName = getCurrentRoomName(user.getConnection());
     return roomName != "";
 }
@@ -118,8 +102,6 @@ void GameService::loadFromStorage() {
 
     // load minigame
     for (const CusJson::MiniGame& minigame : _dataStorage.getMiniGameList()._minigames) {
-        std::cout << minigame._roomId << std::endl;
         _roomIdToMiniGameConnectionsList.emplace(minigame._roomName, models::MiniGame(minigame));
-        //_roomIdToMiniGameConnectionsList(minigame)
     }
 }
