@@ -15,7 +15,7 @@ struct NeighbourInfo {
 class RoomConnectionService {
 public:
     explicit RoomConnectionService(DataStorageService& dataStorageService)
-        : _dataStorageService(dataStorageService) {
+            : _dataStorageService(dataStorageService) {
         buildDirections();
         loadFromStorage();
     }
@@ -26,9 +26,11 @@ public:
 
     const ID* getNeighbourId(const ID& roomId, std::string directionString);
 
-    const std::vector<std::string> getAvailableDirections(const ID&, std::string directionString);
+    const std::vector<std::string> getAvailableRoomDirections(const ID& roomId);
 
     const bool isValidDirectionString(std::string directionString);
+
+    const bool doesRoomExist(const ID& roomId);
 
 private:
     using Room = models::Room;
