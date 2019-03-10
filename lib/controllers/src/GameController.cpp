@@ -48,13 +48,21 @@ void GameController::addUser(const networking::Connection& connection) {
 }
 
 networking::Message GameController::startMiniGame(const networking::Message& message) {
-    auto minigame = _gameService.getMiniGame(message.connection, message.text);
+    if(_gameService.roomHaveMiniGame(message.connection)) {
+        auto minigame = _gameService.getMiniGame(message.connection, message.text);
 
-    networking::Message newMessage = networking::Message();
-    newMessage.connection = message.connection;
-    newMessage.text = minigame.printQuestion();
+        networking::Message newMessage = networking::Message();
+        newMessage.connection = message.connection;
+        newMessage.text = minigame.printQuestion();
 
-    return newMessage;
+        return newMessage;
+    } else {
+        networking::Message newMessage = networking::Message();
+        newMessage.connection = message.connection;
+        newMessage.text = "MiniGame not available for this room";
+
+        return newMessage;
+    }
 }
 
 
