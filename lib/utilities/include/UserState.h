@@ -19,13 +19,15 @@ constexpr char LOGIN_USERNAME_PROMPT[] = "Please enter your username to login: "
 constexpr char LOGIN_USERNAME_FAILED_PROMPT[] = "Account does not exist!\nPlease enter a valid username: ";
 constexpr char LOGIN_PASSWORD_PROMPT[] = "Please enter your password: ";
 constexpr char LOGIN_PASSWORD_FAILED_PROMPT[] = "Login Unsuccessful\nPlease enter your username again: ";
+constexpr char LOGGING_IN_ESCAPE_MESSAGE[] = "You have exited out of the login process\n";
 constexpr char REGISTER_USERNAME_PROMPT[] = "Please create your username: ";
 constexpr char REGISTER_USERNAME_FAILED_PROMPT[] = "Username unavailable!\nPlease enter a different username: ";
 constexpr char REGISTER_PASSWORD_PROMPT[] = "Please create your password: ";
 constexpr char REGISTER_PASSWORD_FAILED_PROMPT[] = "Invalid Password!\nPlease enter a different password: ";
+constexpr char ESCAPE_WHILE_REGISTERING_MESSAGE[] = "You have exited out of the registration process\n";
 constexpr char LOGGED_IN_PROMPT[] = "Successfully logged in!\n";
 constexpr char LOGGED_OUT_PROMPT[] = "Logged out Successfully!\n";
-constexpr char NOT_SIGNED_IN_PROMPT[] = "Please enter login or register!\n";
+constexpr char INVALID_INPUT_PROMPT[] = "Please enter a valid command!\n";
 constexpr char EMPTY_INPUT_PROMPT[] = "Invalid String - \n";
 
 ///////////////////////////////////////////USER-STATES/////////////////////////////////////////////
@@ -80,8 +82,12 @@ struct StateTransitions {
 
     /////////////////////////////////////////////HELPERS///////////////////////////////////////////
     // TODO: Add validity checks asides from empty string possibly move validation to DBUtility
-    bool invalid(const string& str) {
-        return str.find_first_not_of(' ') == std::string::npos;
+    bool isUsernameInvalid(const string& username) {
+        return username.find_first_not_of(' ') == std::string::npos;
+    }
+
+    bool isPasswordInvalid(const string& password) {
+        return password.find_first_not_of(' ') == std::string::npos;
     }
 
     string getResponseForInvalidInput(const string& prompt) {
@@ -90,35 +96,19 @@ struct StateTransitions {
 
     ////////////////////////////////////////////VISITORS///////////////////////////////////////////
     std::optional<UserStateVariant> operator()(ConnectedState& state, RegisterEvent& event, Account& account, const string& message) {
-
-        if(!(account.isLoggingIn || account.isRegistering)){
-            _currentUserResponseMessage = NOT_SIGNED_IN_PROMPT;
-            return ConnectedState {};
-        }
-        _currentUserResponseMessage = account.isLoggingIn ? LOGIN_USERNAME_PROMPT : REGISTER_USERNAME_PROMPT;
-
-        if (account.isLoggingIn) {
-            return LoginUsernameState{};
-        } else {
-            return RegisterUsernameState{};
-        }
+        _currentUserResponseMessage = REGISTER_USERNAME_PROMPT;
+        return RegisterUsernameState{};
     }
 
     std::optional<UserStateVariant> operator()(ConnectedState& state, LoginEvent& event, Account& account, const string& message) {
-        return std::nullopt;
+        _currentUserResponseMessage = LOGIN_USERNAME_PROMPT;
+        return LoginUsernameState {};
     }
 
     std::optional<UserStateVariant> operator()(RegisterUsernameState& state, UpdateEvent& event, Account& account, const string& message) {
-        if (invalid(message)) {
-            _currentUserResponseMessage = REGISTER_USERNAME_FAILED_PROMPT;
-            return RegisterUsernameState {};
-        }
-
-        //check if username exists in DB
+        // check if username is valid and if it exists in DB
         account._registerUsername = message;
-
-        //if username already exists, send a message saying username already taken
-        if(DBUtil::userExists(account._registerUsername)) {
+        if (isUsernameInvalid(message) || DBUtil::userExists(account._registerUsername)) {
             _currentUserResponseMessage = REGISTER_USERNAME_FAILED_PROMPT;
             return RegisterUsernameState {};
         }
@@ -128,34 +118,29 @@ struct StateTransitions {
     }
 
     std::optional<UserStateVariant> operator()(RegisterUsernameState& state, EscapeEvent& event, Account& account, const string& message) {
-        return std::nullopt;
+        _currentUserResponseMessage = ESCAPE_WHILE_REGISTERING_MESSAGE;
+        return ConnectedState {};
     }
 
     std::optional<UserStateVariant> operator()(RegisterPasswordState& state, UpdateEvent& event, Account& account, const string& message) {
-        // TODO: Check is password is valid or not i.e meets the criteria of a password
-        if (invalid(message)) {
-            _currentUserResponseMessage = getResponseForInvalidInput(REGISTER_PASSWORD_FAILED_PROMPT);
-            return RegisterPasswordState {};
-        }
-
+        // Check is password is valid and attempt to insert the user in the database
         account._registerPassword = message;
-
-        if(!DBUtil::registerUser(account._registerUsername, account._registerPassword)){
+        if (isPasswordInvalid(message) || !DBUtil::registerUser(account._registerUsername, account._registerPassword)) {
             _currentUserResponseMessage = getResponseForInvalidInput(REGISTER_PASSWORD_FAILED_PROMPT);
             return RegisterPasswordState {};
         }
 
-        account.isSubmittingRegistration = true;
         _currentUserResponseMessage = LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT;
         return LoginUsernameState {};
     }
 
     std::optional<UserStateVariant> operator()(RegisterPasswordState& state, EscapeEvent& event, Account& account, const string& message) {
-        return std::nullopt;
+        _currentUserResponseMessage = ESCAPE_WHILE_REGISTERING_MESSAGE;
+        return ConnectedState {};
     }
 
     std::optional<UserStateVariant> operator()(LoginUsernameState& state, UpdateEvent& event, Account& account,  const string& message) {
-        if(invalid(message)) {
+        if(isUsernameInvalid(message) || !DBUtil::userExists(message)) {
             _currentUserResponseMessage = getResponseForInvalidInput(LOGIN_USERNAME_FAILED_PROMPT);
             return LoginUsernameState {};
         }
@@ -166,31 +151,24 @@ struct StateTransitions {
     }
 
     std::optional<UserStateVariant> operator()(LoginUsernameState& state, EscapeEvent& event, Account& account,  const string& message) {
-        return std::nullopt;
+        _currentUserResponseMessage = LOGGING_IN_ESCAPE_MESSAGE;
+        return ConnectedState {};
     }
 
     std::optional<UserStateVariant> operator()(LoginPasswordState& state, UpdateEvent& event, Account& account, const string& message) {
-        if(invalid(message)) {
-            _currentUserResponseMessage = getResponseForInvalidInput(LOGIN_PASSWORD_FAILED_PROMPT);
-            return LoginUsernameState {};
-        }
-
+        // Validate password in the database
         account._password = message;
-
-        //verify username and password with DB
-
-        if(DBUtil::isValidCredential(account._username, account._password)){
-            account.isSubmittingLogin = true;
-            _currentUserResponseMessage = LOGGED_IN_PROMPT;
-            return LoggedInState {};
-        } else{
+        if(isPasswordInvalid(message) || !DBUtil::isValidCredential(account._username, account._password)) {
             _currentUserResponseMessage = getResponseForInvalidInput(LOGIN_PASSWORD_FAILED_PROMPT);
             return LoginUsernameState {};
         }
 
+        _currentUserResponseMessage = LOGGED_IN_PROMPT;
+        return LoggedInState {};
     }
 
     std::optional<UserStateVariant> operator()(LoginPasswordState& state, EscapeEvent& event, Account& account, const string& message) {
+        _currentUserResponseMessage = LOGGING_IN_ESCAPE_MESSAGE;
         return std::nullopt;
     }
 
@@ -203,6 +181,7 @@ struct StateTransitions {
 
     template<typename State, typename Event>
     std::optional<UserStateVariant> operator()(State& state, Event& event, Account& account, const string& message) {
+        _currentUserResponseMessage = INVALID_INPUT_PROMPT;
         return std::nullopt;
     }
 };

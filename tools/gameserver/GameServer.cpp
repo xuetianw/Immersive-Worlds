@@ -62,8 +62,8 @@ std::deque<ServerMessage> processMessages(CommandProcessor& commandProcessor,
             quit = true;
         } else if (commandProcessor.isCommand(message)) {
             std::vector<Message> returnedMessages = commandProcessor.processCommand(message);
-            for (auto& message: returnedMessages){
-                result.push_back(message.convertToServerMessage());
+            for (auto& msg : returnedMessages){
+                result.push_back(msg.convertToServerMessage());
             }
 
         } else {

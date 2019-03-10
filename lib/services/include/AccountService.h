@@ -14,7 +14,7 @@ public:
     std::vector<Message> updateUserState(const Message& message, UserEventVariant event);
 
 private:
-    StateTransitions transitions;
+    StateTransitions _transitions;
 };
 
 #endif //WEBSOCKETNETWORKING_USERSERVICE_H
