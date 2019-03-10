@@ -13,6 +13,8 @@ public:
         loadFromStorage();
     }
 
+    const ID& getStartingRoom();
+
     const std::string getRoomName(const ID& roomId);
 
     const std::string getRoomDescription(const ID& roomId);

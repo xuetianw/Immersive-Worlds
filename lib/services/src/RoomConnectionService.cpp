@@ -6,6 +6,15 @@
  * PUBLIC
  */
 
+const ID& RoomConnectionService::getStartingRoom() {
+    //return the ID of first entry of the _roomIdToRoom map as the starting room id
+    //TODO find a more elegant way to choose starting room
+    auto it = std::find_if(_roomIdToRoom.begin(), _roomIdToRoom.end(),
+            [&](const std::pair<ID, Room>& pair) { return true; });
+
+    return it->first;
+}
+
 const std::string RoomConnectionService::getRoomName(const ID& roomId) {
     if (!doesRoomExist(roomId)) {
         return nullptr;
@@ -91,7 +100,7 @@ const bool RoomConnectionService::doesRoomExist(const ID& roomId) {
  */
 
 const models::Room* RoomConnectionService::findRoom(const ID& roomId) {
-    if (doesRoomExist(roomId)) {
+    if (!doesRoomExist(roomId)) {
         return nullptr;
     }
 
@@ -138,5 +147,3 @@ void RoomConnectionService::buildNeighbours(const std::unordered_map<int, ID>& t
         neighbours.emplace_back(neighbourInfo);
     }
 }
-
-
