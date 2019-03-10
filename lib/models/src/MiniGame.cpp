@@ -13,7 +13,7 @@ MiniGame::MiniGame() {
 MiniGame::MiniGame(const CusJson::MiniGame& jsonMiniGame) :
         _id(jsonMiniGame._id), _roomId(jsonMiniGame._roomId), _type(jsonMiniGame._type),
         _answers(jsonMiniGame._possibleAnswers), _correctAnswers(jsonMiniGame._correctAnswers),
-        _questions(jsonMiniGame._questions) { }
+        _questions(jsonMiniGame._questions), _roomName(jsonMiniGame._roomName) { }
 
 void MiniGame::addAnswer(std::string answer) {
     _answers.push_back(answer);

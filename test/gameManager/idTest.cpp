@@ -1,10 +1,9 @@
 #include "ID.h"
 #include "gtest/gtest.h"
 
-
 TEST(idTests, differentIDTest){
 
-    ID::UUIDGen generator;
+    UUIDGen generator;
     ID id1 = ID(generator);
     ID id2 = ID(generator);
     ID id3 = ID(generator);

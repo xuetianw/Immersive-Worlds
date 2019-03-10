@@ -32,13 +32,6 @@ struct Connection {
   }
 };
 
-
-struct ConnectionHasher {
-  std::size_t operator()(const Connection& conn) const {
-    return conn.id;
-  }
-};
-
 struct ConnectionHash {
   size_t
   operator()(Connection c) const {
@@ -51,7 +44,7 @@ struct ConnectionHash {
  *  A Message containing text that can be sent to or was recieved from a given
  *  Connection.
  */
-struct Message {
+struct ServerMessage {
   Connection connection;
   std::string text;
 };
@@ -117,20 +110,20 @@ public:
    *  Send a list of messages to their respective Clients. The messages may not
    *  contain carriage returns.
    */
-  void send(const std::deque<Message>& messages);
+  void send(const std::deque<ServerMessage>& messages);
 
     /**
    *  Send a list of messages to a specific Client. The messages may not
    *  contain carriage returns.
    */
-  void sendSingleMessage(const Message &message);
+  void sendSingleMessage(const ServerMessage &message);
 
   /**
    *  Receive Message instances from Client instances. This returns all Message
    *  instances collected by previous calls to Server::update() and not yet
    *  received.
    */
-  std::deque<Message> receive();
+  std::deque<ServerMessage> receive();
 
   /**
    *  Disconnect the Client specified by the given Connection.
@@ -142,7 +135,7 @@ private:
 
   // Hiding the template parameters of the Server class behind a pointer to
   // a private interface allows us to refer to an unparameterized Server
-  // object while still having the handlers of connect & disconnect be client
+  // object while still having the handlers of connectUser & disconnect be client
   // defined types. This is a form of *type erasure*.
   class ConnectionHandler {
   public:

@@ -60,6 +60,7 @@ namespace CusJson {
     public:
         int _id;
         int _roomId;
+        std::string _roomName;
         std::string _type;
         std::string _questions;
         std::vector<std::string> _possibleAnswers;

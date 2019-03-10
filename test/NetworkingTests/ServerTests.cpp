@@ -3,13 +3,13 @@
 #include "gtest/gtest.h"
 
 using networking::Connection;
-using networking::ConnectionHasher;
+using networking::ConnectionHash;
 using std::string;
 using std::unordered_map;
 
 class ConnectionHashingTest : public ::testing::Test {
 public:
-    unordered_map<Connection, string, ConnectionHasher> map;
+    unordered_map<Connection, string, ConnectionHash> map;
     Connection keyOne{0};
     Connection keyTwo{1};
 

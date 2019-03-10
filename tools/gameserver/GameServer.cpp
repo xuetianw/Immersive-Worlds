@@ -9,11 +9,6 @@
 // for details.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "Server.h"
-#include "AccountController.h"
-#include "CommandProcessor.h"
-#include "GameController.h"
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -21,79 +16,63 @@
 #include <vector>
 #include <set>
 
+#include "Server.h"
+#include "DBUtil.h"
+#include "CommandProcessor.h"
+#include "User.h"
+#include "Message.h"
+
 using networking::Connection;
-using networking::Message;
+using networking::ConnectionHash;
+using networking::ServerMessage;
 using networking::Server;
 
 using namespace std;
 
-// Manager for handling client connections and authentication
-unique_ptr<AccountController> accountController;
+// Manager for handling client commands
+unique_ptr<CommandProcessor> commandProcessor;
 
-// Manage Game actions
-unique_ptr<GameController> gameController;
+// Store User State
+unordered_map<Connection, User, ConnectionHash> users;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onConnect(Connection &c) {
     std::cout << "New connection found: " << c.id << endl;
-    accountController->connectClient(c);
+    users[c] = User {c};
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onDisconnect(Connection &c) {
     std::cout << "Connection lost: " << c.id << endl;
-    accountController->disconnectClient(c);
+    users.erase(c);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-std::deque<Message> processMessages(CommandProcessor &commandProcessor,
-                                    Server &server,
-                                    std::deque<Message> &incoming,
-                                    bool &quit) {
-    std::deque<Message> result;
-    for (auto &message : incoming) {
+std::deque<ServerMessage> processMessages(CommandProcessor& commandProcessor,
+                                    Server& server,
+                                    const std::deque<ServerMessage>& incoming,
+                                    bool& quit) {
+    std::deque<ServerMessage> result;
+    for (auto &serverMessage : incoming) {
+        Message message{users[serverMessage.connection], serverMessage.text};
         if (message.text == "/quit") {
-            server.disconnect(message.connection);
+            server.disconnect(message.user.getConnection());
         } else if (message.text == "shutdown") {
             std::cout << "Shutting down.\n";
             quit = true;
         } else if (commandProcessor.isCommand(message)) {
-            result.push_back(commandProcessor.processCommand(message));
-        } else {
-            // If we can put the controllers into a set and lamda 'if( responseToMessage() -> first ) { push_back && break }
-            // It would be nice and we could make a serverController and move its commands in there (:
-
-            pair<bool, Message> accountControllerResponse = accountController->respondToMessage(message);
-            if (accountControllerResponse.first) {
-                result.push_back(accountControllerResponse.second);
-            } else {
-                pair<bool, Message> gameControllerResponse = gameController->respondToMessage(message);
-                result.push_back(gameControllerResponse.second);
+            std::vector<Message> returnedMessages = commandProcessor.processCommand(message);
+            for (auto& message: returnedMessages){
+                result.push_back(message.convertToServerMessage());
             }
+
+        } else {
+            result.push_back(commandProcessor.handleDefaultMessage(message).convertToServerMessage());
         }
     }
+
     return result;
 }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-CommandProcessor buildCommands() {
-    CommandProcessor commandProcessor;
-
-    commandProcessor.addCommand("/logout", [](Message message) { return ::accountController->logoutUser(message); });
-    commandProcessor.addCommand("/login", [](Message message) { return ::accountController->startLogin(message); });
-    commandProcessor.addCommand("/register", [](Message message) { return ::accountController->startRegister(message); });
-    commandProcessor.addCommand("/escape", [](Message message) { return ::accountController->escapeLogin(message); });
-    commandProcessor.addCommand("/move", [](Message message) { return ::gameController->move(message); });
-    commandProcessor.addCommand("/minigame", [](Message message) { return ::gameController->startMiniGame(message); });
-    commandProcessor.addCommand("/answer", [](Message message) { return ::gameController->verifyMinigameAnswer(message); });
-
-    //commandProcessor.addCommand("/yell", [](Message message){return ::gameController->yell(message);});
-    commandProcessor.addCommand("/whereami", [](Message message) { return ::gameController->outputCurrentLocationInfo(message); });
-
-    return move(commandProcessor);
-}
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 std::string getHTTPMessage(const char *htmlLocation) {
@@ -101,14 +80,12 @@ std::string getHTTPMessage(const char *htmlLocation) {
         std::ifstream infile{htmlLocation};
         return std::string{std::istreambuf_iterator<char>(infile),
                            std::istreambuf_iterator<char>()};
-
     } else {
         std::cerr << "Unable to open HTML index file:\n"
                   << htmlLocation << "\n";
         std::exit(-1);
     }
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char *argv[]) {
@@ -121,15 +98,9 @@ int main(int argc, char *argv[]) {
     bool done = false;
     unsigned short port = static_cast<unsigned short>(std::stoi(argv[1]));
 
-    accountController = make_unique<AccountController>();
-    gameController = make_unique<GameController>();
-
-    accountController->onCompleteLogin([](Message message) {return ::gameController->spawnUserInStartRoom(message.connection);});
-
+    DBUtil::openConnection("adventure.db");
+    commandProcessor = make_unique<CommandProcessor>();
     Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
-    CommandProcessor commandProcessor = buildCommands();
-
-    //TODO: Improve this loop perhaps
 
     while (!done) {
         try {
@@ -141,10 +112,11 @@ int main(int argc, char *argv[]) {
         }
 
         auto incoming = server.receive();
-        auto outgoing = processMessages(commandProcessor, server, incoming, done);
+        auto outgoing = processMessages(*commandProcessor, server, incoming, done);
         server.send(outgoing);
         sleep(1);
     }
 
+    DBUtil::closeConnection();
     return 0;
 }

@@ -12,7 +12,7 @@
 #include <boost/beast.hpp>
 
 using namespace std::string_literals;
-using networking::Message;
+using networking::ServerMessage;
 using networking::Server;
 using networking::ServerImpl;
 using networking::ServerImplDeleter;
@@ -55,7 +55,7 @@ public:
   boost::beast::http::string_body::value_type httpMessage;
 
   ChannelMap channels;
-  std::deque<Message> incoming;
+  std::deque<ServerMessage> incoming;
 };
 
 
@@ -91,7 +91,7 @@ private:
   boost::beast::flat_buffer streamBuf;
   boost::beast::websocket::stream<boost::asio::ip::tcp::socket> websocket;
 
-  std::deque<Message> &readBuffer;
+  std::deque<ServerMessage> &readBuffer;
   std::deque<std::string> writeBuffer;
 };
 
@@ -348,23 +348,23 @@ Server::update() {
 }
 
 
-std::deque<Message>
+std::deque<ServerMessage>
 Server::receive() {
   auto oldIncoming = std::move(impl->incoming);
-  impl->incoming = std::deque<Message>{};
+  impl->incoming = std::deque<ServerMessage>{};
   return oldIncoming;
 }
 
 
 void
-Server::send(const std::deque<Message>& messages) {
+Server::send(const std::deque<ServerMessage>& messages) {
   for (auto& message : messages) {
       sendSingleMessage(message);
   }
 }
 
 void
-Server::sendSingleMessage(const Message &message) {
+Server::sendSingleMessage(const ServerMessage &message) {
     auto found = impl->channels.find(message.connection);
     if (impl->channels.end() != found) {
         found->second->send(message.text);

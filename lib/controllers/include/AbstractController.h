@@ -5,14 +5,11 @@
 #ifndef WEBSOCKETNETWORKING_ABSTRACTCONTROLLER_H
 #define WEBSOCKETNETWORKING_ABSTRACTCONTROLLER_H
 
-#include <Server.h>
-
-using Message = networking::Message;
-using namespace std;
+#include "User.h"
+#include "Message.h"
 
 class AbstractController {
-    virtual pair<bool, Message> respondToMessage(const Message& message) = 0;
+    virtual Message respondToMessage(const Message& message) = 0;
 };
-
 
 #endif //WEBSOCKETNETWORKING_ABSTRACTCONTROLLER_H

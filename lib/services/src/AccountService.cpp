@@ -7,37 +7,51 @@
 
 #include "AccountService.h"
 
-void AccountService::connect(const Connection& connection) {
-    if (_connectedUserMap.find(connection) == _connectedUserMap.end()) {
-        _connectedUserMap.insert(std::make_pair(connection, User{}));
+const string ESCAPEONLYMESSAGE = "You are currently logging in / registering - use /escape to restart";
+const string NOESCAPEMESSAGE = "You are not logging in / Registering";
+
+void updateUserAccountCommands(User& user) {
+
+    Account &userAccount = user.getAccount();
+
+    if (userAccount.isLoggingIn || userAccount.isRegistering) {
+        user.addCommand(ESCAPE);
+        user.removeCommand(REGISTER, ESCAPEONLYMESSAGE);
+        user.removeCommand(LOGIN, ESCAPEONLYMESSAGE);
+    } else if (userAccount.isLoggedIn) {
+        user.removeCommand(ESCAPE, NOESCAPEMESSAGE);
+        user.addCommand(LOGOUT);
     }
-    else {
-        std::cout << "This connection is not unique: " << connection.id << std::endl;
-    }
 }
 
-void AccountService::disconnectClient(const Connection &connection) {
-    _connectedUserMap.erase(connection);
-}
+std::vector<Message> AccountService::updateUserState(const Message& message) {
 
-User& AccountService::getUser(Connection& connection){
-    return _connectedUserMap.find(connection)->second;
-}
+    User& user = message.user;
+    Account& userAccount = user.getAccount();
 
-Message AccountService::updateUserState(const Message &message) {
-    auto userIter = _connectedUserMap.find(message.connection);
-    // std::optional<UserStateVariant> newState = std::visit(StateTransitions {}, userIter->second._state);
     auto newState = std::visit(
             [&](auto& state) -> std::optional<UserStateVariant>
             {
-                return transitions(state, userIter->second, message);
-            }, userIter->second._state);
-    userIter->second._state = *std::move(newState);
+                return transitions(state, userAccount, message.text);
+            }, userAccount._state);
+    userAccount._state = *std::move(newState);
 
-    return transitions._currentUserResponseMessage;
+    if(userAccount.isSubmittingRegistration) {
+
+        userAccount.isRegistering = false;
+        userAccount.isSubmittingRegistration = false;
+        userAccount.isLoggingIn = true; // On sucessful register
+        // fill this with db method
+    } else if (userAccount.isSubmittingLogin) {
+        // fill in with db method
+        userAccount.isLoggedIn = true;
+        userAccount.isLoggingIn = false;
+        userAccount.isSubmittingLogin = false;
+    }
+
+    updateUserAccountCommands(user);
+
+    return std::vector<Message>{ Message{message.user, transitions._currentUserResponseMessage} };
 }
 
-bool AccountService::isLoggedIn(const Connection &connection) {
-    auto userIter = _connectedUserMap.find(connection);
-    return (userIter != _connectedUserMap.end() && std::holds_alternative<LoggedInState>(userIter->second._state));
-}
+

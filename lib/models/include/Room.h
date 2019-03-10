@@ -7,7 +7,6 @@
 
 #include <utility>
 #include <string>
-#include <deque>
 #include <nlohmann/json.hpp>
 #include <CusJson.h>
 #include <MiniGame.h>
@@ -15,66 +14,59 @@
 #include <unordered_map>
 #include <vector>
 
+#include "Avatar.h"
+#include "ID.h"
+#include "CusJson.h"
+#include "InventoryItem.h"
+
 using json = nlohmann::json;
-using std::string;
-using std::deque;
-using std::unordered_map;
-using std::vector;
+using string = std::string;
 
 namespace models {
-  class RoomId {
-  private:
-    int _id;
-  public:
-    int getId() const;
-    RoomId();
+    class Room {
+        ID _id;
 
-      explicit RoomId(int i);
-  };
+        string _name;
 
-  class Room {
-    RoomId _id;  //TODO make room id unique
-    string _name;
-    std::vector<std::string> _description;
-    unordered_map<int, string> _avatars;  //TODO change generic type to Avatar/Character
-    unordered_map<int, string> _objects;  //TODO change generic type to ItemObject
-    unordered_map<int, Room&> _doors;
+        std::vector<std::string> _description;
 
-  public:
-      Room();
+        std::unordered_map<ID, InventoryItem> _objects;
 
-      Room(const models::RoomId &_id, const string &_name,
-                         const vector<string> &_description);
+        std::unordered_map<ID, Room&> _doors;
 
-    Room(const string &_name, const vector<string> &_description);
+    public:
+        Room() : _id(ID()) {}
 
-    explicit Room(const CusJson::Room &jsonForm);
+        Room(const ID& id, string name, std::vector<string> description) :
+            _id(id),
+            _name(move(name)),
+            _description(move(description)) {}
 
-    int getId() const;
+        Room( string name, std::vector<string> description) :
+            _name(move(name)),
+            _description(move(description)) {}
 
-    const string& getName() const;
+        explicit Room(const CusJson::Room& jsonForm) :
+            _id(ID(jsonForm._id)),
+            _name(jsonForm._name),
+            _description(jsonForm._jsonDesc) {}
 
-    void setName(string &name);
+        const ID& getId() const;
 
-      const vector<string> &get_description() const;
+        void setName(string name);
 
-      void set_description(const vector<string> &_description);
+        const string& getName() const;
 
+        void set_description(const std::vector<string>& description);
 
-      vector<string> getAllAvatars() const;
+        const std::vector<string>& get_description() const;
 
-    void addAvatar(int id, const string& avatar);
+        std::vector<InventoryItem> getAllObjects() const;
 
-    vector<string> getAllObjects() const;
+        void addObject(ID objectId, const InventoryItem& object);
 
-    void addObject(int objectId, const string& object);
-
-    vector<Room> getAllDoors() const;
-
-    void addRoom(int roomId, Room& room);
-
-  };
-
+        std::vector<Room> getAllDoors() const;
+    };
 }
 
 #endif //MODELS_ROOM_H

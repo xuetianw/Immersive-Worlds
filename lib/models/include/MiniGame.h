@@ -74,6 +74,7 @@ namespace models {
         std::string _questions;
         int _correctAnswers;
         int _round;
+        std::string _roomName;
 
     };
 } // namespace channel

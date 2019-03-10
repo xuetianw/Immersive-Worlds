@@ -1,7 +1,4 @@
 add_library(controllers
-    src/WorldHandler.cpp
-    src/WorldContainer.cpp
-    src/ID.cpp
     src/GameController.cpp
     src/AccountController.cpp)
 
@@ -9,22 +6,17 @@ find_package(Boost 1.68 COMPONENTS system REQUIRED)
 
 target_include_directories(controllers
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-    ${Boost_INCLUDE_DIR}
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+        ${Boost_INCLUDE_DIR}
     PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${Boost_INCLUDE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
     )
 
 target_link_libraries(controllers
     PUBLIC
-    cusjson
-    networking
-    models
-    commands
-    services
-    datastorage
+        services
+        utilities
     )
 
 set_target_properties(controllers
