@@ -35,7 +35,7 @@ std::vector<Message> AccountController::escapeLogin(const Message& message) {
 }
 
 Message AccountController::respondToMessage(const Message& message) {
-    return isUserLoggedIn(message)
+    return message.user.getAccount().isLoggedIn
         ? Message {message.user, ""}
         : _accountService.updateUserState(message, UpdateEvent {}).front();
 }

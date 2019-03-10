@@ -28,7 +28,7 @@ struct UserServiceManagementTest : testing:: Test {
 TEST_F(UserServiceManagementTest, LogoutWithoutLoggingInTest){
   Message message = accountController.logoutUser(firstMessage).front();
   EXPECT_EQ(ID1, message.user.getConnection().id);
-  EXPECT_EQ(NOT_LOGIN_MESSAGE, message.text);
+  EXPECT_EQ(INVALID_INPUT_PROMPT, message.text);
 }
 
 //user login
@@ -68,7 +68,7 @@ TEST_F(UserServiceManagementTest, LoginTwiceTest){
 
     Message secondPrompt = accountController.startLogin(firstMessage).front();
     EXPECT_EQ(ID1, secondPrompt.user.getConnection().id);
-    EXPECT_EQ(ALREADY_LOGIN_MESSAGE, secondPrompt.text);
+    EXPECT_EQ(INVALID_INPUT_PROMPT, secondPrompt.text);
 }
 
 //user login first and logout
@@ -90,7 +90,7 @@ TEST_F(UserServiceManagementTest, LoginLogoutSequenceTest){
 
     Message message = accountController.logoutUser(firstMessage).front();
     EXPECT_EQ(ID1, message.user.getConnection().id);
-    EXPECT_EQ(LOGOUT_MESSAGE, message.text);
+    EXPECT_EQ(LOGGED_OUT_PROMPT, message.text);
 }
 
 //register without logging in
@@ -134,7 +134,7 @@ TEST_F(UserServiceManagementTest, LoginRegisterTest){
     ASSERT_TRUE(accountControllerSecondResponse.user.getConnection().id == ID1);
 
     Message message = accountController.startRegister(firstMessage).front();
-    EXPECT_EQ(LOGOUT_BEFORE_REGISTER_MESSAGE, message.text);
+    EXPECT_EQ(INVALID_INPUT_PROMPT, message.text);
 }
 
 
@@ -178,7 +178,7 @@ TEST_F(UserServiceManagementTest, LoginEscape_WithoutLoginTest){
     user.reset();
     Message escapeMessage = accountController.escapeLogin(firstMessage).front();
     EXPECT_EQ(ID1, escapeMessage.user.getConnection().id);
-    EXPECT_EQ(ESCAPE_WHILE_NOT_LOGIN_MESSAGE, escapeMessage.text);
+    EXPECT_EQ(INVALID_INPUT_PROMPT, escapeMessage.text);
 }
 
 //
