@@ -55,7 +55,7 @@ std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
     return std::pair<string,string>(keyCommand, remainder);
 }
 
-std::vector<Message> CommandProcessor::listAvailableCommands(const Message &message) {
+std::vector<Message> CommandProcessor::listAvailableCommands(const Message& message) {
     std::stringstream output;
     auto allowedCommands = message.user.getAllowedCommands();
 

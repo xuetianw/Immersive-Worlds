@@ -54,7 +54,7 @@ public:
     }
 };
 
-struct MinigameCommands : public CommandType {
+class MinigameCommands : public CommandType {
 public:
     std::unordered_set<Command> getCommands() override {
         return {
