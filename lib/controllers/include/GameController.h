@@ -16,6 +16,7 @@ constexpr char WRONG_DIRECTION_MESSAGE[] = "wrong message for direction";
 #include <Server.h>
 #include "GameService.h"
 #include "AbstractController.h"
+#include "MiniGame.h"
 
 class GameController : AbstractController {
 public:

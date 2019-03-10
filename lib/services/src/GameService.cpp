@@ -90,14 +90,8 @@ models::MiniGame GameService::getMiniGame(const networking::Connection& connecti
 
 bool GameService::verifyAnswer(const networking::Connection& connection, const int input) {
     auto roomId = _connectionToRoomId.at(connection);
+    auto result = _roomIdToMiniGameConnectionsList.find(roomId.getId());
+    auto correctAnswer = result->second.checkAnswer(input);
 
-    auto got = _roomIdToMiniGameConnectionsList.find(roomId.getId());
-
-    auto found = (got != _roomIdToMiniGameConnectionsList.end());
-    auto correctAnswer = got->second.checkAnswer(input);
-
-    auto miniGame = _roomIdToMiniGameConnectionsList.at(roomId.getId());
-    miniGame.nextRound();
-
-    return found && correctAnswer;
+    return correctAnswer;
 }

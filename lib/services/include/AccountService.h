@@ -36,7 +36,8 @@ private:
             {"John", "password123*"},
             {"Rex", "admin12345"},
             {"Alex", "myPassword!"},
-            {"Garfield", "Pwd15081967@merci"}
+            {"Garfield", "Pwd15081967@merci"},
+            {"x", "x"}
     };
 };
 

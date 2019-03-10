@@ -5,11 +5,10 @@
 #ifndef CHANNEL_MINIGAME_H
 #define CHANNEL_MINIGAME_H
 
-#include <Room.h>
 #include <vector>
+#include <string>
 #include <sstream>
-
-using std::unordered_map;
+#include "CusJson.h"
 
 namespace models {
     class MiniGame {
@@ -78,6 +77,12 @@ namespace models {
 
     };
 } // namespace channel
+
+namespace channel {
+    enum MiniGameType {
+        MULTIPLE_CHOICE
+    };
+}
 
 /*
     - Rewards based on level of difficulty

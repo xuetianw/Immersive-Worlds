@@ -13,31 +13,25 @@ MiniGame::MiniGame() {
 MiniGame::MiniGame(const CusJson::MiniGame& jsonMiniGame) :
         _id(jsonMiniGame._id), _roomId(jsonMiniGame._roomId), _type(jsonMiniGame._type),
         _answers(jsonMiniGame._possibleAnswers), _correctAnswers(jsonMiniGame._correctAnswers),
-        _questions(jsonMiniGame._questions) {
-
-}
+        _questions(jsonMiniGame._questions) { }
 
 void MiniGame::addAnswer(std::string answer) {
     _answers.push_back(answer);
 }
 
 void MiniGame::addQuestion(std::string question) {
-    //_questions.push_back(question);
     _questions = question;
 }
 
 void MiniGame::addCorrectAnswer(int correctAnswer) {
-    //_correctAnswers.push_back(correctAnswer);
     _correctAnswers = correctAnswer;
 }
 
 bool MiniGame::checkAnswer(const int answer) const {
-    //return answer == _correctAnswers.at(_round);
     return answer == _correctAnswers;
 }
 
 std::string MiniGame::getQuestion() const {
-    //return _questions.at(_round);
     return _questions;
 }
 
@@ -62,7 +56,6 @@ std::string MiniGame::printQuestion() {
 }
 
 bool MiniGame::nextRound() {
-    // TODO: NEEDS TO BE CALLED HEARTBEATS
     _round++;
     return _round == _questions.size();
 }

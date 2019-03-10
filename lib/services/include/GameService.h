@@ -11,7 +11,6 @@
 #include "CusJson.h"
 #include "DataStorage.h"
 #include "GameService.h"
-#include "MiniGame.h"
 
 class GameService {
 public:
