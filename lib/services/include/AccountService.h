@@ -11,7 +11,7 @@
 
 class AccountService{
 public:
-    std::vector<Message> updateUserState(const Message& message);
+    std::vector<Message> updateUserState(const Message& message, UserEventVariant event);
 
 private:
     StateTransitions transitions;

@@ -29,7 +29,6 @@ constexpr char NOT_SIGNED_IN_PROMPT[] = "Please enter login or register!\n";
 constexpr char EMPTY_INPUT_PROMPT[] = "Invalid String - \n";
 
 ///////////////////////////////////////////USER-STATES/////////////////////////////////////////////
-struct UnRegisteredState {};
 struct RegisterUsernameState {};
 struct RegisterPasswordState {};
 struct ConnectedState {};
@@ -37,15 +36,29 @@ struct LoginUsernameState {};
 struct LoginPasswordState {};
 struct LoggedInState {};
 
+///////////////////////////////////////////USER-EVENTS/////////////////////////////////////////////
+struct RegisterEvent {};
+struct LoginEvent {};
+struct UpdateEvent {};
+struct EscapeEvent {};
+struct LogoutEvent {};
+
 //////////////////////////////////////////////STATE-VARIANT////////////////////////////////////////
 typedef std::variant<
-        UnRegisteredState,
         RegisterUsernameState,
         RegisterPasswordState,
         ConnectedState,
         LoginUsernameState,
         LoginPasswordState,
         LoggedInState> UserStateVariant;
+
+//////////////////////////////////////////////EVENT-VARIANT////////////////////////////////////////
+typedef std::variant<
+        RegisterEvent,
+        LoginEvent,
+        UpdateEvent,
+        EscapeEvent,
+        LogoutEvent> UserEventVariant;
 
 ///////////////////////////////////////////////USER////////////////////////////////////////////////
 struct Account {
@@ -76,12 +89,26 @@ struct StateTransitions {
     }
 
     ////////////////////////////////////////////VISITORS///////////////////////////////////////////
-    std::optional<UserStateVariant> operator()(UnRegisteredState& state, Account& account, const string& message) {
-        _currentUserResponseMessage = REGISTER_USERNAME_PROMPT;
-        return RegisterUsernameState {};
+    std::optional<UserStateVariant> operator()(ConnectedState& state, RegisterEvent& event, Account& account, const string& message) {
+
+        if(!(account.isLoggingIn || account.isRegistering)){
+            _currentUserResponseMessage = NOT_SIGNED_IN_PROMPT;
+            return ConnectedState {};
+        }
+        _currentUserResponseMessage = account.isLoggingIn ? LOGIN_USERNAME_PROMPT : REGISTER_USERNAME_PROMPT;
+
+        if (account.isLoggingIn) {
+            return LoginUsernameState{};
+        } else {
+            return RegisterUsernameState{};
+        }
     }
 
-    std::optional<UserStateVariant> operator()(RegisterUsernameState& state, Account& account, const string& message) {
+    std::optional<UserStateVariant> operator()(ConnectedState& state, LoginEvent& event, Account& account, const string& message) {
+        return std::nullopt;
+    }
+
+    std::optional<UserStateVariant> operator()(RegisterUsernameState& state, UpdateEvent& event, Account& account, const string& message) {
         if (invalid(message)) {
             _currentUserResponseMessage = REGISTER_USERNAME_FAILED_PROMPT;
             return RegisterUsernameState {};
@@ -100,7 +127,11 @@ struct StateTransitions {
         return RegisterPasswordState {};
     }
 
-    std::optional<UserStateVariant> operator()(RegisterPasswordState& state, Account& account, const string& message) {
+    std::optional<UserStateVariant> operator()(RegisterUsernameState& state, EscapeEvent& event, Account& account, const string& message) {
+        return std::nullopt;
+    }
+
+    std::optional<UserStateVariant> operator()(RegisterPasswordState& state, UpdateEvent& event, Account& account, const string& message) {
         // TODO: Check is password is valid or not i.e meets the criteria of a password
         if (invalid(message)) {
             _currentUserResponseMessage = getResponseForInvalidInput(REGISTER_PASSWORD_FAILED_PROMPT);
@@ -119,24 +150,11 @@ struct StateTransitions {
         return LoginUsernameState {};
     }
 
-    std::optional<UserStateVariant> operator()(ConnectedState& state, Account& account, const string& message) {
-
-        if(!(account.isLoggingIn || account.isRegistering)){
-            _currentUserResponseMessage = NOT_SIGNED_IN_PROMPT;
-            return ConnectedState {};
-        }
-        _currentUserResponseMessage = account.isLoggingIn ? LOGIN_USERNAME_PROMPT : REGISTER_USERNAME_PROMPT;
-
-        if (account.isLoggingIn) {
-            return LoginUsernameState{};
-        } else {
-            return RegisterUsernameState{};
-        }
+    std::optional<UserStateVariant> operator()(RegisterPasswordState& state, EscapeEvent& event, Account& account, const string& message) {
+        return std::nullopt;
     }
 
-    std::optional<UserStateVariant> operator()(LoginUsernameState& state, Account& account,  const string& message) {
-
-
+    std::optional<UserStateVariant> operator()(LoginUsernameState& state, UpdateEvent& event, Account& account,  const string& message) {
         if(invalid(message)) {
             _currentUserResponseMessage = getResponseForInvalidInput(LOGIN_USERNAME_FAILED_PROMPT);
             return LoginUsernameState {};
@@ -147,7 +165,11 @@ struct StateTransitions {
         return LoginPasswordState {};
     }
 
-    std::optional<UserStateVariant> operator()(LoginPasswordState& state, Account& account, const string& message) {
+    std::optional<UserStateVariant> operator()(LoginUsernameState& state, EscapeEvent& event, Account& account,  const string& message) {
+        return std::nullopt;
+    }
+
+    std::optional<UserStateVariant> operator()(LoginPasswordState& state, UpdateEvent& event, Account& account, const string& message) {
         if(invalid(message)) {
             _currentUserResponseMessage = getResponseForInvalidInput(LOGIN_PASSWORD_FAILED_PROMPT);
             return LoginUsernameState {};
@@ -168,11 +190,20 @@ struct StateTransitions {
 
     }
 
-    std::optional<UserStateVariant> operator()(LoggedInState& state, Account& account, const string& message) {
+    std::optional<UserStateVariant> operator()(LoginPasswordState& state, EscapeEvent& event, Account& account, const string& message) {
+        return std::nullopt;
+    }
+
+    std::optional<UserStateVariant> operator()(LoggedInState& state, LogoutEvent& event, Account& account, const string& message) {
         account._username = "";
         account._password = "";
         _currentUserResponseMessage = LOGGED_OUT_PROMPT;
         return ConnectedState {};
+    }
+
+    template<typename State, typename Event>
+    std::optional<UserStateVariant> operator()(State& state, Event& event, Account& account, const string& message) {
+        return std::nullopt;
     }
 };
 
