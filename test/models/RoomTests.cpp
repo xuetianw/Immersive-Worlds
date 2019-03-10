@@ -8,7 +8,7 @@
 
 #include "Room.h"
 
-class RoomTest : public :: testing::Test {
+class RoomTests : public :: testing::Test {
 public:
     std::vector<std::string> desc = {"description1", "description2"};
     std::string name = "room1";
@@ -16,7 +16,7 @@ public:
     models::Room room = models::Room(id, name, desc);
 };
 
-TEST_F(RoomTest, constructor_test) {
+TEST_F(RoomTests, constructor_test) {
     EXPECT_EQ(id, room.getId());
     EXPECT_EQ(name, room.getName());
     EXPECT_EQ(desc, room.get_description());
