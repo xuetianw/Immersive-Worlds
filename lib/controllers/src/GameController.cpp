@@ -5,6 +5,7 @@
 #include "GameController.h"
 
 Message GameController::respondToMessage(const Message& message) {
+    message.user.setCommandType(new GameCommands());
     string responseText = message.text + spawnUserInRoomOnLogin(message.user).text;
     return Message {message.user, responseText};
 }

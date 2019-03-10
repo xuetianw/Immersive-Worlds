@@ -16,24 +16,22 @@ using Connection = networking::Connection;
 class User {
 private:
     Connection _connection;
+
     Account _account;
+
     std::unordered_set<Command> _allowedCommands;
-    std::unordered_map<Command, string> _disabledCommands;
+
+    std::unique_ptr<CommandType> _commandType;
 
 public:
     User() = default;
 
-    explicit User(Connection c) : _connection(c) {
+    explicit User(Connection c) :
+        _connection(c) {
         reset();
     }
 
     void reset();
-
-    void removeCommand(Command command);
-
-    void removeCommand(Command command, string message);
-
-    void addCommand(Command command);
 
     const Connection& getConnection() const;
 
@@ -43,11 +41,9 @@ public:
 
     void setAccount(const Account& account);
 
+    void setCommandType(CommandType* commandType);
+
     const std::unordered_set<Command>& getAllowedCommands() const;
-
-    const std::unordered_map<Command, string>& getDisabledCommands() const;
-
-    void setAllowedCommands(std::unordered_set<Command> allowedCommands);
 
     bool canPreformCommand(Command command);
 };
