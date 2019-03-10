@@ -14,12 +14,21 @@ struct NeighbourInfo {
 
 class RoomConnectionService {
 public:
-    RoomConnectionService(DataStorageService& dataStorageService)
+    explicit RoomConnectionService(DataStorageService& dataStorageService)
         : _dataStorageService(dataStorageService) {
         buildDirections();
         loadFromStorage();
     }
 
+    const std::string getRoomName(const ID& roomId);
+
+    const std::string getRoomDescription(const ID& roomId);
+
+    const ID* getNeighbourId(const ID& roomId, std::string directionString);
+
+    const std::vector<std::string> getAvailableDirections(const ID&, std::string directionString);
+
+    const bool isValidDirectionString(std::string directionString);
 
 private:
     using Room = models::Room;
@@ -31,7 +40,10 @@ private:
     std::unordered_map<ID, Neighbours> _roomIdToNeighbours;
     std::unordered_map<std::string, Direction> _directions;
 
+    const Room* findRoom(const ID& roomId);
+
     void buildDirections();
+
     void loadFromStorage();
 
     void buildNeighbours(const std::unordered_map<int, ID>& tmp, const CusJson::Room& jsonRoom, Neighbours& neighbours);
