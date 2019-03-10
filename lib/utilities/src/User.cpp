@@ -51,9 +51,7 @@ void User::setAllowedCommands(unordered_set<Command> allowedCommands) {
 }
 
 bool User::canPreformCommand(Command command) {
-    //return _allowedCommands.find(command) != _allowedCommands.end();
-    // JAN HERE
-    return true;
+    return _allowedCommands.find(command) != _allowedCommands.end();
 }
 
 const std::unordered_map<Command, string>& User::getDisabledCommands() const {
