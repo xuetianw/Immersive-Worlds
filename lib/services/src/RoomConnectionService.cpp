@@ -41,10 +41,12 @@ const ID* RoomConnectionService::getNeighbourId(const ID& roomId, const std::str
     const Direction direction = _directions.at(directionString);
     const Neighbours& neighbours = _roomIdToNeighbours.at(roomId);
 
+    //iterate through all neighbours to find a matching one
     auto neighbour = find_if(neighbours.begin(), neighbours.end(),
                              [&](const NeighbourInfo& info) { return info.direction == direction; });
 
     if (neighbour == neighbours.end()) {
+        //no matching neighbour
         return nullptr;
     }
 
@@ -61,6 +63,7 @@ const std::vector<std::string> RoomConnectionService::getAvailableRoomDirections
 
     const Neighbours& neighbours = _roomIdToNeighbours.at(roomId);
 
+    //add directions of all neighbours
     for (auto& neighbour : neighbours) {
         Direction direction = neighbour.direction;
 
@@ -95,7 +98,7 @@ const models::Room* RoomConnectionService::findRoom(const ID& roomId) {
     return &(_roomIdToRoom.at(roomId));
 }
 
-void RoomConnectionService::buildDirections() {
+void RoomConnectionService::buildDirectionsMap() {
     _directions["north"] = Direction::NORTH;
     _directions["south"] = Direction::SOUTH;
     _directions["east"] = Direction::EAST;
