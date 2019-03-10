@@ -10,7 +10,7 @@ const ID& RoomConnectionService::getStartingRoom() {
     //return the ID of first entry of the _roomIdToRoom map as the starting room id
     //TODO find a more elegant way to choose starting room
     auto it = std::find_if(_roomIdToRoom.begin(), _roomIdToRoom.end(),
-            [&](const std::pair<ID, Room>& pair) { return true; });
+                           [&](const std::pair<ID, Room>& pair) { return true; });
 
     return it->first;
 }
