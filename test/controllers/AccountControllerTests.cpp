@@ -1,6 +1,3 @@
-////
-//// Created by vinshit on 31/01/19.
-////
 //
 // Created by vinshit on 31/01/19.
 //
@@ -12,27 +9,27 @@
 using testing::Return;
 using namespace std;
 
-struct AccountServiceTests : testing:: Test {
+struct AccountControllerTests : testing:: Test {
     AccountController accountController;
     const std::uintptr_t ID1 = static_cast<unsigned int>(rand()) % 1000000;
     Connection connection{ID1};
     Connection secondConnection{1};
     User user{connection};
     User secondUser{secondConnection};
-    Message firstMessage{user,""};
+    Message firstMessage{user,"/login"};
     Message usernameMessage{user,"random_name"};
     Message passwordMessage{user,"random_passworld"};
 };
 
 // user logout without logging in
-TEST_F(AccountServiceTests, LogoutWithoutLoggingInTest){
+TEST_F(AccountControllerTests, LogoutWithoutLoggingInTest){
   Message message = accountController.logoutUser(firstMessage).front();
   EXPECT_EQ(ID1, message.user.getConnection().id);
   EXPECT_EQ(INVALID_INPUT_PROMPT, message.text);
 }
 
 //user login
-TEST_F(AccountServiceTests, LoginTest){
+TEST_F(AccountControllerTests, LoginTest){
     user.reset();
     Message userPrompt = accountController.startLogin(firstMessage).front();
 
@@ -50,7 +47,7 @@ TEST_F(AccountServiceTests, LoginTest){
 }
 
 //same user login twice
-TEST_F(AccountServiceTests, LoginTwiceTest){
+TEST_F(AccountControllerTests, LoginTwiceTest){
     user.reset();
     Message userPrompt = accountController.startLogin(firstMessage).front();
 
@@ -72,7 +69,7 @@ TEST_F(AccountServiceTests, LoginTwiceTest){
 }
 
 //user login first and logout
-TEST_F(AccountServiceTests, LoginLogoutSequenceTest){
+TEST_F(AccountControllerTests, LoginLogoutSequenceTest){
     user.reset();
     Message userPrompt = accountController.startLogin(firstMessage).front();
 
@@ -94,7 +91,7 @@ TEST_F(AccountServiceTests, LoginLogoutSequenceTest){
 }
 
 //register without logging in
-TEST_F(AccountServiceTests, RegisterTest){
+TEST_F(AccountControllerTests, RegisterTest){
     user.reset();
     Message message = accountController.startRegister(firstMessage).front();
 
@@ -116,7 +113,7 @@ TEST_F(AccountServiceTests, RegisterTest){
 
 
 //register after logging in
-TEST_F(AccountServiceTests, LoginRegisterTest){
+TEST_F(AccountControllerTests, LoginRegisterTest){
     user.reset();
     Message userPrompt = accountController.startLogin(firstMessage).front();
 
@@ -140,7 +137,7 @@ TEST_F(AccountServiceTests, LoginRegisterTest){
 
 //register and excape
 
-TEST_F(AccountServiceTests, RegisterEscapeTest){
+TEST_F(AccountControllerTests, RegisterEscapeTest){
     user.reset();
     Message message = accountController.startRegister(firstMessage).front();
 
@@ -157,7 +154,7 @@ TEST_F(AccountServiceTests, RegisterEscapeTest){
 }
 
 //login and escape
-TEST_F(AccountServiceTests, LoginEscapeTest){
+TEST_F(AccountControllerTests, LoginEscapeTest){
     user.reset();
     Message userPrompt = accountController.startLogin(firstMessage).front();
 
@@ -174,7 +171,7 @@ TEST_F(AccountServiceTests, LoginEscapeTest){
 }
 
 //user escape without logingin
-TEST_F(AccountServiceTests, LoginEscape_WithoutLoginTest){
+TEST_F(AccountControllerTests, LoginEscape_WithoutLoginTest){
     user.reset();
     Message escapeMessage = accountController.escapeLogin(firstMessage).front();
     EXPECT_EQ(ID1, escapeMessage.user.getConnection().id);

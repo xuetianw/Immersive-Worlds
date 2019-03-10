@@ -21,7 +21,7 @@ enable_testing()
 
 add_executable(run_tests
     utilities/IDTest.cpp
-    services/AccountServiceTests.cpp
+    controllers/AccountControllerTests.cpp
     processors/CommandProcessorTests.cpp
     networking/ServerTests.cpp
     utilities/DBUtilityTest.cpp
