@@ -68,10 +68,6 @@ struct Account {
     std::string _password;
     std::string _registerUsername;
     std::string _registerPassword;
-    bool isLoggingIn = false;
-    bool isSubmittingLogin = false;
-    bool isRegistering = false;
-    bool isSubmittingRegistration = false;
     bool isLoggedIn = false;
     UserStateVariant _state = ConnectedState {};
 };
@@ -110,7 +106,7 @@ struct StateTransitions {
         account._registerUsername = message;
         if (isUsernameInvalid(message) || DBUtil::userExists(account._registerUsername)) {
             _currentUserResponseMessage = REGISTER_USERNAME_FAILED_PROMPT;
-            return RegisterUsernameState {};
+            return std::nullopt;
         }
 
         _currentUserResponseMessage = REGISTER_PASSWORD_PROMPT;
@@ -127,7 +123,7 @@ struct StateTransitions {
         account._registerPassword = message;
         if (isPasswordInvalid(message) || !DBUtil::registerUser(account._registerUsername, account._registerPassword)) {
             _currentUserResponseMessage = getResponseForInvalidInput(REGISTER_PASSWORD_FAILED_PROMPT);
-            return RegisterPasswordState {};
+            return std::nullopt;
         }
 
         _currentUserResponseMessage = LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT;
@@ -142,7 +138,7 @@ struct StateTransitions {
     std::optional<UserStateVariant> operator()(LoginUsernameState& state, UpdateEvent& event, Account& account,  const string& message) {
         if(isUsernameInvalid(message) || !DBUtil::userExists(message)) {
             _currentUserResponseMessage = getResponseForInvalidInput(LOGIN_USERNAME_FAILED_PROMPT);
-            return LoginUsernameState {};
+            return std::nullopt;
         }
 
         account._username = message;
@@ -163,18 +159,20 @@ struct StateTransitions {
             return LoginUsernameState {};
         }
 
+        account.isLoggedIn = true;
         _currentUserResponseMessage = LOGGED_IN_PROMPT;
         return LoggedInState {};
     }
 
     std::optional<UserStateVariant> operator()(LoginPasswordState& state, EscapeEvent& event, Account& account, const string& message) {
         _currentUserResponseMessage = LOGGING_IN_ESCAPE_MESSAGE;
-        return std::nullopt;
+        return ConnectedState {};
     }
 
     std::optional<UserStateVariant> operator()(LoggedInState& state, LogoutEvent& event, Account& account, const string& message) {
         account._username = "";
         account._password = "";
+        account.isLoggedIn = false;
         _currentUserResponseMessage = LOGGED_OUT_PROMPT;
         return ConnectedState {};
     }
