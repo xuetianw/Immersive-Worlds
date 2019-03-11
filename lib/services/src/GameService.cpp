@@ -4,8 +4,6 @@
 
 #include "Server.h"
 #include "GameService.h"
-#include <iostream>
-
 using models::RoomConnection;
 
 bool GameService::moveUser(const User& user, const std::string& keywordString) {
