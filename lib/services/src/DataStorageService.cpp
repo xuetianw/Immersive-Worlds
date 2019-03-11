@@ -5,10 +5,6 @@
 #include "DataStorageService.h"
 
 using CusJson::Area;
-DataStorage::DataStorage() {
-    json solaceJson = getTestingArea();
-    _jsonArea = solaceJson.get<CusJson::Area>();
-}
 
 json DataStorageService::getTestingArea() {
     json j = R"(

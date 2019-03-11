@@ -18,8 +18,6 @@ namespace CusJson {
 
     class JsonDoor {
     public:
-        JsonDoor();
-
         std::string _dir;
         std::vector<std::string> _desc;
         std::vector<std::string> _keywords;
@@ -28,8 +26,6 @@ namespace CusJson {
 
     class ExtDesc {
     public:
-        ExtDesc();
-
         std::vector<std::string> _keywords;
         std::vector<std::string> _desc;
     };
