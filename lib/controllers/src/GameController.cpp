@@ -3,6 +3,10 @@
 //
 #include "GameController.h"
 Message GameController::respondToMessage(const Message& message) {
+
+//    TODO: add Avatar to User as a field and use to check if avatar has been made ! !
+    message.user.addCommand(Command::MINIGAME);
+    message.user.addCommand(Command::MINIGAME_ANSWER);
     string responseText = message.text + spawnUserInRoomOnLogin(message.user).text;
     return Message {message.user, responseText};
 }
