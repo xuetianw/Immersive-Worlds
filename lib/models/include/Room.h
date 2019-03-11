@@ -56,7 +56,7 @@ namespace models {
 
         void set_description(const std::vector<string>& description);
 
-        const std::vector<string>& get_description() const;
+        const std::vector<string>& getDescription() const;
 
         std::vector<InventoryItem> getAllObjects() const;
 

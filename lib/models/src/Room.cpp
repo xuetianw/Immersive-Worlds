@@ -1,7 +1,5 @@
 #include <utility>
 
-#include <utility>
-
 //
 // Created by Jacky Lui on 2019-01-18.
 //
@@ -32,7 +30,7 @@ void Room::setName(
     _name = move(name);
 }
 
-const std::vector<string>& Room::get_description() const {
+const std::vector<string>& Room::getDescription() const {
     return _description;
 }
 
