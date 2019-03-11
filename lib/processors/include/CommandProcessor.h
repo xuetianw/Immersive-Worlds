@@ -51,7 +51,7 @@ public:
     /*
      *  Lists the keywords of the allowed commands to the user
      */
-    std::vector<Message> listAvailableCommands(const Message &message);
+    std::vector<Message> listAvailableCommands(const Message& message);
 
 private:
     /*
