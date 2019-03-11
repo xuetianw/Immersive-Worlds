@@ -15,19 +15,19 @@ const ID& RoomConnectionService::getStartingRoom() {
     return it->first;
 }
 
-const std::string RoomConnectionService::getRoomName(const ID& roomId) {
+const std::optional<std::string> RoomConnectionService::getRoomName(const ID& roomId) {
     if (!doesRoomExist(roomId)) {
-        return nullptr;
+        return std::nullopt;
     }
 
     const Room* room = findRoom(roomId);
 
-    return room->getName();
+    return std::optional<std::string>{room->getName()};
 }
 
-const std::string RoomConnectionService::getRoomDescription(const ID& roomId) {
+const std::optional<std::string> RoomConnectionService::getRoomDescription(const ID& roomId) {
     if (!doesRoomExist(roomId)) {
-        return nullptr;
+        return std::nullopt;
     }
 
     const Room* room = findRoom(roomId);
@@ -37,7 +37,7 @@ const std::string RoomConnectionService::getRoomDescription(const ID& roomId) {
         descriptionString += text;
     }
 
-    return descriptionString;
+    return std::optional<std::string>{descriptionString};
 }
 
 const ID* RoomConnectionService::getNeighbourId(const ID& roomId, const std::string& directionString) {

@@ -15,9 +15,9 @@ public:
 
     const ID& getStartingRoom();
 
-    const std::string getRoomName(const ID& roomId);
+    const std::optional<std::string> getRoomName(const ID& roomId);
 
-    const std::string getRoomDescription(const ID& roomId);
+    const std::optional<std::string> getRoomDescription(const ID& roomId);
 
     //Get the ID of a the neighbour of a room in a specific direction
     const ID* getNeighbourId(const ID& roomId, const std::string& directionString);
