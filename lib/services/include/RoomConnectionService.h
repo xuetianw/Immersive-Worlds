@@ -20,13 +20,13 @@ public:
     const std::string getRoomDescription(const ID& roomId);
 
     //Get the ID of a the neighbour of a room in a specific direction
-    const ID* getNeighbourId(const ID& roomId, std::string directionString);
+    const ID* getNeighbourId(const ID& roomId, const std::string& directionString);
 
     //Return a vector of direction strings available for a room
     const std::vector<std::string> getAvailableRoomDirections(const ID& roomId);
 
     //Check if a direction string is a valid direction
-    const bool isValidDirectionString(std::string directionString);
+    const bool isValidDirectionString(const std::string& directionString);
 
     //Check if the room exists in the game
     const bool doesRoomExist(const ID& roomId);

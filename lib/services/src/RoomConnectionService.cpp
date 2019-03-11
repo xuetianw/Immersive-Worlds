@@ -40,7 +40,7 @@ const std::string RoomConnectionService::getRoomDescription(const ID& roomId) {
     return descriptionString;
 }
 
-const ID* RoomConnectionService::getNeighbourId(const ID& roomId, const std::string directionString) {
+const ID* RoomConnectionService::getNeighbourId(const ID& roomId, const std::string& directionString) {
     if (!isValidDirectionString(directionString)
         || !doesRoomExist(roomId)
         || _roomIdToNeighbours.count(roomId) == 0) {
@@ -87,7 +87,7 @@ const std::vector<std::string> RoomConnectionService::getAvailableRoomDirections
     return availableDirections;
 }
 
-const bool RoomConnectionService::isValidDirectionString(const std::string directionString) {
+const bool RoomConnectionService::isValidDirectionString(const std::string& directionString) {
     return _directions.count(directionString) != 0;
 }
 
