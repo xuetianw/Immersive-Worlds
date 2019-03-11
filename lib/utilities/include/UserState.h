@@ -8,8 +8,8 @@
 #include <string>
 #include <variant>
 #include <optional>
-#include "DBUtil.h"
 
+#include "DBUtil.h"
 
 using string = std::string;
 
@@ -148,8 +148,6 @@ struct StateTransitions {
     }
 
     std::optional<UserStateVariant> operator()(LoginPasswordState& state, Account& account, const string& message) {
-
-        //DBUtil::openConnection("adventure.db");
         if(invalid(message)) {
             _currentUserResponseMessage = getResponseForInvalidInput(LOGIN_PASSWORD_FAILED_PROMPT);
             return LoginUsernameState {};

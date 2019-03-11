@@ -2,7 +2,7 @@
 // Created by user on 2/11/19.
 //
 
-#include "DataStorage.h"
+#include "DataStorageService.h"
 
 using CusJson::Area;
 DataStorage::DataStorage() {
@@ -10,7 +10,7 @@ DataStorage::DataStorage() {
     _jsonArea = solaceJson.get<CusJson::Area>();
 }
 
-json DataStorage::getTestingArea() {
+json DataStorageService::getTestingArea() {
     json j = R"(
 {
 "AREA": {
@@ -257,10 +257,10 @@ json DataStorage::getTestingArea() {
     return j;
 }
 
-const Area& DataStorage::getJsonArea() const {
+const Area& DataStorageService::getJsonArea() const {
     return _jsonArea;
 }
 
-void DataStorage::setJsonArea(const Area& jsonArea) {
+void DataStorageService::setJsonArea(const Area& jsonArea) {
     _jsonArea = jsonArea;
 }

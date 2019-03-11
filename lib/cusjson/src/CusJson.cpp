@@ -9,10 +9,6 @@ using json = nlohmann::json;
 
 namespace CusJson {
 
-    JsonDoor::JsonDoor() {}
-
-    ExtDesc::ExtDesc() {}
-
     void to_json(json& j, const JsonDoor& door) {
         //TODO implement
     }

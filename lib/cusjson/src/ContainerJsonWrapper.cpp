@@ -2,8 +2,6 @@
 // Created by user on 3/4/19.
 //
 
-#include <ContainerJsonWrapper.h>
-
 #include "ContainerJsonWrapper.h"
 
 CusJson::ContainerJsonWrapper::ContainerJsonWrapper(int _objectId, int _roomId) : _objectId(_objectId),

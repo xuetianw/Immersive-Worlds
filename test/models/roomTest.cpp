@@ -19,5 +19,5 @@ public:
 TEST_F(RoomTest, constructor_test) {
     EXPECT_EQ(id, room.getId());
     EXPECT_EQ(name, room.getName());
-    EXPECT_EQ(desc, room.get_description());
+    EXPECT_EQ(desc, room.getDescription());
 }

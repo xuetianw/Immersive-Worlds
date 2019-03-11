@@ -7,10 +7,10 @@
 
 #include <string>
 #include <vector>
-#include <NPCJsonWrapper.h>
-#include <DoorStateJsonWrapper.h>
-#include <ContainerJsonWrapper.h>
 #include <nlohmann/json.hpp>
+#include "NPCJsonWrapper.h"
+#include "DoorStateJsonWrapper.h"
+#include "ContainerJsonWrapper.h"
 
 using json = nlohmann::json;
 
