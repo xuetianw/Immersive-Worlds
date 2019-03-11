@@ -116,23 +116,25 @@ void RoomConnectionService::buildDirectionsMap() {
 
 
 void RoomConnectionService::loadFromStorage() {
-    std::unordered_map<int, ID> tmp;
+    // jsonIdToUuid is mapping the JSON room IDs to a UUID.
+    // It's needed when building up the neighbours since some neighbours might not have been assigned a UUID yet.
+    std::unordered_map<int, ID> jsonIdToUuid;
     std::vector<CusJson::Room> jsonRooms = _dataStorageService.getJsonArea()._rooms;
 
     for (const CusJson::Room& jsonRoom : jsonRooms) {
         Room room{jsonRoom};
         const ID& roomId = room.getId();
 
-        tmp.emplace(jsonRoom._id, roomId);
+        jsonIdToUuid.emplace(jsonRoom._id, roomId);
         _roomIdToRoom.emplace(roomId, room);
     }
 
     for (const CusJson::Room& jsonRoom : jsonRooms) {
         Neighbours neighbours;
 
-        buildNeighbours(tmp, jsonRoom, neighbours);
+        buildNeighbours(jsonIdToUuid, jsonRoom, neighbours);
 
-        _roomIdToNeighbours.try_emplace(tmp[jsonRoom._id], neighbours);
+        _roomIdToNeighbours.try_emplace(jsonIdToUuid[jsonRoom._id], neighbours);
     }
 }
 
