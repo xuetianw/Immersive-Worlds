@@ -70,4 +70,15 @@ void GameService::loadFromStorage() {
 
         _roomIdToRoomConnectionsList.emplace(newRoomId, roomConnectionVector);
     }
+    auto containerConfiguration = _dataStorage.getJsonArea()._containerWrappers;
+    for (auto container : containerConfiguration) {
+        auto roomQuery = _roomIdToRoom.find(ID(container._roomId));
+        if (roomQuery != _roomIdToRoom.end()) {
+            auto spawnedContainer = _dataStorage.spawnObjectCopy(container._objectId);
+            for (auto containedItemId : container._containedObjectIds) {
+                spawnedContainer.getItemsInContainer().push_back(_dataStorage.spawnObjectCopy(containedItemId));
+            }
+            roomQuery->second.addObject(spawnedContainer.getId(), spawnedContainer);
+        }
+    }
 }

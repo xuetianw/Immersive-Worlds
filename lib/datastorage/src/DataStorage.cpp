@@ -2,8 +2,6 @@
 // Created by user on 2/11/19.
 //
 
-#include <DataStorage.h>
-
 #include "DataStorage.h"
 
 using CusJson::Area;
@@ -284,4 +282,13 @@ std::unordered_map<int, SingleItem> DataStorage::configObjectMap(const CusJson::
         map.insert({jsonObject.id, SingleItem(ID(jsonObject.id), keywords, jsonObject.shortdesc, longDesc, "")});
     }
     return map;
+}
+
+SingleItem DataStorage::spawnObjectCopy(int objectId) {
+    auto objectQueury = _objectMap.find(objectId);
+    if (objectQueury != _objectMap.end()) {
+        return SingleItem(objectQueury->second);
+    } else {
+        std::cerr << "spawnObjectCopy called with unknown object Id: " + objectId;
+    }
 }

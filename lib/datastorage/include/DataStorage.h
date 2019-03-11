@@ -7,6 +7,7 @@
 
 #include "SingleItem.h"
 #include "CusJson.h"
+#include <iostream>
 
 class DataStorage {
 private:
@@ -19,6 +20,7 @@ public:
 
     void setJsonArea(const CusJson::Area& jsonArea);
     std::unordered_map<int, SingleItem> getObjectsFromJson();
+    SingleItem spawnObjectCopy(int objectId);
 
 private:
     std::unordered_map<int, SingleItem> configObjectMap(const CusJson::Area& jsonArea);

@@ -15,7 +15,8 @@ public:
         _keywords(std::vector<string>()),
         _shortdesc(""),
         _longdescs(std::vector<string>()),
-        _description("") {}
+        _description(""),
+        _singleItems({}) {}
 
     SingleItem(ID anId,
                std::vector<string>  aKeyword,
@@ -25,7 +26,8 @@ public:
             _keywords(move(aKeyword)),
             _shortdesc(move(aShortdesc)),
             _longdescs(move(aLongdesc)),
-            _description(move(aDescription)) {}
+            _description(move(aDescription)),
+            _singleItems({}) {}
 
     std::vector<string> getKeyword() const;
 
@@ -34,6 +36,13 @@ public:
     std::vector<string> getLongdesc() const;
 
     std::string getDescription() const;
+
+    /**
+       * Get all items in containerItem.
+       */
+    std::vector<SingleItem>& getItemsInContainer() {
+        return _singleItems;
+    }
 
 private:
     ID _id;
@@ -45,6 +54,8 @@ private:
     std::vector<string>  _longdescs;
 
     string _description;
+
+    std::vector<SingleItem> _singleItems;
 };
 
 #endif //PROJECT_SINGLEITEM_H
