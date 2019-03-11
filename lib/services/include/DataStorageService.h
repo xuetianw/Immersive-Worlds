@@ -2,20 +2,25 @@
 // Created by user on 2/11/19.
 //
 
-#ifndef WEBSOCKETNETWORKING_DATASTORAGE_H
-#define WEBSOCKETNETWORKING_DATASTORAGE_H
+#ifndef WEBSOCKETNETWORKING_DATASTORAGESERVICE_H
+#define WEBSOCKETNETWORKING_DATASTORAGESERVICE_H
 
 #include "SingleItem.h"
 #include "CusJson.h"
 #include <iostream>
 
-class DataStorage {
+class DataStorageService {
 private:
     CusJson::Area _jsonArea;
     std::unordered_map<int, SingleItem> _objectMap;
 
 public:
-    DataStorage();
+    DataStorageService() {
+        json solaceJson = getTestingArea();
+        _jsonArea = solaceJson.get<CusJson::Area>();
+        _objectMap = configObjectMap(_jsonArea);
+    }
+
     const CusJson::Area& getJsonArea() const;
 
     void setJsonArea(const CusJson::Area& jsonArea);
@@ -27,4 +32,4 @@ private:
     json getTestingArea();
 };
 
-#endif //WEBSOCKETNETWORKING_DATASTORAGE_H
+#endif //WEBSOCKETNETWORKING_DATASTORAGESERVICE_H

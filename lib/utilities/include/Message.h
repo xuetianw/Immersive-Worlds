@@ -1,8 +1,8 @@
-#include <User.h>
-#include <Server.h>
-
 #ifndef WEBSOCKETNETWORKING_MESSAGE_H
 #define WEBSOCKETNETWORKING_MESSAGE_H
+
+#include "User.h"
+#include "Server.h"
 
 struct Message{
     User& user;

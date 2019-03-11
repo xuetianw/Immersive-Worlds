@@ -11,7 +11,8 @@ enum Command{
     ESCAPE,
     LOGOUT,
     MOVE,
-    WHEREAMI
+    WHEREAMI,
+    HELP
 };
 
 #endif //WEBSOCKETNETWORKING_COMMAND_H

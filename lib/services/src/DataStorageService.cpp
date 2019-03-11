@@ -2,16 +2,11 @@
 // Created by user on 2/11/19.
 //
 
-#include "DataStorage.h"
+#include "DataStorageService.h"
 
 using CusJson::Area;
-DataStorage::DataStorage() {
-    json solaceJson = getTestingArea();
-    _jsonArea = solaceJson.get<CusJson::Area>();
-    _objectMap = configObjectMap(_jsonArea);
-}
 
-json DataStorage::getTestingArea() {
+json DataStorageService::getTestingArea() {
     json j = R"(
 {
 "AREA": {
@@ -258,19 +253,19 @@ json DataStorage::getTestingArea() {
     return j;
 }
 
-const Area& DataStorage::getJsonArea() const {
+const Area& DataStorageService::getJsonArea() const {
     return _jsonArea;
 }
 
-void DataStorage::setJsonArea(const Area& jsonArea) {
+void DataStorageService::setJsonArea(const Area& jsonArea) {
     _jsonArea = jsonArea;
 }
 
-std::unordered_map<int, SingleItem> DataStorage::getObjectsFromJson() {
+std::unordered_map<int, SingleItem> DataStorageService::getObjectsFromJson() {
     return _objectMap;
 }
 
-std::unordered_map<int, SingleItem> DataStorage::configObjectMap(const CusJson::Area& jsonArea) {
+std::unordered_map<int, SingleItem> DataStorageService::configObjectMap(const CusJson::Area& jsonArea) {
     std::unordered_map<int, SingleItem> map;
     for (CusJson::Object jsonObject : jsonArea._objects) {
         std::vector<string> keywords = jsonObject.keywords;
@@ -284,7 +279,7 @@ std::unordered_map<int, SingleItem> DataStorage::configObjectMap(const CusJson::
     return map;
 }
 
-SingleItem DataStorage::spawnObjectCopy(int objectId) {
+SingleItem DataStorageService::spawnObjectCopy(int objectId) {
     auto objectQueury = _objectMap.find(objectId);
     if (objectQueury != _objectMap.end()) {
         return SingleItem(objectQueury->second);
