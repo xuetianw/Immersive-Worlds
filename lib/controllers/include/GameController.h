@@ -18,13 +18,11 @@ class GameController : AbstractController {
 public:
     GameController() : _gameService() {}
 
-    std::vector<Message> move(const Message &message);
+    std::vector<Message> move(const Message& message);
 
     Message respondToMessage(const Message& message) override;
 
     const std::string spawnAvatarInStartingRoom(const ID& avatarId);
-
-    void spawnUserInRoom(const networking::Connection& connection, int debugRoomId);
 
     /**
      * Creates a MiniGame based on the room.
@@ -39,7 +37,7 @@ public:
      * @return the message that will be displayed
      */
     std::vector<Message> verifyMinigameAnswer(const Message& message);
-    
+
     void spawnUserInRoom(User& user, ID roomId);
 
     /**
@@ -55,7 +53,6 @@ private:
 
     //TODO make user a unique point
     std::unordered_map<ID, User*> _avatarIdToUser;
-
 
     std::vector<std::string> directions = {"east", "west", "south", "north"};
 
