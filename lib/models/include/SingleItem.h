@@ -23,6 +23,7 @@ public:
                string aShortdesc,
                std::vector<string>  aLongdesc,
                string aDescription) :
+            _id(ID(anId)),
             _keywords(move(aKeyword)),
             _shortdesc(move(aShortdesc)),
             _longdescs(move(aLongdesc)),

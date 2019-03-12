@@ -274,16 +274,17 @@ std::unordered_map<int, SingleItem> DataStorageService::configObjectMap(const Cu
             keywords.insert(keywords.begin(), extDesc._keywords.begin(), extDesc._keywords.end());
             longDesc.insert(longDesc.begin(), extDesc._desc.begin(), extDesc._desc.end());
         }
-        map.insert({jsonObject.id, SingleItem(ID(jsonObject.id), keywords, jsonObject.shortdesc, longDesc, "")});
+        auto item = SingleItem(ID(jsonObject.id), keywords, jsonObject.shortdesc, longDesc, "");
+        map.insert({jsonObject.id, item});
     }
     return map;
 }
 
-SingleItem DataStorageService::spawnObjectCopy(int objectId) {
-    auto objectQueury = _objectMap.find(objectId);
+SingleItem DataStorageService::spawnObjectCopy(int jsonId) {
+    auto objectQueury = _objectMap.find(jsonId);
     if (objectQueury != _objectMap.end()) {
         return SingleItem(objectQueury->second);
     } else {
-        std::cerr << "spawnObjectCopy called with unknown object Id: " + objectId;
+        std::cerr << "spawnObjectCopy called with unknown object Id";
     }
 }

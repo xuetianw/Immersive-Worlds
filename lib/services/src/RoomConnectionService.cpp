@@ -136,6 +136,18 @@ void RoomConnectionService::loadFromStorage() {
 
         _roomIdToNeighbours.try_emplace(jsonIdToUuid[jsonRoom._id], neighbours);
     }
+
+    auto containerConfiguration = _dataStorageService.getJsonArea()._containerWrappers;
+    for (auto container : containerConfiguration) {
+        auto roomQuery = _roomIdToRoom.find(jsonIdToUuid.find(container._roomId)->second);
+        if (roomQuery != _roomIdToRoom.end()) {
+            auto spawnedContainer = _dataStorageService.spawnObjectCopy(container._objectId);
+            for (auto containedItemId : container._containedObjectIds) {
+                spawnedContainer.getItemsInContainer().push_back(_dataStorageService.spawnObjectCopy(containedItemId));
+            }
+            roomQuery->second.addObject(spawnedContainer.getId(), spawnedContainer);
+        }
+    }
 }
 
 void RoomConnectionService::buildNeighbours(const std::unordered_map<int, ID>& tmp, const CusJson::Room& jsonRoom,

@@ -27,7 +27,6 @@ public:
     GameService()
         : _dataStorage(DataStorageService()),
           _roomConnectionService(_dataStorage) {
-
     }
 
 private:
@@ -43,8 +42,6 @@ private:
     const Room* getRoomByName(const string& roomName) const;
 
     const Room& getUserRoom(const Connection& connection);
-
-    void loadFromStorage();
 
 public:
 

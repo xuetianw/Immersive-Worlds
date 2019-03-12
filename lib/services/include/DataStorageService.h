@@ -25,7 +25,7 @@ public:
 
     void setJsonArea(const CusJson::Area& jsonArea);
     std::unordered_map<int, SingleItem> getObjectsFromJson();
-    SingleItem spawnObjectCopy(int objectId);
+    SingleItem spawnObjectCopy(int jsonId);
 
 private:
     std::unordered_map<int, SingleItem> configObjectMap(const CusJson::Area& jsonArea);
