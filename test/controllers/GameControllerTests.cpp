@@ -16,19 +16,20 @@ struct GameControllerTests : testing::Test {
 
 TEST_F(GameControllerTests, SpawnUserInStartRoomTest) {
     // Assumption: Starting room is Lexie's shop
-    Message response = gameController->spawnUserInRoomOnLogin(user);
+    std::string response = gameController->spawnAvatarInStartingRoom(user.getAccount().avatarId);
 
-    EXPECT_EQ(INITIAL_ROOM_START_MESSAGE, response.text);
+    EXPECT_EQ(INITIAL_ROOM_START_MESSAGE, response);
 }
-
+//TODO fix this test
 TEST_F(GameControllerTests, OutputCurrentLocationInfoTest) {
     Message emptyMessage = Message{user, ""};
 
     // Assumption: Starting room is Lexie's shop
-    gameController->spawnUserInRoomOnLogin(user);
+    gameController->spawnAvatarInStartingRoom(user.getAccount().avatarId);
     Message response = gameController->outputCurrentLocationInfo(emptyMessage)[0];
 
-    EXPECT_EQ(string(USER_CURRENTLY_LOCATED_MESSAGE) + string(LEXIE_SHOP), response.text);
+    EXPECT_EQ(string(USER_CURRENTLY_LOCATED_MESSAGE)
+                  +string(LEXIE_SHOP), response.text);
 }
 
 //TODO add more unit tests involving moving avatars to different rooms.

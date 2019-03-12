@@ -15,6 +15,7 @@
 #include "DataStorageService.h"
 #include "ID.h"
 #include "RoomConnectionService.h"
+#include "AvatarService.h"
 
 using Room = models::Room;
 using RoomConnection = models::RoomConnection;
@@ -26,7 +27,8 @@ class GameService {
 public:
     GameService()
         : _dataStorage(DataStorageService()),
-          _roomConnectionService(_dataStorage) {
+          _roomConnectionService(_dataStorage),
+          _avatarService(_dataStorage) {
 
     }
 
@@ -39,6 +41,7 @@ private:
 
     DataStorageService _dataStorage;
     RoomConnectionService _roomConnectionService;
+    AvatarService _avatarService;
 
     const Room* getRoomByName(const string& roomName) const;
 
@@ -56,7 +59,7 @@ public:
 
     bool userYell(const User& user, const string& messageString);
 
-    bool spawnUserInRoomOnLogin(const Connection& connection);
+    bool spawnAvatarInStartingRoom(const ID& avatarId);
 
     bool spawnUserInRoom(const Connection& connection, const ID& id);
 

@@ -22,7 +22,7 @@ public:
 
     Message respondToMessage(const Message& message) override;
 
-    Message spawnUserInRoomOnLogin(User &user);
+    const std::string spawnAvatarInStartingRoom(const ID& avatarId);
 
     void spawnUserInRoom(const networking::Connection& connection, int debugRoomId);
 
@@ -52,6 +52,10 @@ public:
 
 private:
     GameService _gameService;
+
+    //TODO make user a unique point
+    std::unordered_map<ID, User*> _avatarIdToUser;
+
 
     std::vector<std::string> directions = {"east", "west", "south", "north"};
 
