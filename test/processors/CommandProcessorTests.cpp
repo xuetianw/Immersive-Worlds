@@ -6,7 +6,7 @@ using Connection = networking::Connection;
 
 string loginStr{"Logged in!"}, logoutStr{"Logged out!"};
 
-class ConsoleCommandTest : public ::testing::Test {
+class CommandProcessorTests : public ::testing::Test {
 public:
     CommandProcessor commandProcessor;
     Connection loginConnection{0},logoutConnection{1}, dummyConnection{99};
@@ -27,12 +27,10 @@ protected:
     void TearDown() override { }
 };
 
-TEST_F(ConsoleCommandTest, commandsAreCalled){
-    loginUser.addCommand(LOGIN);
-    logoutUser.addCommand(LOGOUT);
-
+TEST_F(CommandProcessorTests, commandsAreCalled){
     Message defaultResponse = commandProcessor.processCommand(dummy).front();
     Message loginResponse = commandProcessor.processCommand(login).front();
+    logout.user.setCommandType(new GameCommands {});
     Message logoutResponse = commandProcessor.processCommand(logout).front();
 
     EXPECT_TRUE(defaultResponse.text != loginStr && defaultResponse.text != logoutStr);
@@ -43,7 +41,7 @@ TEST_F(ConsoleCommandTest, commandsAreCalled){
     EXPECT_TRUE(logoutResponse.user.getConnection().id == logoutConnection.id);
 }
 
-TEST_F(ConsoleCommandTest, userCallsForbiddenCommands){
+TEST_F(CommandProcessorTests, userCallsForbiddenCommands){
     Message loginResponse = commandProcessor.processCommand(login).front();
     Message logoutResponse = commandProcessor.processCommand(logout).front();
 
