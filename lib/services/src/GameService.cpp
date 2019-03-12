@@ -4,6 +4,7 @@
 
 #include "Server.h"
 #include "GameService.h"
+
 using models::RoomConnection;
 
 bool GameService::moveUser(const User& user, const std::string& keywordString) {
@@ -72,6 +73,7 @@ bool GameService::verifyAnswer(const User& user, const int input) {
     auto roomId = getCurrentRoomName(user.getConnection());
     auto result = _roomIdToMiniGameConnectionsList.find(roomId);
     auto correctAnswer = result->second.checkAnswer(input);
+    result->second.nextRound();
 
     return correctAnswer;
 }

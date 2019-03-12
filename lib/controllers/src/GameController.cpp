@@ -2,6 +2,7 @@
 // Created by asim on 07/02/19.
 //
 #include "GameController.h"
+
 Message GameController::respondToMessage(const Message& message) {
 
 //    TODO: add Avatar to User as a field and use to check if avatar has been made ! !

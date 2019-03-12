@@ -62,9 +62,9 @@ namespace CusJson {
         int _roomId;
         std::string _roomName;
         std::string _type;
-        std::string _questions;
-        std::vector<std::string> _possibleAnswers;
-        int _correctAnswers;
+        std::vector<std::string> _questions;
+        std::vector<std::vector<std::string>> _possibleAnswers;
+        std::vector<int> _correctAnswers;
     };
 
     class MiniGameList {

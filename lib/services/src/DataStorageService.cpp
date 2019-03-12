@@ -16,26 +16,45 @@ json DataStorageService::getTestingMiniGameList() {
           "roomId" : 10500,
           "roomName" : "Lexie's Scuba Shop",
           "type" : "multiple_choice",
-          "question" : "Which spelling is correct?",
+          "questions" : [
+                          "Which spelling is correct?",
+                          "Which spelling is correct?"
+                        ],
           "answers" : [
-            "RRRR",
-            "CAT",
-            "TTTT"
-          ],
-          "correctanswer" : 1
+                        [
+                          "RRRR",
+                          "CAT",
+                          "TTTT"
+                        ],
+                        [
+                          "TTTT",
+                          "WWW",
+                          "HELLO"
+                        ]
+                      ],
+          "correctanswers" :  [
+                                1,
+                                2
+                              ]
         },
         {
           "id" : 2,
           "roomId" : 10608,
           "roomName" : "Marketplace.",
           "type" : "multiple_choice",
-          "question" : "Which spelling is correct?",
+          "questions" : [
+                        "Which spelling is correct?"
+                        ],
           "answers" : [
-            "RRRR",
-            "DOG",
-            "TTTT"
-          ],
-          "correctanswer" : 1
+                        [
+                          "RRRR",
+                          "DOG",
+                          "TTTT"
+                        ]
+                      ],
+          "correctanswers" : [
+                              1
+                            ]
         }
     ]
   }

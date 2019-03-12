@@ -13,30 +13,20 @@ MiniGame::MiniGame() {
 MiniGame::MiniGame(const CusJson::MiniGame& jsonMiniGame) :
         _id(jsonMiniGame._id), _roomId(jsonMiniGame._roomId), _type(jsonMiniGame._type),
         _answers(jsonMiniGame._possibleAnswers), _correctAnswers(jsonMiniGame._correctAnswers),
-        _questions(jsonMiniGame._questions), _roomName(jsonMiniGame._roomName) { }
-
-void MiniGame::addAnswer(std::string answer) {
-    _answers.push_back(answer);
-}
-
-void MiniGame::addQuestion(std::string question) {
-    _questions = question;
-}
-
-void MiniGame::addCorrectAnswer(int correctAnswer) {
-    _correctAnswers = correctAnswer;
-}
+        _questions(jsonMiniGame._questions), _roomName(jsonMiniGame._roomName) { 
+            _round = 0;
+        }
 
 bool MiniGame::checkAnswer(const int answer) const {
-    return answer == _correctAnswers;
+    return answer == _correctAnswers.at(_round);
 }
 
 std::string MiniGame::getQuestion() const {
-    return _questions;
+    return _questions.at(_round);
 }
 
 std::vector<std::string> MiniGame::getAnswers() const {
-    return _answers;
+    return _answers.at(_round);
 }
 
 std::string MiniGame::printQuestion() {

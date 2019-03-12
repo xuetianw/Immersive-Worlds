@@ -70,9 +70,9 @@ namespace models {
         int _id;
         int _roomId;
         std::string _type;
-        std::vector<std::string> _answers;
-        std::string _questions;
-        int _correctAnswers;
+        std::vector<std::vector<std::string>> _answers;
+        std::vector<std::string> _questions;
+        std::vector<int> _correctAnswers;
         int _round;
         std::string _roomName;
 
