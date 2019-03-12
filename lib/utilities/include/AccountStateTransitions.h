@@ -9,6 +9,8 @@
 #include <variant>
 #include <optional>
 
+#include "ID.h"
+
 using string = std::string;
 
 ///////////////////////////////////////////USER-PROMPTS////////////////////////////////////////////
@@ -62,6 +64,7 @@ typedef std::variant<
 
 ///////////////////////////////////////////////USER////////////////////////////////////////////////
 struct Account {
+    ID avatarId;
     std::string _username;
     std::string _password;
     std::string _registerUsername;

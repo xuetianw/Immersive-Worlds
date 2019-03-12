@@ -53,6 +53,8 @@ public:
 private:
     GameService _gameService;
 
+    std::unordered_map<ID, User> _avatarIdToUser;
+
     std::vector<std::string> directions = {"east", "west", "south", "north"};
 
     bool checkIsDirectionMessage(const Message& message);

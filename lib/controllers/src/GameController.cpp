@@ -6,6 +6,12 @@
 Message GameController::respondToMessage(const Message& message) {
 //    TODO: add Avatar to User as a field and use to check if avatar has been made ! !
     message.user.setCommandType(new GameCommands());
+
+    ID avatarId = message.user.getAccount().avatarId;
+    User& user = message.user;
+
+    _avatarIdToUser.try_emplace(avatarId, user);
+
     string responseText = message.text + spawnUserInRoomOnLogin(message.user).text;
     return Message {message.user, responseText};
 }
