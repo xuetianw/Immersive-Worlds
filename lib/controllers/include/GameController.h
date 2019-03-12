@@ -22,7 +22,7 @@ public:
 
     Message respondToMessage(const Message& message) override;
 
-    Message spawnUserInRoomOnLogin(User &user);
+    const std::string spawnAvatarInStartingRoom(const ID& avatarId);
 
     void spawnUserInRoom(const networking::Connection& connection, int debugRoomId);
 

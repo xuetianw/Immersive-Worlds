@@ -4,17 +4,19 @@
 #include "GameController.h"
 
 Message GameController::respondToMessage(const Message& message) {
-//    TODO: add Avatar to User as a field and use to check if avatar has been made ! !
-    message.user.setCommandType(new GameCommands());
-
-    ID avatarId = message.user.getAccount().avatarId;
     User& user = message.user;
+    ID avatarId = ID{};
+
+    user.setCommandType(new GameCommands());
+
+    //Assign account a new avatar ID
+    user.getAccount().avatarId = avatarId;
 
     //TODO make user a unique_ptr
     _avatarIdToUser.try_emplace(avatarId, user);
 
-    string responseText = message.text + spawnUserInRoomOnLogin(message.user).text;
-    return Message {message.user, responseText};
+    string responseText = message.text + spawnAvatarInStartingRoom(avatarId);
+    return Message{user, responseText};
 }
 
 std::vector<Message> GameController::move(const Message& message) {
@@ -36,11 +38,12 @@ std::vector<Message> GameController::move(const Message& message) {
     return std::vector<Message>{newMessage};
 }
 
-Message GameController::spawnUserInRoomOnLogin(User& user) {
-    if (_gameService.spawnUserInRoomOnLogin(user.getConnection())) {
-        return Message{user, INITIAL_ROOM_START_MESSAGE};
+//TODO pass in avatar name
+const std::string GameController::spawnAvatarInStartingRoom(const ID& avatarId) {
+    if (_gameService.spawnAvatarInStartingRoom(avatarId)) {
+        return INITIAL_ROOM_START_MESSAGE;
     } else {
-        return Message{user, ROOM_SPAWN_FAIL_MESSAGE};
+        return ROOM_SPAWN_FAIL_MESSAGE;
     }
 }
 

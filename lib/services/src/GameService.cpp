@@ -29,18 +29,14 @@ string GameService::getCurrentRoomName(const Connection& connection) {
     return roomIter != _roomIdToRoom.end() ? roomIter->second.getName() : "";
 }
 
-ID GameService::getCurrentRoomId(const Connection& connection) {
-    // TODO: think of a better way to do this
-    const ID& roomId = _connectionToRoomId[connection];
-    auto roomIter = _roomIdToRoom.find(roomId);
-    return roomIter->second.getId();
+bool GameService::spawnAvatarInStartingRoom(const ID& avatarId) {
+    const ID& startingRoomID = _roomConnectionService.getStartingRoom();
+
+    return _avatarService.generateAvatarFromAvatarId(avatarId, startingRoomID, "SOMENAME"); //TODO input avatar name
 }
 
-bool GameService::spawnUserInRoomOnLogin(const Connection& connection) {
-    const Room* userRoom = getRoomByName("Lexie's Scuba Shop");
-    return userRoom ? spawnUserInRoom(connection, userRoom->getId()) : false;
-}
 
+//TODO change implementation
 bool GameService::spawnUserInRoom(const Connection& connection, const ID& id) {
     auto [it, inserted] = _connectionToRoomId.emplace(connection, id);
     return it != _connectionToRoomId.end() || inserted;

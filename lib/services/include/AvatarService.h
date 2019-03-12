@@ -14,7 +14,7 @@ public:
 
     }
 
-    void generateAvatarFromAvatarId(const ID& avatarId, const ID& roomId, const std::string& avatarName);
+    bool generateAvatarFromAvatarId(const ID& avatarId, const ID& roomId, const std::string& avatarName);
 
     const Avatar& getAvatarFromAvatarId(const ID& avatarId);
 
