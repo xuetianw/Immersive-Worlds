@@ -1,10 +1,10 @@
 //
 // Created by asim on 07/02/19.
 //
-
 #include "GameController.h"
 
 Message GameController::respondToMessage(const Message& message) {
+//    TODO: add Avatar to User as a field and use to check if avatar has been made ! !
     message.user.setCommandType(new GameCommands());
     string responseText = message.text + spawnUserInRoomOnLogin(message.user).text;
     return Message {message.user, responseText};
@@ -37,13 +37,41 @@ Message GameController::spawnUserInRoomOnLogin(User& user) {
     }
 }
 
+std::vector<Message> GameController::startMiniGame(const Message& message) {
+    bool hasMiniGame = _gameService.roomHaveMiniGame(message.user);
+
+    Message newMessage = Message(message.user);
+    if(hasMiniGame) {
+        auto minigame = _gameService.getMiniGame(message.user, message.text);
+
+        newMessage.text = minigame.printQuestion();
+    } else {
+        newMessage.text = "MiniGame not available for this room";
+    }
+
+    return std::vector<Message>{newMessage};
+}
+
+
+std::vector<Message> GameController::verifyMinigameAnswer(const Message& message) {
+    // TODO: figure out a better way to get the input. EX. maybe they type a number, should throw error or something
+    char letter = (message.text).at(0);
+    int input = letter - 'a';
+
+    bool result = _gameService.verifyAnswer(message.user, input);
+
+    Message newMessage = Message(message.user, (result) ? "Correct" : "WRONG");
+    return std::vector<Message>{newMessage};
+}
+
+
 void GameController::spawnUserInRoom(User& user, ID roomId) {
     _gameService.spawnUserInRoom(user.getConnection(), roomId);
 }
 
 bool GameController::checkIsDirectionMessage(const Message& message) {
     std::vector<std::string>::iterator it;
-    it = std::find (directions.begin(), directions.end(), message.text);
+    it = std::find(directions.begin(), directions.end(), message.text);
     return it != directions.end();
 }
 

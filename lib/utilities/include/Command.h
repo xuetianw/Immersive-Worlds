@@ -12,7 +12,9 @@ enum Command {
     LOGOUT,
     MOVE,
     WHEREAMI,
-    HELP
+    HELP,
+    MINIGAME,
+    MINIGAME_ANSWER
 };
 
 class CommandType {

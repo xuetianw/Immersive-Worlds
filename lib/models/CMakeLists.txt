@@ -5,6 +5,7 @@ add_library(models
     src/Inventory.cpp
     src/InventoryItem.cpp
     src/SingleItem.cpp
+    src/MiniGame.cpp
     )
 
 target_include_directories(models

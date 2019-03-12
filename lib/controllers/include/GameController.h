@@ -7,6 +7,7 @@
 
 #include "GameService.h"
 #include "AbstractController.h"
+#include "MiniGame.h"
 
 constexpr char INITIAL_ROOM_START_MESSAGE[] = "User has spawned in initial room";
 constexpr char USER_CURRENTLY_LOCATED_MESSAGE[] = "You are currently located in ";
@@ -23,6 +24,22 @@ public:
 
     Message spawnUserInRoomOnLogin(User &user);
 
+    void spawnUserInRoom(const networking::Connection& connection, int debugRoomId);
+
+    /**
+     * Creates a MiniGame based on the room.
+     * @param message
+     * @return the message that will be displayed
+     */
+    std::vector<Message> startMiniGame(const Message& message);
+
+    /**
+     * Verify if the input given by the user is valid.
+     * @param message
+     * @return the message that will be displayed
+     */
+    std::vector<Message> verifyMinigameAnswer(const Message& message);
+    
     void spawnUserInRoom(User& user, ID roomId);
 
     /**
@@ -38,7 +55,7 @@ private:
 
     std::vector<std::string> directions = {"east", "west", "south", "north"};
 
-    bool checkIsDirectionMessage(const Message &message);
+    bool checkIsDirectionMessage(const Message& message);
 };
 
 #endif //WEBSOCKETNETWORKING_GAMECONTROLLER_H

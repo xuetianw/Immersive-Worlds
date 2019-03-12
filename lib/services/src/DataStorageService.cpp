@@ -3,8 +3,64 @@
 //
 
 #include "DataStorageService.h"
+#include <iostream>
 
 using CusJson::Area;
+
+json DataStorageService::getTestingMiniGameList() {
+    json j = R"(
+  {
+    "MINIGAMES" : [
+        {
+          "id" : 1,
+          "roomId" : 10500,
+          "roomName" : "Lexie's Scuba Shop",
+          "type" : "multiple_choice",
+          "questions" : [
+                          "Which spelling is correct?",
+                          "Which spelling is correct?"
+                        ],
+          "answers" : [
+                        [
+                          "RRRR",
+                          "CAT",
+                          "TTTT"
+                        ],
+                        [
+                          "TTTT",
+                          "WWW",
+                          "HELLO"
+                        ]
+                      ],
+          "correctanswers" :  [
+                                1,
+                                2
+                              ]
+        },
+        {
+          "id" : 2,
+          "roomId" : 10608,
+          "roomName" : "Marketplace.",
+          "type" : "multiple_choice",
+          "questions" : [
+                        "Which spelling is correct?"
+                        ],
+          "answers" : [
+                        [
+                          "RRRR",
+                          "DOG",
+                          "TTTT"
+                        ]
+                      ],
+          "correctanswers" : [
+                              1
+                            ]
+        }
+    ]
+  }
+)"_json;
+    return j;
+}
 
 json DataStorageService::getTestingArea() {
     json j = R"(
@@ -125,4 +181,8 @@ const Area& DataStorageService::getJsonArea() const {
 
 void DataStorageService::setJsonArea(const Area& jsonArea) {
     _jsonArea = jsonArea;
+}
+
+const CusJson::MiniGameList& DataStorageService::getMiniGameList() const {
+    return _jsonMiniGameList;
 }
