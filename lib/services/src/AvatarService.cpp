@@ -11,7 +11,7 @@ bool AvatarService::generateAvatarFromAvatarId(const ID& avatarId, const ID& roo
 
     std::unique_ptr<Avatar> avatar = std::make_unique<Avatar>(avatarId, roomId, avatarName);
 
-    _avatars.try_emplace(avatarId, avatar);
+    _avatars.try_emplace(avatarId, std::move(avatar));
 
     return true;
 }

@@ -20,6 +20,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
 link_directories(${LIBRARY_OUTPUT_PATH})
 set(CMAKE_TEMP_LIBRARY_PATH "${PROJECT_BINARY_DIR}/lib")
 
+configure_file(webchat.html webchat.html COPYONLY)
+
 add_subdirectory(lib)
 add_subdirectory(tools)
 add_subdirectory(test)
