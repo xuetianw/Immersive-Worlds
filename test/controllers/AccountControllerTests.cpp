@@ -10,6 +10,8 @@
 using testing::Return;
 using namespace std;
 
+constexpr char DBNAME[] = "testAdventure.db";
+
 struct AccountControllerTests : testing:: Test {
     AccountController accountController;
     const std::uintptr_t ID1 = static_cast<unsigned int>(rand()) % 1000000;
@@ -27,8 +29,8 @@ struct AccountControllerTests : testing:: Test {
     Message emptyPassword{user, ""};
 
     void SetUp() override {
-        remove("testAdventure.db");
-        DBUtil::openConnection("testAdventure.db");
+        remove(DBNAME);
+        DBUtil::openConnection(DBNAME);
 
         DBUtil::registerUser("Josh", "abcdefg");
         DBUtil::registerUser("Karan", "hijklmn");
@@ -36,7 +38,7 @@ struct AccountControllerTests : testing:: Test {
     }
 
     void TearDown() override {
-        remove("testAdventure.db");
+        remove(DBNAME);
         DBUtil::closeConnection();
     }
 };
