@@ -40,6 +40,7 @@ bool Avatar::isPlayable() {
 Avatar::Avatar(AvatarType avatarType, ID userId)
         : MAX_HP(200),
           MAX_MANA(150),
+          MAX_DAMAGE_OUTPUT(30),
           _avatarType(avatarType),
           _userID(userId),
           _inventory(Inventory(_userID)) {}
@@ -50,6 +51,10 @@ void Avatar::set_hp(unsigned int _hp) {
 
 void Avatar::set_mana(unsigned int _mana) {
     Avatar::_mana = _mana;
+}
+
+void Avatar::setDamageOutput(int damageOutput) {
+    Avatar::damageOutput = damageOutput;
 }
 
 AvatarType Avatar::get_avatarType() const {
@@ -78,6 +83,10 @@ int Avatar::get_hp() const {
 
 int Avatar::get_mana() const {
     return _mana;
+}
+
+int Avatar::getDamageOutput() const {
+    return damageOutput;
 }
 
 string Avatar::get_shortDesc() const {

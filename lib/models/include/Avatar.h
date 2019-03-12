@@ -75,9 +75,14 @@ namespace models {
 
         std::unique_ptr<InventoryItem> removeItem(const InventoryItem& inventoryItem);
 
+        int getDamageOutput() const;
+
+        void setDamageOutput(int damageOutput);
+
     private:
         int MAX_HP;
         int MAX_MANA;
+        int MAX_DAMAGE_OUTPUT;
 
         AvatarType _avatarType;
 
@@ -95,6 +100,8 @@ namespace models {
         int _hp = MAX_HP;
 
         int _mana = MAX_MANA;
+
+        int damageOutput = MAX_DAMAGE_OUTPUT;
 
         string _shortDesc;
 

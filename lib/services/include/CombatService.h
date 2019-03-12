@@ -7,12 +7,16 @@
 
 #include <vector>
 
+#include "Room.h"
+#include "Avatar.h"
 
 using namespace std;
+using namespace models;
 
 struct combatRound{
     int roundNumber;
-    int damageDealt;
+    int damageDealtByPlayer;
+    int damageDealtByNPC;
 
 };
 
@@ -24,19 +28,30 @@ class CombatLogic{
 
 private:
 
-    vector<combatRound> rounds;
+    static int fightsInitialized;
 
+    vector<combatRound> rounds;
+    Avatar player;
+    Avatar NPC;
+    Room battleRoom;
 
     //obtain value from global config file
     constexpr static int heartBeatCount = 100;
-    int roundCounts;
+    int roundCount;
 
 public:
 
+    CombatLogic(const Avatar &player, const Avatar &NPC);
+
     /*
-     * attacks a Character (User or NPC)
+     * attacks an NPC
      */
-    bool attack();
+    bool attackNpc();
+
+    /*
+     * User takes damage from NPC
+     */
+    bool receiveDamage();
 
     /*
      * function which outputs information of the combat state such as
@@ -50,8 +65,9 @@ public:
      * function to determine if the combat state is still valid
      * i.e checks if either player is dead or if they decided to flee
      */
-    bool validateCombatState();
+    bool isCombatActive();
 
+    void updateRoundCount();
 
 };
 
