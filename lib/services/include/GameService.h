@@ -14,6 +14,7 @@
 #include "CusJson.h"
 #include "DataStorageService.h"
 #include "ID.h"
+#include "RoomConnectionService.h"
 
 using Room = models::Room;
 using RoomConnection = models::RoomConnection;
@@ -23,8 +24,10 @@ using string = std::string;
 
 class GameService {
 public:
-    GameService() : _dataStorage(DataStorageService()) {
-        loadFromStorage();
+    GameService()
+        : _dataStorage(DataStorageService()),
+          _roomConnectionService(_dataStorage) {
+
     }
 
 private:
@@ -35,12 +38,12 @@ private:
     std::unordered_map<ID, std::vector<RoomConnection> > _roomIdToRoomConnectionsList;
 
     DataStorageService _dataStorage;
+    RoomConnectionService _roomConnectionService;
 
     const Room* getRoomByName(const string& roomName) const;
 
     const Room& getUserRoom(const Connection& connection);
 
-    void loadFromStorage();
 
 public:
 
