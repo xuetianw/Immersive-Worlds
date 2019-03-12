@@ -1,3 +1,5 @@
+#include <utility>
+
 #ifndef WEBSOCKETNETWORKING_AVATAR_H
 #define WEBSOCKETNETWORKING_AVATAR_H
 
@@ -11,7 +13,12 @@ namespace models {
             _avatarId(ID{}),
             _roomId(roomId),
             _name(std::move(name)) {
+        }
 
+        Avatar(ID avatar, ID roomId, std::string name) :
+            _avatarId(avatar),
+            _roomId(roomId),
+            _name(std::move(name)) {
         }
 
         const ID& getRoomId() const;

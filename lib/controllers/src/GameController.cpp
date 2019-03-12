@@ -10,6 +10,7 @@ Message GameController::respondToMessage(const Message& message) {
     ID avatarId = message.user.getAccount().avatarId;
     User& user = message.user;
 
+    //TODO make user a unique_ptr
     _avatarIdToUser.try_emplace(avatarId, user);
 
     string responseText = message.text + spawnUserInRoomOnLogin(message.user).text;
