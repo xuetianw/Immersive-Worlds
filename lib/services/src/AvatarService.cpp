@@ -9,8 +9,9 @@ bool AvatarService::generateAvatarFromAvatarId(const ID& avatarId, const ID& roo
         return false;
     }
 
-    std::unique_ptr<Avatar> avatar = std::make_unique<Avatar>(Avatar{avatarId, roomId, avatarName});
-    _avatars.try_emplace(avatarId, std::move(avatar));
+    std::unique_ptr<Avatar> avatar = std::make_unique<Avatar>(avatarId, roomId, avatarName);
+
+    _avatars.try_emplace(avatarId, avatar);
 
     return true;
 }

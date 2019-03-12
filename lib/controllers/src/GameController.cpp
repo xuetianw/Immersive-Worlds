@@ -3,14 +3,16 @@
 //
 #include "GameController.h"
 
+//Upon successful login
 Message GameController::respondToMessage(const Message& message) {
     User& user = message.user;
+
+    //For now, generate avatar id
+    //TODO the avatar id should be retrieved from the database
     ID avatarId = ID{};
+    user.getAccount().avatarId = avatarId;
 
     user.setCommandType(new GameCommands());
-
-    //Assign account a new avatar ID
-    user.getAccount().avatarId = avatarId;
 
     //TODO make user a unique_ptr
     _avatarIdToUser.try_emplace(avatarId, &user);
