@@ -51,7 +51,7 @@ public:
     /*
      *  Lists the keywords of the allowed commands to the user
      */
-    std::vector<Message> listAllowedCommands(const Message& message);
+    std::vector<Message> listAvailableCommands(const Message& message);
 
 private:
     /*
@@ -63,11 +63,6 @@ private:
      * Map a command to a function ptr that executes it
      */
     void buildCommands();
-
-    /*
-     * Finds the disabled command's reason for being disabled, if there has been stated any
-     */
-    Message getDisabledCommandMessage(string keyword, User& user);
 
     /*
      *  Holds all the commands added to the map
