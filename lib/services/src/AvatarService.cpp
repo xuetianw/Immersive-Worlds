@@ -5,7 +5,7 @@
  */
 
 bool AvatarService::generateAvatarFromAvatarId(const ID& avatarId, const ID& roomId, const std::string& avatarName) {
-    if (_avatars.count(avatarId)) {
+    if (_avatars.count(avatarId) != 0) {
         return false;
     }
 
