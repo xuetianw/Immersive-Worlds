@@ -27,9 +27,9 @@ namespace models {
 
         const ID& getAvatarId() const;
 
-        const string& getName() const;
+        const std::string& getName() const;
 
-        void setName(const string& _name);
+        void setName(const std::string& _name);
 
     private:
         ID _avatarId;
