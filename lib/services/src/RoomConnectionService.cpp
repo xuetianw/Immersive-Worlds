@@ -139,7 +139,10 @@ void RoomConnectionService::loadFromStorage() {
 
     // load minigame
     for (const CusJson::MiniGame& minigame : _dataStorageService.getMiniGameList()._minigames) {
-        _roomIdToMiniGameConnectionsList.emplace(minigame._roomName, models::MiniGame(minigame));
+        auto roomUuid = jsonIdToUuid.find(minigame._roomId);
+        if(roomUuid != jsonIdToUuid.end()) {
+            _roomIdToMiniGameConnectionsList.emplace(roomUuid->second, models::MiniGame(minigame));
+        }
     }
 }
 

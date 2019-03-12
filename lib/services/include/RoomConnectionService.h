@@ -50,7 +50,7 @@ private:
     std::unordered_map<ID, Room> _roomIdToRoom;
     std::unordered_map<ID, Neighbours> _roomIdToNeighbours;
     std::unordered_map<std::string, Direction> _directions;
-    std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;
+    std::unordered_map<ID, models::MiniGame> _roomIdToMiniGameConnectionsList;
 
     const Room* findRoom(const ID& roomId);
 
