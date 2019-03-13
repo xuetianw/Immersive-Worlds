@@ -41,17 +41,22 @@ private:
 
 public:
 
-    CombatLogic(const Avatar &player, const Avatar &NPC);
+    CombatLogic(Avatar &player, Avatar &NPC);
 
     /*
      * attacks an NPC
      */
-    bool attackNpc();
+    void attackNpc();
 
     /*
      * User takes damage from NPC
      */
-    bool receiveDamage();
+    void receiveDamage();
+
+    /*
+     * attacks NPC and automatically receives damage from it
+     */
+    void fightRound();
 
     /*
      * function which outputs information of the combat state such as
@@ -68,6 +73,18 @@ public:
     bool isCombatActive();
 
     void updateRoundCount();
+
+    vector<combatRound> &getRounds();
+
+    void setRounds(const vector<combatRound> &rounds);
+
+    Avatar &getPlayer();
+
+    void setPlayer(const Avatar &player);
+
+    Avatar &getNPC();
+
+    void setNPC(const Avatar &NPC);
 
 };
 
