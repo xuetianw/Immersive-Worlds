@@ -50,6 +50,8 @@ namespace models {
 
         void set_mana(unsigned int _mana);
 
+        void setDamageOutput(int damageOutput);
+
         /**
          * Adds an InventoryItem to characterInventory.
          * @param inventoryItem item to add to inventory
@@ -77,7 +79,6 @@ namespace models {
 
         int getDamageOutput() const;
 
-        void setDamageOutput(int damageOutput);
 
     private:
         int MAX_HP;
