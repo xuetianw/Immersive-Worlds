@@ -21,3 +21,19 @@ const models::Avatar& AvatarService::getAvatarFromAvatarId(const ID& avatarId) {
 
     return avatar;
 }
+
+const ID& AvatarService::getRoomIdFromAvatarId(const ID& avatarId){
+    return _avatars.at(avatarId)->getRoomId();
+}
+
+
+std::vector<ID> AvatarService::getAllAvatarIdsForRoomId(const ID& roomId) {
+    std::vector<ID> avatarIdsInRoom;
+
+    for(auto const& [id, avatar] : _avatars){
+        if(avatar->getRoomId() == roomId){
+            avatarIdsInRoom.push_back(id);
+        }
+    }
+    return avatarIdsInRoom;
+}

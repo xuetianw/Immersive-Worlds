@@ -18,6 +18,10 @@ public:
 
     const Avatar& getAvatarFromAvatarId(const ID& avatarId);
 
+    const ID& getRoomIdFromAvatarId(const ID& avatarId);
+
+    std::vector<ID> getAllAvatarIdsForRoomId(const ID& roomId);
+
 private:
     //map of Avatar IDs to Avatar objects
     std::unordered_map<ID, std::unique_ptr<Avatar>> _avatars;
