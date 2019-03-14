@@ -22,22 +22,20 @@ Message GameController::respondToMessage(const Message& message) {
 }
 
 std::vector<Message> GameController::move(const Message& message) {
-    Message newMessage = Message(message.user);
-    if (!checkIsDirectionMessage(message)) {
-        newMessage.text = WRONG_DIRECTION_MESSAGE;
-        return std::vector<Message>{newMessage};
-    }
+    const ID& avatarId = message.user.getAccount().avatarId;
+    const std::string& directionString = message.text;
+    Message responseMessage{message.user};
 
-    std::string beforeMoveRoomName = _gameService.getCurrentRoomName(message.user.getConnection());
-    if (_gameService.moveUser(message.user, message.text)) {
-        std::string afterMoveRoomName = _gameService.getCurrentRoomName(message.user.getConnection());
-        std::string output = "command /move " + message.text + " called\n" + "before move: " + beforeMoveRoomName + "\nafter move: " + afterMoveRoomName;
-        newMessage.text = output;
+    bool didMoveAvatar = _gameService.moveAvatar(avatarId, directionString);
+
+    if (didMoveAvatar) {
+        std::optional<std::string> newAvatarRoomName = _gameService.getAvatarRoomName(avatarId);
+        responseMessage.text = "Successfully moved " + directionString + " to room: " + newAvatarRoomName.value();
     } else {
-        newMessage.text = "user did not move";
+        responseMessage.text = "Failed to move avatar " + directionString;
     }
 
-    return std::vector<Message>{newMessage};
+    return std::vector<Message>{responseMessage};
 }
 
 //TODO pass in avatar name
@@ -74,11 +72,6 @@ std::vector<Message> GameController::verifyMinigameAnswer(const Message& message
 
     Message newMessage = Message(message.user, (result) ? "Correct" : "WRONG");
     return std::vector<Message>{newMessage};
-}
-
-
-void GameController::spawnUserInRoom(User& user, ID roomId) {
-    _gameService.spawnUserInRoom(user.getConnection(), roomId);
 }
 
 bool GameController::checkIsDirectionMessage(const Message& message) {
