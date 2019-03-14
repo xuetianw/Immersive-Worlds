@@ -32,7 +32,7 @@ public:
 
     }
 
-    bool moveUser(const User& user, const string& keywordString);
+    bool moveAvatar(const ID& avatarId, const std::string& directionString);
 
     bool userYell(const User& user, const string& messageString);
 
@@ -41,6 +41,8 @@ public:
     bool spawnUserInRoom(const Connection& connection, const ID& id);
 
     string getCurrentRoomName(const Connection& connection);
+
+    std::optional<std::string> getAvatarRoomName(const ID& avatarId);
 
     /** 
      * Get the current minigame available in this room
@@ -63,7 +65,6 @@ private:
     std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;
     std::unordered_map<ID, Room> _roomIdToRoom;
     std::unordered_map<Connection, ID, ConnectionHash> _connectionToRoomId;
-    std::unordered_map<ID, std::vector<RoomConnection> > _roomIdToRoomConnectionsList;
 
     DataStorageService _dataStorage;
     RoomConnectionService _roomConnectionService;

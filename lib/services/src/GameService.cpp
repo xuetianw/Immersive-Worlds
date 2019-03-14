@@ -7,16 +7,21 @@
 
 using models::RoomConnection;
 
-bool GameService::moveUser(const User& user, const std::string& keywordString) {
-    auto roomId = _connectionToRoomId.at(user.getConnection());
-    auto connectedRoomList = _roomIdToRoomConnectionsList.at(roomId);
-    auto connectedRoom = std::find_if(connectedRoomList.begin(), connectedRoomList.end(), [keywordString](const models::RoomConnection &roomConnection) -> bool {
-        return roomConnection.getUserInputDirKey() == keywordString;
-    });
-    if (connectedRoom != connectedRoomList.end()) {
-        _connectionToRoomId.find(user.getConnection())->second = connectedRoom.base()->getTo();
+bool GameService::moveAvatar(const ID& avatarId, const string& directionString) {
+    if (!_avatarService.doesAvatarExist(avatarId)) {
+        return false;
     }
-    return connectedRoom != connectedRoomList.end();
+
+    const std::optional<std::reference_wrapper<const Avatar>> avatar = _avatarService.getAvatarFromAvatarId(avatarId);
+    const ID& currentAvatarRoomId = avatar->get().getRoomId();
+    const std::optional<std::reference_wrapper<const ID>> neighbourId = _roomConnectionService.getNeighbourId(
+        currentAvatarRoomId, directionString);
+
+    if (!neighbourId) {
+        return false;
+    }
+
+    return _avatarService.setAvatarRoomId(avatarId, neighbourId.value());
 }
 
 bool GameService::userYell(const User& user, const std::string& messageString) {
@@ -35,11 +40,17 @@ bool GameService::spawnAvatarInStartingRoom(const ID& avatarId) {
     return _avatarService.generateAvatarFromAvatarId(avatarId, startingRoomID, "SOMENAME"); //TODO input avatar name
 }
 
+std::optional<std::string> GameService::getAvatarRoomName(const ID& avatarId) {
+    if (!_avatarService.doesAvatarExist(avatarId)) {
+        return std::nullopt;
+    }
 
-//TODO change implementation
-bool GameService::spawnUserInRoom(const Connection& connection, const ID& id) {
-    auto [it, inserted] = _connectionToRoomId.emplace(connection, id);
-    return it != _connectionToRoomId.end() || inserted;
+    const std::optional<std::reference_wrapper<const Avatar>> avatar = _avatarService.getAvatarFromAvatarId(avatarId);
+    const ID& avatarRoomId = avatar->get().getRoomId();
+
+    std::optional<std::string> avatarRoomName = _roomConnectionService.getRoomName(avatarRoomId);
+
+    return avatarRoomName.value();
 }
 
 const Room* GameService::getRoomByName(const string& roomName) const {
@@ -72,12 +83,6 @@ bool GameService::verifyAnswer(const User& user, const int input) {
     result->second.nextRound();
 
     return correctAnswer;
-}
-
-const Room& GameService::getUserRoom(const Connection& connection) {
-    // This is just a placeholder.
-    // TODO: Implement the logic appropriately
-    return std::move(Room());
 }
 
 //========================= Avatar Service =============================
