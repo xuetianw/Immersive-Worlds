@@ -74,12 +74,6 @@ std::vector<Message> GameController::verifyMinigameAnswer(const Message& message
     return std::vector<Message>{newMessage};
 }
 
-bool GameController::checkIsDirectionMessage(const Message& message) {
-    std::vector<std::string>::iterator it;
-    it = std::find(directions.begin(), directions.end(), message.text);
-    return it != directions.end();
-}
-
 std::vector<Message> GameController::outputCurrentLocationInfo(const Message& message) {
     const Connection& currentConnection = message.user.getConnection();
     string currentRoom = _gameService.getCurrentRoomName(currentConnection);
