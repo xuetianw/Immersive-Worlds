@@ -16,7 +16,11 @@ public:
 
     bool generateAvatarFromAvatarId(const ID& avatarId, const ID& roomId, const std::string& avatarName);
 
-    const Avatar& getAvatar(const ID& avatarId);
+    const std::optional<std::reference_wrapper<const models::Avatar>> getAvatarFromAvatarId(const ID& avatarId);
+
+    bool setAvatarRoomId(const ID& avatarId, const ID& roomId);
+
+    bool doesAvatarExist(const ID& avatarId);
 
     const ID& getRoomId(const ID& avatarId);
 
