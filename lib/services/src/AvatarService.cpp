@@ -16,18 +16,18 @@ bool AvatarService::generateAvatarFromAvatarId(const ID& avatarId, const ID& roo
     return true;
 }
 
-const models::Avatar& AvatarService::getAvatarFromAvatarId(const ID& avatarId) {
+const models::Avatar& AvatarService::getAvatar(const ID& avatarId) {
     Avatar& avatar = *(_avatars.at(avatarId));
 
     return avatar;
 }
 
-const ID& AvatarService::getRoomIdFromAvatarId(const ID& avatarId){
+const ID& AvatarService::getRoomId(const ID& avatarId){
     return _avatars.at(avatarId)->getRoomId();
 }
 
 
-std::vector<ID> AvatarService::getAllAvatarIdsForRoomId(const ID& roomId) {
+std::vector<ID> AvatarService::getAllAvatarIds(const ID& roomId) {
     std::vector<ID> avatarIdsInRoom;
 
     for(auto const& [id, avatar] : _avatars){

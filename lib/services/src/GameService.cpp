@@ -82,10 +82,10 @@ const Room& GameService::getUserRoom(const Connection& connection) {
 
 //========================= Avatar Service =============================
 
-std::vector<ID> GameService::getAllAvatarIdsForRoomId(ID roomId) {
-    return _avatarService.getAllAvatarIdsForRoomId(roomId);
+std::vector<ID> GameService::getAllAvatarIds(ID roomId) {
+    return _avatarService.getAllAvatarIds(roomId);
 };
 
-const ID& GameService::getRoomIdFromAvatarId(const ID& avatarId){
-    return _avatarService.getRoomIdFromAvatarId(avatarId);
+const ID& GameService::getRoomId(const ID& avatarId){
+    return _avatarService.getRoomId(avatarId);
 };

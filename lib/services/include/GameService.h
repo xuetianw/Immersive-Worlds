@@ -55,9 +55,9 @@ public:
     bool verifyAnswer(const User& user, const int input);
 
 
-    std::vector<ID> getAllAvatarIdsForRoomId(ID roomId);
+    std::vector<ID> getAllAvatarIds(ID roomId);
 
-    const ID& getRoomIdFromAvatarId(const ID& avatarId);
+    const ID& getRoomId(const ID& avatarId);
 
 private:
     std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;
