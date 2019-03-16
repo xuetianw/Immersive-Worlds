@@ -257,12 +257,18 @@ const Area& DataStorageService::getJsonArea() const {
     return _jsonArea;
 }
 
-void DataStorageService::setJsonArea(const Area& jsonArea) {
-    _jsonArea = jsonArea;
-}
-
 std::unordered_map<int, SingleItem> DataStorageService::getObjectsFromJson() {
     return _objectMap;
+}
+
+void DataStorageService::configRoomsAndJsonIdMap(const CusJson::Area& jsonArea) {
+    for (const CusJson::Room& jsonRoom : jsonArea._rooms) {
+        models::Room room{jsonRoom};
+        const ID& roomId = room.getId();
+
+        _jsonRoomIdToUuid.emplace(jsonRoom._id, roomId);
+        _roomIdToRoom.emplace(roomId, room);
+    }
 }
 
 std::unordered_map<int, SingleItem> DataStorageService::configObjectMap(const CusJson::Area& jsonArea) {
@@ -287,4 +293,37 @@ SingleItem DataStorageService::spawnObjectCopy(int jsonId) {
     } else {
         std::cerr << "spawnObjectCopy called with unknown object Id";
     }
+}
+
+void DataStorageService::configNeighboursMap(std::unordered_map<int, ID> jsonIdToUuid,
+                                             std::vector<CusJson::Room> jsonRooms) {
+    for (const CusJson::Room& jsonRoom : jsonRooms) {
+        Neighbours neighbours;
+
+        buildNeighbours(jsonIdToUuid, jsonRoom, neighbours);
+
+        _roomIdToNeighbours.try_emplace(jsonIdToUuid[jsonRoom._id], neighbours);
+    }
+}
+
+void DataStorageService::buildNeighbours(const std::unordered_map<int, ID>& tmp, const CusJson::Room& jsonRoom,
+                                            Neighbours& neighbours) {
+    for (const CusJson::JsonDoor& jsonDoor : jsonRoom._jsonDoors) {
+        models::NeighbourInfo neighbourInfo;
+        neighbourInfo.direction = models::DIRECTION_STRING_TO_ENUM_MAP.find(jsonDoor._dir)->second;
+        neighbourInfo.destinationRoomId = tmp.at(jsonDoor._to);
+        neighbourInfo.descriptions = jsonDoor._desc;
+
+        neighbours.emplace_back(neighbourInfo);
+    }
+}
+
+std::unordered_map<ID, models::Room> DataStorageService::getRoomIdToRoomMapCopy() {
+    auto roomIdToRoomMapCopy = this->_roomIdToRoom;
+    return roomIdToRoomMapCopy;
+}
+
+std::unordered_map<ID, std::vector<models::NeighbourInfo>> DataStorageService::getRoomIdToNeighboursMapCopy() {
+    auto roomIdToNeighboursMapCopy = this->_roomIdToNeighbours;
+    return roomIdToNeighboursMapCopy;
 }

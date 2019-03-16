@@ -47,12 +47,12 @@ const ID* RoomConnectionService::getNeighbourId(const ID& roomId, const std::str
         return nullptr;
     }
 
-    const Direction direction = _directions.at(directionString);
+    const models::Direction direction = _directions.at(directionString);
     const Neighbours& neighbours = _roomIdToNeighbours.at(roomId);
 
     //iterate through all neighbours to find a matching one
     auto neighbour = find_if(neighbours.begin(), neighbours.end(),
-                             [&](const NeighbourInfo& info) { return info.direction == direction; });
+                             [&](const models::NeighbourInfo& info) { return info.direction == direction; });
 
     if (neighbour == neighbours.end()) {
         //no matching neighbour
@@ -74,12 +74,14 @@ const std::vector<std::string> RoomConnectionService::getAvailableRoomDirections
 
     //add directions of all neighbours
     for (auto& neighbour : neighbours) {
-        Direction direction = neighbour.direction;
+        models::Direction direction = neighbour.direction;
 
         //there's no easy way to convert enums to strings
         //iterate _directions map to find matching direction enum value and return the key
         auto it = std::find_if(_directions.begin(), _directions.end(),
-                               [&](const std::pair<string, Direction>& pair) { return pair.second == direction; });
+                               [&](const std::pair<string, models::Direction>& pair) {
+                                   return pair.second == direction;
+                               });
 
         availableDirections.emplace_back(it->first);
     }
@@ -107,57 +109,21 @@ const models::Room* RoomConnectionService::findRoom(const ID& roomId) {
     return &(_roomIdToRoom.at(roomId));
 }
 
-void RoomConnectionService::buildDirectionsMap() {
-    _directions["north"] = Direction::NORTH;
-    _directions["south"] = Direction::SOUTH;
-    _directions["east"] = Direction::EAST;
-    _directions["west"] = Direction::WEST;
-}
-
-
 void RoomConnectionService::loadFromStorage() {
-    // jsonIdToUuid is mapping the JSON room IDs to a UUID.
-    // It's needed when building up the neighbours since some neighbours might not have been assigned a UUID yet.
-    std::unordered_map<int, ID> jsonIdToUuid;
-    std::vector<CusJson::Room> jsonRooms = _dataStorageService.getJsonArea()._rooms;
+    _roomIdToRoom = _dataStorageService.getRoomIdToRoomMapCopy();
 
-    for (const CusJson::Room& jsonRoom : jsonRooms) {
-        Room room{jsonRoom};
-        const ID& roomId = room.getId();
+    _roomIdToNeighbours = _dataStorageService.getRoomIdToNeighboursMapCopy();
 
-        jsonIdToUuid.emplace(jsonRoom._id, roomId);
-        _roomIdToRoom.emplace(roomId, room);
-    }
 
-    for (const CusJson::Room& jsonRoom : jsonRooms) {
-        Neighbours neighbours;
-
-        buildNeighbours(jsonIdToUuid, jsonRoom, neighbours);
-
-        _roomIdToNeighbours.try_emplace(jsonIdToUuid[jsonRoom._id], neighbours);
-    }
-
-    auto containerConfiguration = _dataStorageService.getJsonArea()._containerWrappers;
-    for (auto container : containerConfiguration) {
-        auto roomQuery = _roomIdToRoom.find(jsonIdToUuid.find(container._roomId)->second);
-        if (roomQuery != _roomIdToRoom.end()) {
-            auto spawnedContainer = _dataStorageService.spawnObjectCopy(container._objectId);
-            for (auto containedItemId : container._containedObjectIds) {
-                spawnedContainer.getItemsInContainer().push_back(_dataStorageService.spawnObjectCopy(containedItemId));
-            }
-            roomQuery->second.addObject(spawnedContainer.getId(), spawnedContainer);
-        }
-    }
-}
-
-void RoomConnectionService::buildNeighbours(const std::unordered_map<int, ID>& tmp, const CusJson::Room& jsonRoom,
-                                            RoomConnectionService::Neighbours& neighbours) {
-    for (const CusJson::JsonDoor& jsonDoor : jsonRoom._jsonDoors) {
-        NeighbourInfo neighbourInfo;
-        neighbourInfo.direction = _directions[jsonDoor._dir];
-        neighbourInfo.destinationRoomId = tmp.at(jsonDoor._to);
-        neighbourInfo.descriptions = jsonDoor._desc;
-
-        neighbours.emplace_back(neighbourInfo);
-    }
+//    auto containerConfiguration = _dataStorageService.getJsonArea()._containerWrappers;
+//    for (auto container : containerConfiguration) {
+//        auto roomQuery = _roomIdToRoom.find(jsonIdToUuid.find(container._roomId)->second);
+//        if (roomQuery != _roomIdToRoom.end()) {
+//            auto spawnedContainer = _dataStorageService.spawnObjectCopy(container._objectId);
+//            for (auto containedItemId : container._containedObjectIds) {
+//                spawnedContainer.getItemsInContainer().push_back(_dataStorageService.spawnObjectCopy(containedItemId));
+//            }
+//            roomQuery->second.addObject(spawnedContainer.getId(), spawnedContainer);
+//        }
+//    }
 }
