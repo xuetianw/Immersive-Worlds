@@ -1,3 +1,6 @@
+
+#include <Avatar.h>
+
 #include "Avatar.h"
 
 using models::Avatar;
@@ -23,26 +26,25 @@ void models::Avatar::setName(const std::string& name) {
 }
 
 int models::Avatar::get_hp() const {
-    return _hp;
+    return 0;
 }
 
 void models::Avatar::set_hp(int _hp) {
-    Avatar::_hp = _hp;
+
 }
 
 int models::Avatar::get_mana() const {
-    return _mana;
+    return 0;
 }
 
 void models::Avatar::set_mana(int _mana) {
-    Avatar::_mana = _mana;
+
 }
 
 void models::Avatar::setDamageOutput(int damageOutput) {
-    Avatar::damageOutput = damageOutput;
+
 }
 
 int models::Avatar::getDamageOutput() const {
-    return damageOutput;
+    return 0;
 }
-
