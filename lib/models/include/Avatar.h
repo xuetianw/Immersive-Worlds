@@ -31,6 +31,16 @@ namespace models {
 
         void setName(const std::string& _name);
 
+        int get_hp() const;
+
+        void set_hp(int _hp);
+
+        int get_mana() const;
+
+        void set_mana(int _mana);
+
+        void setDamageOutput(int damageOutput);
+
         int getDamageOutput() const;
 
     private:
@@ -40,8 +50,6 @@ namespace models {
         int _hp ;
         int _mana ;
         int damageOutput;
-
-
     };
 }
 

@@ -10,8 +10,8 @@ using namespace models;
 struct CombatServiceTest : testing::Test{
 
 
-    Avatar player{ AvatarType::PLAYABLE , ID(1)};
-    Avatar NPC{ AvatarType::NON_PLAYABLE , ID(2)};
+    Avatar player{ ID(1), "John"};
+    Avatar NPC{ ID(2), "Kevin"};
 
     CombatLogic combatLogic{player, NPC};
 };
