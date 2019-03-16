@@ -8,6 +8,9 @@
 #include <utility>
 #include <string>
 #include <nlohmann/json.hpp>
+#include <CusJson.h>
+#include <MiniGame.h>
+
 #include <unordered_map>
 #include <vector>
 

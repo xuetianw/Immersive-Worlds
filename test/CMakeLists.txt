@@ -20,14 +20,14 @@ enable_testing()
 
 
 add_executable(run_tests
-    gameManager/idTest.cpp
-        NetworkingTests/UserServiceManagementTest.cpp
-    NetworkingTests/ConsoleCommandTests.cpp
-    NetworkingTests/ServerTests.cpp
-    databaseTest/DatabaseTest.cpp
-    controllersTest/GameControllerTest.cpp
-    inventory/inventoryTest.cpp
-        models/roomTest.cpp
+    utilities/IDTest.cpp
+    controllers/AccountControllerTests.cpp
+    processors/CommandProcessorTests.cpp
+    networking/ServerTests.cpp
+    utilities/DBUtilityTest.cpp
+    controllers/GameControllerTests.cpp
+    models/InventoryTests.cpp
+    models/RoomTests.cpp
   )
 
 
@@ -41,5 +41,5 @@ set_target_properties(run_tests
         )
 
 ##TO DO: Add Lib Here
-target_link_libraries(run_tests networking models cusjson controllers processors)
+target_link_libraries(run_tests networking models cusjson controllers services processors utilities)
 add_test(NAME network_tests COMMAND run_tests)

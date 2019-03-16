@@ -18,6 +18,8 @@ namespace CusJson {
 
     class JsonDoor {
     public:
+        JsonDoor();
+
         std::string _dir;
         std::vector<std::string> _desc;
         std::vector<std::string> _keywords;
@@ -26,6 +28,8 @@ namespace CusJson {
 
     class ExtDesc {
     public:
+        ExtDesc();
+
         std::vector<std::string> _keywords;
         std::vector<std::string> _desc;
     };
@@ -68,6 +72,22 @@ namespace CusJson {
         std::vector<ContainerJsonWrapper> _containerWrappers;
     };
 
+    class MiniGame {
+    public:
+        int _id;
+        int _roomId;
+        std::string _roomName;
+        std::string _type;
+        std::vector<std::string> _questions;
+        std::vector<std::vector<std::string>> _possibleAnswers;
+        std::vector<int> _correctAnswers;
+    };
+
+    class MiniGameList {
+    public:
+        std::vector<MiniGame> _minigames;
+    };
+
     void to_json(json& j, const JsonDoor& door);
 
     void from_json(const json& j, JsonDoor& door);
@@ -93,6 +113,14 @@ namespace CusJson {
     void from_json(const json& j, Area& p);
 
     void parseResetJsonToArea(const json& resetJson, Area& area);
+
+    void to_json(json& j, const MiniGame& p);
+
+    void from_json(const json& j, MiniGame& p);
+
+    void to_json(json& j, const MiniGameList& p);
+
+    void from_json(const json& j, MiniGameList& p);
 }
 
 #endif //WEBSOCKETNETWORKING_CUSJSON_H

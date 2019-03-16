@@ -8,6 +8,10 @@
 using json = nlohmann::json;
 
 namespace CusJson {
+    JsonDoor::JsonDoor() {}
+
+    ExtDesc::ExtDesc() {}
+
     void to_json(json& j, const JsonDoor& door) {
         //TODO implement
     }
@@ -167,5 +171,52 @@ namespace CusJson {
                 }
             }
         }
+    }
+
+    void to_json(json& j, const MiniGame& p) {
+        //j = json{{"name", p._name}};
+    }
+
+    void from_json(const json& j, MiniGame& p) {
+        j.at("id").get_to(p._id);
+        j.at("roomId").get_to(p._roomId);
+        j.at("type").get_to(p._type);
+        j.at("roomName").get_to(p._roomName);
+
+        // questions
+        const json& questions = j.at("questions");
+        p._questions.resize(questions.size());
+        std::copy(questions.begin(), questions.end(), p._questions.begin());  
+
+        // find a better way to do it. 
+        auto jsonMap = j.get<std::unordered_map<std::string, json>>();
+        auto answers = jsonMap.find("answers");
+        std::vector<std::vector<std::string>> possibleAnswers;
+        for (auto possibleAnswersRound : answers->second) {
+            std::vector<std::string> roundAnswers;
+
+            for(auto curAnswer : possibleAnswersRound) {
+                roundAnswers.push_back(curAnswer);
+            }
+
+            possibleAnswers.push_back(roundAnswers);
+        }
+        
+        p._possibleAnswers = std::move(possibleAnswers);
+
+        // correct answers
+        const json& correctAnswers = j.at("correctanswers");
+        p._correctAnswers.resize(questions.size());
+        std::copy(correctAnswers.begin(), correctAnswers.end(), p._correctAnswers.begin());  
+    }
+
+    void to_json(json& j, const MiniGameList& p) {
+        //j = json{{"name", p._name}};
+    }
+
+    void from_json(const json& j, MiniGameList& p) {
+        const json& miniGameList = j.at("MINIGAMES");
+        p._minigames.resize(miniGameList.size());
+        std::copy(miniGameList.begin(), miniGameList.end(), p._minigames.begin());
     }
 }
