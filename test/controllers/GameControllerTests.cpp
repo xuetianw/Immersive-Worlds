@@ -7,28 +7,29 @@ using testing::Return;
 
 constexpr char LEXIE_SHOP[] = "Lexie's Scuba Shop";
 
-struct GameControllerTest : testing::Test {
+struct GameControllerTests : testing::Test {
     std::unique_ptr<GameController> gameController = std::make_unique<GameController>();
     networking::Connection connection{1};
     User user{connection};
 };
 
 
-TEST_F(GameControllerTest, SpawnUserInStartRoomTest) {
+TEST_F(GameControllerTests, SpawnUserInStartRoomTest) {
     // Assumption: Starting room is Lexie's shop
-    Message response = gameController->spawnUserInRoomOnLogin(user);
+    std::string response = gameController->spawnAvatarInStartingRoom(user.getAccount().avatarId);
 
-    EXPECT_EQ(INITIAL_ROOM_START_MESSAGE, response.text);
+    EXPECT_EQ(INITIAL_ROOM_START_MESSAGE, response);
 }
-
-TEST_F(GameControllerTest, OutputCurrentLocationInfoTest) {
+//TODO fix this test
+TEST_F(GameControllerTests, OutputCurrentLocationInfoTest) {
     Message emptyMessage = Message{user, ""};
 
     // Assumption: Starting room is Lexie's shop
-    gameController->spawnUserInRoomOnLogin(user);
+    gameController->spawnAvatarInStartingRoom(user.getAccount().avatarId);
     Message response = gameController->outputCurrentLocationInfo(emptyMessage)[0];
 
-    EXPECT_EQ(string(USER_CURRENTLY_LOCATED_MESSAGE) + string(LEXIE_SHOP), response.text);
+    EXPECT_EQ(string(USER_CURRENTLY_LOCATED_MESSAGE)
+                  +string(LEXIE_SHOP), response.text);
 }
 
 //TODO add more unit tests involving moving avatars to different rooms.

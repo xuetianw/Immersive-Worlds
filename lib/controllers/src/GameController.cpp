@@ -1,12 +1,24 @@
 //
 // Created by asim on 07/02/19.
 //
-
 #include "GameController.h"
 
+//Upon successful login
 Message GameController::respondToMessage(const Message& message) {
-    string responseText = message.text + spawnUserInRoomOnLogin(message.user).text;
-    return Message {message.user, responseText};
+    User& user = message.user;
+
+    //For now, generate avatar id
+    //TODO the avatar id should be retrieved from the database
+    ID avatarId = ID{};
+    user.getAccount().avatarId = avatarId;
+
+    user.setCommandType(new GameCommands());
+
+    //TODO make user a unique_ptr
+    _avatarIdToUser.try_emplace(avatarId, &user);
+
+    string responseText = message.text + spawnAvatarInStartingRoom(avatarId);
+    return Message{user, responseText};
 }
 
 std::vector<Message> GameController::move(const Message& message) {
@@ -28,13 +40,42 @@ std::vector<Message> GameController::move(const Message& message) {
     return std::vector<Message>{newMessage};
 }
 
-Message GameController::spawnUserInRoomOnLogin(User& user) {
-    if (_gameService.spawnUserInRoomOnLogin(user.getConnection())) {
-        return Message{user, INITIAL_ROOM_START_MESSAGE};
+//TODO pass in avatar name
+const std::string GameController::spawnAvatarInStartingRoom(const ID& avatarId) {
+    if (_gameService.spawnAvatarInStartingRoom(avatarId)) {
+        return INITIAL_ROOM_START_MESSAGE;
     } else {
-        return Message{user, ROOM_SPAWN_FAIL_MESSAGE};
+        return ROOM_SPAWN_FAIL_MESSAGE;
     }
 }
+
+std::vector<Message> GameController::startMiniGame(const Message& message) {
+    bool hasMiniGame = _gameService.roomHaveMiniGame(message.user);
+
+    Message newMessage = Message(message.user);
+    if(hasMiniGame) {
+        auto minigame = _gameService.getMiniGame(message.user, message.text);
+
+        newMessage.text = minigame.printQuestion();
+    } else {
+        newMessage.text = "MiniGame not available for this room";
+    }
+
+    return std::vector<Message>{newMessage};
+}
+
+
+std::vector<Message> GameController::verifyMinigameAnswer(const Message& message) {
+    // TODO: figure out a better way to get the input. EX. maybe they type a number, should throw error or something
+    char letter = (message.text).at(0);
+    int input = letter - 'a';
+
+    bool result = _gameService.verifyAnswer(message.user, input);
+
+    Message newMessage = Message(message.user, (result) ? "Correct" : "WRONG");
+    return std::vector<Message>{newMessage};
+}
+
 
 void GameController::spawnUserInRoom(User& user, ID roomId) {
     _gameService.spawnUserInRoom(user.getConnection(), roomId);
@@ -42,7 +83,7 @@ void GameController::spawnUserInRoom(User& user, ID roomId) {
 
 bool GameController::checkIsDirectionMessage(const Message& message) {
     std::vector<std::string>::iterator it;
-    it = std::find (directions.begin(), directions.end(), message.text);
+    it = std::find(directions.begin(), directions.end(), message.text);
     return it != directions.end();
 }
 

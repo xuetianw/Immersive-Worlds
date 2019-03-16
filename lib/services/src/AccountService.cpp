@@ -7,51 +7,19 @@
 
 #include "AccountService.h"
 
-const string ESCAPEONLYMESSAGE = "You are currently logging in / registering - use /escape to restart";
-const string NOESCAPEMESSAGE = "You are not logging in / Registering";
-
-void updateUserAccountCommands(User& user) {
-
-    Account &userAccount = user.getAccount();
-
-    if (userAccount.isLoggingIn || userAccount.isRegistering) {
-        user.addCommand(ESCAPE);
-        user.removeCommand(REGISTER, ESCAPEONLYMESSAGE);
-        user.removeCommand(LOGIN, ESCAPEONLYMESSAGE);
-    } else if (userAccount.isLoggedIn) {
-        user.removeCommand(ESCAPE, NOESCAPEMESSAGE);
-        user.addCommand(LOGOUT);
-    }
-}
-
-std::vector<Message> AccountService::updateUserState(const Message& message) {
-
-    User& user = message.user;
-    Account& userAccount = user.getAccount();
+std::vector<Message> AccountService::updateUserState(const Message& message, UserEventVariant event) {
+    Account& userAccount = message.user.getAccount();
 
     auto newState = std::visit(
-            [&](auto& state) -> std::optional<UserStateVariant>
+            [&](auto& state, auto& event) -> std::optional<UserStateVariant>
             {
-                return transitions(state, userAccount, message.text);
-            }, userAccount._state);
-    userAccount._state = *std::move(newState);
-
-    if(userAccount.isSubmittingRegistration) {
-
-        userAccount.isRegistering = false;
-        userAccount.isSubmittingRegistration = false;
-        userAccount.isLoggingIn = true; // On sucessful register
-        // fill this with db method
-    } else if (userAccount.isSubmittingLogin) {
-        // fill in with db method
-        userAccount.isLoggedIn = true;
-        userAccount.isLoggingIn = false;
-        userAccount.isSubmittingLogin = false;
+                return _transitions(state, event, userAccount, message.text);
+            }, userAccount._state, event);
+    if(newState) {
+        userAccount._state = *std::move(newState);
     }
 
-    updateUserAccountCommands(user);
-
-    return std::vector<Message>{ Message{message.user, transitions._currentUserResponseMessage} };
+    return std::vector<Message>{ Message{message.user, _transitions._currentUserResponseMessage} };
 }
 
 

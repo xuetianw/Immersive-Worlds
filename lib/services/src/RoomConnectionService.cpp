@@ -136,6 +136,14 @@ void RoomConnectionService::loadFromStorage() {
 
         _roomIdToNeighbours.try_emplace(jsonIdToUuid[jsonRoom._id], neighbours);
     }
+
+    // load minigame
+    for (const CusJson::MiniGame& minigame : _dataStorageService.getMiniGameList()._minigames) {
+        auto roomUuid = jsonIdToUuid.find(minigame._roomId);
+        if(roomUuid != jsonIdToUuid.end()) {
+            _roomIdToMiniGameConnectionsList.emplace(roomUuid->second, models::MiniGame(minigame));
+        }
+    }
 }
 
 void RoomConnectionService::buildNeighbours(const std::unordered_map<int, ID>& tmp, const CusJson::Room& jsonRoom,

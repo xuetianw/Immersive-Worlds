@@ -7,15 +7,6 @@
 
 #include "CommandProcessor.h"
 
-Message CommandProcessor::getDisabledCommandMessage(string keyword, User& user){
-    auto disableEnd = user.getDisabledCommands().end();
-    auto disableIter =  user.getDisabledCommands().find(_keywords.at(keyword));
-
-    string returnMessage = disableIter != disableEnd ? disableIter->second : "You cannot preform: " + keyword;
-
-    return Message{user, returnMessage};
-}
-
 bool CommandProcessor::isCommand(const Message& message) {
     std::pair commandMessagePair = splitCommand(message.text);
     return _keywords.find(commandMessagePair.first) != _keywords.end();
@@ -30,21 +21,21 @@ std::vector<Message> CommandProcessor::processCommand(const Message& message) {
     std::pair commandMessagePair = splitCommand(message.text);
 
     auto keywordIter = _keywords.find(commandMessagePair.first);
-    auto commandsIter = keywordIter!=_keywords.end() ? _commands.find(keywordIter->second) : _commands.end();
+    auto commandsIter = keywordIter != _keywords.end() ? _commands.find(keywordIter->second) : _commands.end();
 
     if(commandsIter != _commands.end()) {
-
         auto command = commandsIter->first;
         auto commandFunc = commandsIter->second;
 
-        if(message.user.canPreformCommand(command)){
+        if(message.user.canPreformCommand(command)) {
             return commandFunc(Message {message.user, commandMessagePair.second});
         } else {
-            return std::vector<Message>{ getDisabledCommandMessage(commandMessagePair.first, message.user) };
+            return std::vector<Message>{ Message {message.user, INVALID_INPUT_PROMPT} };
         }
     }
 
-    return std::vector<Message>{ Message{message.user, "Attempted Command Not Found."} };
+    Message msg = handleDefaultMessage(message);
+    return std::vector<Message>{ msg };
 }
 
 Message CommandProcessor::handleDefaultMessage(const Message& message) {
@@ -64,17 +55,16 @@ std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
     return std::pair<string,string>(keyCommand, remainder);
 }
 
-std::vector<Message> CommandProcessor::listAllowedCommands(const Message& message){
+std::vector<Message> CommandProcessor::listAvailableCommands(const Message& message) {
     std::stringstream output;
     auto allowedCommands = message.user.getAllowedCommands();
 
     output << "Allowed Commands: \n";
 
-    for(auto keywordCommandPair : _keywords){
-
+    for(auto& keywordCommandPair : _keywords) {
         auto command = keywordCommandPair.second;
         auto keyword = keywordCommandPair.first;
-        if(allowedCommands.find(command) != allowedCommands.end()){
+        if(allowedCommands.find(command) != allowedCommands.end()) {
             output << keyword << "\n";
         }
     }
@@ -89,6 +79,8 @@ void CommandProcessor::buildCommands() {
     addCommand("/register", REGISTER, [this] (Message message) { return accountController->startRegister(message); });
     addCommand("/escape", ESCAPE, [this] (Message message) { return accountController->escapeLogin(message); });
     addCommand("/move", MOVE, [this] (Message message) { return gameController->move(message); });
-    addCommand("/help", HELP, [this] (Message message) { return listAllowedCommands(message);});
+    addCommand("/minigame", MINIGAME, [this] (Message message) { return gameController->startMiniGame(message); });
+    addCommand("/answer", MINIGAME_ANSWER, [this] (Message message) { return gameController->verifyMinigameAnswer(message); });
+    addCommand("/help", HELP, [this] (Message message) { return listAvailableCommands(message);});
 }
 
