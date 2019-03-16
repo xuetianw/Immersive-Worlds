@@ -9,7 +9,7 @@ Message GameController::respondToMessage(const Message& message) {
 
     //For now, generate avatar id
     //TODO the avatar id should be retrieved from the database
-    ID avatarId = ID{};
+    int avatarId = random() % 100;
     user.getAccount().avatarId = avatarId;
 
     user.setCommandType(new GameCommands());
@@ -41,7 +41,7 @@ std::vector<Message> GameController::move(const Message& message) {
 }
 
 //TODO pass in avatar name
-const std::string GameController::spawnAvatarInStartingRoom(const ID& avatarId) {
+const std::string GameController::spawnAvatarInStartingRoom(const int& avatarId) {
     if (_gameService.spawnAvatarInStartingRoom(avatarId)) {
         return INITIAL_ROOM_START_MESSAGE;
     } else {
@@ -106,8 +106,8 @@ std::vector<Message> GameController::say(const Message& message) {
     ID roomId = _gameService.getRoomId(message.user.getAccount().avatarId);
 
     std::vector<Message> responses;
-    std::vector<ID> avatarIds = _gameService.getAllAvatarIds(roomId);
-    for(const ID& id : avatarIds) {
+    std::vector<int > avatarIds = _gameService.getAllAvatarIds(roomId);
+    for(const int & id : avatarIds) {
         User* user = findUser(id);
         if(user == nullptr) continue;
         responses.push_back(Message{*user, sayMessage});
@@ -116,7 +116,7 @@ std::vector<Message> GameController::say(const Message& message) {
 }
 
 
-User* GameController::findUser(const ID& avatarId){
+User* GameController::findUser(const int & avatarId){
     if(_avatarIdToUser.count(avatarId) == 0){
         return nullptr;
     }

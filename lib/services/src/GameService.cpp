@@ -29,7 +29,7 @@ string GameService::getCurrentRoomName(const Connection& connection) {
     return roomIter != _roomIdToRoom.end() ? roomIter->second.getName() : "";
 }
 
-bool GameService::spawnAvatarInStartingRoom(const ID& avatarId) {
+bool GameService::spawnAvatarInStartingRoom(const int& avatarId) {
     const ID& startingRoomID = _roomConnectionService.getStartingRoom();
 
     return _avatarService.generateAvatarFromAvatarId(avatarId, startingRoomID, "SOMENAME"); //TODO input avatar name
@@ -82,10 +82,10 @@ const Room& GameService::getUserRoom(const Connection& connection) {
 
 //========================= Avatar Service =============================
 
-std::vector<ID> GameService::getAllAvatarIds(ID roomId) {
+std::vector<int> GameService::getAllAvatarIds(ID roomId) {
     return _avatarService.getAllAvatarIds(roomId);
 };
 
-const ID& GameService::getRoomId(const ID& avatarId){
+const ID& GameService::getRoomId(const int& avatarId){
     return _avatarService.getRoomId(avatarId);
 };

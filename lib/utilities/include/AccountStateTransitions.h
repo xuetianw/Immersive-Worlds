@@ -14,7 +14,7 @@
 using string = std::string;
 
 ///////////////////////////////////////////USER-PROMPTS////////////////////////////////////////////
-constexpr char LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT[] = "Account Created! Please enter your new username: ";
+constexpr char ENTER_AVATAR_NAME_AFTER_REGISTRATION_PROMPT[] = "Account Created! Please enter the name of your avatar";
 constexpr char LOGIN_USERNAME_PROMPT[] = "Please enter your username to login: ";
 constexpr char LOGIN_USERNAME_FAILED_PROMPT[] = "Account does not exist!\nPlease enter a valid username: ";
 constexpr char LOGIN_PASSWORD_PROMPT[] = "Please enter your password: ";
@@ -34,6 +34,7 @@ constexpr char EMPTY_INPUT_PROMPT[] = "Invalid String - \n";
 struct RegisterUsernameState {};
 struct RegisterPasswordState {};
 struct ConnectedState {};
+struct RegisteringAvatarState{};
 struct LoginUsernameState {};
 struct LoginPasswordState {};
 struct LoggedInState {};
@@ -52,7 +53,8 @@ typedef std::variant<
         ConnectedState,
         LoginUsernameState,
         LoginPasswordState,
-        LoggedInState> UserStateVariant;
+        LoggedInState,
+        RegisteringAvatarState> UserStateVariant;
 
 //////////////////////////////////////////////EVENT-VARIANT////////////////////////////////////////
 typedef std::variant<
@@ -64,12 +66,13 @@ typedef std::variant<
 
 ///////////////////////////////////////////////USER////////////////////////////////////////////////
 struct Account {
-    ID avatarId;
+    int avatarId;
     std::string _username;
     std::string _password;
     std::string _registerUsername;
     std::string _registerPassword;
     bool isLoggedIn = false;
+    bool isRegisteringAvatar = false;
     UserStateVariant _state = ConnectedState {};
 };
 
@@ -128,7 +131,15 @@ struct AccountStateTransitions {
             return std::nullopt;
         }
 
-        _currentUserResponseMessage = LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT;
+        _currentUserResponseMessage = ENTER_AVATAR_NAME_AFTER_REGISTRATION_PROMPT;
+        account.isRegisteringAvatar = true;
+        return RegisteringAvatarState {};
+    }
+
+    std::optional<UserStateVariant> operator()(RegisteringAvatarState& state, const RegisterEvent& event, Account& account,  const string& message) {
+
+        _currentUserResponseMessage = "you have successfully registered your avatar\nplease enter your username";
+        account.isRegisteringAvatar = false;
         return LoginUsernameState {};
     }
 
@@ -145,12 +156,13 @@ struct AccountStateTransitions {
 
         account._username = message;
         _currentUserResponseMessage = LOGIN_PASSWORD_PROMPT;
-        return LoginPasswordState {};
+        return RegisteringAvatarState {};
     }
+
 
     std::optional<UserStateVariant> operator()(LoginUsernameState& state, const EscapeEvent& event, Account& account,  const string& message) {
         _currentUserResponseMessage = LOGGING_IN_ESCAPE_MESSAGE;
-        return ConnectedState {};
+        return LoginUsernameState {};
     }
 
     std::optional<UserStateVariant> operator()(LoginPasswordState& state, const UpdateEvent& event, Account& account, const string& message) {

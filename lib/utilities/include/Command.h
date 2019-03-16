@@ -15,7 +15,8 @@ enum Command {
     WHEREAMI,
     HELP,
     MINIGAME,
-    MINIGAME_ANSWER
+    MINIGAME_ANSWER,
+    Avatar
 };
 
 class CommandType {

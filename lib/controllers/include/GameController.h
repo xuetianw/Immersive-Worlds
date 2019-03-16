@@ -16,13 +16,11 @@ constexpr char WRONG_DIRECTION_MESSAGE[] = "wrong message for direction";
 
 class GameController : AbstractController {
 public:
-    GameController() : _gameService() {}
-
     std::vector<Message> move(const Message& message);
 
     Message respondToMessage(const Message& message) override;
 
-    const std::string spawnAvatarInStartingRoom(const ID& avatarId);
+    const std::string spawnAvatarInStartingRoom(const int& avatarId);
 
     /**
      * Creates a MiniGame based on the room.
@@ -60,9 +58,9 @@ private:
     GameService _gameService;
 
     //TODO make user a unique point
-    std::unordered_map<ID, User*> _avatarIdToUser;
+    std::unordered_map<int, User*> _avatarIdToUser;
 
-    User* findUser(const ID& avatarId);
+    User* findUser(const int & avatarId);
 
     std::vector<std::string> directions = {"east", "west", "south", "north"};
 

@@ -10,7 +10,7 @@ void Avatar::setRoomId(const ID& roomId) {
     _roomId = roomId;
 }
 
-const ID& models::Avatar::getAvatarId() const {
+const int & models::Avatar::getAvatarId() const {
     return _avatarId;
 }
 
