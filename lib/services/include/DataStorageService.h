@@ -45,6 +45,7 @@ public:
     SingleItem spawnObjectCopy(int jsonId);
 
     const CusJson::MiniGameList& getMiniGameList() const;
+    void resetObjectsToWorld(std::unordered_map<ID, models::Room>& roomIdToRoomMap);
 
 private:
     json getTestingArea();

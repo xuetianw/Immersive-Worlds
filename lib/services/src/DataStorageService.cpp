@@ -4,6 +4,8 @@
 
 #include "DataStorageService.h"
 #include <iostream>
+#include <DataStorageService.h>
+
 
 using CusJson::Area;
 
@@ -386,4 +388,18 @@ std::unordered_map<ID, std::vector<models::NeighbourInfo>> DataStorageService::g
 
 const CusJson::MiniGameList& DataStorageService::getMiniGameList() const {
     return _jsonMiniGameList;
+}
+
+void DataStorageService::resetObjectsToWorld(std::unordered_map<ID, models::Room>& roomIdToRoomMap) {
+    auto containerConfiguration = _jsonArea._containerWrappers;
+    for (auto container : containerConfiguration) {
+        auto roomQuery = roomIdToRoomMap.find(_jsonRoomIdToUuid.find(container._roomId)->second);
+        if (roomQuery != roomIdToRoomMap.end()) {
+            auto spawnedContainer = spawnObjectCopy(container._objectId);
+            for (auto containedItemId : container._containedObjectIds) {
+                spawnedContainer.getItemsInContainer().push_back(spawnObjectCopy(containedItemId));
+            }
+            roomQuery->second.addObject(spawnedContainer.getId(), spawnedContainer);
+        }
+    }
 }

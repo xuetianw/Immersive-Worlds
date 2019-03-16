@@ -114,16 +114,5 @@ void RoomConnectionService::loadFromStorage() {
 
     _roomIdToNeighbours = _dataStorageService.getRoomIdToNeighboursMapCopy();
 
-
-//    auto containerConfiguration = _dataStorageService.getJsonArea()._containerWrappers;
-//    for (auto container : containerConfiguration) {
-//        auto roomQuery = _roomIdToRoom.find(jsonIdToUuid.find(container._roomId)->second);
-//        if (roomQuery != _roomIdToRoom.end()) {
-//            auto spawnedContainer = _dataStorageService.spawnObjectCopy(container._objectId);
-//            for (auto containedItemId : container._containedObjectIds) {
-//                spawnedContainer.getItemsInContainer().push_back(_dataStorageService.spawnObjectCopy(containedItemId));
-//            }
-//            roomQuery->second.addObject(spawnedContainer.getId(), spawnedContainer);
-//        }
-//    }
+    _dataStorageService.resetObjectsToWorld(_roomIdToRoom);
 }
