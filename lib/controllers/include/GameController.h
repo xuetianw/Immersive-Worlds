@@ -48,11 +48,21 @@ public:
     std::vector<Message> outputCurrentLocationInfo(const Message& message);
 
 
+    /**
+    * Displays to the user message sent by another user in the same room
+    * @param message
+    * @return messages that will be sent to user in the same room
+    */
+    std::vector<Message> say(const Message& message);
+
+
 private:
     GameService _gameService;
 
     //TODO make user a unique point
     std::unordered_map<ID, User*> _avatarIdToUser;
+
+    User* findUser(const ID& avatarId);
 
     std::vector<std::string> directions = {"east", "west", "south", "north"};
 

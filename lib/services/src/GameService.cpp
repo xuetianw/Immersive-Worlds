@@ -79,3 +79,13 @@ const Room& GameService::getUserRoom(const Connection& connection) {
     // TODO: Implement the logic appropriately
     return std::move(Room());
 }
+
+//========================= Avatar Service =============================
+
+std::vector<ID> GameService::getAllAvatarIds(ID roomId) {
+    return _avatarService.getAllAvatarIds(roomId);
+};
+
+const ID& GameService::getRoomId(const ID& avatarId){
+    return _avatarService.getRoomId(avatarId);
+};

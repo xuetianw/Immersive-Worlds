@@ -79,6 +79,7 @@ void CommandProcessor::buildCommands() {
     addCommand("/register", REGISTER, [this] (Message message) { return accountController->startRegister(message); });
     addCommand("/escape", ESCAPE, [this] (Message message) { return accountController->escapeLogin(message); });
     addCommand("/move", MOVE, [this] (Message message) { return gameController->move(message); });
+    addCommand("/say", SAY, [this] (Message message) { return gameController->say(message); });
     addCommand("/minigame", MINIGAME, [this] (Message message) { return gameController->startMiniGame(message); });
     addCommand("/answer", MINIGAME_ANSWER, [this] (Message message) { return gameController->verifyMinigameAnswer(message); });
     addCommand("/help", HELP, [this] (Message message) { return listAvailableCommands(message);});

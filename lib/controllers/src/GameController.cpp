@@ -96,3 +96,30 @@ std::vector<Message> GameController::outputCurrentLocationInfo(const Message& me
 
     return response;
 }
+
+
+std::vector<Message> GameController::say(const Message& message) {
+
+    std::string sayMessage = message.user.getAccount()._username + " says: " + message.text;
+
+    //retrieve the room the sender avatar is in.
+    ID roomId = _gameService.getRoomId(message.user.getAccount().avatarId);
+
+    std::vector<Message> responses;
+    std::vector<ID> avatarIds = _gameService.getAllAvatarIds(roomId);
+    for(const ID& id : avatarIds) {
+        User* user = findUser(id);
+        if(user == nullptr) continue;
+        responses.push_back(Message{*user, sayMessage});
+    }
+    return responses;
+}
+
+
+User* GameController::findUser(const ID& avatarId){
+    if(_avatarIdToUser.count(avatarId) == 0){
+        return nullptr;
+    }
+    //return user associated with ID
+    return _avatarIdToUser[avatarId];
+};

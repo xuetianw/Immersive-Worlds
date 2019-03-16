@@ -16,7 +16,11 @@ public:
 
     bool generateAvatarFromAvatarId(const ID& avatarId, const ID& roomId, const std::string& avatarName);
 
-    const Avatar& getAvatarFromAvatarId(const ID& avatarId);
+    const Avatar& getAvatar(const ID& avatarId);
+
+    const ID& getRoomId(const ID& avatarId);
+
+    std::vector<ID> getAllAvatarIds(const ID& roomId);
 
 private:
     //map of Avatar IDs to Avatar objects
