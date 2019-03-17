@@ -157,7 +157,7 @@ struct AccountStateTransitions {
 
         account._username = message;
         _currentUserResponseMessage = LOGIN_PASSWORD_PROMPT;
-        return RegisteringAvatarState {};
+        return LoginPasswordState {};
     }
 
 
