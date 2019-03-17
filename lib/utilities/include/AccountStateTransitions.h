@@ -140,6 +140,11 @@ struct AccountStateTransitions {
     std::optional<UserStateVariant> operator()(RegisteringAvatarState& state, const RegisterEvent& event, Account& account,  const string& message) {
 
         _currentUserResponseMessage = LOGIN_AFTER_REGISTERING_AVATAR_PROMPT;
+//        std::unique_ptr avatar = std::make_unique<models::Avatar> ();
+//        avatar->setName(message);
+//        avatar->set_avatarId(ID());
+//        avatar->set_roomId(ID());
+        // store avatar Name-message, or roomId we need to discuss in the meeting. or in the database
         account.isRegisteringAvatar = false;
         return LoginUsernameState {};
     }

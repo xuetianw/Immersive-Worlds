@@ -57,7 +57,6 @@ public:
 private:
     GameService _gameService;
 
-    //TODO make user a unique point
     std::unordered_map<ID, User*> _avatarIdToUser;
 
     User* findUser(const ID & avatarId);

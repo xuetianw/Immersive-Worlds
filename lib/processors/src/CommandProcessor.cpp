@@ -40,7 +40,7 @@ std::vector<Message> CommandProcessor::processCommand(const Message& message) {
 
 Message CommandProcessor::handleDefaultMessage(const Message& message) {
     if (message.user.getAccount().isRegisteringAvatar) {
-        avatarController-> respondToMessage(message);
+//        avatarController-> respondToMessage(message);
         return accountController->respondToMessage(message);
     } else {
         Message accountControllerResponse = accountController->respondToMessage(message);

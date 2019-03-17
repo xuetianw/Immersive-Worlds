@@ -12,10 +12,7 @@ std::vector<Message> AvatarController::registerAvatar(const Message& message) {
 }
 
 Message AvatarController::respondToMessage(const Message& message) {
-    avatarService.generateAvatarFromAvatarId(ID(), message.text);
-    return message;
-}
 
-std::atomic<int> AvatarController::nextid() {
-    return std::atomic<int>();
+//    avatarService.generateAvatarFromAvatarId(ID(), message.text);
+    return message;
 }

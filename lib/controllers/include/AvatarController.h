@@ -18,7 +18,6 @@ public:
 
 private:
     AvatarService avatarService;
-    std::atomic<int> nextid();
 };
 
 #endif //WEBSOCKETNETWORKING_AVATARCONTROLLER_H

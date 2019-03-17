@@ -14,7 +14,6 @@ Message GameController::respondToMessage(const Message& message) {
 
     user.setCommandType(new GameCommands());
 
-    //TODO make user a unique_ptr
     _avatarIdToUser.try_emplace(avatarId, &user);
 
     string responseText = message.text + spawnAvatarInStartingRoom(avatarId);
@@ -40,7 +39,6 @@ std::vector<Message> GameController::move(const Message& message) {
     return std::vector<Message>{newMessage};
 }
 
-//TODO pass in avatar name
 const std::string GameController::spawnAvatarInStartingRoom(const ID& avatarId) {
     if (_gameService.spawnAvatarInStartingRoom(avatarId)) {
         return INITIAL_ROOM_START_MESSAGE;
