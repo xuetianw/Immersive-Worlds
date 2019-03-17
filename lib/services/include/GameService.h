@@ -36,7 +36,7 @@ public:
 
     bool userYell(const User& user, const string& messageString);
 
-    bool spawnAvatarInStartingRoom(const int& avatarId);
+    bool spawnAvatarInStartingRoom(const ID& avatarId);
 
     bool spawnUserInRoom(const Connection& connection, const ID& id);
 
@@ -55,9 +55,9 @@ public:
     bool verifyAnswer(const User& user, const int input);
 
 
-    std::vector<int> getAllAvatarIds(ID roomId);
+    std::vector<ID> getAllAvatarIds(ID roomId);
 
-    const ID& getRoomId(const int& avatarId);
+    const ID& getRoomId(const ID& avatarId);
 
 private:
     std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;

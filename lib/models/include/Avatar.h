@@ -15,13 +15,13 @@ namespace models {
 //            _name(std::move(name)) {
 //        }
 
-        Avatar(int avatarID, std::string name) :
+        Avatar(ID avatarID, std::string name) :
                 _avatarId(avatarID),
                 _name(std::move(name)) {
         }
 
 
-        Avatar(int avatar, ID roomId, std::string name) :
+        Avatar(ID avatar, ID roomId, std::string name) :
             _avatarId(avatar),
             _roomId(roomId),
             _name(std::move(name)) {
@@ -31,14 +31,14 @@ namespace models {
 
         void setRoomId(const ID& roomId);
 
-        const int& getAvatarId() const;
+        const ID& getAvatarId() const;
 
         const std::string& getName() const;
 
         void setName(const std::string& _name);
 
     private:
-        int _avatarId;
+        ID _avatarId;
         ID _roomId;
         std::string _name;
     };

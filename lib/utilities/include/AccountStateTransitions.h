@@ -29,6 +29,7 @@ constexpr char LOGGED_IN_PROMPT[] = "Successfully logged in!\n";
 constexpr char LOGGED_OUT_PROMPT[] = "Logged out Successfully!\n";
 constexpr char INVALID_INPUT_PROMPT[] = "Please enter a valid command!\n";
 constexpr char EMPTY_INPUT_PROMPT[] = "Invalid String - \n";
+constexpr char LOGIN_AFTER_REGISTERING_AVATAR_PROMPT[] = "you have successfully registered your avatar\nplease enter your username";
 
 ///////////////////////////////////////////USER-STATES/////////////////////////////////////////////
 struct RegisterUsernameState {};
@@ -66,7 +67,7 @@ typedef std::variant<
 
 ///////////////////////////////////////////////USER////////////////////////////////////////////////
 struct Account {
-    int avatarId;
+    ID avatarId;
     std::string _username;
     std::string _password;
     std::string _registerUsername;
@@ -138,7 +139,7 @@ struct AccountStateTransitions {
 
     std::optional<UserStateVariant> operator()(RegisteringAvatarState& state, const RegisterEvent& event, Account& account,  const string& message) {
 
-        _currentUserResponseMessage = "you have successfully registered your avatar\nplease enter your username";
+        _currentUserResponseMessage = LOGIN_AFTER_REGISTERING_AVATAR_PROMPT;
         account.isRegisteringAvatar = false;
         return LoginUsernameState {};
     }

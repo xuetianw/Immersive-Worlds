@@ -4,7 +4,7 @@
  * PUBLIC
  */
 
-bool AvatarService::generateAvatarFromAvatarId(const int& avatarId, const ID& roomId, const std::string& avatarName) {
+bool AvatarService::generateAvatarFromAvatarId(const ID& avatarId, const ID& roomId, const std::string& avatarName) {
     if (_avatars.count(avatarId) != 0) {
         return false;
     }
@@ -17,26 +17,26 @@ bool AvatarService::generateAvatarFromAvatarId(const int& avatarId, const ID& ro
 }
 
 
-bool AvatarService::generateAvatarFromAvatarId(int id, const std::string& avatarName) {
+bool AvatarService::generateAvatarFromAvatarId(const ID &id, const std::string& avatarName) {
     _avatars.insert(std::make_pair(id, std::make_unique<models::Avatar>(id, avatarName)));
     return false;
 }
 
 
 
-const models::Avatar& AvatarService::getAvatar(const int& avatarId) {
+const models::Avatar& AvatarService::getAvatar(const ID& avatarId) {
     models::Avatar& avatar = *(_avatars.at(avatarId));
 
     return avatar;
 }
 
-const ID& AvatarService::getRoomId(const int& avatarId){
+const ID& AvatarService::getRoomId(const ID& avatarId){
     return _avatars.at(avatarId)->getRoomId();
 }
 
 
-std::vector<int> AvatarService::getAllAvatarIds(const ID& roomId) {
-    std::vector<int> avatarIdsInRoom;
+std::vector<ID> AvatarService::getAllAvatarIds(const ID& roomId) {
+    std::vector<ID> avatarIdsInRoom;
 
     for(auto const& [id, avatar] : _avatars){
         if(avatar->getRoomId() == roomId){

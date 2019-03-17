@@ -20,7 +20,7 @@ public:
 
     Message respondToMessage(const Message& message) override;
 
-    const std::string spawnAvatarInStartingRoom(const int& avatarId);
+    const std::string spawnAvatarInStartingRoom(const ID& avatarId);
 
     /**
      * Creates a MiniGame based on the room.
@@ -58,9 +58,9 @@ private:
     GameService _gameService;
 
     //TODO make user a unique point
-    std::unordered_map<int, User*> _avatarIdToUser;
+    std::unordered_map<ID, User*> _avatarIdToUser;
 
-    User* findUser(const int & avatarId);
+    User* findUser(const ID & avatarId);
 
     std::vector<std::string> directions = {"east", "west", "south", "north"};
 

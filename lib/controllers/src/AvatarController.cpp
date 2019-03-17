@@ -4,13 +4,15 @@
 
 
 #include "AvatarController.h"
+#include <boost/lexical_cast.hpp>
+
 
 std::vector<Message> AvatarController::registerAvatar(const Message& message) {
     return std::vector<Message>();
 }
 
 Message AvatarController::respondToMessage(const Message& message) {
-    avatarService.generateAvatarFromAvatarId(nextid(), message.text);
+    avatarService.generateAvatarFromAvatarId(ID(), message.text);
     return message;
 }
 
