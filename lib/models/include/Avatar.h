@@ -31,10 +31,26 @@ namespace models {
 
         void setName(const std::string& _name);
 
+        int get_hp() const;
+
+        int get_mana() const;
+
+        int getDamageOutput() const;
+
+        void set_hp(int _hp);
+
+        void set_mana(int _mana);
+
+        void setDamageOutput(int damageOutput);
+
+
     private:
         ID _avatarId;
         ID _roomId;
         std::string _name;
+        int _hp ;
+        int _mana ;
+        int damageOutput;
     };
 }
 
