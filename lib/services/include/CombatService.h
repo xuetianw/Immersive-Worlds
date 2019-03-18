@@ -17,7 +17,6 @@ struct combatRound{
     int roundNumber;
     int damageDealtByPlayer;
     int damageDealtByNPC;
-
 };
 
 
@@ -31,8 +30,8 @@ private:
     static int fightsInitialized;
 
     vector<combatRound> rounds;
-    Avatar player;
-    Avatar NPC;
+    Avatar& player;
+    Avatar& NPC;
     Room battleRoom;
 
     //obtain value from global config file

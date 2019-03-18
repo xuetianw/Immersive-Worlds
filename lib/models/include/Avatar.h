@@ -33,15 +33,16 @@ namespace models {
 
         int get_hp() const;
 
-        void set_hp(int _hp);
-
         int get_mana() const;
+
+        int getDamageOutput() const;
+
+        void set_hp(int _hp);
 
         void set_mana(int _mana);
 
         void setDamageOutput(int damageOutput);
 
-        int getDamageOutput() const;
 
     private:
         ID _avatarId;
