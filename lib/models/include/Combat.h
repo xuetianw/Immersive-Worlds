@@ -29,10 +29,7 @@ private:
 
 public:
 
-    Combat(Avatar &player, Avatar &NPC) :
-    _player(player),
-    _NPC(NPC),
-    combatId(ID{}){}
+    Combat(Avatar &player, Avatar &NPC);
 
     /*
      * attacks an NPC
@@ -74,7 +71,7 @@ public:
 
     bool isCombatInProgress() const;
 
-    void setCombatInProgress(bool combatInProgress);
+    void setCombatInProgress();
 
 };
 
