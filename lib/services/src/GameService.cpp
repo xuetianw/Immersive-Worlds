@@ -23,7 +23,9 @@ bool GameService::moveAvatar(const ID& avatarId, const string& directionString) 
         return false;
     }
 
-    return _avatarService.setAvatarRoomId(avatarId, neighbourIdOptional.value());
+    bool didAvatarMove = _avatarService.setAvatarRoomId(avatarId, neighbourIdOptional.value());
+
+    return didAvatarMove;
 }
 
 bool GameService::userYell(const User& user, const std::string& messageString) {

@@ -73,7 +73,7 @@ public:
 
 private:
     std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;
-    std::unordered_map<ID, Room> _roomIdToRoom;
+    std::unordered_map<ID, Room> _roomIdToRoom; //TODO remove
     std::unordered_map<Connection, ID, ConnectionHash> _connectionToRoomId; //TODO remove
 
     DataStorageService _dataStorage;
