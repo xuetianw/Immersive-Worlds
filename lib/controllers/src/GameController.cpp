@@ -126,6 +126,19 @@ std::vector<Message> GameController::outputCurrentLocationInfo(const Message& me
     return std::vector<Message>{responseMessage};
 }
 
+//combat methods
+std::vector<Message> GameController::attackNPC(const Message &message) {
+
+
+    //attack NPC and return a response (current HP, damage dealt, etc)
+
+
+    return std::vector<Message>();
+}
+
+std::vector<Message> GameController::fleeCombat(const Message &message) {
+    return std::vector<Message>();
+}
 
 std::vector<Message> GameController::say(const Message& message) {
 
