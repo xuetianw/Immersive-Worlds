@@ -79,6 +79,103 @@ json DataStorageService::getTestingArea() {
         "There is a large bat here."
       ],
       "description": []
+    },
+    {
+      "id": 10538,
+      "keywords": [
+        "Lexie"
+      ],
+      "shortdesc": "Lexie",
+      "longdesc": [
+        "Lexie is here."
+      ],
+      "description": [
+        "Lexie is an accomplish diver. But he seems to have problems keeping",
+        "students."
+      ]
+    }
+  ],
+  "OBJECTS": [
+    {
+      "id": 10500,
+      "keywords": [
+        "chamorro",
+        "ringmail"
+      ],
+      "shortdesc": "chamorro ringmail",
+      "longdesc": [
+        "A bunch of rings sewn together with taotamoa bark is on the ground."
+      ],
+      "extra": [
+        {
+          "keywords": [
+            "ringmail"
+          ],
+          "desc": [
+            "This armor is imported from the island of Guam."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10501,
+      "keywords": [
+        "Mcbread"
+      ],
+      "shortdesc": "mcbread",
+      "longdesc": [
+        "A Mcloaf of Mcbread has been left here."
+      ],
+      "extra": []
+    },
+    {
+      "id": 10502,
+      "keywords": [
+        "enchanted",
+        "two-handed",
+        "sword"
+      ],
+      "shortdesc": "enchanted two-handed sword",
+      "longdesc": [
+        "A large two-handed sword with runes etched in it is on the floor."
+      ],
+      "extra": []
+    },
+    {
+      "id": 10562,
+      "keywords": [
+        "safe",
+        "deposit",
+        "box"
+      ],
+      "shortdesc": "safe deposit box",
+      "longdesc": [
+        "A strong metal box is embedded in the wall."
+      ],
+      "extra": [
+        {
+          "keywords": [
+            "safe",
+            "deposit",
+            "box"
+          ],
+          "desc": [
+            "You see a strong metal box used to keep the town deposits in."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10563,
+      "keywords": [
+        "gold",
+        "coins"
+      ],
+      "shortdesc": "alot of gold coins.",
+      "longdesc": [
+        "A lot of gold is here."
+      ],
+      "extra": []
     }
   ],
   "ROOMS": [
@@ -170,8 +267,45 @@ json DataStorageService::getTestingArea() {
       ],
       "extended_descriptions": []
     }
-
-]})"_json;
+  ],
+  "RESETS": [
+    {
+      "action": "npc",
+      "id": 10538,
+      "limit": 1,
+      "room": 10500
+    },
+    {
+      "action": "give",
+      "id": 10500
+    },
+    {
+      "action": "give",
+      "id": 10501
+    },
+    {
+      "action": "equip",
+      "id": 10502,
+      "slot": 16
+    },
+    {
+      "action": "door",
+      "id": 0,
+      "room": 10609,
+      "state": "locked"
+    },
+    {
+      "action": "object",
+      "id": 10562,
+      "room": 10500
+    },
+    {
+      "action": "put",
+      "id": 10563,
+      "container": 10562
+    }
+  ]
+})"_json;
     return j;
 }
 
