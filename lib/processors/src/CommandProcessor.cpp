@@ -88,6 +88,8 @@ void CommandProcessor::buildCommands() {
     addCommand("/say", SAY, [this] (Message message) { return gameController->say(message); });
     addCommand("/minigame", MINIGAME, [this] (Message message) { return gameController->startMiniGame(message); });
     addCommand("/answer", MINIGAME_ANSWER, [this] (Message message) { return gameController->verifyMinigameAnswer(message); });
+    addCommand("/attack", ATTACK, [this] (Message message) { return gameController->attackNPC(message);});
+    addCommand("/flee", FLEE, [this] (Message message) { return gameController->fleeCombat(message);});
     addCommand("/help", HELP, [this] (Message message) { return listAvailableCommands(message);});
     addCommand("/directions", DIRECTIONS, [this](Message message) { return gameController->listDirections(message); });
     addCommand("/avatar", AVATAR_INFO, [this] (Message message) { return gameController->displayAvatarInfo(message);});

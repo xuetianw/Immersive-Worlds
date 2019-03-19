@@ -49,6 +49,22 @@ public:
      */
     std::vector<Message> verifyMinigameAnswer(const Message& message);
 
+    /*
+     * Start a combat session with an NPC
+     * OR
+     * continue combat session
+     * @param message
+     * @return the message that will be displayed
+     */
+    std::vector<Message> attackNPC(const Message& message);
+
+    /*
+     * Escape/Flee combat
+     * @param message
+     * @return the message that will be displayed
+     */
+    std::vector<Message> fleeCombat(const Message& message);
+
     /**
      * Displays to the user info about their current location.
      * @param message
