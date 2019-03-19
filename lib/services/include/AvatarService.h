@@ -14,9 +14,17 @@ public:
 
     }
 
+    //creates an avatar and adds it to the avatar map
     bool generateAvatarFromAvatarId(const ID& avatarId, const ID& roomId, const std::string& avatarName);
 
-    const Avatar& getAvatar(const ID& avatarId);
+    //Returns an Avatar object of an avatarId
+    const std::optional<std::reference_wrapper<const models::Avatar>> getAvatarFromAvatarId(const ID& avatarId);
+
+    //sets the room for an avatar
+    bool setAvatarRoomId(const ID& avatarId, const ID& roomId);
+
+    //checks avatars map if avatarId exists
+    bool doesAvatarExist(const ID& avatarId);
 
     const ID& getRoomId(const ID& avatarId);
 
@@ -27,6 +35,7 @@ private:
     std::unordered_map<ID, std::unique_ptr<Avatar>> _avatars;
     DataStorageService _dataStorageService;
 
+    //TODO implement
     void loadFromStorage();
 };
 
