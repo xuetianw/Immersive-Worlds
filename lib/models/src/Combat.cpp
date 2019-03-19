@@ -14,7 +14,6 @@ void Combat::attackNpc() {
         _NPC.set_hp(0);
     else
         _NPC.set_hp(updated_NPCHealth);
-
 }
 
 void Combat::receiveDamage() {
@@ -27,16 +26,15 @@ void Combat::receiveDamage() {
         _player.set_hp(updatedPlayerHealth);
 }
 
-/*
- * structured this way because we attack first
- * and only if the _NPC is alive do we receive damage
- */
+
 void Combat::fightRound() {
 
     attackNpc();
     if(!isCombatActive()){
         //_NPC is dead, cannot attack dead Avatar
         combatInProgress = false;
+        //NPC is dead, cannot attack dead Avatar
+
     }
     receiveDamage();
 
@@ -45,7 +43,9 @@ void Combat::fightRound() {
         combatInProgress = false;
     }
     ++roundCount;
-}
+
+    }
+
 
 void Combat::displayCombatInfo() {
 
@@ -74,6 +74,8 @@ bool Combat::isCombatInProgress() const {
     return combatInProgress;
 }
 
-void Combat::setCombatInProgress(bool combatInProgress) {
-    Combat::combatInProgress = combatInProgress;
+void Combat::setCombatInProgress() {
+    if((_player.get_hp() > 0 && _NPC.get_hp() > 0))
+        Combat::combatInProgress = true;
+
 }
