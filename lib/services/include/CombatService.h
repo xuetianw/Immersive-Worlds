@@ -11,6 +11,7 @@
 #include "Room.h"
 #include "Avatar.h"
 #include "Combat.h"
+using namespace models;
 
 using namespace std;
 using namespace models;
@@ -19,22 +20,23 @@ using namespace models;
 /*
  * class for combat logic
  */
-class CombatLogic{
+class CombatService{
 
 private:
 
-    static int fightsInitialized;
+    int fightsInitialized;
 
     //obtain value from global config file
     const static int heartBeatCount = 100;
 
-    //data structure to map an Avatar (user) to hiss/her own combat
-    static map<Avatar, Combat> combatMap;
+    //data structure to map user Avatar to his/her own combat
+
+    map<ID, Combat> combatMap;
 
 public:
 
-
-
+    void createCombat(Avatar &player, Avatar& NPC);
+    void destroyCombat(Avatar &player);
 };
 
 #endif //WEBSOCKETNETWORKING_COMBATSERVICE_H

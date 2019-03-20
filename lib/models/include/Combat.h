@@ -20,14 +20,19 @@ class Combat{
 
 private:
 
-    Avatar& player;
-    Avatar& NPC;
+    ID combatId;
+    Avatar& _player;
+    Avatar& _NPC;
     Room battleRoom;
     int roundCount;
+    bool combatInProgress = true;
 
 public:
 
-    Combat(Avatar &player, Avatar &NPC);
+    Combat(Avatar &player, Avatar &NPC) :
+    _player(player),
+    _NPC(NPC),
+    combatId(ID{}){}
 
     /*
      * attacks an NPC
@@ -59,6 +64,14 @@ public:
     bool isCombatActive();
 
     void updateRoundCount();
+
+    int getRoundCount() const;
+
+    void setRoundCount(int roundCount);
+
+    bool isCombatInProgress() const;
+
+    void setCombatInProgress(bool combatInProgress);
 
 };
 
