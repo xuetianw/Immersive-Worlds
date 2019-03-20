@@ -29,7 +29,10 @@ private:
 
 public:
 
-    Combat(Avatar &player, Avatar &NPC);
+    Combat(Avatar &player, Avatar &NPC) :
+    _player(player),
+    _NPC(NPC),
+    combatId(ID{}){}
 
     /*
      * attacks an NPC
@@ -65,12 +68,14 @@ public:
     //player and npc enter combat state by updating Avatar state
     void enterCombat();
 
+
     int getRoundCount() const;
 
     void setRoundCount(int roundCount);
 
     bool isCombatInProgress() const;
 
+    void setCombatInProgress();
     void setCombatInProgress();
 
 };

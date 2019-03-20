@@ -26,7 +26,10 @@ void Combat::receiveDamage() {
         _player.set_hp(updatedPlayerHealth);
 }
 
-
+/*
+ * structured this way because we attack first
+ * and only if the _NPC is alive do we receive damage
+ */
 void Combat::fightRound() {
 
     attackNpc();
@@ -43,9 +46,7 @@ void Combat::fightRound() {
         combatInProgress = false;
     }
     ++roundCount;
-
-    }
-
+}
 
 void Combat::displayCombatInfo() {
 
@@ -75,7 +76,6 @@ bool Combat::isCombatInProgress() const {
 }
 
 void Combat::setCombatInProgress() {
-    if((_player.get_hp() > 0 && _NPC.get_hp() > 0))
+    if ((_player.get_hp() > 0 && _NPC.get_hp() > 0))
         Combat::combatInProgress = true;
-
 }
