@@ -6,6 +6,9 @@
 #define WEBSOCKETNETWORKING_GAMECONTROLLER_H
 
 #include "GameActions.h"
+#include "GameService.h"
+#include "CombatService.h"
+#include "AbstractController.h"
 #include "MiniGame.h"
 
 constexpr char INITIAL_ROOM_START_MESSAGE[] = "User has spawned in initial room";
@@ -97,6 +100,8 @@ private:
 
     // Actions
     GameActions _gameActions;
+    GameService _gameService;
+    CombatService _combatService;
 
     std::unordered_map<ID, User*> _avatarIdToUser;
 

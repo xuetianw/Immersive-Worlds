@@ -2,24 +2,23 @@
 // Created by Nirag Mehta on 2019-03-12.
 //
 
+#include <CombatService.h>
+
 #include "CombatService.h"
 
-static int fightsInitialized = 0;
+void CombatService::createCombat(Avatar& player, Avatar& NPC) {
 
-//getters and setters
+    if(combatMap.find(player.getAvatarId()) == combatMap.end()){
 
- Avatar &CombatLogic::getPlayer(){
-    return player;
+        //create Combat
+        Combat combat{player, NPC};
+        combatMap.insert(std::pair<ID ,Combat>(player.getAvatarId(), combat));
+    }
+
+    ++fightsInitialized;
 }
 
-void CombatLogic::setPlayer(const Avatar &player) {
-    CombatLogic::player = player;
-}
-
-Avatar &CombatLogic::getNPC(){
-    return NPC;
-}
-
-void CombatLogic::setNPC(const Avatar &NPC) {
-    CombatLogic::NPC = NPC;
+void CombatService::destroyCombat(Avatar &player) {
+    //removes combat object from map
+    combatMap.erase(player.getAvatarId());
 }
