@@ -59,6 +59,12 @@ public:
     */
     std::vector<Message> say(const Message& message);
 
+    /**
+     * Displays to the user the available directions for their avatar
+     * @param message
+     * @return a list of available directions
+     */
+    std::vector<Message> listDirections(const Message& message);
 
 private:
     GameService _gameService;
