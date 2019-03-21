@@ -1,7 +1,9 @@
 //
 // Created by asim on 07/02/19.
 //
+
 #include "GameController.h"
+#include "Helper.h"
 
 //Upon successful login
 Message GameController::respondToMessage(const Message& message) {
@@ -37,6 +39,20 @@ std::vector<Message> GameController::move(const Message& message) {
 
     return std::vector<Message>{responseMessage};
 }
+
+std::vector<Message> GameController::listDirections(const Message& message) {
+    const ID& avatarId = message.user.getAccount().avatarId;
+    Message responseMessage{message.user};
+    string responseText = "Available directions are: ";
+
+    std::vector<string> directionStrings = _gameService.getDirectionsForAvatarId(avatarId);
+
+    responseText += helper::convertListToString(directionStrings);
+
+    responseMessage.text = responseText;
+
+    return std::vector<Message>{responseMessage};
+};
 
 //TODO pass in avatar name
 const std::string GameController::spawnAvatarInStartingRoom(const ID& avatarId) {
@@ -102,11 +118,13 @@ std::vector<Message> GameController::say(const Message& message) {
     return responses;
 }
 
-
+/*
+ * PRIVATE
+ */
 User* GameController::findUser(const ID& avatarId){
     if(_avatarIdToUser.count(avatarId) == 0){
         return nullptr;
     }
     //return user associated with ID
     return _avatarIdToUser[avatarId];
-};
+}

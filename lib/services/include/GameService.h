@@ -44,6 +44,13 @@ public:
     bool userYell(const User& user, const string& messageString);
 
     /**
+     * Get a list of directions available for the Avatar
+     * @param avatarId
+     * @return vector of directions.
+     */
+    std::vector<string> getDirectionsForAvatarId(const ID& avatarId);
+
+    /**
      * Spawns avatar in starting room.
      * @param avatarId
      * @return true if avatar does not already exist. false otherwise

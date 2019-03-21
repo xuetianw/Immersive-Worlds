@@ -15,7 +15,8 @@ enum Command {
     WHEREAMI,
     HELP,
     MINIGAME,
-    MINIGAME_ANSWER
+    MINIGAME_ANSWER,
+    DIRECTIONS
 };
 
 class CommandType {
@@ -43,7 +44,8 @@ public:
             WHEREAMI,
             SAY,
             LOGOUT,
-            HELP
+            HELP,
+            DIRECTIONS
         };
     }
 };
