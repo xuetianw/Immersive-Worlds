@@ -11,6 +11,7 @@ enum Command {
     ESCAPE,
     LOGOUT,
     MOVE,
+    SAY,
     WHEREAMI,
     HELP,
     MINIGAME,
@@ -40,6 +41,7 @@ public:
         return {
             MOVE,
             WHEREAMI,
+            SAY,
             LOGOUT,
             HELP
         };

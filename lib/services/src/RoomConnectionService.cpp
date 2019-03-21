@@ -40,11 +40,12 @@ const std::optional<std::string> RoomConnectionService::getRoomDescription(const
     return std::optional<std::string>{descriptionString};
 }
 
-const ID* RoomConnectionService::getNeighbourId(const ID& roomId, const std::string& directionString) {
+const std::optional<std::reference_wrapper<const ID>>
+RoomConnectionService::getNeighbourId(const ID& roomId, const std::string& directionString) {
     if (!isValidDirectionString(directionString)
         || !doesRoomExist(roomId)
         || _roomIdToNeighbours.count(roomId) == 0) {
-        return nullptr;
+        return std::nullopt;
     }
 
     const models::Direction direction = _directions.at(directionString);
@@ -56,10 +57,12 @@ const ID* RoomConnectionService::getNeighbourId(const ID& roomId, const std::str
 
     if (neighbour == neighbours.end()) {
         //no matching neighbour
-        return nullptr;
+        return std::nullopt;
     }
 
-    return &(*neighbour).destinationRoomId;
+    const ID& destinationRoomId = (*neighbour).destinationRoomId;
+
+    return std::optional<std::reference_wrapper<const ID>>{destinationRoomId};
 }
 
 const std::vector<std::string> RoomConnectionService::getAvailableRoomDirections(const ID& roomId) {

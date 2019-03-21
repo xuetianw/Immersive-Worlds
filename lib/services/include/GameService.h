@@ -32,15 +32,27 @@ public:
 
     }
 
-    bool moveUser(const User& user, const string& keywordString);
+    /**
+     * Changes the roomID of an avatar to the room in the direction of the avatar's current room.
+     * Direction should be valid for the current avatar's room.
+     * @param avatarId
+     * @param directionString
+     * @return true if successfully changed avatar's room id. false otherwise.
+     */
+    bool moveAvatar(const ID& avatarId, const std::string& directionString);
 
     bool userYell(const User& user, const string& messageString);
 
+    /**
+     * Spawns avatar in starting room.
+     * @param avatarId
+     * @return true if avatar does not already exist. false otherwise
+     */
     bool spawnAvatarInStartingRoom(const ID& avatarId);
 
-    bool spawnUserInRoom(const Connection& connection, const ID& id);
-
     string getCurrentRoomName(const Connection& connection);
+
+    std::optional<std::string> getAvatarRoomName(const ID& avatarId);
 
     /** 
      * Get the current minigame available in this room
@@ -58,19 +70,19 @@ public:
      */
     bool verifyAnswer(const User& user, const int input);
 
+
+    std::vector<ID> getAllAvatarIds(ID roomId);
+
+    const ID& getRoomId(const ID& avatarId);
+
 private:
     std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;
-    std::unordered_map<ID, Room> _roomIdToRoom;
-    std::unordered_map<Connection, ID, ConnectionHash> _connectionToRoomId;
-    std::unordered_map<ID, std::vector<RoomConnection> > _roomIdToRoomConnectionsList;
+    std::unordered_map<ID, Room> _roomIdToRoom; //TODO remove
+    std::unordered_map<Connection, ID, ConnectionHash> _connectionToRoomId; //TODO remove
 
     DataStorageService _dataStorage;
     RoomConnectionService _roomConnectionService;
     AvatarService _avatarService;
-
-    const Room* getRoomByName(const string& roomName) const;
-
-    const Room& getUserRoom(const Connection& connection);
 };
 
 #endif //WEBSOCKETNETWORKING_GAMESERVICE_H

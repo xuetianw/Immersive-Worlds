@@ -28,6 +28,7 @@ add_executable(run_tests
     controllers/GameControllerTests.cpp
     models/InventoryTests.cpp
     models/RoomTests.cpp
+    services/CombatServiceTest.cpp
   )
 
 

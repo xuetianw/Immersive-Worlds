@@ -20,7 +20,8 @@ public:
     const std::optional<std::string> getRoomDescription(const ID& roomId);
 
     //Get the ID of a the neighbour of a room in a specific direction
-    const ID* getNeighbourId(const ID& roomId, const std::string& directionString);
+    const std::optional<std::reference_wrapper<const ID>>
+    getNeighbourId(const ID& roomId, const std::string& directionString);
 
     //Return a vector of direction strings available for a room
     const std::vector<std::string> getAvailableRoomDirections(const ID& roomId);

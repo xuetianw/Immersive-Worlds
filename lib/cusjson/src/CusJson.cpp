@@ -8,9 +8,6 @@
 using json = nlohmann::json;
 
 namespace CusJson {
-    JsonDoor::JsonDoor() {}
-
-    ExtDesc::ExtDesc() {}
 
     void to_json(json& j, const JsonDoor& door) {
         //TODO implement
@@ -136,7 +133,7 @@ namespace CusJson {
     //Manual checking/parse is required for resets, See doc/JsonStructureDocument for more info
     void parseResetJsonToArea(const json& resetJson, Area& area) {
         for (json resetJsonObject : resetJson) {
-            auto actionString = resetJsonObject["action"].get<std::__cxx11::string>();
+            auto actionString = resetJsonObject["action"].get<std::string>();
             if (actionString == "npc") {
                 area._npcsWrappers.push_back(NPCJsonWrapper(
                         resetJsonObject["id"].get<int>(),
@@ -152,9 +149,9 @@ namespace CusJson {
                 });
             } else if (actionString == "door") {
                 area._doorStateWrappers.push_back(DoorStateJsonWrapper(
-                        resetJsonObject["id"].get<int>(),
-                        resetJsonObject["room"].get<int>(),
-                        resetJsonObject["state"].get<std::__cxx11::string>()
+                    resetJsonObject["id"].get<int>(),
+                    resetJsonObject["room"].get<int>(),
+                    resetJsonObject["state"].get<std::string>()
                 ));
             } else if (actionString == "object") {
                 area._containerWrappers.push_back(ContainerJsonWrapper(

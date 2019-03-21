@@ -18,6 +18,12 @@ class GameController : AbstractController {
 public:
     GameController() : _gameService() {}
 
+    /**
+     * Calls GameService to Move Avatar.
+     * Current Directions are north, east, south, west
+     * @param message
+     * @return response message
+     */
     std::vector<Message> move(const Message& message);
 
     Message respondToMessage(const Message& message) override;
@@ -38,8 +44,6 @@ public:
      */
     std::vector<Message> verifyMinigameAnswer(const Message& message);
 
-    void spawnUserInRoom(User& user, ID roomId);
-
     /**
      * Displays to the user info about their current location.
      * @param message
@@ -48,15 +52,21 @@ public:
     std::vector<Message> outputCurrentLocationInfo(const Message& message);
 
 
+    /**
+    * Displays to the user message sent by another user in the same room
+    * @param message
+    * @return messages that will be sent to user in the same room
+    */
+    std::vector<Message> say(const Message& message);
+
+
 private:
     GameService _gameService;
 
     //TODO make user a unique point
     std::unordered_map<ID, User*> _avatarIdToUser;
 
-    std::vector<std::string> directions = {"east", "west", "south", "north"};
-
-    bool checkIsDirectionMessage(const Message& message);
+    User* findUser(const ID& avatarId);
 };
 
 #endif //WEBSOCKETNETWORKING_GAMECONTROLLER_H
