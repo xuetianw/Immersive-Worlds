@@ -28,6 +28,27 @@ bool GameService::moveAvatar(const ID& avatarId, const string& directionString) 
     return didAvatarMove;
 }
 
+
+std::vector<string> GameService::getDirectionsForAvatarId(const ID& avatarId) {
+    std::vector<string> response;
+
+    if (!_avatarService.doesAvatarExist(avatarId)) {
+        return response;
+    }
+
+    //get the Avatar object
+    const std::optional<std::reference_wrapper<const Avatar>> avatarOptional =
+        _avatarService.getAvatarFromAvatarId(avatarId);
+
+    //get the room ID of the Avatar
+    const ID& currentAvatarRoomId = avatarOptional->get().getRoomId();
+
+    //get the available directions for the room ID
+    response = _roomConnectionService.getAvailableRoomDirections(currentAvatarRoomId);
+
+    return response;
+};
+
 bool GameService::userYell(const User& user, const std::string& messageString) {
     return false;
 }
@@ -106,4 +127,4 @@ std::vector<ID> GameService::getAllAvatarIds(ID roomId) {
 
 const ID& GameService::getRoomId(const ID& avatarId){
     return _avatarService.getRoomId(avatarId);
-};
+}
