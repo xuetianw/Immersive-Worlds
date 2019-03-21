@@ -22,3 +22,4 @@ void CombatService::destroyCombat(Avatar &player) {
     //removes combat object from map
     combatMap.erase(player.getAvatarId());
 }
+
