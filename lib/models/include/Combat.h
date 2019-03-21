@@ -65,6 +65,9 @@ public:
 
     void updateRoundCount();
 
+    //player and npc enter combat state by updating Avatar state
+    void enterCombat();
+
     int getRoundCount() const;
 
     void setRoundCount(int roundCount);

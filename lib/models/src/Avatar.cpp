@@ -48,3 +48,11 @@ void Avatar::set_mana(int _mana) {
 void Avatar::setDamageOutput(int damageOutput) {
     Avatar::damageOutput = damageOutput;
 }
+
+void Avatar::enterCombat() {
+    Avatar::inCombat = true;
+}
+
+void models::Avatar::leaveCombat() {
+    Avatar::inCombat = false;
+}
