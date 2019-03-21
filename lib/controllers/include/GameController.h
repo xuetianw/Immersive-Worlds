@@ -59,6 +59,8 @@ public:
     */
     std::vector<Message> say(const Message& message);
 
+    std::vector<Message> yell(const Message& message);
+
 
 private:
     GameService _gameService;
@@ -67,6 +69,18 @@ private:
     std::unordered_map<ID, User*> _avatarIdToUser;
 
     User* findUser(const ID& avatarId);
+
+    std::vector<std::string> directions = {"east", "west", "south", "north"};
+
+    bool checkIsDirectionMessage(const Message& message);
+
+    /**
+    * Construct message to send to multiple avatars
+    * @param message    the system message to be sent to avatars
+    * @param avatarIds  list of avatar that should receive the message
+    * @return vector of Messages that will be sent to the given list of avatars
+    */
+    std::vector<Message> constructMessageToAvatars(std::string message, const std::vector<ID>& avatarIds);
 };
 
 #endif //WEBSOCKETNETWORKING_GAMECONTROLLER_H

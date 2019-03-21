@@ -26,6 +26,8 @@ public:
     //Return a vector of direction strings available for a room
     const std::vector<std::string> getAvailableRoomDirections(const ID& roomId);
 
+    std::vector<ID> getAllNeighbourId(const ID& roomId);
+
     //Check if a direction string is a valid direction
     const bool isValidDirectionString(const std::string& directionString);
 

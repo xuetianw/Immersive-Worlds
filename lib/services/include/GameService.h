@@ -66,10 +66,14 @@ public:
      */
     bool verifyAnswer(const User& user, const int input);
 
-
     std::vector<ID> getAllAvatarIds(ID roomId);
 
     const ID& getRoomId(const ID& avatarId);
+
+    /**
+     * Get ids of adjacent rooms and current room
+     */
+    std::vector<ID> getAllAvatarIdsInNeighbourAndCurrent(ID roomId);
 
 private:
     std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;

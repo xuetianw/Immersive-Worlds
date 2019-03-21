@@ -12,6 +12,7 @@ enum Command {
     LOGOUT,
     MOVE,
     SAY,
+    YELL,
     WHEREAMI,
     HELP,
     MINIGAME,
@@ -42,6 +43,7 @@ public:
             MOVE,
             WHEREAMI,
             SAY,
+            YELL,
             LOGOUT,
             HELP
         };

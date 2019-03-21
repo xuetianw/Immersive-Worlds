@@ -92,13 +92,35 @@ std::vector<Message> GameController::say(const Message& message) {
     //retrieve the room the sender avatar is in.
     ID roomId = _gameService.getRoomId(message.user.getAccount().avatarId);
 
-    std::vector<Message> responses;
     std::vector<ID> avatarIds = _gameService.getAllAvatarIds(roomId);
+
+    return constructMessageToAvatars(sayMessage, avatarIds);
+}
+
+std::vector<Message> GameController::yell(const Message& message) {
+
+    std::string yellMessage = message.user.getAccount()._username + " yells: " + message.text;
+
+    //retrieve the room the sender avatar is in.
+    ID roomId = _gameService.getRoomId(message.user.getAccount().avatarId);
+
+    std::vector<ID> avatarIds = _gameService.getAllAvatarIdsInNeighbourAndCurrent(roomId);
+
+    return constructMessageToAvatars(yellMessage, avatarIds);
+}
+
+
+std::vector<Message> GameController::constructMessageToAvatars(std::string message, const std::vector<ID>& avatarIds){
+
+    std::vector<Message> responses;
+
     for(const ID& id : avatarIds) {
+        //TODO change this to use optional
         User* user = findUser(id);
         if(user == nullptr) continue;
-        responses.push_back(Message{*user, sayMessage});
+        responses.push_back(Message{*user, message});
     }
+
     return responses;
 }
 
