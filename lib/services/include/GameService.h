@@ -50,8 +50,6 @@ public:
      */
     bool spawnAvatarInStartingRoom(const ID& avatarId);
 
-    string getCurrentRoomName(const Connection& connection);
-
     std::optional<std::string> getAvatarRoomName(const ID& avatarId);
 
     /** 
@@ -66,15 +64,12 @@ public:
      */
     bool verifyAnswer(const User& user, const int input);
 
-
     std::vector<ID> getAllAvatarIds(ID roomId);
 
     const ID& getRoomId(const ID& avatarId);
 
 private:
     std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;
-    std::unordered_map<ID, Room> _roomIdToRoom; //TODO remove
-    std::unordered_map<Connection, ID, ConnectionHash> _connectionToRoomId; //TODO remove
 
     DataStorageService _dataStorage;
     RoomConnectionService _roomConnectionService;
