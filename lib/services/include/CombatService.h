@@ -31,7 +31,7 @@ private:
 
     //data structure to map user Avatar to his/her own combat
 
-    map<ID, Combat> combatMap;
+    map<ID, Combat&> combatMap;
 
 public:
 

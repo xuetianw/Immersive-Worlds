@@ -55,6 +55,11 @@ bool Combat::isCombatActive() {
     return (_player.get_hp() > 0 && _NPC.get_hp() > 0);
 }
 
+void Combat::enterCombat() {
+    _player.enterCombat();
+    _NPC.enterCombat();
+}
+
 //getters and setters
 
 int Combat::getRoundCount() const {

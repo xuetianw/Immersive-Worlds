@@ -131,6 +131,11 @@ std::vector<Message> GameController::attackNPC(const Message &message) {
 
 
     //attack NPC and return a response (current HP, damage dealt, etc)
+    Message combatResponse = Message(message.user);
+
+    //obtain User's Avatar
+    ID userAvatar(message.user.getAccount().avatarId);
+    std::optional<std::reference_wrapper<const Avatar>> user = _gameService.get_avatarService().getAvatarFromAvatarId(userAvatar);
 
 
     return std::vector<Message>();
