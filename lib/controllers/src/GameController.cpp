@@ -109,13 +109,11 @@ std::vector<Message> GameController::yell(const Message& message) {
     return constructMessageToAvatars(yellMessage, avatarIds);
 }
 
-
 std::vector<Message> GameController::constructMessageToAvatars(std::string message, const std::vector<ID>& avatarIds){
 
     std::vector<Message> responses;
 
     for(const ID& id : avatarIds) {
-        //TODO change this to use optional
         User* user = findUser(id);
         if(user == nullptr) continue;
         responses.push_back(Message{*user, message});
