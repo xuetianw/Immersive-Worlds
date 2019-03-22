@@ -30,9 +30,9 @@ private:
 public:
 
     Combat(Avatar &player, Avatar &NPC) :
+    combatId(ID{}),
     _player(player),
-    _NPC(NPC),
-    combatId(ID{}){}
+    _NPC(NPC){}
 
     /*
      * attacks an NPC
