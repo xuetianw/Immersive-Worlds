@@ -7,7 +7,7 @@ add_library(services
     src/CombatService.cpp)
 
 
-find_package(Boost 1.68 COMPONENTS system REQUIRED)
+find_package(Boost 1.68 COMPONENTS system filesystem REQUIRED)
 
 target_include_directories(services
     PUBLIC
@@ -23,6 +23,8 @@ target_link_libraries(services
         cusjson
         models
         utilities
+        ${BOOST_LIBRARIES}
+        Boost::filesystem
     )
 
 set_target_properties(services

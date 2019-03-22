@@ -4,6 +4,8 @@
 
 #include "DataStorageService.h"
 #include <iostream>
+#include <DataStorageService.h>
+
 
 using CusJson::Area;
 
@@ -319,4 +321,32 @@ void DataStorageService::setJsonArea(const Area& jsonArea) {
 
 const CusJson::MiniGameList& DataStorageService::getMiniGameList() const {
     return _jsonMiniGameList;
+}
+
+void DataStorageService::readFromPath(std::string jsonDirPath) {
+    std::vector<directory_entry> filesAndDir;
+    std::vector<directory_entry> jsonFiles;
+    path pathOfJsonDir(jsonDirPath);
+    if(is_directory(pathOfJsonDir)) {
+        copy(directory_iterator(pathOfJsonDir), directory_iterator(), back_inserter(filesAndDir));
+
+        std::cout << pathOfJsonDir << " is a directory containing:\n";
+
+        for ( std::vector<directory_entry>::const_iterator it = filesAndDir.begin(); it != filesAndDir.end();  ++ it )
+        {
+            auto filename = (*it).path().filename().string();
+            if (filename.find(".json")!=std::string::npos) {
+                jsonFiles.push_back((*it));
+            }
+        }
+    }
+    for(auto entry : jsonFiles) {
+        json j;
+        auto test = boost::filesystem::ifstream(entry.path());
+        test >> j;
+        _jsonArea = j.get<CusJson::Area>();
+
+        std::cout << "test\n";
+    }
+
 }

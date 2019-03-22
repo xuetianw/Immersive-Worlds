@@ -96,8 +96,13 @@ int main(int argc, char *argv[]) {
     unsigned short port = static_cast<unsigned short>(std::stoi(argv[1]));
 
     DBUtil::openConnection("adventure.db");
-    commandProcessor = make_unique<CommandProcessor>();
+
+    std::string webChatPath = std::string(argv[2]);
+    std::string directoryDelimiter = "webchat.html";
+    std::string jsonDirPath = webChatPath.substr(0, webChatPath.find(directoryDelimiter));
+    commandProcessor = make_unique<CommandProcessor>(jsonDirPath);
     Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
+
 
     while (!done) {
         try {

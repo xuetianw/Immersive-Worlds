@@ -31,6 +31,11 @@ public:
         buildCommands();
     }
 
+    CommandProcessor(string jsonDirPath) : accountController(std::make_unique<AccountController>()),
+                         gameController(std::make_unique<GameController>(jsonDirPath)) {
+        buildCommands();
+    }
+
     /*
      * Determines if the message is a command prompt by checking if the first word is mapped to a command
      */
