@@ -6,13 +6,13 @@
 
 void CombatService::createCombat(Avatar& player, Avatar& NPC) {
 
-    if(combatMap.find(player.getAvatarId()) == combatMap.end()){
+    if(combatMap.find(const_cast<ID*>(&player.getAvatarId()) ) == combatMap.end()){
 
         //create Combat
         Combat combat{player, NPC};
 
         combat.enterCombat();
-        combatMap.insert(std::pair<ID ,Combat&>(player.getAvatarId(), combat));
+        combatMap.insert(std::pair<ID*, Combat&>(const_cast<ID*>(&player.getAvatarId()), combat));
     }
 
     ++fightsInitialized;
@@ -20,6 +20,6 @@ void CombatService::createCombat(Avatar& player, Avatar& NPC) {
 
 void CombatService::destroyCombat(Avatar &player) {
     //removes combat object from map
-    combatMap.erase(player.getAvatarId());
+    combatMap.erase(const_cast<ID*>(&player.getAvatarId()));
 }
 

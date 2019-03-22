@@ -5,7 +5,6 @@
 #ifndef WEBSOCKETNETWORKING_COMBATSERVICE_H
 #define WEBSOCKETNETWORKING_COMBATSERVICE_H
 
-#include <vector>
 #include <map>
 
 #include "Room.h"
@@ -31,7 +30,7 @@ private:
 
     //data structure to map user Avatar to his/her own combat
 
-    map<ID, Combat&> combatMap;
+    map<ID*, Combat&> combatMap;
 
 public:
 
