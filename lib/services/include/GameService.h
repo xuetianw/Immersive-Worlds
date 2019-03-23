@@ -72,7 +72,11 @@ public:
      * Get the current minigame available in this room
      */
     models::MiniGame getMiniGame(const User& user, const std::string keywordString);
+public:
 
+    /**
+     * It is assumed that the user is in a room, and the room has a list of connections(can be blank).
+    */
     bool roomHaveMiniGame(const User& user);
 
     /** 

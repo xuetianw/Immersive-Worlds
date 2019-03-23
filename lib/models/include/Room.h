@@ -22,6 +22,7 @@
 using json = nlohmann::json;
 using string = std::string;
 
+
 namespace models {
     class Room {
         ID _id;
@@ -35,6 +36,7 @@ namespace models {
         std::unordered_map<ID, Room&> _doors;
 
     public:
+
         Room() : _id(ID()) {}
 
         Room(const ID& id, string name, std::vector<string> description) :
@@ -67,6 +69,33 @@ namespace models {
 
         std::vector<Room> getAllDoors() const;
     };
+
+    enum Direction {
+        NORTH, SOUTH, EAST, WEST
+    };
+
+    struct NeighbourInfo {
+        Direction direction;
+        ID destinationRoomId;
+        std::vector<string> descriptions;
+    };
+
+    // The strings are based on the keywords found in the json file
+    static const std::unordered_map<std::string, Direction>  DIRECTION_STRING_TO_ENUM_MAP =
+            {
+                    {"north", Direction::NORTH},
+                    {"east", Direction::EAST},
+                    {"south", Direction::SOUTH},
+                    {"west", Direction::WEST}
+            };
+
+    static const std::unordered_map<int, Direction>  DIRECTION_INDEX_TO_ENUM_MAP =
+            {
+                    {0, Direction::NORTH},
+                    {1, Direction::EAST},
+                    {2, Direction::SOUTH},
+                    {3, Direction::WEST}
+            };
 }
 
 #endif //MODELS_ROOM_H

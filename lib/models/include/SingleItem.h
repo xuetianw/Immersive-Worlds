@@ -12,39 +12,51 @@ class SingleItem : public InventoryItem {
 public:
     SingleItem() :
         _id(ID()),
-        _keyword(""),
+        _keywords(std::vector<string>()),
         _shortdesc(""),
-        _longdesc(""),
-        _description("") {}
+        _longdescs(std::vector<string>()),
+        _description(""),
+        _singleItems({}) {}
 
     SingleItem(ID anId,
-            string aKeyword,
-            string aShortdesc,
-            string aLongdesc,
-            string aDescription) :
-            _keyword(move(aKeyword)),
+               std::vector<string>  aKeyword,
+               string aShortdesc,
+               std::vector<string>  aLongdesc,
+               string aDescription) :
+            _id(ID(anId)),
+            _keywords(move(aKeyword)),
             _shortdesc(move(aShortdesc)),
-            _longdesc(move(aLongdesc)),
-            _description(move(aDescription)) {}
+            _longdescs(move(aLongdesc)),
+            _description(move(aDescription)),
+            _singleItems({}) {}
 
-    std::string getKeyword() const;
+    std::vector<string> getKeyword() const;
 
     std::string getShortdesc() const;
 
-    std::string getLongdesc() const;
+    std::vector<string> getLongdesc() const;
 
     std::string getDescription() const;
+
+    /**
+       * Get all items in containerItem.
+       */
+    std::vector<SingleItem>& getItemsInContainer() {
+        return _singleItems;
+    }
 
 private:
     ID _id;
 
-    string _keyword;
+    std::vector<string> _keywords;
 
     string _shortdesc;
 
-    string _longdesc;
+    std::vector<string>  _longdescs;
 
     string _description;
+
+    std::vector<SingleItem> _singleItems;
 };
 
 #endif //PROJECT_SINGLEITEM_H
