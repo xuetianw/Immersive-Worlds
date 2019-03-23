@@ -91,13 +91,14 @@ std::vector<Message> GameController::verifyMinigameAnswer(const Message& message
 }
 
 std::vector<Message> GameController::outputCurrentLocationInfo(const Message& message) {
-    const Connection& currentConnection = message.user.getConnection();
-    string currentRoom = _gameService.getCurrentRoomName(currentConnection);
-    string responseText = USER_CURRENTLY_LOCATED_MESSAGE + currentRoom;
+    Message responseMessage{message.user};
+    const ID& avatarId = message.user.getAccount().avatarId;
+    std::optional<std::string> roomName = _gameService.getAvatarRoomName(avatarId);
 
-    std::vector<Message> response { Message{message.user, responseText} };
+    responseMessage.text = roomName.has_value() ? "Currently located in room: " + roomName.value()
+                                                : "Error locating avatar";
 
-    return response;
+    return std::vector<Message>{responseMessage};
 }
 
 
