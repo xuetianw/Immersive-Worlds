@@ -71,7 +71,7 @@ namespace models {
     };
 
     enum Direction {
-        NORTH, SOUTH, EAST, WEST
+        NORTH, SOUTH, EAST, WEST, DOWN, UP
     };
 
     struct NeighbourInfo {
@@ -86,7 +86,9 @@ namespace models {
                     {"north", Direction::NORTH},
                     {"east", Direction::EAST},
                     {"south", Direction::SOUTH},
-                    {"west", Direction::WEST}
+                    {"west", Direction::WEST},
+                    {"down", Direction::DOWN},
+                    {"up", Direction::UP}
             };
 
     static const std::unordered_map<int, Direction>  DIRECTION_INDEX_TO_ENUM_MAP =

@@ -407,6 +407,7 @@ void DataStorageService::readFromPath(std::string jsonDirPath) {
 
         for (std::vector<directory_entry>::const_iterator it = filesAndDir.begin(); it != filesAndDir.end(); ++it) {
             auto filename = (*it).path().filename().string();
+            // This assumes the json in the Dir are only Rooms. Loading files take a while so change this to find just one file to shorten startup.
             if (filename.find(".json") != std::string::npos) {
                 jsonFiles.push_back((*it));
             }
@@ -418,7 +419,7 @@ void DataStorageService::readFromPath(std::string jsonDirPath) {
         auto jsonFileStream = boost::filesystem::ifstream(entry.path());
         jsonFileStream >> jsonArea;
         _jsonAreas.push_back(jsonArea.get<CusJson::Area>());
-        configRoomsAndJsonIdMap(_jsonArea);
+        configRoomsAndJsonIdMap(_jsonAreas.at(_jsonAreas.size() - 1));
         std::cout << entry.path().filename().string() << " is finished\n";
     }
 
