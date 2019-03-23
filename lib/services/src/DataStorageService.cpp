@@ -315,10 +315,6 @@ const Area& DataStorageService::getJsonArea() const {
     return _jsonArea;
 }
 
-std::unordered_map<int, SingleItem> DataStorageService::getObjectsFromJson() {
-    return _objectMap;
-}
-
 void DataStorageService::configRoomsAndJsonIdMap(const CusJson::Area& jsonArea) {
     for (const CusJson::Room& jsonRoom : jsonArea._rooms) {
         models::Room room{jsonRoom};

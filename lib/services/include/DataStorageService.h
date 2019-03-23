@@ -39,7 +39,6 @@ public:
 
     const CusJson::Area& getJsonArea() const;
 
-    std::unordered_map<int, SingleItem> getObjectsFromJson();
     std::unordered_map<ID, models::Room> getRoomIdToRoomMapCopy();
     std::unordered_map<ID, Neighbours> getRoomIdToNeighboursMapCopy();
     SingleItem spawnObjectCopy(int jsonId);
