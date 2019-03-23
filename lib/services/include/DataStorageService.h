@@ -34,13 +34,14 @@ private:
 
 public:
     DataStorageService() {
-        json solaceJson = getTestingArea();
-        _jsonArea = solaceJson.get<CusJson::Area>();
-        configObjectMap(_jsonArea, _objectMap);
-        configRoomsAndJsonIdMap(_jsonArea);
-        configNeighboursMap(_jsonRoomIdToUuid, _jsonArea._rooms);
-        json minigameJson = getTestingMiniGameList();
-        _jsonMiniGameList = minigameJson.get<CusJson::MiniGameList>();
+        std::cout << "Default constructor of DataStorageService should not be used\n";
+//        json solaceJson = getTestingArea();
+//        _jsonArea = solaceJson.get<CusJson::Area>();
+//        configObjectMap(_jsonArea, _objectMap);
+//        configRoomsAndJsonIdMap(_jsonArea);
+//        configNeighboursMap(_jsonRoomIdToUuid, _jsonArea._rooms);
+//        json minigameJson = getTestingMiniGameList();
+//        _jsonMiniGameList = minigameJson.get<CusJson::MiniGameList>();
     }
 
     DataStorageService(std::string jsonDirPath) {
@@ -60,7 +61,6 @@ public:
     void resetObjectsToWorld(std::unordered_map<ID, models::Room>& roomIdToRoomMap);
 
 private:
-    json getTestingArea();
 
     json getTestingMiniGameList();
 
