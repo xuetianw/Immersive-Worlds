@@ -58,6 +58,8 @@ public:
      */
     std::vector<Message> listDirections(const Message& message);
 
+    std::vector<Message> displayAvatarInfo(const Message& message);
+
 private:
     GameService _gameService;
 

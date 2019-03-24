@@ -118,6 +118,12 @@ std::vector<Message> GameController::say(const Message& message) {
     return responses;
 }
 
+
+std::vector<Message> GameController::displayAvatarInfo(const Message& message) {
+    return  _gameService.displayAvatarinfo(message);
+}
+
+
 /*
  * PRIVATE
  */

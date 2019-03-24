@@ -2,6 +2,8 @@
 // Created by user on 2/8/19.
 //
 
+#include <GameService.h>
+
 #include "Server.h"
 #include "GameService.h"
 
@@ -108,4 +110,14 @@ std::vector<ID> GameService::getAllAvatarIds(ID roomId) {
 
 const ID& GameService::getRoomId(const ID& avatarId){
     return _avatarService.getRoomId(avatarId);
+}
+
+std::vector<Message> GameService::displayAvatarinfo(const Message& message) {
+    std::optional<std::reference_wrapper<const Avatar>> avatar = _avatarService.getAvatarFromAvatarId(message.user.getAccount().avatarId);
+
+    Avatar userAvatar = avatar.value();
+    std::string response = "name :" + userAvatar.getName() + "\n"
+                           + "_hp: " + std::to_string(userAvatar.get_hp()) + "\n"
+                           + "_mana: " + std::to_string(userAvatar.get_mana()) + "\n";
+    return std::vector<Message>{Message(message.user, response)};
 }

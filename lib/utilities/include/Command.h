@@ -46,7 +46,8 @@ public:
             SAY,
             LOGOUT,
             HELP,
-            DIRECTIONS
+            DIRECTIONS,
+            AVATAR_INFO
         };
     }
 };
