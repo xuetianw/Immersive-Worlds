@@ -7,26 +7,50 @@
 
 using models::RoomConnection;
 
-bool GameService::moveUser(const User& user, const std::string& keywordString) {
-    auto roomId = _connectionToRoomId.at(user.getConnection());
-    auto connectedRoomList = _roomIdToRoomConnectionsList.at(roomId);
-    auto connectedRoom = std::find_if(connectedRoomList.begin(), connectedRoomList.end(), [keywordString](const models::RoomConnection &roomConnection) -> bool {
-        return roomConnection.getUserInputDirKey() == keywordString;
-    });
-    if (connectedRoom != connectedRoomList.end()) {
-        _connectionToRoomId.find(user.getConnection())->second = connectedRoom.base()->getTo();
+bool GameService::moveAvatar(const ID& avatarId, const string& directionString) {
+    if (!_avatarService.doesAvatarExist(avatarId)) {
+        return false;
     }
-    return connectedRoom != connectedRoomList.end();
+
+    const std::optional<std::reference_wrapper<const Avatar>> avatarOptional = _avatarService.getAvatarFromAvatarId(
+        avatarId);
+    const ID& currentAvatarRoomId = avatarOptional->get().getRoomId();
+
+    const std::optional<std::reference_wrapper<const ID>> neighbourIdOptional = _roomConnectionService.getNeighbourId(
+        currentAvatarRoomId, directionString);
+
+    if (!neighbourIdOptional.has_value()) {
+        return false;
+    }
+
+    bool didAvatarMove = _avatarService.setAvatarRoomId(avatarId, neighbourIdOptional.value());
+
+    return didAvatarMove;
 }
+
+
+std::vector<string> GameService::getDirectionsForAvatarId(const ID& avatarId) {
+    std::vector<string> response;
+
+    if (!_avatarService.doesAvatarExist(avatarId)) {
+        return response;
+    }
+
+    //get the Avatar object
+    const std::optional<std::reference_wrapper<const Avatar>> avatarOptional =
+        _avatarService.getAvatarFromAvatarId(avatarId);
+
+    //get the room ID of the Avatar
+    const ID& currentAvatarRoomId = avatarOptional->get().getRoomId();
+
+    //get the available directions for the room ID
+    response = _roomConnectionService.getAvailableRoomDirections(currentAvatarRoomId);
+
+    return response;
+};
 
 bool GameService::userYell(const User& user, const std::string& messageString) {
     return false;
-}
-
-string GameService::getCurrentRoomName(const Connection& connection) {
-    const ID& roomId = _connectionToRoomId[connection];
-    auto roomIter = _roomIdToRoom.find(roomId);
-    return roomIter != _roomIdToRoom.end() ? roomIter->second.getName() : "";
 }
 
 bool GameService::spawnAvatarInStartingRoom(const ID& avatarId) {
@@ -36,49 +60,44 @@ bool GameService::spawnAvatarInStartingRoom(const ID& avatarId) {
     return _avatarService.generateAvatarFromAvatarId(avatarId, startingRoomID, "AVATAR NAME");
 }
 
-
-//TODO change implementation
-bool GameService::spawnUserInRoom(const Connection& connection, const ID& id) {
-    auto [it, inserted] = _connectionToRoomId.emplace(connection, id);
-    return it != _connectionToRoomId.end() || inserted;
-}
-
-const Room* GameService::getRoomByName(const string& roomName) const {
-    for(const auto& room : _roomIdToRoom) {
-        if(room.second.getName() == roomName) {
-            return &room.second;
-        }
+std::optional<std::string> GameService::getAvatarRoomName(const ID& avatarId) {
+    if (!_avatarService.doesAvatarExist(avatarId)) {
+        return std::nullopt;
     }
-    return nullptr;
+
+    const std::optional<std::reference_wrapper<const Avatar>> avatarOptional = _avatarService.getAvatarFromAvatarId(
+        avatarId);
+    const ID& avatarRoomId = avatarOptional->get().getRoomId();
+
+    std::optional<std::string> avatarRoomName = _roomConnectionService.getRoomName(avatarRoomId);
+
+    return avatarRoomName.value();
 }
 
+//TODO FIX - getCurrentRoomName() is removed
 bool GameService::roomHaveMiniGame(const User& user) {
-    auto roomName = getCurrentRoomName(user.getConnection());
-    return roomName != "";
+//    auto roomName = getCurrentRoomName(user.getConnection());
+//    return roomName != "";
 }
 
+//TODO FIX - getCurrentRoomName() is removed
 models::MiniGame GameService::getMiniGame(const User& user, const std::string keywordString) {
     //auto roomId = _connectionToRoomId.at(user.getConnection());
-    auto roomId = getCurrentRoomName(user.getConnection());
-    auto found = _roomIdToMiniGameConnectionsList.find(roomId);
+//    auto roomId = getCurrentRoomName(user.getConnection());
+//    auto found = _roomIdToMiniGameConnectionsList.find(roomId);
 
-    return found->second;
+//    return found->second;
 }
 
+//TODO FIX - getCurrentRoomName() is removed
 bool GameService::verifyAnswer(const User& user, const int input) {
     //auto roomId = _connectionToRoomId.at(user.getConnection());
-    auto roomId = getCurrentRoomName(user.getConnection());
-    auto result = _roomIdToMiniGameConnectionsList.find(roomId);
-    auto correctAnswer = result->second.checkAnswer(input);
-    result->second.nextRound();
+//    auto roomId = getCurrentRoomName(user.getConnection());
+//    auto result = _roomIdToMiniGameConnectionsList.find(roomId);
+//    auto correctAnswer = result->second.checkAnswer(input);
+//    result->second.nextRound();
 
-    return correctAnswer;
-}
-
-const Room& GameService::getUserRoom(const Connection& connection) {
-    // This is just a placeholder.
-    // TODO: Implement the logic appropriately
-    return std::move(Room());
+//    return correctAnswer;
 }
 
 //========================= Avatar Service =============================
@@ -89,4 +108,4 @@ std::vector<ID> GameService::getAllAvatarIds(ID roomId) {
 
 const ID& GameService::getRoomId(const ID& avatarId){
     return _avatarService.getRoomId(avatarId);
-};
+}

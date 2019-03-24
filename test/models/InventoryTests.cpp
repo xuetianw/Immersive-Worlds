@@ -5,7 +5,9 @@ struct InventoryTests : testing:: Test {
     ID testPlayerID;
     ID testItemID;
     std::unique_ptr<Inventory> inventory = std::make_unique<Inventory>(testPlayerID);
-    std::unique_ptr<InventoryItem> item = std::make_unique<SingleItem>(testItemID, "keyword", "shortDesc", "longDesc", "Description");
+    std::vector<string> keywords = {"keywords"};
+    std::vector<string> longDesc = {"keywords"};
+    std::unique_ptr<InventoryItem> item = std::make_unique<SingleItem>(testItemID, keywords, "shortDesc", longDesc, "Description");
 };
 
 TEST_F(InventoryTests, Test_Inventory_GetPlayerId){

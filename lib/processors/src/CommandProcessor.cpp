@@ -78,7 +78,7 @@ std::vector<Message> CommandProcessor::listAvailableCommands(const Message& mess
 }
 
 void CommandProcessor::buildCommands() {
-    addCommand("/whereami", WHEREAMI, [this] (Message message) { return gameController->outputCurrentLocationInfo(message); });
+    addCommand("/look", LOOK, [this](Message message) { return gameController->outputCurrentLocationInfo(message); });
     addCommand("/logout", LOGOUT, [this] (Message message) { return accountController->logoutUser(message); });
     addCommand("/login", LOGIN, [this] (Message message) { return accountController->startLogin(message); });
     addCommand("/register", REGISTER, [this] (Message message) { return accountController->startRegister(message); });
@@ -88,6 +88,7 @@ void CommandProcessor::buildCommands() {
     addCommand("/minigame", MINIGAME, [this] (Message message) { return gameController->startMiniGame(message); });
     addCommand("/answer", MINIGAME_ANSWER, [this] (Message message) { return gameController->verifyMinigameAnswer(message); });
     addCommand("/help", HELP, [this] (Message message) { return listAvailableCommands(message);});
+    addCommand("/directions", DIRECTIONS, [this](Message message) { return gameController->listDirections(message); });
 //    addCommand("/avatar", Avatar, [this] (Message message) { return avatarController->registerAvatar(message);});
 }
 

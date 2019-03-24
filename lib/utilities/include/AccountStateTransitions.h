@@ -140,7 +140,7 @@ struct AccountStateTransitions {
     std::optional<UserStateVariant> operator()(RegisteringAvatarState& state, const RegisterEvent& event, Account& account,  const string& message) {
 
         _currentUserResponseMessage = LOGIN_AFTER_REGISTERING_AVATAR_PROMPT;
-        // store avatar Name-message in the database
+        // Todo store avatar Name-message in the database
         account.isRegisteringAvatar = false;
         return LoginUsernameState {};
     }

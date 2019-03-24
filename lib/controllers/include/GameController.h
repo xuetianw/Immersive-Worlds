@@ -36,8 +36,6 @@ public:
      */
     std::vector<Message> verifyMinigameAnswer(const Message& message);
 
-    void spawnUserInRoom(User& user, ID roomId);
-
     /**
      * Displays to the user info about their current location.
      * @param message
@@ -53,17 +51,19 @@ public:
     */
     std::vector<Message> say(const Message& message);
 
+    /**
+     * Displays to the user the available directions for their avatar
+     * @param message
+     * @return a list of available directions
+     */
+    std::vector<Message> listDirections(const Message& message);
 
 private:
     GameService _gameService;
 
     std::unordered_map<ID, User*> _avatarIdToUser;
 
-    User* findUser(const ID & avatarId);
-
-    std::vector<std::string> directions = {"east", "west", "south", "north"};
-
-    bool checkIsDirectionMessage(const Message& message);
+    User* findUser(const ID& avatarId);
 };
 
 #endif //WEBSOCKETNETWORKING_GAMECONTROLLER_H

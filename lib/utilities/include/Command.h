@@ -12,10 +12,11 @@ enum Command {
     LOGOUT,
     MOVE,
     SAY,
-    WHEREAMI,
+    LOOK,
     HELP,
     MINIGAME,
     MINIGAME_ANSWER,
+    DIRECTIONS,
     AVATAR_INFO
 };
 
@@ -41,10 +42,11 @@ public:
     std::unordered_set<Command> getCommands() override {
         return {
             MOVE,
-            WHEREAMI,
+            LOOK,
             SAY,
             LOGOUT,
-            HELP
+            HELP,
+            DIRECTIONS
         };
     }
 };

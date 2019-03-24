@@ -2,7 +2,7 @@ add_library(utilities
     src/User.cpp
     src/ID.cpp
     src/DBUtil.cpp
-    )
+    src/Helper.cpp)
 
 find_package(Boost 1.68 COMPONENTS system REQUIRED)
 

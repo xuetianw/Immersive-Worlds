@@ -1,7 +1,8 @@
 add_library(cusjson
-    src/CusJson.cpp
-    )
-
+  src/CusJson.cpp
+        src/NPCJsonWrapper.cpp
+        src/DoorStateJsonWrapper.cpp
+        src/ContainerJsonWrapper.cpp)
 
 target_include_directories(cusjson
     PUBLIC

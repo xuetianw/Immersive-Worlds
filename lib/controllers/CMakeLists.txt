@@ -18,6 +18,7 @@ target_link_libraries(controllers
     PUBLIC
         services
         utilities
+        models
     )
 
 set_target_properties(controllers
