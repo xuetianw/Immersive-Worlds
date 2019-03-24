@@ -9,7 +9,7 @@ bool AvatarService::generateAvatarFromAvatarId(const ID& avatarId, const ID& roo
         return false;
     }
 
-    std::unique_ptr<models::Avatar> avatar = std::make_unique<models::Avatar>(avatarId, roomId, avatarName);
+    std::unique_ptr<Avatar> avatar = std::make_unique<Avatar>(avatarId, roomId, avatarName);
 
     _avatars.try_emplace(avatarId, std::move(avatar));
 
@@ -18,14 +18,14 @@ bool AvatarService::generateAvatarFromAvatarId(const ID& avatarId, const ID& roo
 
 
 bool AvatarService::generateAvatarFromAvatarId(const ID &id, const std::string& avatarName) {
-    _avatars.insert(std::make_pair(id, std::make_unique<models::Avatar>(id, avatarName)));
+    _avatars.insert(std::make_pair(id, std::make_unique<Avatar>(id, avatarName)));
     return false;
 }
 
 
 
-const models::Avatar& AvatarService::getAvatar(const ID& avatarId) {
-    models::Avatar& avatar = *(_avatars.at(avatarId));
+const Avatar& AvatarService::getAvatar(const ID& avatarId) {
+    Avatar& avatar = *(_avatars.at(avatarId));
 
     return avatar;
 }

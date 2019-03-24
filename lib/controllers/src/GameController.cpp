@@ -104,8 +104,8 @@ std::vector<Message> GameController::say(const Message& message) {
     ID roomId = _gameService.getRoomId(message.user.getAccount().avatarId);
 
     std::vector<Message> responses;
-    std::vector<ID > avatarIds = _gameService.getAllAvatarIds(roomId);
-    for(const ID & id : avatarIds) {
+    std::vector<ID> avatarIds = _gameService.getAllAvatarIds(roomId);
+    for(const ID& id : avatarIds) {
         User* user = findUser(id);
         if(user == nullptr) continue;
         responses.push_back(Message{*user, sayMessage});
@@ -114,7 +114,7 @@ std::vector<Message> GameController::say(const Message& message) {
 }
 
 
-User* GameController::findUser(const ID & avatarId){
+User* GameController::findUser(const ID& avatarId){
     if(_avatarIdToUser.count(avatarId) == 0){
         return nullptr;
     }

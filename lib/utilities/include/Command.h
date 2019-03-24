@@ -16,7 +16,7 @@ enum Command {
     HELP,
     MINIGAME,
     MINIGAME_ANSWER,
-    Avatar
+    AVATAR_INFO
 };
 
 class CommandType {

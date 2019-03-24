@@ -5,10 +5,11 @@
 #include "Avatar.h"
 #include "ID.h"
 
+using Avatar = models::Avatar;
 
 class AvatarService {
 public:
-    AvatarService() = default;;
+    AvatarService() = default;
 
     explicit AvatarService(DataStorageService& dataStorageService)
         : _dataStorageService(dataStorageService) {
@@ -19,7 +20,7 @@ public:
 
     bool generateAvatarFromAvatarId(const ID& avatarId, const std::string& avatarName);
 
-    const models::Avatar& getAvatar(const ID& avatarId);
+    const Avatar& getAvatar(const ID& avatarId);
 
     const ID& getRoomId(const ID& avatarId);
 
@@ -27,7 +28,7 @@ public:
 
 private:
     //map of Avatar IDs to Avatar objects
-    std::unordered_map<ID, std::unique_ptr<models::Avatar>> _avatars;
+    std::unordered_map<ID, std::unique_ptr<Avatar>> _avatars;
     DataStorageService _dataStorageService;
 
     void loadFromStorage();
