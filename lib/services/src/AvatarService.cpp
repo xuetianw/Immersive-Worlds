@@ -5,21 +5,12 @@
  */
 
 bool AvatarService::generateAvatarFromAvatarId(const ID& avatarId, const ID& roomId, const std::string& avatarName) {
-    if (_avatars.count(avatarId) != 0) {
-        return false;
-    }
 
     std::unique_ptr<Avatar> avatar = std::make_unique<Avatar>(avatarId, roomId, avatarName);
 
     _avatars.try_emplace(avatarId, std::move(avatar));
 
     return true;
-}
-
-
-bool AvatarService::generateAvatarFromAvatarId(const ID &id, const std::string& avatarName) {
-    _avatars.insert(std::make_pair(id, std::make_unique<Avatar>(id, avatarName)));
-    return false;
 }
 
 

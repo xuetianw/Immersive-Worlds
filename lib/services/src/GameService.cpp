@@ -31,11 +31,9 @@ string GameService::getCurrentRoomName(const Connection& connection) {
 
 bool GameService::spawnAvatarInStartingRoom(const ID& avatarId) {
 
-    //TODO retrive avatar name from the database, need to be discussed what to store in the database and how many tables needed, AVATARID and ROOMID MAY not need to be store because there avatar names is uniquely connected to a username; A separate Avatar table table might be neede but can be solved my adding AvatarName colum and RoomID colum to the usertabale
-//    const ID& startingRoomID = _roomConnectionService.getStartingRoom();
-//    return _avatarService.generateAvatarFromAvatarId(avatarId, startingRoomID, "SOMENAME");
-
-    return true;
+    const ID& startingRoomID = _roomConnectionService.getStartingRoom();
+    //TODO retrive avatar name from the database
+    return _avatarService.generateAvatarFromAvatarId(avatarId, startingRoomID, "AVATAR NAME");
 }
 
 

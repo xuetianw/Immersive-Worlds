@@ -18,8 +18,6 @@ public:
 
     bool generateAvatarFromAvatarId(const ID& avatarId, const ID& roomId, const std::string& avatarName);
 
-    bool generateAvatarFromAvatarId(const ID& avatarId, const std::string& avatarName);
-
     const Avatar& getAvatar(const ID& avatarId);
 
     const ID& getRoomId(const ID& avatarId);
