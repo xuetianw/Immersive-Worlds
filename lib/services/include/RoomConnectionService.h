@@ -38,7 +38,7 @@ private:
     using Room = models::Room;
     using Neighbours = std::vector<models::NeighbourInfo>;
 
-    DataStorageService _dataStorageService;
+    DataStorageService& _dataStorageService;
 
     std::unordered_map<ID, Room> _roomIdToRoom;
     std::unordered_map<ID, Neighbours> _roomIdToNeighbours;
