@@ -27,7 +27,7 @@ public:
 
     std::vector<Message> escapeLogin(const Message& message);
 
-    Message respondToMessage(const Message& message) override;
+    std::vector<Message> respondToMessage(const Message& message) override;
 
 private:
     AccountService _accountService;

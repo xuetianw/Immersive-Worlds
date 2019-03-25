@@ -6,21 +6,26 @@
 #include "Helper.h"
 
 //Upon successful login
-Message GameController::respondToMessage(const Message& message) {
+std::vector<Message> GameController::onLogin(Message& message) {
     User& user = message.user;
 
-    //For now, generate avatar id
-    //TODO the avatar id should be retrieved from the database
+    // For now, generate avatar id
+    // TODO the avatar id should be retrieved from the database
     ID avatarId = ID{};
     user.getAccount().avatarId = avatarId;
 
-    user.setCommandType(new GameCommands());
-
-    //TODO make user a unique_ptr
+    // TODO make user a unique_ptr
     _avatarIdToUser.try_emplace(avatarId, &user);
 
-    string responseText = message.text + spawnAvatarInStartingRoom(avatarId);
-    return Message{user, responseText};
+    // Transition from AccountState to GameState allowing the user to perform game commands
+    user.setCommandType(new GameCommands());
+
+    message.text += spawnAvatarInStartingRoom(avatarId);
+    return std::vector<Message> { message };
+}
+
+std::vector<Message> GameController::respondToMessage(const Message& message) {
+    return std::vector<Message> { Message {message.user, INVALID_GAME_COMMAND} };
 }
 
 std::vector<Message> GameController::move(const Message& message) {
