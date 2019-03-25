@@ -15,7 +15,6 @@
 #include "GameController.h"
 #include "User.h"
 #include "Message.h"
-#include "AvatarController.h"
 
 
 
@@ -30,10 +29,7 @@ class CommandProcessor {
      */
 public:
     CommandProcessor() : accountController(std::make_unique<AccountController>()),
-                         gameController(std::make_unique<GameController>()),
-                         avatarController(std::make_unique<AvatarController>())
-
-                         {
+                         gameController(std::make_unique<GameController>()){
         buildCommands();
     }
 
@@ -81,7 +77,6 @@ private:
 
     // Manage Game actions
     std::unique_ptr<GameController> gameController;
-    std::unique_ptr<AvatarController> avatarController;
 };
 
 #endif //WEBSOCKETNETWORKING_COMMANDPROCESSOR_H
