@@ -24,12 +24,13 @@ constexpr char REGISTER_USERNAME_PROMPT[] = "Please create your username: ";
 constexpr char REGISTER_USERNAME_FAILED_PROMPT[] = "Username unavailable!\nPlease enter a different username: ";
 constexpr char REGISTER_PASSWORD_PROMPT[] = "Please create your password: ";
 constexpr char REGISTER_PASSWORD_FAILED_PROMPT[] = "Invalid Password!\nPlease enter a different password: ";
+constexpr char REGISTER_AVATAR_NAME_FAILED_PROMPT[] = "Avatar name is either invalid or unavailable!\nPlease provide a different name for your avatar: ";
 constexpr char ESCAPE_WHILE_REGISTERING_MESSAGE[] = "You have exited out of the registration process\n";
 constexpr char LOGGED_IN_PROMPT[] = "Successfully logged in!\n";
 constexpr char LOGGED_OUT_PROMPT[] = "Logged out Successfully!\n";
 constexpr char INVALID_INPUT_PROMPT[] = "Please enter a valid command!\n";
 constexpr char EMPTY_INPUT_PROMPT[] = "Invalid String - \n";
-constexpr char LOGIN_AFTER_REGISTERING_AVATAR_PROMPT[] = "you have successfully registered your avatar\nplease enter your username";
+constexpr char LOGIN_AFTER_REGISTERING_AVATAR_PROMPT[] = "Avatar Successfully registered!\nPlease enter your username";
 
 ///////////////////////////////////////////USER-STATES/////////////////////////////////////////////
 struct RegisterUsernameState {};
@@ -73,7 +74,6 @@ struct Account {
     std::string _registerUsername;
     std::string _registerPassword;
     bool isLoggedIn = false;
-    bool isRegisteringAvatar = false;
     UserStateVariant _state = ConnectedState {};
 };
 
@@ -86,6 +86,10 @@ struct AccountStateTransitions {
     // TODO: Add validity checks asides from empty string possibly move validation to DBUtility
     bool isUsernameInvalid(const string& username) {
         return username.find_first_not_of(' ') == std::string::npos;
+    }
+
+    bool isAvatarNameInValid(const string& avatarname) {
+        return avatarname.find_first_not_of(' ') == std::string::npos;
     }
 
     bool isPasswordInvalid(const string& password) {
@@ -133,15 +137,17 @@ struct AccountStateTransitions {
         }
 
         _currentUserResponseMessage = ENTER_AVATAR_NAME_AFTER_REGISTRATION_PROMPT;
-        account.isRegisteringAvatar = true;
         return RegisteringAvatarState {};
     }
 
-    std::optional<UserStateVariant> operator()(RegisteringAvatarState& state, const RegisterEvent& event, Account& account,  const string& message) {
+    std::optional<UserStateVariant> operator()(RegisteringAvatarState& state, const UpdateEvent& event, Account& account,  const string& message) {
+        // Todo check if avatar already exists, store avatar Name-message in the database
+        if(isAvatarNameInValid(message)) {
+            _currentUserResponseMessage = getResponseForInvalidInput(REGISTER_AVATAR_NAME_FAILED_PROMPT);
+            return std::nullopt;
+        }
 
         _currentUserResponseMessage = LOGIN_AFTER_REGISTERING_AVATAR_PROMPT;
-        // Todo store avatar Name-message in the database
-        account.isRegisteringAvatar = false;
         return LoginUsernameState {};
     }
 

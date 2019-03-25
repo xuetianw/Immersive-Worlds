@@ -35,10 +35,6 @@ std::vector<Message> AccountController::escapeLogin(const Message& message) {
 }
 
 Message AccountController::respondToMessage(const Message& message) {
-    if(message.user.getAccount().isRegisteringAvatar) {
-        return _accountService.updateUserState(message, RegisterEvent {}).front();
-    }
-
     return message.user.getAccount().isLoggedIn
         ? Message {message.user, ""}
         : _accountService.updateUserState(message, UpdateEvent {}).front();

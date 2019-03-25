@@ -39,16 +39,11 @@ std::vector<Message> CommandProcessor::processCommand(const Message& message) {
 }
 
 Message CommandProcessor::handleDefaultMessage(const Message& message) {
-    if (message.user.getAccount().isRegisteringAvatar) {
-//        avatarController-> respondToMessage(message);
-        return accountController->respondToMessage(message);
-    } else {
-        Message accountControllerResponse = accountController->respondToMessage(message);
+    Message accountControllerResponse = accountController->respondToMessage(message);
 
-        return message.user.getAccount().isLoggedIn
-               ? gameController->respondToMessage(accountControllerResponse)
-               : accountControllerResponse;
-    }
+    return message.user.getAccount().isLoggedIn
+           ? gameController->respondToMessage(accountControllerResponse)
+           : accountControllerResponse;
 }
 
 std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
