@@ -58,6 +58,7 @@ public:
      */
     std::vector<Message> outputCurrentLocationInfo(const Message& message);
 
+    std::vector<Message> nextRound(const Message& message);
 
     /**
     * Displays to the user message sent by another user in the same room
