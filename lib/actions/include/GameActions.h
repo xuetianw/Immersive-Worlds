@@ -62,6 +62,10 @@ public:
 
     std::vector<Message> displayAvatarinfo(const Message& message);
 
+    // Temp Solution
+    const RoomConnectionService& getRoomConnectionService();
+    const DataStorageService& getDataStorageService();
+
 private:
     std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;
 

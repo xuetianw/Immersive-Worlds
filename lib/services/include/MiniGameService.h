@@ -17,13 +17,6 @@ public:
             loadMiniGame();
     }
 
-private:
-    std::unordered_map<ID, models::MiniGame> _roomIdToMiniGameConnectionsList;
-    
-    DataStorageService _dataStorage;
-    RoomConnectionService _roomConnectionService;
-
-public:
     /** 
      * Get the current minigame available in this room
      */
@@ -43,6 +36,12 @@ public:
     void nextRound(const ID& roomID);
 
     void resetMiniGame(const ID& roomID);
+
+private:
+    std::unordered_map<ID, models::MiniGame> _roomIdToMiniGameConnectionsList;
+    
+    DataStorageService _dataStorage;
+    RoomConnectionService _roomConnectionService;
 };
 
 #endif //WEBSOCKETNETWORKING_MINIGAMESERVICE_H
