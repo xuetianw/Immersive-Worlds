@@ -9,12 +9,6 @@
 namespace models {
     class Avatar {
     public:
-//        Avatar(ID roomId, std::string name) :
-//            _avatarId(ID{}),
-//            _roomId(roomId),
-//            _name(std::move(name)) {
-//        }
-
         Avatar(ID avatarID, std::string name) :
                 _avatarId(avatarID),
                 _name(std::move(name)) {
