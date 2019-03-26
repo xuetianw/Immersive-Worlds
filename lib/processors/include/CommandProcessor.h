@@ -48,7 +48,7 @@ public:
      */
     void addCommand(string keyword, Command command, function_ptr);
 
-    Message handleDefaultMessage(const Message& message);
+    std::vector<Message> handleDefaultMessage(const Message& message);
 
     /*
      *  Lists the keywords of the allowed commands to the user

@@ -8,9 +8,9 @@ struct Message{
     User& user;
     string text;
 
-    Message(User& user) : user(user), text(""){}
+    explicit Message(User& user) : user(user), text(""){}
 
-    Message(User& user, string text) : user(user), text(text){}
+    Message(User& user, string text) : user(user), text(std::move(text)){}
 
     networking::ServerMessage convertToServerMessage(){
         return networking::ServerMessage{this->user.getConnection(), this->text};

@@ -170,7 +170,7 @@ struct AccountStateTransitions {
 
     std::optional<UserStateVariant> operator()(LoginUsernameState& state, const EscapeEvent& event, Account& account,  const string& message) {
         _currentUserResponseMessage = LOGGING_IN_ESCAPE_MESSAGE;
-        return LoginUsernameState {};
+        return ConnectedState {};
     }
 
     std::optional<UserStateVariant> operator()(LoginPasswordState& state, const UpdateEvent& event, Account& account, const string& message) {
