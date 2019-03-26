@@ -14,7 +14,7 @@ InventoryService::getObjectById(const ID& objectId) const {
 }
 
 std::vector<Object*> InventoryService::getObjectsByAvatarId(const ID& avatarId) const {
-    return std::vector<Object*&>{};
+    return std::vector<Object*>{};
 }
 
 std::vector<Object*> InventoryService::getObjectsByRoomId(const ID& roomId) const {
