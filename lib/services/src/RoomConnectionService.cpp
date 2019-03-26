@@ -100,6 +100,12 @@ const bool RoomConnectionService::doesRoomExist(const ID& roomId) {
     return _roomIdToRoom.count(roomId) != 0;
 }
 
+const ID& RoomConnectionService::getRoomByJsonId(const int& jsonId) const {
+    // todo find a proper way to error handle
+    auto curId = _jsonIdToUuid.find(jsonId);
+    return curId->second;
+}
+
 /*
  * PRIVATE
  */
@@ -116,6 +122,8 @@ void RoomConnectionService::loadFromStorage() {
     _roomIdToRoom = _dataStorageService.getRoomIdToRoomMapCopy();
 
     _roomIdToNeighbours = _dataStorageService.getRoomIdToNeighboursMapCopy();
+
+    _jsonIdToUuid = _dataStorageService.getJsonIdToUuidCopy();
 
     _dataStorageService.resetObjectsToWorld(_roomIdToRoom);
 }

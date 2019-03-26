@@ -74,30 +74,12 @@ std::optional<std::string> GameService::getAvatarRoomName(const ID& avatarId) {
     return avatarRoomName.value();
 }
 
-//TODO FIX - getCurrentRoomName() is removed
-bool GameService::roomHaveMiniGame(const User& user) {
-//    auto roomName = getCurrentRoomName(user.getConnection());
-//    return roomName != "";
+const RoomConnectionService& GameService::getRoomConnectionService() {
+    return _roomConnectionService;
 }
 
-//TODO FIX - getCurrentRoomName() is removed
-models::MiniGame GameService::getMiniGame(const User& user, const std::string keywordString) {
-    //auto roomId = _connectionToRoomId.at(user.getConnection());
-//    auto roomId = getCurrentRoomName(user.getConnection());
-//    auto found = _roomIdToMiniGameConnectionsList.find(roomId);
-
-//    return found->second;
-}
-
-//TODO FIX - getCurrentRoomName() is removed
-bool GameService::verifyAnswer(const User& user, const int input) {
-    //auto roomId = _connectionToRoomId.at(user.getConnection());
-//    auto roomId = getCurrentRoomName(user.getConnection());
-//    auto result = _roomIdToMiniGameConnectionsList.find(roomId);
-//    auto correctAnswer = result->second.checkAnswer(input);
-//    result->second.nextRound();
-
-//    return correctAnswer;
+const DataStorageService& GameService::getDataStorageService() {
+    return _dataStorage;
 }
 
 //========================= Avatar Service =============================

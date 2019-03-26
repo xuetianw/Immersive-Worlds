@@ -4,7 +4,8 @@ add_library(services
     src/DataStorageService.cpp
     src/RoomConnectionService.cpp
     src/AvatarService.cpp
-    src/CombatService.cpp)
+    src/CombatService.cpp
+    src/MiniGameService.cpp)
 
 
 find_package(Boost 1.68 COMPONENTS system REQUIRED)

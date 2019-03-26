@@ -7,7 +7,7 @@
 
 #include "GameService.h"
 #include "AbstractController.h"
-#include "MiniGame.h"
+#include "MiniGameService.h"
 
 constexpr char INITIAL_ROOM_START_MESSAGE[] = "User has spawned in initial room";
 constexpr char USER_CURRENTLY_LOCATED_MESSAGE[] = "You are currently located in ";
@@ -17,7 +17,9 @@ constexpr char INVALID_GAME_COMMAND[] = "Invalid Command. Please enter a valid g
 
 class GameController : AbstractController {
 public:
-    GameController() : _gameService() {}
+    GameController() :  _gameService(), _miniGameService() {
+        _miniGameService.loadMiniGame(_gameService.getDataStorageService(), _gameService.getRoomConnectionService());
+    }
 
     /**
      * Calls GameService to Move Avatar.
@@ -62,6 +64,8 @@ public:
     */
     std::vector<Message> say(const Message& message);
 
+    std::vector<Message> nextRound(const Message& message);
+
     /**
      * Displays to the user the available directions for their avatar
      * @param message
@@ -70,7 +74,8 @@ public:
     std::vector<Message> listDirections(const Message& message);
 
 private:
-    GameService _gameService;
+    GameService _gameService;    
+    MiniGameService _miniGameService;
 
     //TODO make user a unique point
     std::unordered_map<ID, User*> _avatarIdToUser;

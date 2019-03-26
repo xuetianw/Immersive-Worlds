@@ -16,6 +16,7 @@ enum Command {
     HELP,
     MINIGAME,
     MINIGAME_ANSWER,
+    MINIGAME_NEXTROUND,
     DIRECTIONS
 };
 
@@ -45,7 +46,8 @@ public:
             SAY,
             LOGOUT,
             HELP,
-            DIRECTIONS
+            DIRECTIONS,
+            MINIGAME
         };
     }
 };
@@ -65,7 +67,9 @@ public:
     std::unordered_set<Command> getCommands() override {
         return {
             LOGOUT,
-            HELP
+            HELP,
+            MINIGAME_ANSWER,
+            MINIGAME_NEXTROUND
         };
     }
 };
