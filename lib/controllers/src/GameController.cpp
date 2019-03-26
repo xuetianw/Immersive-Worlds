@@ -33,10 +33,10 @@ std::vector<Message> GameController::move(const Message& message) {
     const std::string& directionString = message.text;
     Message responseMessage{message.user};
 
-    bool didMoveAvatar = _gameService.moveAvatar(avatarId, directionString);
+    bool didMoveAvatar = _gameActions.moveAvatar(avatarId, directionString);
 
     if (didMoveAvatar) {
-        std::optional<std::string> newAvatarRoomName = _gameService.getAvatarRoomName(avatarId);
+        std::optional<std::string> newAvatarRoomName = _gameActions.getAvatarRoomName(avatarId);
         responseMessage.text = "Successfully moved " + directionString + " to room: " + newAvatarRoomName.value();
     } else {
         responseMessage.text = "Failed to move avatar " + directionString;
@@ -50,7 +50,7 @@ std::vector<Message> GameController::listDirections(const Message& message) {
     Message responseMessage{message.user};
     string responseText = "Available directions are: ";
 
-    std::vector<string> directionStrings = _gameService.getDirectionsForAvatarId(avatarId);
+    std::vector<string> directionStrings = _gameActions.getDirectionsForAvatarId(avatarId);
 
     responseText += helper::convertListToString(directionStrings);
 
@@ -60,7 +60,7 @@ std::vector<Message> GameController::listDirections(const Message& message) {
 };
 
 const std::string GameController::spawnAvatarInStartingRoom(const ID& avatarId) {
-    if (_gameService.spawnAvatarInStartingRoom(avatarId)) {
+    if (_gameActions.spawnAvatarInStartingRoom(avatarId)) {
         return INITIAL_ROOM_START_MESSAGE;
     } else {
         return ROOM_SPAWN_FAIL_MESSAGE;
@@ -68,11 +68,11 @@ const std::string GameController::spawnAvatarInStartingRoom(const ID& avatarId) 
 }
 
 std::vector<Message> GameController::startMiniGame(const Message& message) {
-    bool hasMiniGame = _gameService.roomHaveMiniGame(message.user);
+    bool hasMiniGame = _gameActions.roomHaveMiniGame(message.user);
 
     Message newMessage = Message(message.user);
     if(hasMiniGame) {
-        auto minigame = _gameService.getMiniGame(message.user, message.text);
+        auto minigame = _gameActions.getMiniGame(message.user, message.text);
 
         newMessage.text = minigame.printQuestion();
     } else {
@@ -88,7 +88,7 @@ std::vector<Message> GameController::verifyMinigameAnswer(const Message& message
     char letter = (message.text).at(0);
     int input = letter - 'a';
 
-    bool result = _gameService.verifyAnswer(message.user, input);
+    bool result = _gameActions.verifyAnswer(message.user, input);
 
     Message newMessage = Message(message.user, (result) ? "Correct" : "WRONG");
     return std::vector<Message>{newMessage};
@@ -97,7 +97,7 @@ std::vector<Message> GameController::verifyMinigameAnswer(const Message& message
 std::vector<Message> GameController::outputCurrentLocationInfo(const Message& message) {
     Message responseMessage{message.user};
     const ID& avatarId = message.user.getAccount().avatarId;
-    std::optional<std::string> roomName = _gameService.getAvatarRoomName(avatarId);
+    std::optional<std::string> roomName = _gameActions.getAvatarRoomName(avatarId);
 
     responseMessage.text = roomName.has_value() ? "Currently located in room: " + roomName.value()
                                                 : "Error locating avatar";
@@ -111,21 +111,21 @@ std::vector<Message> GameController::say(const Message& message) {
     std::string sayMessage = message.user.getAccount()._username + " says: " + message.text;
 
     //retrieve the room the sender avatar is in.
-    ID roomId = _gameService.getRoomId(message.user.getAccount().avatarId);
+    ID roomId = _gameActions.getRoomId(message.user.getAccount().avatarId);
 
     std::vector<Message> responses;
-    std::vector<ID> avatarIds = _gameService.getAllAvatarIds(roomId);
+    std::vector<ID> avatarIds = _gameActions.getAllAvatarIds(roomId);
     for(const ID& id : avatarIds) {
         User* user = findUser(id);
         if(user == nullptr) continue;
-        responses.push_back(Message{*user, sayMessage});
+        responses.emplace_back(Message{*user, sayMessage});
     }
     return responses;
 }
 
 
 std::vector<Message> GameController::displayAvatarInfo(const Message& message) {
-    return  _gameService.displayAvatarinfo(message);
+    return  _gameActions.displayAvatarinfo(message);
 }
 
 

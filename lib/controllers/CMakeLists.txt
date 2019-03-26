@@ -19,6 +19,7 @@ target_link_libraries(controllers
         services
         utilities
         models
+        actions
     )
 
 set_target_properties(controllers
