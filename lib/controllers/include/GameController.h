@@ -7,7 +7,7 @@
 
 #include "GameActions.h"
 #include "MiniGame.h"
-#include "MiniGameService.h"
+#include "MiniGameActions.h"
 
 constexpr char INITIAL_ROOM_START_MESSAGE[] = "User has spawned in initial room";
 constexpr char USER_CURRENTLY_LOCATED_MESSAGE[] = "You are currently located in ";
@@ -21,7 +21,7 @@ public:
                        _roomConnectionService{_dataStorageService},
                        _avatarService{_dataStorageService},
                        _gameActions(_roomConnectionService, _avatarService),
-                       _miniGameService(_dataStorageService, _roomConnectionService) { }
+                       _miniGameActions(_dataStorageService, _roomConnectionService) { }
 
     /**
      * Calls GameService to Move Avatar.
@@ -81,7 +81,7 @@ private:
     DataStorageService _dataStorageService;
     RoomConnectionService _roomConnectionService;
     AvatarService _avatarService;
-    MiniGameService _miniGameService;
+    MiniGameActions _miniGameActions;
 
     // Actions
     GameActions _gameActions;

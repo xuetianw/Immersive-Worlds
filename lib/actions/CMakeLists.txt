@@ -1,5 +1,6 @@
 add_library(actions
     src/GameActions.cpp
+    src/MiniGameActions.cpp
     )
 
 find_package(Boost 1.68 COMPONENTS system REQUIRED)

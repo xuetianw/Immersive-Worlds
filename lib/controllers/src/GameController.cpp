@@ -70,11 +70,11 @@ const std::string GameController::spawnAvatarInStartingRoom(const ID& avatarId) 
 std::vector<Message> GameController::startMiniGame(const Message& message) {
     User& user = message.user;
     auto roomID = _gameActions.getRoomId(message.user.getAvatarId());
-    bool hasMiniGame = _miniGameService.roomHaveMiniGame(roomID);
+    bool hasMiniGame = _miniGameActions.roomHaveMiniGame(roomID);
 
     Message newMessage = Message(message.user);
     if(hasMiniGame) {
-        auto minigame = _miniGameService.getMiniGame(roomID, message.text);
+        auto minigame = _miniGameActions.getMiniGame(roomID, message.text);
         newMessage.text = minigame.printQuestion();
         user.setCommandType(new MinigameCommands());
     } else {
@@ -88,15 +88,15 @@ std::vector<Message> GameController::nextRound(const Message& message) {
     // for testing purposes
     User& user = message.user;
     auto roomID = _gameActions.getRoomId(message.user.getAvatarId());
-    _miniGameService.nextRound(roomID);
+    _miniGameActions.nextRound(roomID);
 
     std::vector<Message> response;
-    auto minigame = _miniGameService.getMiniGame(roomID, message.text);
+    auto minigame = _miniGameActions.getMiniGame(roomID, message.text);
     if(minigame.hasMoreRounds()) {
         response.push_back(Message{message.user, minigame.printQuestion()});
     } else {
         response.push_back(Message{message.user, "No More Questions"});
-        _miniGameService.resetMiniGame(roomID);
+        _miniGameActions.resetMiniGame(roomID);
         user.setCommandType(new GameCommands());
     }
 
@@ -109,7 +109,7 @@ std::vector<Message> GameController::verifyMinigameAnswer(const Message& message
     int input = letter - 'a';
 
     auto roomID = _gameActions.getRoomId(message.user.getAvatarId());
-    bool result = _miniGameService.verifyAnswer(roomID, input);
+    bool result = _miniGameActions.verifyAnswer(roomID, input);
 
     Message newMessage = Message(message.user, (result) ? "Correct" : "WRONG");
     return std::vector<Message>{newMessage};

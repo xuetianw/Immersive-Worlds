@@ -10,9 +10,9 @@
 #include "AvatarService.h"
 #include "RoomConnectionService.h"
 
-class MiniGameService {
+class MiniGameActions {
 public:
-    MiniGameService(DataStorageService& dataStorageService, RoomConnectionService& roomConnectionService) 
+    MiniGameActions(DataStorageService& dataStorageService, RoomConnectionService& roomConnectionService) 
         : _dataStorage(dataStorageService), _roomConnectionService(roomConnectionService) {
             loadMiniGame();
     }
