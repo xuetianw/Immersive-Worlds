@@ -79,10 +79,6 @@ private:
 
     User* findUser(const ID& avatarId);
 
-    std::vector<std::string> directions = {"east", "west", "south", "north"};
-
-    bool checkIsDirectionMessage(const Message& message);
-
     /**
     * Construct message to send to multiple avatars
     * @param message    the system message to be sent to avatars
