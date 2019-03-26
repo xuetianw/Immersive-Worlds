@@ -34,16 +34,22 @@ std::vector<Message> CommandProcessor::processCommand(const Message& message) {
         }
     }
 
-    Message msg = handleDefaultMessage(message);
-    return std::vector<Message>{ msg };
+    return handleDefaultMessage(message);
 }
 
-Message CommandProcessor::handleDefaultMessage(const Message& message) {
-    Message accountControllerResponse = accountController->respondToMessage(message);
+std::vector<Message> CommandProcessor::handleDefaultMessage(const Message& message) {
+    // Default Game handler when the user is logged in
+    if(message.user.getAccount().isLoggedIn) {
+        return gameController->respondToMessage(message);
+    }
 
-    return message.user.getAccount().isLoggedIn
-        ? gameController->respondToMessage(accountControllerResponse)
-        : accountControllerResponse;
+    std::vector<Message> accountControllerResponse = accountController->respondToMessage(message);
+    bool loggedInStatusChanged = accountControllerResponse.front().user.getAccount().isLoggedIn;
+    if(loggedInStatusChanged) {
+        return gameController->onLogin(accountControllerResponse.front());
+    }
+
+    return accountControllerResponse;
 }
 
 std::pair<string,string> CommandProcessor::splitCommand(string messageText) {

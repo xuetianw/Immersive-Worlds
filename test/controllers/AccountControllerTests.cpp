@@ -55,8 +55,8 @@ TEST_F(AccountControllerTests, LoginTest){
     user.reset();
     Message userPrompt = accountController.startLogin(firstMessage).front();
 
-    Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage);
-    Message accountControllerSecondResponse = accountController.respondToMessage(loginPasswordMessage);
+    Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage).front();
+    Message accountControllerSecondResponse = accountController.respondToMessage(loginPasswordMessage).front();
 
     ASSERT_EQ(ID1, userPrompt.user.getConnection().id);
     ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
@@ -73,8 +73,8 @@ TEST_F(AccountControllerTests, LoginTwiceTest){
     user.reset();
     Message userPrompt = accountController.startLogin(firstMessage).front();
 
-    Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage);
-    Message accountControllerSecondResponse = accountController.respondToMessage(loginPasswordMessage);
+    Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage).front();
+    Message accountControllerSecondResponse = accountController.respondToMessage(loginPasswordMessage).front();
 
     ASSERT_EQ(ID1, userPrompt.user.getConnection().id);
     ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
@@ -95,8 +95,8 @@ TEST_F(AccountControllerTests, LoginLogoutSequenceTest){
     user.reset();
     Message userPrompt = accountController.startLogin(firstMessage).front();
 
-    Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage);
-    Message accountControllerSecondResponse = accountController.respondToMessage(loginPasswordMessage);
+    Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage).front();
+    Message accountControllerSecondResponse = accountController.respondToMessage(loginPasswordMessage).front();
 
     ASSERT_EQ(ID1, userPrompt.user.getConnection().id);
     ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
@@ -117,8 +117,8 @@ TEST_F(AccountControllerTests, RegisterTest){
     user.reset();
     Message message = accountController.startRegister(firstMessage).front();
 
-    Message accountControllerFirstResponse = accountController.respondToMessage(registerUsernameMessage);
-    Message accountControllerSecondResponse = accountController.respondToMessage(registerPasswordMessage);
+    Message accountControllerFirstResponse = accountController.respondToMessage(registerUsernameMessage).front();
+    Message accountControllerSecondResponse = accountController.respondToMessage(registerPasswordMessage).front();
 
     ASSERT_EQ(REGISTER_USERNAME_PROMPT, message.text);
     EXPECT_EQ(ID1, message.user.getConnection().id);
@@ -135,7 +135,7 @@ TEST_F(AccountControllerTests, LoginWhenUsernameExists) {
     user.reset();
     Message message = accountController.startLogin(firstMessage).front();
 
-    Message accountControllerFirstResponse = accountController.respondToMessage(usernameNotExistsMessage);
+    Message accountControllerFirstResponse = accountController.respondToMessage(usernameNotExistsMessage).front();
 
     ASSERT_EQ(LOGIN_USERNAME_PROMPT, message.text);
     EXPECT_EQ(ID1, message.user.getConnection().id);
@@ -151,8 +151,8 @@ TEST_F(AccountControllerTests, LoginWithEmptyPassword) {
     user.reset();
     Message message = accountController.startLogin(firstMessage).front();
 
-    Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage);
-    Message accountControllerSecondResponse = accountController.respondToMessage(emptyPassword);
+    Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage).front();
+    Message accountControllerSecondResponse = accountController.respondToMessage(emptyPassword).front();
 
     ASSERT_EQ(LOGIN_USERNAME_PROMPT, message.text);
     EXPECT_EQ(ID1, message.user.getConnection().id);
@@ -171,7 +171,7 @@ TEST_F(AccountControllerTests, RegisterWhenUsernameExists) {
     user.reset();
     Message message = accountController.startRegister(firstMessage).front();
 
-    Message accountControllerFirstResponse = accountController.respondToMessage(usernameExistsMessage);
+    Message accountControllerFirstResponse = accountController.respondToMessage(usernameExistsMessage).front();
 
     ASSERT_EQ(REGISTER_USERNAME_PROMPT, message.text);
     EXPECT_EQ(ID1, message.user.getConnection().id);
@@ -185,8 +185,8 @@ TEST_F(AccountControllerTests, RegisterWithEmptyPassword) {
     user.reset();
     Message message = accountController.startRegister(firstMessage).front();
 
-    Message accountControllerFirstResponse = accountController.respondToMessage(registerUsernameMessage);
-    Message accountControllerSecondResponse = accountController.respondToMessage(emptyPassword);
+    Message accountControllerFirstResponse = accountController.respondToMessage(registerUsernameMessage).front();
+    Message accountControllerSecondResponse = accountController.respondToMessage(emptyPassword).front();
 
     ASSERT_EQ(REGISTER_USERNAME_PROMPT, message.text);
     EXPECT_EQ(ID1, message.user.getConnection().id);
@@ -205,8 +205,8 @@ TEST_F(AccountControllerTests, LoginRegisterTest){
     user.reset();
     Message userPrompt = accountController.startLogin(firstMessage).front();
 
-    Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage);
-    Message accountControllerSecondResponse = accountController.respondToMessage(loginPasswordMessage);
+    Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage).front();
+    Message accountControllerSecondResponse = accountController.respondToMessage(loginPasswordMessage).front();
 
 
     ASSERT_EQ(ID1, userPrompt.user.getConnection().id);
@@ -228,7 +228,7 @@ TEST_F(AccountControllerTests, RegisterEscapeTest){
     user.reset();
     Message message = accountController.startRegister(firstMessage).front();
 
-    Message accountControllerFirstResponse = accountController.respondToMessage(registerUsernameMessage);
+    Message accountControllerFirstResponse = accountController.respondToMessage(registerUsernameMessage).front();
 
     ASSERT_EQ(REGISTER_USERNAME_PROMPT, message.text);
     ASSERT_EQ(ID1, message.user.getConnection().id);
@@ -245,7 +245,7 @@ TEST_F(AccountControllerTests, LoginEscapeTest){
     user.reset();
     Message userPrompt = accountController.startLogin(firstMessage).front();
 
-    Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage);
+    Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage).front();
 
     ASSERT_EQ(ID1, userPrompt.user.getConnection().id);
     ASSERT_EQ(LOGIN_USERNAME_PROMPT, userPrompt.text);
