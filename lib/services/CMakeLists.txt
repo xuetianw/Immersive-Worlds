@@ -1,6 +1,5 @@
 add_library(services
     src/AccountService.cpp
-    src/GameService.cpp
     src/DataStorageService.cpp
     src/RoomConnectionService.cpp
     src/AvatarService.cpp
