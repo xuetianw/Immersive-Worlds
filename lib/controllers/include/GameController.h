@@ -6,9 +6,7 @@
 #define WEBSOCKETNETWORKING_GAMECONTROLLER_H
 
 #include "GameActions.h"
-#include "GameService.h"
 #include "CombatService.h"
-#include "AbstractController.h"
 #include "MiniGame.h"
 #include "MiniGameActions.h"
 
@@ -111,7 +109,6 @@ private:
 
     // Actions
     GameActions _gameActions;
-    GameService _gameService;
     CombatService _combatService;
 
     std::unordered_map<ID, User*> _avatarIdToUser;
