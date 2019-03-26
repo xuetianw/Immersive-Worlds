@@ -13,9 +13,9 @@
 class MiniGameActions {
 public:
     MiniGameActions(DataStorageService& dataStorageService, RoomConnectionService& roomConnectionService) 
-        : _dataStorage(dataStorageService), _roomConnectionService(roomConnectionService) {
-            loadMiniGame();
-    }
+        : _dataStorage(dataStorageService), _roomConnectionService(roomConnectionService) { 
+            _roomIdToMiniGameConnectionsList = _dataStorage.getRoomIdToMiniGameCopy();
+        }
 
     /** 
      * Get the current minigame available in this room
@@ -31,8 +31,9 @@ public:
      */
     bool verifyAnswer(const ID& roomId, const int input);
 
-    void loadMiniGame();
-
+    /* 
+     * increment the next round if a game exists
+     */
     void nextRound(const ID& roomID);
 
     void resetMiniGame(const ID& roomID);

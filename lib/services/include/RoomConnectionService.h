@@ -32,8 +32,6 @@ public:
     //Check if the room exists in the game
     const bool doesRoomExist(const ID& roomId);
 
-    const ID& getRoomByJsonId(const int& jsonId) const;
-
 private:
     using Room = models::Room;
     using Neighbours = std::vector<models::NeighbourInfo>;
@@ -43,9 +41,6 @@ private:
     std::unordered_map<ID, Room> _roomIdToRoom;
     std::unordered_map<ID, Neighbours> _roomIdToNeighbours;
     std::unordered_map<std::string, models::Direction> _directions = models::DIRECTION_STRING_TO_ENUM_MAP;
-
-    //return the ID of first entry of the _roomIdToRoom map as the starting room id
-    std::unordered_map<int, ID> _jsonIdToUuid;
 
     const Room* findRoom(const ID& roomId);
 

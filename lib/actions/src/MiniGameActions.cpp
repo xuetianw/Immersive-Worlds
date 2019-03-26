@@ -15,15 +15,6 @@ bool MiniGameActions::verifyAnswer(const ID& roomId, const int input) {
     return room->second.checkAnswer(input);
 }
 
-void MiniGameActions::loadMiniGame() {
-    // load minigame
-    for (const CusJson::MiniGame& minigame : _dataStorage.getMiniGameList()._minigames) {
-        //auto roomUuid = jsonIdToUuid.find(minigame._roomId);
-        auto roomUuid = _roomConnectionService.getRoomByJsonId(minigame._roomId);
-        _roomIdToMiniGameConnectionsList.emplace(roomUuid, models::MiniGame(minigame));
-    }
-}
-
 void MiniGameActions::nextRound(const ID& roomID) {
     auto minigame = _roomIdToMiniGameConnectionsList.find(roomID);
     minigame->second.nextRound();
