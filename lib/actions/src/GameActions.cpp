@@ -98,6 +98,22 @@ bool GameActions::verifyAnswer(const User& user, int input) {
 //    return correctAnswer;
 }
 
+std::vector<ID> GameActions::getAllAvatarIdsInNeighbourAndCurrent(ID roomId){
+
+    std::vector<ID> currAvatars;
+    std::vector<ID> neighbours;
+
+    std::vector<ID> avatars = getAllAvatarIds(roomId);
+
+    neighbours = _roomConnectionService.getAllNeighbourId(roomId);
+
+    for(const ID& neighbourId : neighbours){
+        currAvatars = getAllAvatarIds(neighbourId);
+        avatars.insert(avatars.end(), currAvatars.begin(), currAvatars.end());
+    }
+    return avatars;
+}
+
 //========================= Avatar Service =============================
 
 std::vector<ID> GameActions::getAllAvatarIds(ID roomId) {

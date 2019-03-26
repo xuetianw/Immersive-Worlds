@@ -64,6 +64,8 @@ public:
     */
     std::vector<Message> say(const Message& message);
 
+    std::vector<Message> yell(const Message& message);
+
     /**
      * Displays to the user the available directions for their avatar
      * @param message
@@ -85,6 +87,14 @@ private:
     std::unordered_map<ID, User*> _avatarIdToUser;
 
     User* findUser(const ID& avatarId);
+
+    /**
+    * Construct message to send to multiple avatars
+    * @param message    the system message to be sent to avatars
+    * @param avatarIds  list of avatar that should receive the message
+    * @return vector of Messages that will be sent to the given list of avatars
+    */
+    std::vector<Message> constructMessageToAvatars(std::string message, const std::vector<ID>& avatarIds);
 };
 
 #endif //WEBSOCKETNETWORKING_GAMECONTROLLER_H
