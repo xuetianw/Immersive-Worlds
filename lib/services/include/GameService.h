@@ -79,6 +79,8 @@ public:
 
     const ID& getRoomId(const ID& avatarId);
 
+    std::vector<Message> displayAvatarinfo(const Message& message);
+
 private:
     std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;
 

@@ -90,5 +90,6 @@ void CommandProcessor::buildCommands() {
     addCommand("/answer", MINIGAME_ANSWER, [this] (Message message) { return gameController->verifyMinigameAnswer(message); });
     addCommand("/help", HELP, [this] (Message message) { return listAvailableCommands(message);});
     addCommand("/directions", DIRECTIONS, [this](Message message) { return gameController->listDirections(message); });
+    addCommand("/avatar", AVATAR_INFO, [this] (Message message) { return gameController->displayAvatarInfo(message);});
 }
 

@@ -1,6 +1,7 @@
 add_library(controllers
     src/GameController.cpp
-    src/AccountController.cpp)
+    src/AccountController.cpp
+        )
 
 find_package(Boost 1.68 COMPONENTS system REQUIRED)
 

@@ -127,7 +127,7 @@ TEST_F(AccountControllerTests, RegisterTest){
     ASSERT_EQ(REGISTER_PASSWORD_PROMPT, accountControllerFirstResponse.text);
 
     EXPECT_EQ(ID1, accountControllerSecondResponse.user.getConnection().id);
-    EXPECT_EQ(LOGIN_USERNAME_AFTER_REGISTRATION_PROMPT, accountControllerSecondResponse.text);
+    EXPECT_EQ(ENTER_AVATAR_NAME_AFTER_REGISTRATION_PROMPT, accountControllerSecondResponse.text);
 }
 
 //login with non-existing username

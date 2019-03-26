@@ -17,14 +17,6 @@ constexpr char INVALID_GAME_COMMAND[] = "Invalid Command. Please enter a valid g
 
 class GameController : AbstractController {
 public:
-    GameController() : _gameService() {}
-
-    /**
-     * Calls GameService to Move Avatar.
-     * Current Directions are north, east, south, west
-     * @param message
-     * @return response message
-     */
     std::vector<Message> move(const Message& message);
 
     std::vector<Message> respondToMessage(const Message& message) override;
@@ -69,10 +61,11 @@ public:
      */
     std::vector<Message> listDirections(const Message& message);
 
+    std::vector<Message> displayAvatarInfo(const Message& message);
+
 private:
     GameService _gameService;
 
-    //TODO make user a unique point
     std::unordered_map<ID, User*> _avatarIdToUser;
 
     User* findUser(const ID& avatarId);

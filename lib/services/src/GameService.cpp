@@ -2,6 +2,7 @@
 // Created by user on 2/8/19.
 //
 
+
 #include "Server.h"
 #include "GameService.h"
 
@@ -54,10 +55,10 @@ bool GameService::userYell(const User& user, const std::string& messageString) {
 }
 
 bool GameService::spawnAvatarInStartingRoom(const ID& avatarId) {
-    const ID& startingRoomID = _roomConnectionService.getStartingRoom();
 
-    //TODO input avatar name on registration
-    return _avatarService.generateAvatarFromAvatarId(avatarId, startingRoomID, "SOMENAME");
+    const ID& startingRoomID = _roomConnectionService.getStartingRoom();
+    //TODO retrive avatar name from the database
+    return _avatarService.generateAvatarFromAvatarId(avatarId, startingRoomID, "AVATAR NAME");
 }
 
 std::optional<std::string> GameService::getAvatarRoomName(const ID& avatarId) {
@@ -108,4 +109,14 @@ std::vector<ID> GameService::getAllAvatarIds(ID roomId) {
 
 const ID& GameService::getRoomId(const ID& avatarId){
     return _avatarService.getRoomId(avatarId);
+}
+
+std::vector<Message> GameService::displayAvatarinfo(const Message& message) {
+    std::optional<std::reference_wrapper<const Avatar>> avatar = _avatarService.getAvatarFromAvatarId(message.user.getAccount().avatarId);
+
+    Avatar userAvatar = avatar.value();
+    std::string response = "name :" + userAvatar.getName() + "\n"
+                           + "_hp: " + std::to_string(userAvatar.get_hp()) + "\n"
+                           + "_mana: " + std::to_string(userAvatar.get_mana()) + "\n";
+    return std::vector<Message>{Message(message.user, response)};
 }
