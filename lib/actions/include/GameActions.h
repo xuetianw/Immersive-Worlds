@@ -56,25 +56,13 @@ public:
 
     std::optional<std::string> getAvatarRoomName(const ID& avatarId);
 
-    /**
-     * Get the current minigame available in this room
-     */
-    models::MiniGame getMiniGame(const User& user, std::string keywordString);
-public:
-
-    /**
-     * It is assumed that the user is in a room, and the room has a list of connections(can be blank).
-    */
-    bool roomHaveMiniGame(const User& user);
-
-    /**
-     * Verify if the answer given in the minigame is the correct one.
-     */
-    bool verifyAnswer(const User& user, int input);
-
     std::vector<ID> getAllAvatarIds(ID roomId);
 
     const ID& getRoomId(const ID& avatarId);
+
+    // Temp Solution
+    const RoomConnectionService& getRoomConnectionService();
+    const DataStorageService& getDataStorageService();
 
     std::vector<Message> displayAvatarinfo(const Message& message);
 

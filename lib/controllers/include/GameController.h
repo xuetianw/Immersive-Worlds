@@ -7,6 +7,7 @@
 
 #include "GameActions.h"
 #include "MiniGame.h"
+#include "MiniGameService.h"
 
 constexpr char INITIAL_ROOM_START_MESSAGE[] = "User has spawned in initial room";
 constexpr char USER_CURRENTLY_LOCATED_MESSAGE[] = "You are currently located in ";
@@ -19,7 +20,8 @@ public:
     GameController() : _dataStorageService(DataStorageService{}),
                        _roomConnectionService{_dataStorageService},
                        _avatarService{_dataStorageService},
-                       _gameActions(_roomConnectionService, _avatarService) {}
+                       _gameActions(_roomConnectionService, _avatarService),
+                       _miniGameService(_dataStorageService, _roomConnectionService) { }
 
     /**
      * Calls GameService to Move Avatar.
@@ -63,6 +65,8 @@ public:
     * @return messages that will be sent to user in the same room
     */
     std::vector<Message> say(const Message& message);
+
+    std::vector<Message> nextRound(const Message& message);
 
     /**
      * Displays to the user the available directions for their avatar

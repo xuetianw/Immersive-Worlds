@@ -15,12 +15,12 @@ json DataStorageService::getTestingMiniGameList() {
     "MINIGAMES" : [
         {
           "id" : 1,
-          "roomId" : 10500,
-          "roomName" : "Lexie's Scuba Shop",
+          "roomId" : 10609,
+          "roomName" : "Marketplace2.",
           "type" : "multiple_choice",
           "questions" : [
-                          "Which spelling is correct?",
-                          "Which spelling is correct?"
+                          "Which spelling is correct? 1",
+                          "Which spelling is correct? 2"
                         ],
           "answers" : [
                         [
@@ -45,7 +45,7 @@ json DataStorageService::getTestingMiniGameList() {
           "roomName" : "Marketplace.",
           "type" : "multiple_choice",
           "questions" : [
-                        "Which spelling is correct?"
+                        "Which spelling is correct? 3"
                         ],
           "answers" : [
                         [
@@ -380,6 +380,11 @@ std::unordered_map<ID, models::Room> DataStorageService::getRoomIdToRoomMapCopy(
 std::unordered_map<ID, std::vector<models::NeighbourInfo>> DataStorageService::getRoomIdToNeighboursMapCopy() {
     auto roomIdToNeighboursMapCopy = this->_roomIdToNeighbours;
     return roomIdToNeighboursMapCopy;
+}
+
+std::unordered_map<int, ID> DataStorageService::getJsonIdToUuidCopy() {
+    auto jsonRoomIdToUuidCopy = this->_jsonRoomIdToUuid;
+    return jsonRoomIdToUuidCopy;
 }
 
 const CusJson::MiniGameList& DataStorageService::getMiniGameList() const {
