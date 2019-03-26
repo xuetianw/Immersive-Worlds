@@ -1,10 +1,10 @@
 #include "SingleItem.h"
 
-std::string SingleItem::getKeyword() const { return _keyword; }
+std::vector<string> SingleItem::getKeyword() const { return _keywords; }
 
 std::string SingleItem::getShortdesc() const { return _shortdesc; }
 
-std::string SingleItem::getLongdesc() const { return _longdesc; }
+std::vector<string> SingleItem::getLongdesc() const { return _longdescs; }
 
 std::string SingleItem::getDescription() const { return _description; }
 

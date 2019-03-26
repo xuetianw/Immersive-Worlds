@@ -34,16 +34,22 @@ std::vector<Message> CommandProcessor::processCommand(const Message& message) {
         }
     }
 
-    Message msg = handleDefaultMessage(message);
-    return std::vector<Message>{ msg };
+    return handleDefaultMessage(message);
 }
 
-Message CommandProcessor::handleDefaultMessage(const Message& message) {
-    Message accountControllerResponse = accountController->respondToMessage(message);
+std::vector<Message> CommandProcessor::handleDefaultMessage(const Message& message) {
+    // Default Game handler when the user is logged in
+    if(message.user.getAccount().isLoggedIn) {
+        return gameController->respondToMessage(message);
+    }
 
-    return message.user.getAccount().isLoggedIn
-        ? gameController->respondToMessage(accountControllerResponse)
-        : accountControllerResponse;
+    std::vector<Message> accountControllerResponse = accountController->respondToMessage(message);
+    bool loggedInStatusChanged = accountControllerResponse.front().user.getAccount().isLoggedIn;
+    if(loggedInStatusChanged) {
+        return gameController->onLogin(accountControllerResponse.front());
+    }
+
+    return accountControllerResponse;
 }
 
 std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
@@ -73,7 +79,7 @@ std::vector<Message> CommandProcessor::listAvailableCommands(const Message& mess
 }
 
 void CommandProcessor::buildCommands() {
-    addCommand("/whereami", WHEREAMI, [this] (Message message) { return gameController->outputCurrentLocationInfo(message); });
+    addCommand("/look", LOOK, [this](Message message) { return gameController->outputCurrentLocationInfo(message); });
     addCommand("/logout", LOGOUT, [this] (Message message) { return accountController->logoutUser(message); });
     addCommand("/login", LOGIN, [this] (Message message) { return accountController->startLogin(message); });
     addCommand("/register", REGISTER, [this] (Message message) { return accountController->startRegister(message); });

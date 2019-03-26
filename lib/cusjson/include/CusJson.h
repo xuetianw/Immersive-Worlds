@@ -7,6 +7,9 @@
 
 #include <string>
 #include <vector>
+#include "NPCJsonWrapper.h"
+#include "DoorStateJsonWrapper.h"
+#include "ContainerJsonWrapper.h"
 #include <nlohmann/json.hpp>
 #include "NPCJsonWrapper.h"
 #include "DoorStateJsonWrapper.h"
@@ -93,6 +96,8 @@ namespace CusJson {
     void from_json(const json& j, ExtDesc& extDesc);
 
     void to_json(json& j, const NPC& npc);
+
+    void from_json(const json& j, NPC& npc);
 
     void from_json(const json& j, NPC& npc);
 

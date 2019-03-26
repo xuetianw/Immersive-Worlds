@@ -9,7 +9,7 @@
 #include "Message.h"
 
 class AbstractController {
-    virtual Message respondToMessage(const Message& message) = 0;
+    virtual std::vector<Message> respondToMessage(const Message& message) = 0;
 };
 
 #endif //WEBSOCKETNETWORKING_ABSTRACTCONTROLLER_H

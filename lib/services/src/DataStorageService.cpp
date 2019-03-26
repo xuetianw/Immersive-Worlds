@@ -4,6 +4,8 @@
 
 #include "DataStorageService.h"
 #include <iostream>
+#include <DataStorageService.h>
+
 
 using CusJson::Area;
 
@@ -313,10 +315,87 @@ const Area& DataStorageService::getJsonArea() const {
     return _jsonArea;
 }
 
-void DataStorageService::setJsonArea(const Area& jsonArea) {
-    _jsonArea = jsonArea;
+void DataStorageService::configRoomsAndJsonIdMap(const CusJson::Area& jsonArea) {
+    for (const CusJson::Room& jsonRoom : jsonArea._rooms) {
+        models::Room room{jsonRoom};
+        const ID& roomId = room.getId();
+
+        _jsonRoomIdToUuid.emplace(jsonRoom._id, roomId);
+        _roomIdToRoom.emplace(roomId, room);
+    }
+}
+
+std::unordered_map<int, SingleItem> DataStorageService::configObjectMap(const CusJson::Area& jsonArea) {
+    std::unordered_map<int, SingleItem> map;
+    for (CusJson::Object jsonObject : jsonArea._objects) {
+        std::vector<string> keywords = jsonObject.keywords;
+        std::vector<string> longDesc = jsonObject.longdesc;
+        for (CusJson::ExtDesc extDesc : jsonObject._jsonExtDesc) {
+            keywords.insert(keywords.begin(), extDesc._keywords.begin(), extDesc._keywords.end());
+            longDesc.insert(longDesc.begin(), extDesc._desc.begin(), extDesc._desc.end());
+        }
+        auto item = SingleItem(ID(jsonObject.id), keywords, jsonObject.shortdesc, longDesc, "");
+        map.insert({jsonObject.id, item});
+    }
+    return map;
+}
+
+SingleItem DataStorageService::spawnObjectCopy(int jsonId) {
+    auto objectQueury = _objectMap.find(jsonId);
+    if (objectQueury != _objectMap.end()) {
+        return SingleItem(objectQueury->second);
+    } else {
+        std::cerr << "spawnObjectCopy called with unknown object Id";
+    }
+}
+
+void DataStorageService::configNeighboursMap(std::unordered_map<int, ID> jsonIdToUuid,
+                                             std::vector<CusJson::Room> jsonRooms) {
+    for (const CusJson::Room& jsonRoom : jsonRooms) {
+        Neighbours neighbours;
+
+        buildNeighbours(jsonIdToUuid, jsonRoom, neighbours);
+
+        _roomIdToNeighbours.try_emplace(jsonIdToUuid[jsonRoom._id], neighbours);
+    }
+}
+
+void DataStorageService::buildNeighbours(const std::unordered_map<int, ID>& tmp, const CusJson::Room& jsonRoom,
+                                            Neighbours& neighbours) {
+    for (const CusJson::JsonDoor& jsonDoor : jsonRoom._jsonDoors) {
+        models::NeighbourInfo neighbourInfo;
+        neighbourInfo.direction = models::DIRECTION_STRING_TO_ENUM_MAP.find(jsonDoor._dir)->second;
+        neighbourInfo.destinationRoomId = tmp.at(jsonDoor._to);
+        neighbourInfo.descriptions = jsonDoor._desc;
+
+        neighbours.emplace_back(neighbourInfo);
+    }
+}
+
+std::unordered_map<ID, models::Room> DataStorageService::getRoomIdToRoomMapCopy() {
+    auto roomIdToRoomMapCopy = this->_roomIdToRoom;
+    return roomIdToRoomMapCopy;
+}
+
+std::unordered_map<ID, std::vector<models::NeighbourInfo>> DataStorageService::getRoomIdToNeighboursMapCopy() {
+    auto roomIdToNeighboursMapCopy = this->_roomIdToNeighbours;
+    return roomIdToNeighboursMapCopy;
 }
 
 const CusJson::MiniGameList& DataStorageService::getMiniGameList() const {
     return _jsonMiniGameList;
+}
+
+void DataStorageService::resetObjectsToWorld(std::unordered_map<ID, models::Room>& roomIdToRoomMap) {
+    auto containerConfiguration = _jsonArea._containerWrappers;
+    for (auto container : containerConfiguration) {
+        auto roomQuery = roomIdToRoomMap.find(_jsonRoomIdToUuid.find(container._roomId)->second);
+        if (roomQuery != roomIdToRoomMap.end()) {
+            auto spawnedContainer = spawnObjectCopy(container._objectId);
+            for (auto containedItemId : container._containedObjectIds) {
+                spawnedContainer.getItemsInContainer().push_back(spawnObjectCopy(containedItemId));
+            }
+            roomQuery->second.addObject(spawnedContainer.getId(), spawnedContainer);
+        }
+    }
 }

@@ -57,15 +57,17 @@ public:
      */
     bool spawnAvatarInStartingRoom(const ID& avatarId);
 
-    string getCurrentRoomName(const Connection& connection);
-
     std::optional<std::string> getAvatarRoomName(const ID& avatarId);
 
     /** 
      * Get the current minigame available in this room
      */
     models::MiniGame getMiniGame(const User& user, const std::string keywordString);
+public:
 
+    /**
+     * It is assumed that the user is in a room, and the room has a list of connections(can be blank).
+    */
     bool roomHaveMiniGame(const User& user);
 
     /** 
@@ -84,8 +86,6 @@ public:
 
 private:
     std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;
-    std::unordered_map<ID, Room> _roomIdToRoom; //TODO remove
-    std::unordered_map<Connection, ID, ConnectionHash> _connectionToRoomId; //TODO remove
 
     DataStorageService _dataStorage;
     RoomConnectionService _roomConnectionService;

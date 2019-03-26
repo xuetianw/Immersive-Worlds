@@ -53,13 +53,6 @@ bool GameService::userYell(const User& user, const std::string& messageString) {
     return false;
 }
 
-//TODO change this to use RoomConnectionService
-string GameService::getCurrentRoomName(const Connection& connection) {
-    const ID& roomId = _connectionToRoomId[connection];
-    auto roomIter = _roomIdToRoom.find(roomId);
-    return roomIter != _roomIdToRoom.end() ? roomIter->second.getName() : "";
-}
-
 bool GameService::spawnAvatarInStartingRoom(const ID& avatarId) {
     const ID& startingRoomID = _roomConnectionService.getStartingRoom();
 
@@ -81,27 +74,30 @@ std::optional<std::string> GameService::getAvatarRoomName(const ID& avatarId) {
     return avatarRoomName.value();
 }
 
+//TODO FIX - getCurrentRoomName() is removed
 bool GameService::roomHaveMiniGame(const User& user) {
-    auto roomName = getCurrentRoomName(user.getConnection());
-    return roomName != "";
+//    auto roomName = getCurrentRoomName(user.getConnection());
+//    return roomName != "";
 }
 
+//TODO FIX - getCurrentRoomName() is removed
 models::MiniGame GameService::getMiniGame(const User& user, const std::string keywordString) {
     //auto roomId = _connectionToRoomId.at(user.getConnection());
-    auto roomId = getCurrentRoomName(user.getConnection());
-    auto found = _roomIdToMiniGameConnectionsList.find(roomId);
+//    auto roomId = getCurrentRoomName(user.getConnection());
+//    auto found = _roomIdToMiniGameConnectionsList.find(roomId);
 
-    return found->second;
+//    return found->second;
 }
 
+//TODO FIX - getCurrentRoomName() is removed
 bool GameService::verifyAnswer(const User& user, const int input) {
     //auto roomId = _connectionToRoomId.at(user.getConnection());
-    auto roomId = getCurrentRoomName(user.getConnection());
-    auto result = _roomIdToMiniGameConnectionsList.find(roomId);
-    auto correctAnswer = result->second.checkAnswer(input);
-    result->second.nextRound();
+//    auto roomId = getCurrentRoomName(user.getConnection());
+//    auto result = _roomIdToMiniGameConnectionsList.find(roomId);
+//    auto correctAnswer = result->second.checkAnswer(input);
+//    result->second.nextRound();
 
-    return correctAnswer;
+//    return correctAnswer;
 }
 
 std::vector<ID> GameService::getAllAvatarIdsInNeighbourAndCurrent(ID roomId){

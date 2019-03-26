@@ -13,7 +13,7 @@ enum Command {
     MOVE,
     SAY,
     YELL,
-    WHEREAMI,
+    LOOK,
     HELP,
     MINIGAME,
     MINIGAME_ANSWER,
@@ -42,7 +42,7 @@ public:
     std::unordered_set<Command> getCommands() override {
         return {
             MOVE,
-            WHEREAMI,
+            LOOK,
             SAY,
             YELL,
             LOGOUT,
