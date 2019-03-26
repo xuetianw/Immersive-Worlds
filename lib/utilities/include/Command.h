@@ -17,7 +17,8 @@ enum Command {
     HELP,
     MINIGAME,
     MINIGAME_ANSWER,
-    DIRECTIONS
+    DIRECTIONS,
+    AVATAR_INFO
 };
 
 class CommandType {
@@ -47,7 +48,8 @@ public:
             YELL,
             LOGOUT,
             HELP,
-            DIRECTIONS
+            DIRECTIONS,
+            AVATAR_INFO
         };
     }
 };

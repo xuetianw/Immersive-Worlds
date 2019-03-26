@@ -1,23 +1,22 @@
 //
-// Created by user on 2/8/19.
+// Created by asim on 25/03/19.
 //
 
-#include "Server.h"
-#include "GameService.h"
+#include "GameActions.h"
 
 using models::RoomConnection;
 
-bool GameService::moveAvatar(const ID& avatarId, const string& directionString) {
+bool GameActions::moveAvatar(const ID& avatarId, const string& directionString) {
     if (!_avatarService.doesAvatarExist(avatarId)) {
         return false;
     }
 
     const std::optional<std::reference_wrapper<const Avatar>> avatarOptional = _avatarService.getAvatarFromAvatarId(
-        avatarId);
+            avatarId);
     const ID& currentAvatarRoomId = avatarOptional->get().getRoomId();
 
     const std::optional<std::reference_wrapper<const ID>> neighbourIdOptional = _roomConnectionService.getNeighbourId(
-        currentAvatarRoomId, directionString);
+            currentAvatarRoomId, directionString);
 
     if (!neighbourIdOptional.has_value()) {
         return false;
@@ -29,7 +28,7 @@ bool GameService::moveAvatar(const ID& avatarId, const string& directionString) 
 }
 
 
-std::vector<string> GameService::getDirectionsForAvatarId(const ID& avatarId) {
+std::vector<string> GameActions::getDirectionsForAvatarId(const ID& avatarId) {
     std::vector<string> response;
 
     if (!_avatarService.doesAvatarExist(avatarId)) {
@@ -38,7 +37,7 @@ std::vector<string> GameService::getDirectionsForAvatarId(const ID& avatarId) {
 
     //get the Avatar object
     const std::optional<std::reference_wrapper<const Avatar>> avatarOptional =
-        _avatarService.getAvatarFromAvatarId(avatarId);
+            _avatarService.getAvatarFromAvatarId(avatarId);
 
     //get the room ID of the Avatar
     const ID& currentAvatarRoomId = avatarOptional->get().getRoomId();
@@ -49,24 +48,23 @@ std::vector<string> GameService::getDirectionsForAvatarId(const ID& avatarId) {
     return response;
 };
 
-bool GameService::userYell(const User& user, const std::string& messageString) {
+bool GameActions::userYell(const User& user, const std::string& messageString) {
     return false;
 }
 
-bool GameService::spawnAvatarInStartingRoom(const ID& avatarId) {
+bool GameActions::spawnAvatarInStartingRoom(const ID& avatarId) {
     const ID& startingRoomID = _roomConnectionService.getStartingRoom();
-
-    //TODO input avatar name on registration
-    return _avatarService.generateAvatarFromAvatarId(avatarId, startingRoomID, "SOMENAME");
+    //TODO retrive avatar name from the database
+    return _avatarService.generateAvatarFromAvatarId(avatarId, startingRoomID, "AVATAR NAME");
 }
 
-std::optional<std::string> GameService::getAvatarRoomName(const ID& avatarId) {
+std::optional<std::string> GameActions::getAvatarRoomName(const ID& avatarId) {
     if (!_avatarService.doesAvatarExist(avatarId)) {
         return std::nullopt;
     }
 
     const std::optional<std::reference_wrapper<const Avatar>> avatarOptional = _avatarService.getAvatarFromAvatarId(
-        avatarId);
+            avatarId);
     const ID& avatarRoomId = avatarOptional->get().getRoomId();
 
     std::optional<std::string> avatarRoomName = _roomConnectionService.getRoomName(avatarRoomId);
@@ -75,13 +73,13 @@ std::optional<std::string> GameService::getAvatarRoomName(const ID& avatarId) {
 }
 
 //TODO FIX - getCurrentRoomName() is removed
-bool GameService::roomHaveMiniGame(const User& user) {
+bool GameActions::roomHaveMiniGame(const User& user) {
 //    auto roomName = getCurrentRoomName(user.getConnection());
 //    return roomName != "";
 }
 
 //TODO FIX - getCurrentRoomName() is removed
-models::MiniGame GameService::getMiniGame(const User& user, const std::string keywordString) {
+models::MiniGame GameActions::getMiniGame(const User& user, std::string keywordString) {
     //auto roomId = _connectionToRoomId.at(user.getConnection());
 //    auto roomId = getCurrentRoomName(user.getConnection());
 //    auto found = _roomIdToMiniGameConnectionsList.find(roomId);
@@ -90,7 +88,7 @@ models::MiniGame GameService::getMiniGame(const User& user, const std::string ke
 }
 
 //TODO FIX - getCurrentRoomName() is removed
-bool GameService::verifyAnswer(const User& user, const int input) {
+bool GameActions::verifyAnswer(const User& user, int input) {
     //auto roomId = _connectionToRoomId.at(user.getConnection());
 //    auto roomId = getCurrentRoomName(user.getConnection());
 //    auto result = _roomIdToMiniGameConnectionsList.find(roomId);
@@ -100,7 +98,7 @@ bool GameService::verifyAnswer(const User& user, const int input) {
 //    return correctAnswer;
 }
 
-std::vector<ID> GameService::getAllAvatarIdsInNeighbourAndCurrent(ID roomId){
+std::vector<ID> GameActions::getAllAvatarIdsInNeighbourAndCurrent(ID roomId){
 
     std::vector<ID> currAvatars, neighbours;
 
@@ -117,10 +115,20 @@ std::vector<ID> GameService::getAllAvatarIdsInNeighbourAndCurrent(ID roomId){
 
 //========================= Avatar Service =============================
 
-std::vector<ID> GameService::getAllAvatarIds(ID roomId) {
+std::vector<ID> GameActions::getAllAvatarIds(ID roomId) {
     return _avatarService.getAllAvatarIds(roomId);
 };
 
-const ID& GameService::getRoomId(const ID& avatarId){
+const ID& GameActions::getRoomId(const ID& avatarId){
     return _avatarService.getRoomId(avatarId);
+}
+
+std::vector<Message> GameActions::displayAvatarinfo(const Message& message) {
+    std::optional<std::reference_wrapper<const Avatar>> avatar = _avatarService.getAvatarFromAvatarId(message.user.getAccount().avatarId);
+
+    auto userAvatar = avatar.value().get();
+    std::string response = "name :" + userAvatar.getName() + "\n"
+                           + "_hp: " + std::to_string(userAvatar.get_hp()) + "\n"
+                           + "_mana: " + std::to_string(userAvatar.get_mana()) + "\n";
+    return std::vector<Message>{Message(message.user, response)};
 }

@@ -5,8 +5,7 @@
 #ifndef WEBSOCKETNETWORKING_GAMECONTROLLER_H
 #define WEBSOCKETNETWORKING_GAMECONTROLLER_H
 
-#include "GameService.h"
-#include "AbstractController.h"
+#include "GameActions.h"
 #include "MiniGame.h"
 
 constexpr char INITIAL_ROOM_START_MESSAGE[] = "User has spawned in initial room";
@@ -15,9 +14,12 @@ constexpr char ROOM_SPAWN_FAIL_MESSAGE[] = "User failed to be spawned in a room"
 constexpr char WRONG_DIRECTION_MESSAGE[] = "wrong message for direction";
 constexpr char INVALID_GAME_COMMAND[] = "Invalid Command. Please enter a valid game command!";
 
-class GameController : AbstractController {
+class GameController {
 public:
-    GameController() : _gameService() {}
+    GameController() : _dataStorageService(DataStorageService{}),
+                       _roomConnectionService{_dataStorageService},
+                       _avatarService{_dataStorageService},
+                       _gameActions(_roomConnectionService, _avatarService) {}
 
     /**
      * Calls GameService to Move Avatar.
@@ -27,7 +29,7 @@ public:
      */
     std::vector<Message> move(const Message& message);
 
-    std::vector<Message> respondToMessage(const Message& message) override;
+    std::vector<Message> respondToMessage(const Message& message);
 
     std::vector<Message> onLogin(Message& message);
 
@@ -71,10 +73,17 @@ public:
      */
     std::vector<Message> listDirections(const Message& message);
 
-private:
-    GameService _gameService;
+    std::vector<Message> displayAvatarInfo(const Message& message);
 
-    //TODO make user a unique point
+private:
+    // Services
+    DataStorageService _dataStorageService;
+    RoomConnectionService _roomConnectionService;
+    AvatarService _avatarService;
+
+    // Actions
+    GameActions _gameActions;
+
     std::unordered_map<ID, User*> _avatarIdToUser;
 
     User* findUser(const ID& avatarId);
