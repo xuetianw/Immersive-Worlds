@@ -67,8 +67,6 @@ public:
     */
     std::vector<Message> say(const Message& message);
 
-    std::vector<Message> nextRound(const Message& message);
-
     /**
      * Displays to the user the available directions for their avatar
      * @param message
@@ -83,6 +81,7 @@ private:
     DataStorageService _dataStorageService;
     RoomConnectionService _roomConnectionService;
     AvatarService _avatarService;
+    MiniGameService _miniGameService;
 
     // Actions
     GameActions _gameActions;

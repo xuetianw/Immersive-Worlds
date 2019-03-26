@@ -72,14 +72,6 @@ std::optional<std::string> GameActions::getAvatarRoomName(const ID& avatarId) {
     return avatarRoomName.value();
 }
 
-const RoomConnectionService& GameService::getRoomConnectionService() {
-    return _roomConnectionService;
-}
-
-const DataStorageService& GameService::getDataStorageService() {
-    return _dataStorage;
-}
-
 //========================= Avatar Service =============================
 
 std::vector<ID> GameActions::getAllAvatarIds(ID roomId) {

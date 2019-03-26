@@ -12,10 +12,16 @@
 
 class MiniGameService {
 public:
-    MiniGameService(){ }
+    MiniGameService(DataStorageService& dataStorageService, RoomConnectionService& roomConnectionService) 
+        : _dataStorage(dataStorageService), _roomConnectionService(roomConnectionService) {
+            loadMiniGame();
+    }
 
 private:
     std::unordered_map<ID, models::MiniGame> _roomIdToMiniGameConnectionsList;
+    
+    DataStorageService _dataStorage;
+    RoomConnectionService _roomConnectionService;
 
 public:
     /** 
@@ -32,7 +38,7 @@ public:
      */
     bool verifyAnswer(const ID& roomId, const int input);
 
-    void loadMiniGame(const DataStorageService& dataStorage, const RoomConnectionService& roomConnectionService);
+    void loadMiniGame();
 
     void nextRound(const ID& roomID);
 

@@ -69,12 +69,12 @@ const std::string GameController::spawnAvatarInStartingRoom(const ID& avatarId) 
 
 std::vector<Message> GameController::startMiniGame(const Message& message) {
     User& user = message.user;
-    auto roomID = _gameService.getRoomId(message.user.getAvatarId());
-    bool hasMiniGame = _gameActions.roomHaveMiniGame(roomID);
+    auto roomID = _gameActions.getRoomId(message.user.getAvatarId());
+    bool hasMiniGame = _miniGameService.roomHaveMiniGame(roomID);
 
     Message newMessage = Message(message.user);
     if(hasMiniGame) {
-        auto minigame = _gameActions.getMiniGame(roomID, message.text);
+        auto minigame = _miniGameService.getMiniGame(roomID, message.text);
         newMessage.text = minigame.printQuestion();
         user.setCommandType(new MinigameCommands());
     } else {
@@ -87,7 +87,7 @@ std::vector<Message> GameController::startMiniGame(const Message& message) {
 std::vector<Message> GameController::nextRound(const Message& message) {
     // for testing purposes
     User& user = message.user;
-    auto roomID = _gameService.getRoomId(message.user.getAvatarId());
+    auto roomID = _gameActions.getRoomId(message.user.getAvatarId());
     _miniGameService.nextRound(roomID);
 
     std::vector<Message> response;

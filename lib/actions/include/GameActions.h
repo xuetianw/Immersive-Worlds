@@ -60,10 +60,6 @@ public:
 
     const ID& getRoomId(const ID& avatarId);
 
-    // Temp Solution
-    const RoomConnectionService& getRoomConnectionService();
-    const DataStorageService& getDataStorageService();
-
     std::vector<Message> displayAvatarinfo(const Message& message);
 
 private:

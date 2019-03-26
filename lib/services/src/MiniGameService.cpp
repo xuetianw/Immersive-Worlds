@@ -16,11 +16,11 @@ bool MiniGameService::verifyAnswer(const ID& roomId, const int input) {
     return room->second.checkAnswer(input);
 }
 
-void MiniGameService::loadMiniGame(const DataStorageService& dataStorage, const RoomConnectionService& roomConnectionService) {
+void MiniGameService::loadMiniGame() {
     // load minigame
-    for (const CusJson::MiniGame& minigame : dataStorage.getMiniGameList()._minigames) {
+    for (const CusJson::MiniGame& minigame : _dataStorage.getMiniGameList()._minigames) {
         //auto roomUuid = jsonIdToUuid.find(minigame._roomId);
-        auto roomUuid = roomConnectionService.getRoomByJsonId(minigame._roomId);
+        auto roomUuid = _roomConnectionService.getRoomByJsonId(minigame._roomId);
         _roomIdToMiniGameConnectionsList.emplace(roomUuid, models::MiniGame(minigame));
     }
 }
