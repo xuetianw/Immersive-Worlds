@@ -113,7 +113,6 @@ std::vector<Message> GameController::say(const Message& message) {
     //retrieve the room the sender avatar is in.
     ID roomId = _gameActions.getRoomId(message.user.getAccount().avatarId);
 
-//<<<<<<< HEAD
     std::vector<ID> avatarIds = _gameActions.getAllAvatarIds(roomId);
 
     return constructMessageToAvatars(sayMessage, avatarIds);
@@ -126,7 +125,6 @@ std::vector<Message> GameController::yell(const Message& message) {
     //retrieve the room the sender avatar is in.
     ID roomId = _gameActions.getRoomId(message.user.getAccount().avatarId);
 
-    //TODO: _gameService -> gameAction
     std::vector<ID> avatarIds = _gameActions.getAllAvatarIdsInNeighbourAndCurrent(roomId);
 
     return constructMessageToAvatars(yellMessage, avatarIds);
@@ -140,14 +138,6 @@ std::vector<Message> GameController::constructMessageToAvatars(std::string messa
         User* user = findUser(id);
         if(user == nullptr) continue;
         responses.emplace_back(Message{*user, message});
-//=======
-//    std::vector<Message> responses;
-//    std::vector<ID> avatarIds = _gameActions.getAllAvatarIds(roomId);
-//    for(const ID& id : avatarIds) {
-//        User* user = findUser(id);
-//        if(user == nullptr) continue;
-//        responses.emplace_back(Message{*user, sayMessage});
-//>>>>>>> 73d38db3648c94b65df7a0abbe1b9b3708111147
     }
 
     return responses;

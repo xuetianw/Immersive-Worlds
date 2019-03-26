@@ -100,7 +100,8 @@ bool GameActions::verifyAnswer(const User& user, int input) {
 
 std::vector<ID> GameActions::getAllAvatarIdsInNeighbourAndCurrent(ID roomId){
 
-    std::vector<ID> currAvatars, neighbours;
+    std::vector<ID> currAvatars;
+    std::vector<ID> neighbours;
 
     std::vector<ID> avatars = getAllAvatarIds(roomId);
 
