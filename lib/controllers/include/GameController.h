@@ -64,8 +64,6 @@ public:
     */
     std::vector<Message> say(const Message& message);
 
-    std::vector<Message> nextRound(const Message& message);
-
     /**
      * Displays to the user the available directions for their avatar
      * @param message
@@ -73,11 +71,12 @@ public:
      */
     std::vector<Message> listDirections(const Message& message);
 
+    std::vector<Message> displayAvatarInfo(const Message& message);
+
 private:
-    GameService _gameService;    
+    GameService _gameService;
     MiniGameService _miniGameService;
 
-    //TODO make user a unique point
     std::unordered_map<ID, User*> _avatarIdToUser;
 
     User* findUser(const ID& avatarId);

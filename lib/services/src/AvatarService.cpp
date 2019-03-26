@@ -5,7 +5,7 @@
  */
 
 bool AvatarService::generateAvatarFromAvatarId(const ID& avatarId, const ID& roomId, const std::string& avatarName) {
-    if (_avatars.count(avatarId) != 0) {
+    if (doesAvatarExist(avatarId)) {
         return false;
     }
 
@@ -16,15 +16,15 @@ bool AvatarService::generateAvatarFromAvatarId(const ID& avatarId, const ID& roo
     return true;
 }
 
-const std::optional<std::reference_wrapper<const models::Avatar>>
+const std::optional<std::reference_wrapper<const Avatar>>
 AvatarService::getAvatarFromAvatarId(const ID& avatarId) {
     if (!doesAvatarExist(avatarId)) {
         return std::nullopt;
     }
 
-    const std::unique_ptr<models::Avatar>& avatar = _avatars.at(avatarId);
+    const std::unique_ptr<Avatar>& avatar = _avatars.at(avatarId);
 
-    return std::optional<std::reference_wrapper<const models::Avatar>>{*avatar};
+    return std::optional<std::reference_wrapper<const Avatar>>{*avatar};
 }
 
 bool AvatarService::setAvatarRoomId(const ID& avatarId, const ID& roomId) {
@@ -41,6 +41,7 @@ bool AvatarService::setAvatarRoomId(const ID& avatarId, const ID& roomId) {
 bool AvatarService::doesAvatarExist(const ID& avatarId) {
     return _avatars.count(avatarId) != 0;
 }
+
 const ID& AvatarService::getRoomId(const ID& avatarId){
     return _avatars.at(avatarId)->getRoomId();
 }

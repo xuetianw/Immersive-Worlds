@@ -9,6 +9,8 @@ using Avatar = models::Avatar;
 
 class AvatarService {
 public:
+    AvatarService() = default;
+
     explicit AvatarService(DataStorageService& dataStorageService)
         : _dataStorageService(dataStorageService) {
 

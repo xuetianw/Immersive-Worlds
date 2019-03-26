@@ -91,5 +91,6 @@ void CommandProcessor::buildCommands() {
     addCommand("/nextRound", MINIGAME_NEXTROUND, [this] (Message message) { return gameController->nextRound(message); });
     addCommand("/help", HELP, [this] (Message message) { return listAvailableCommands(message);});
     addCommand("/directions", DIRECTIONS, [this](Message message) { return gameController->listDirections(message); });
+    addCommand("/avatar", AVATAR_INFO, [this] (Message message) { return gameController->displayAvatarInfo(message);});
 }
 

@@ -9,9 +9,9 @@
 std::vector<Message> GameController::onLogin(Message& message) {
     User& user = message.user;
 
-    // For now, generate avatar id
-    // TODO the avatar id should be retrieved from the database
-    ID avatarId = ID{};
+    //For now, generate avatar id
+    //TODO the avatar id should be retrieved from the database
+    ID avatarId = ID();
     user.getAccount().avatarId = avatarId;
 
     // TODO make user a unique_ptr
@@ -59,7 +59,6 @@ std::vector<Message> GameController::listDirections(const Message& message) {
     return std::vector<Message>{responseMessage};
 };
 
-//TODO pass in avatar name
 const std::string GameController::spawnAvatarInStartingRoom(const ID& avatarId) {
     if (_gameService.spawnAvatarInStartingRoom(avatarId)) {
         return INITIAL_ROOM_START_MESSAGE;
@@ -144,6 +143,12 @@ std::vector<Message> GameController::say(const Message& message) {
     }
     return responses;
 }
+
+
+std::vector<Message> GameController::displayAvatarInfo(const Message& message) {
+    return  _gameService.displayAvatarinfo(message);
+}
+
 
 /*
  * PRIVATE
