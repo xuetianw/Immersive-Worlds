@@ -10,12 +10,6 @@
 
 using namespace models;
 
-struct combatRound{
-    int roundNumber;
-    int damageDealtByPlayer;
-    int damageDealtByNPC;
-};
-
 class Combat{
 
 private:

@@ -26,7 +26,7 @@ private:
 
     //data structure to map user Avatar to his/her own combat
 
-    std::map<ID*, Combat&> combatMap;
+    std::map<ID*, Combat> combatMap;
 
 public:
 
