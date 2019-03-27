@@ -43,6 +43,7 @@ private:
     std::unordered_map<ID, Room> _roomIdToRoom;
     std::unordered_map<ID, Neighbours> _roomIdToNeighbours;
     std::unordered_map<std::string, models::Direction> _directions = models::DIRECTION_STRING_TO_ENUM_MAP;
+
     const Room* findRoom(const ID& roomId);
 
     //builds a mapping of direction strings to Direction enum

@@ -72,32 +72,6 @@ std::optional<std::string> GameActions::getAvatarRoomName(const ID& avatarId) {
     return avatarRoomName.value();
 }
 
-//TODO FIX - getCurrentRoomName() is removed
-bool GameActions::roomHaveMiniGame(const User& user) {
-//    auto roomName = getCurrentRoomName(user.getConnection());
-//    return roomName != "";
-}
-
-//TODO FIX - getCurrentRoomName() is removed
-models::MiniGame GameActions::getMiniGame(const User& user, std::string keywordString) {
-    //auto roomId = _connectionToRoomId.at(user.getConnection());
-//    auto roomId = getCurrentRoomName(user.getConnection());
-//    auto found = _roomIdToMiniGameConnectionsList.find(roomId);
-
-//    return found->second;
-}
-
-//TODO FIX - getCurrentRoomName() is removed
-bool GameActions::verifyAnswer(const User& user, int input) {
-    //auto roomId = _connectionToRoomId.at(user.getConnection());
-//    auto roomId = getCurrentRoomName(user.getConnection());
-//    auto result = _roomIdToMiniGameConnectionsList.find(roomId);
-//    auto correctAnswer = result->second.checkAnswer(input);
-//    result->second.nextRound();
-
-//    return correctAnswer;
-}
-
 std::vector<ID> GameActions::getAllAvatarIdsInNeighbourAndCurrent(ID roomId){
 
     std::vector<ID> currAvatars;
