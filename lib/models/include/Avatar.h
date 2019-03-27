@@ -9,16 +9,26 @@
 namespace models {
     class Avatar {
     public:
-        Avatar(ID avatarID, std::string name) :
-                _avatarId(avatarID),
-                _name(std::move(name)) {
+
+        Avatar(ID roomId, std::string name) :
+            _avatarId(ID{}),
+            _roomId(roomId),
+            _name(std::move(name)),
+            _hp(200),
+            _mana(100),
+            _damageOutput(30),
+            _inCombat(false){
         }
 
 
         Avatar(ID avatar, ID roomId, std::string name) :
             _avatarId(avatar),
             _roomId(roomId),
-            _name(std::move(name)) {
+            _name(std::move(name)),
+            _hp(200),
+            _mana(100),
+            _damageOutput(30),
+            _inCombat(false){
         }
 
         const ID& getRoomId() const;
@@ -43,6 +53,10 @@ namespace models {
 
         void setDamageOutput(int damageOutput);
 
+        void enterCombat();
+
+        void leaveCombat();
+
 
     private:
         ID _avatarId;
@@ -50,7 +64,8 @@ namespace models {
         std::string _name;
         int _hp ;
         int _mana ;
-        int damageOutput;
+        int _damageOutput;
+        bool _inCombat;
     };
 }
 
