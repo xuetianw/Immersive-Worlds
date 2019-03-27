@@ -8,9 +8,10 @@
 #include "SingleItem.h"
 #include "CusJson.h"
 #include "Room.h"
+#include "DataStorageServiceInterface.h"
 #include <iostream>
 
-class DataStorageService {
+class DataStorageService : public DataStorageServiceInterface {
 private:
     using Neighbours = std::vector<models::NeighbourInfo>;
 
@@ -45,14 +46,16 @@ public:
 
     const CusJson::Area& getJsonArea() const;
 
-    std::unordered_map<ID, models::Room> getRoomIdToRoomMapCopy();
-    std::unordered_map<ID, Neighbours> getRoomIdToNeighboursMapCopy();
+    std::unordered_map<ID, models::Room> getRoomIdToRoomMapCopy() override;
+
+    std::unordered_map<ID, Neighbours> getRoomIdToNeighboursMapCopy() override;
     std::unordered_map<ID, models::MiniGame> getRoomIdToMiniGameCopy();
 
     SingleItem spawnObjectCopy(int jsonId);
 
     const CusJson::MiniGameList& getMiniGameList() const;
-    void resetObjectsToWorld(std::unordered_map<ID, models::Room>& roomIdToRoomMap);
+
+    void resetObjectsToWorld(std::unordered_map<ID, models::Room>& roomIdToRoomMap) override;
 
 private:
     json getTestingArea();
