@@ -59,8 +59,8 @@ public:
 private:
     std::unordered_map<ID, models::MiniGame> _roomIdToMiniGameConnectionsList;
     
-    DataStorageService _dataStorage;
-    RoomConnectionService _roomConnectionService;
+    DataStorageService& _dataStorage;
+    RoomConnectionService& _roomConnectionService;
 };
 
 #endif //WEBSOCKETNETWORKING_MINIGAMESERVICE_H
