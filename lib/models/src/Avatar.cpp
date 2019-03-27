@@ -34,7 +34,7 @@ int Avatar::get_mana() const {
 }
 
 int Avatar::getDamageOutput() const {
-    return _damageOutput;
+    return damageOutput;
 }
 
 void Avatar::set_hp(int _hp) {
@@ -46,13 +46,5 @@ void Avatar::set_mana(int _mana) {
 }
 
 void Avatar::setDamageOutput(int damageOutput) {
-    Avatar::_damageOutput = damageOutput;
-}
-
-void Avatar::enterCombat() {
-    Avatar::_inCombat = true;
-}
-
-void models::Avatar::leaveCombat() {
-    Avatar::_inCombat = false;
+    Avatar::damageOutput = damageOutput;
 }

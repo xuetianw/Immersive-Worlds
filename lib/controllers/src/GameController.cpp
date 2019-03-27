@@ -2,8 +2,6 @@
 // Created by asim on 07/02/19.
 //
 
-#include <GameController.h>
-
 #include "GameController.h"
 #include "Helper.h"
 
@@ -84,6 +82,7 @@ std::vector<Message> GameController::startMiniGame(const Message& message) {
     return std::vector<Message>{newMessage};
 }
 
+
 std::vector<Message> GameController::verifyMinigameAnswer(const Message& message) {
     // TODO: figure out a better way to get the input. EX. maybe they type a number, should throw error or something
     char letter = (message.text).at(0);
@@ -106,23 +105,6 @@ std::vector<Message> GameController::outputCurrentLocationInfo(const Message& me
     return std::vector<Message>{responseMessage};
 }
 
-//combat methods
-std::vector<Message> GameController::attackNPC(const Message &message) {
-
-
-    //attack NPC and return a response (current HP, damage dealt, etc)
-    Message combatResponse = Message(message.user);
-
-    //obtain User's Avatar
-    ID userAvatar(message.user.getAccount().avatarId);
-    //std::optional<std::reference_wrapper<const Avatar>> user = _gameService.get_avatarService().getAvatarFromAvatarId(userAvatar);
-
-    return std::vector<Message>();
-}
-
-std::vector<Message> GameController::fleeCombat(const Message &message) {
-    return std::vector<Message>();
-}
 
 std::vector<Message> GameController::say(const Message& message) {
 
