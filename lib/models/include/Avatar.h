@@ -10,8 +10,18 @@ namespace models {
     class Avatar {
     public:
 
-        Avatar(ID roomId, std::string name) :
-            _avatarId(ID{}),
+        Avatar(ID avatarId, std::string name) :
+            _avatarId(avatarId),
+            _roomId(ID{}),
+            _name(std::move(name)),
+            _hp(200),
+            _mana(100),
+            _damageOutput(30),
+            _inCombat(false){
+        }
+
+        Avatar(ID avatarId, ID roomId, std::string name) :
+            _avatarId(avatarId),
             _roomId(roomId),
             _name(std::move(name)),
             _hp(200),
