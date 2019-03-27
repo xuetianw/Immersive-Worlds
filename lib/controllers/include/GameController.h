@@ -58,6 +58,9 @@ public:
      */
     std::vector<Message> outputCurrentLocationInfo(const Message& message);
 
+    /* 
+     * increment the next round if a game exists
+     */
     std::vector<Message> nextRound(const Message& message);
 
     /**
