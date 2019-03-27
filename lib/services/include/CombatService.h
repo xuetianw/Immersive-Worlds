@@ -11,11 +11,7 @@
 #include "Avatar.h"
 #include "Combat.h"
 
-
 using namespace models;
-
-using namespace std;
-
 
 /*
  * class for combat logic
@@ -30,7 +26,7 @@ private:
 
     //data structure to map user Avatar to his/her own combat
 
-    map<ID*, Combat&> combatMap;
+    std::map<ID*, Combat&> combatMap;
 
 public:
 

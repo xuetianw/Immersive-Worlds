@@ -1,9 +1,6 @@
 //
 // Created by Nirag Mehta on 2019-03-19.
 //
-
-#include <Combat.h>
-
 #include "Combat.h"
 
 void Combat::attackNpc() {
