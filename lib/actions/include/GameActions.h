@@ -60,6 +60,12 @@ public:
 
     const ID& getRoomId(const ID& avatarId);
 
+
+    /**
+     * Get ids of adjacent rooms and current room
+     */
+    std::vector<ID> getAllAvatarIdsInNeighbourAndCurrent(ID roomId);
+
     std::vector<Message> displayAvatarinfo(const Message& message);
 
 private:
