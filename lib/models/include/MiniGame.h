@@ -35,8 +35,15 @@ namespace models {
          */
         void nextRound();
 
+        /**
+         * Checks if the minigame has more rounds left.
+         * @return true if there are more rounds
+         */
         bool hasMoreRounds();
 
+        /**
+         * Reset the Minigame and make the rounds zero.
+         */
         void resetMiniGame();
     private:
         /**

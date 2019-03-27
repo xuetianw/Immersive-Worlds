@@ -60,6 +60,8 @@ public:
 
     /* 
      * increment the next round if a game exists
+     * @param message
+     * @return prints next round if there are rounds left. 
      */
     std::vector<Message> nextRound(const Message& message);
 

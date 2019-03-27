@@ -19,23 +19,41 @@ public:
 
     /** 
      * Get the current minigame available in this room
+     * @param roomId
+     * @return the minigame
      */
-    models::MiniGame getMiniGame(const ID& roomId, const std::string keywordString);
+    models::MiniGame getMiniGame(const ID& roomId);
 
+    /**
+     * Check if the room has a minigame inside
+     * @param roomId
+     * @return true if minigame inside
+     */
     bool roomHaveMiniGame(const ID& roomId);
 
+    /**
+     * Check if the minigame has more rounds to show
+     * @return true if there are more rounds
+     */
     bool hasMoreRounds(const ID& roomID);
 
     /** 
      * Verify if the answer given in the minigame is the correct one.
+     * @param roomId
+     * @param input
+     * @return true if the answer the user put was correct.
      */
     bool verifyAnswer(const ID& roomId, const int input);
 
-    /* 
+    /** 
      * increment the next round if a game exists
      */
     void nextRound(const ID& roomID);
 
+    /**
+     * Reset the minigame by making the round to zero
+     * @param roomID
+     */
     void resetMiniGame(const ID& roomID);
 
 private:

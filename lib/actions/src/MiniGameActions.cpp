@@ -4,7 +4,7 @@ bool MiniGameActions::roomHaveMiniGame(const ID& roomId) {
     return _roomIdToMiniGameConnectionsList.count(roomId) > 0;
 }
 
-models::MiniGame MiniGameActions::getMiniGame(const ID& roomId, const std::string keywordString) {
+models::MiniGame MiniGameActions::getMiniGame(const ID& roomId) {
     auto room = _roomIdToMiniGameConnectionsList.find(roomId);
     return room->second;
 }

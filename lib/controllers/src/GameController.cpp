@@ -74,7 +74,7 @@ std::vector<Message> GameController::startMiniGame(const Message& message) {
 
     Message newMessage = Message(message.user);
     if(hasMiniGame) {
-        auto minigame = _miniGameActions.getMiniGame(roomID, message.text);
+        auto minigame = _miniGameActions.getMiniGame(roomID);
         newMessage.text = minigame.printQuestion();
         user.setCommandType(new MinigameCommands());
     } else {
@@ -91,7 +91,7 @@ std::vector<Message> GameController::nextRound(const Message& message) {
     _miniGameActions.nextRound(roomID);
 
     std::vector<Message> response;
-    auto minigame = _miniGameActions.getMiniGame(roomID, message.text);
+    auto minigame = _miniGameActions.getMiniGame(roomID);
     if(minigame.hasMoreRounds()) {
         response.push_back(Message{message.user, minigame.printQuestion()});
     } else {
