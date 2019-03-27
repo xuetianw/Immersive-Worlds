@@ -38,8 +38,6 @@ public:
      */
     bool moveAvatar(const ID& avatarId, const std::string& directionString);
 
-    bool userYell(const User& user, const string& messageString);
-
     /**
      * Get a list of directions available for the Avatar
      * @param avatarId

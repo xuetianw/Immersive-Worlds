@@ -64,6 +64,11 @@ public:
     */
     std::vector<Message> say(const Message& message);
 
+    /**
+    * Displays to the user message sent by another user in the same or adjacent rooms
+    * @param message
+    * @return messages that will be sent to user in the same or adjacent rooms
+    */
     std::vector<Message> yell(const Message& message);
 
     /**
