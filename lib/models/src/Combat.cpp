@@ -10,20 +10,24 @@ void Combat::attackNpc() {
     int updated_NPCHealth = _NPC.get_hp();
     updated_NPCHealth = updated_NPCHealth - _player.getDamageOutput();
 
-    if(updated_NPCHealth <= 0)
+    if(updated_NPCHealth <= 0) {
         _NPC.set_hp(0);
-    else
+    }
+    else {
         _NPC.set_hp(updated_NPCHealth);
+    }
 }
 
 void Combat::receiveDamage() {
     int updatedPlayerHealth = _player.get_hp();
     updatedPlayerHealth = updatedPlayerHealth - _NPC.getDamageOutput();
 
-    if(updatedPlayerHealth <= 0)
+    if(updatedPlayerHealth <= 0) {
         _player.set_hp(0);
-    else
+    }
+    else {
         _player.set_hp(updatedPlayerHealth);
+    }
 }
 
 /*
@@ -36,8 +40,7 @@ void Combat::fightRound() {
     if(!isCombatActive()){
         //_NPC is dead, cannot attack dead Avatar
         combatInProgress = false;
-        //NPC is dead, cannot attack dead Avatar
-
+        return;
     }
     receiveDamage();
 
@@ -52,7 +55,7 @@ void Combat::displayCombatInfo() {
 
 }
 
-bool Combat::isCombatActive() {
+const bool Combat::isCombatActive() {
     return (_player.get_hp() > 0 && _NPC.get_hp() > 0);
 }
 
