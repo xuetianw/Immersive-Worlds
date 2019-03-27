@@ -29,7 +29,7 @@ private:
 
 public:
 
-    Combat(Avatar &player, Avatar &NPC) :
+    Combat(Avatar& player, Avatar& NPC) :
     combatId(ID{}),
     _player(player),
     _NPC(NPC){}
@@ -61,7 +61,7 @@ public:
      * function to determine if the combat state is still valid
      * i.e checks if either player is dead or if they decided to flee
      */
-    bool isCombatActive();
+    const bool isCombatActive();
 
     void updateRoundCount();
 

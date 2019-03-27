@@ -16,8 +16,8 @@ namespace models {
             _name(std::move(name)),
             _hp(200),
             _mana(100),
-            damageOutput(30),
-            inCombat(false){
+            _damageOutput(30),
+            _inCombat(false){
         }
 
 
@@ -27,8 +27,8 @@ namespace models {
             _name(std::move(name)),
             _hp(200),
             _mana(100),
-            damageOutput(30),
-            inCombat(false){
+            _damageOutput(30),
+            _inCombat(false){
         }
 
         const ID& getRoomId() const;
@@ -64,8 +64,8 @@ namespace models {
         std::string _name;
         int _hp ;
         int _mana ;
-        int damageOutput;
-        bool inCombat;
+        int _damageOutput;
+        bool _inCombat;
     };
 }
 
