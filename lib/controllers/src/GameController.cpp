@@ -130,6 +130,39 @@ std::vector<Message> GameController::yell(const Message& message) {
     return constructMessageToAvatars(yellMessage, avatarIds);
 }
 
+std::vector<Message> GameController::tell(const Message& message) {
+
+    std::vector<Message> resultMessage{};
+
+    std::string userInput = message.text;
+
+    //split user input after command name by space
+    std::string toUser = userInput.substr(0, userInput.find(' '));
+    std::string userMessage = userInput.substr(userInput.find(' ')+1);
+
+    std::string tellMessage = message.user.getAccount()._username + " whispers: " + userMessage;
+
+    //find user with matching username
+    auto it = std::find_if(
+        _avatarIdToUser.begin(),
+        _avatarIdToUser.end(),
+        [&toUser](const auto& it){
+            return it.second->getAccount()._username == toUser;
+        }
+    );
+
+    if (_avatarIdToUser.end() != it){
+        resultMessage.emplace_back(*(it->second), tellMessage);
+        resultMessage.emplace_back(message.user, "you whispered to " + toUser + ": " + userMessage);
+    } else {
+        resultMessage.emplace_back(message.user, "User is not online or does not exist");
+    }
+
+
+    return resultMessage;
+
+}
+
 std::vector<Message> GameController::constructMessageToAvatars(std::string message, const std::vector<ID>& avatarIds){
 
     std::vector<Message> responses;
