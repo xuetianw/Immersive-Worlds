@@ -12,21 +12,18 @@ struct CombatServiceTest : testing::Test{
 
     Avatar player{ ID(1), "John"};
     Avatar NPC{ ID(2), "Kevin"};
+    Combat combat{player, NPC};
 };
 
 TEST_F(CombatServiceTest, combatTest){
 
-//    combatLogic.getPlayer().set_hp(100);
-//    combatLogic.getPlayer().setDamageOutput(30);
-//    combatLogic.getNPC().set_hp(100);
-//    combatLogic.getNPC().setDamageOutput(20);
-//
-//    combatLogic.fightRound();
-//    combatLogic.fightRound();
-//    combatLogic.fightRound();
-//
-//    EXPECT_TRUE(combatLogic.isCombatActive());
-//    combatLogic.fightRound();
-//    EXPECT_FALSE(combatLogic.isCombatActive());
+
+    combat.fightRound();
+    combat.fightRound();
+    combat.fightRound();
+
+    EXPECT_TRUE(combat.isCombatActive());
+    combat.fightRound();
+    EXPECT_FALSE(combat.isCombatActive());
 
 }

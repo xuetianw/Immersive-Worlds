@@ -13,21 +13,13 @@ namespace models {
         Avatar(ID avatarId, std::string name) :
             _avatarId(avatarId),
             _roomId(ID{}),
-            _name(std::move(name)),
-            _hp(200),
-            _mana(100),
-            _damageOutput(30),
-            _inCombat(false){
+            _name(std::move(name)){
         }
 
         Avatar(ID avatarId, ID roomId, std::string name) :
             _avatarId(avatarId),
             _roomId(roomId),
-            _name(std::move(name)),
-            _hp(200),
-            _mana(100),
-            _damageOutput(30),
-            _inCombat(false){
+            _name(std::move(name)){
         }
 
         const ID& getRoomId() const;
@@ -52,19 +44,14 @@ namespace models {
 
         void setDamageOutput(int damageOutput);
 
-        void enterCombat();
-
-        void leaveCombat();
-
 
     private:
         ID _avatarId;
         ID _roomId;
         std::string _name;
-        int _hp ;
-        int _mana ;
-        int _damageOutput;
-        bool _inCombat;
+        int _hp = 500;
+        int _mana = 300;
+        int _damageOutput = 40;
     };
 }
 

@@ -10,23 +10,28 @@
 
 using namespace models;
 
-class Combat{
+class Combat {
 
 private:
 
     ID combatId;
     Avatar& _player;
     Avatar& _NPC;
-    Room battleRoom;
-    int roundCount;
+    int roundCount = 0;
     bool combatInProgress = true;
+
+    /*
+    * function to determine if the combat state is still valid
+    * i.e checks if either player is dead or if they decided to flee
+    */
+    bool isCombatActive();
 
 public:
 
     Combat(Avatar& player, Avatar& NPC) :
-    combatId(ID{}),
-    _player(player),
-    _NPC(NPC){}
+            combatId(ID{}),
+            _player(player),
+            _NPC(NPC) {}
 
     /*
      * attacks an NPC
@@ -44,31 +49,18 @@ public:
     void fightRound();
 
     /*
-     * function which outputs information of the combat state such as
+     * function which returns a string of information about the combat state such as
      * -health of both players
-     * -number of ingame combat rounds
+     * -number of in-game combat rounds
      * -number of elapsed heartbeats
      */
-    void displayCombatInfo();
-
-    /*
-     * function to determine if the combat state is still valid
-     * i.e checks if either player is dead or if they decided to flee
-     */
-    const bool isCombatActive();
+    std::string getCombatInfo();
 
     void updateRoundCount();
-
-    //player and npc enter combat state by updating Avatar state
-    void enterCombat();
 
     int getRoundCount() const;
 
     void setRoundCount(int roundCount);
-
-    bool isCombatInProgress() const;
-
-    void setCombatInProgress();
 
 };
 

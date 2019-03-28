@@ -48,17 +48,8 @@ void Combat::fightRound() {
     ++roundCount;
 }
 
-void Combat::displayCombatInfo() {
-
-}
-
-const bool Combat::isCombatActive() {
+bool Combat::isCombatActive() {
     return (_player.get_hp() > 0 && _NPC.get_hp() > 0);
-}
-
-void Combat::enterCombat() {
-    _player.enterCombat();
-    _NPC.enterCombat();
 }
 
 //getters and setters
@@ -69,12 +60,4 @@ int Combat::getRoundCount() const {
 
 void Combat::setRoundCount(int roundCount) {
     Combat::roundCount = roundCount;
-}
-
-bool Combat::isCombatInProgress() const {
-    return combatInProgress;
-}
-
-void Combat::setCombatInProgress() {
-    Combat::combatInProgress = true;
 }

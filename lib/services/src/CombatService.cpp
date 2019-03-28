@@ -4,22 +4,23 @@
 
 #include "CombatService.h"
 
-void CombatService::createCombat(Avatar& player, Avatar& NPC) {
-
-    if(combatMap.find(player.getAvatarId()) == combatMap.end()){
-
-        //create Combat
-        Combat combat{player, NPC};
-
-        combat.enterCombat();
-        combatMap.insert(std::pair<ID, Combat&>(player.getAvatarId(), combat));
+bool CombatService::createCombat(Avatar& player, Avatar& NPC) {
+    if(_combatMap.find(player.getAvatarId()) != _combatMap.end()){
+        return false;
     }
 
+    //create Combat
+    Combat combat{player, NPC};
+    _combatMap.insert(std::pair<ID, Combat>(player.getAvatarId(), combat));
+
     ++fightsInitialized;
+
+    return true;
 }
 
 void CombatService::destroyCombat(Avatar &player) {
     //removes combat object from map
-    combatMap.erase(player.getAvatarId());
+    _combatMap.erase(player.getAvatarId());
 }
+
 

@@ -6,32 +6,32 @@
 #define WEBSOCKETNETWORKING_COMBATSERVICE_H
 
 #include <unordered_map>
-
 #include "Room.h"
 #include "Avatar.h"
 #include "Combat.h"
+#include "AvatarService.h"
+#include "RoomConnectionService.h"
 
 using namespace models;
 
 /*
  * class for combat logic
  */
-class CombatService{
-
-private:
-
-    int fightsInitialized;
-    //obtain value from global config file
-    const static int heartBeatCount = 100;
-
-    //data structure to map user Avatar to his/her own combat
-
-    std::unordered_map<ID, Combat> combatMap;
+class CombatService {
 
 public:
+    CombatService(AvatarService& avatarService, RoomConnectionService& roomConnectionService) :
+        _avatarService(avatarService), _roomConnectionService(roomConnectionService){}
 
-    void createCombat(Avatar &player, Avatar& NPC);
-    void destroyCombat(Avatar &player);
+    bool createCombat(Avatar& player, Avatar& NPC);
+
+    void destroyCombat(Avatar& player);
+
+private:
+    int fightsInitialized;
+    std::unordered_map<ID, Combat> _combatMap;
+    AvatarService& _avatarService;
+    RoomConnectionService& _roomConnectionService;
 };
 
 #endif //WEBSOCKETNETWORKING_COMBATSERVICE_H
