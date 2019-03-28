@@ -138,26 +138,29 @@ std::vector<Message> GameController::tell(const Message& message) {
 
     //split user input after command name by space
     std::string recipient = userInput.substr(0, userInput.find(' '));
+    std::string sender = message.user.getAccount()._username;
+
+    if(recipient == sender) {
+        response.emplace_back(message.user, "You cannot send private message to yourself!");
+        return response;
+    }
+
     std::string userMessage = userInput.substr(userInput.find(' ')+1);
 
-    std::string tellMessage = message.user.getAccount()._username + " whispers: " + userMessage;
+    if(userInput.find(' ') == std::string::npos || userMessage == ""){
+        response.emplace_back(message.user, "Please enter a message to send");
+        return response;
+    }
 
-    //find user with matching username
-    auto it = std::find_if(
-        _avatarIdToUser.begin(),
-        _avatarIdToUser.end(),
-        [&recipient](const auto& it){
-            return it.second->getAccount()._username == recipient;
-        }
-    );
+    User* user = findUser(recipient);
 
-    if (_avatarIdToUser.end() != it){
-        response.emplace_back(*(it->second), tellMessage);
+    if (user != nullptr){
+        //if user is online
+        response.emplace_back(*user, sender + " whispers: " + userMessage);
         response.emplace_back(message.user, "You whispered to " + recipient + ": " + userMessage);
     } else {
         response.emplace_back(message.user, "User is not online or does not exist");
     }
-
 
     return response;
 
@@ -191,4 +194,23 @@ User* GameController::findUser(const ID& avatarId){
     }
     //return user associated with ID
     return _avatarIdToUser[avatarId];
+}
+
+
+User* GameController::findUser(std::string username){
+
+    //find user with matching username
+    auto it = std::find_if(
+            _avatarIdToUser.begin(),
+            _avatarIdToUser.end(),
+            [&username](const auto& it){
+                return it.second->getAccount()._username == username;
+            }
+    );
+
+    if (_avatarIdToUser.end() != it){
+        return it->second;
+    } else {
+        return nullptr;
+    }
 }

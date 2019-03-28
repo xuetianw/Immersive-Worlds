@@ -100,6 +100,8 @@ private:
 
     User* findUser(const ID& avatarId);
 
+    User* findUser(std::string username);
+
     /**
     * Construct message to send to multiple avatars
     * @param message    the system message to be sent to avatars
