@@ -29,15 +29,35 @@ void InventoryService::giveObjectToAvatar(const ID& avatarId, Object item) {
 
 }
 
-void InventoryService::removeObjectFromRoom(const ID& objectId) {
+void InventoryService::removeObjectFromRoom(const ID& roomId, const ID& objectId) {
+    auto roomIter = _roomIdToObjectIds.find(roomId);
 
+    if(roomIter != _roomIdToObjectIds.end()) {
+        roomIter->second.erase(
+                std::remove_if(roomIter->second.begin(), roomIter->second.end(),
+                        [&](const ID& id) {
+                            return objectId == id;
+                }),
+                roomIter->second.end()
+        );
+    }
 }
 
-void InventoryService::takeObjectFromAvatar(const ID& objectID) {
+void InventoryService::takeObjectFromAvatar(const ID& avatarId, const ID& objectID) {
+    auto avatarIter = _avatarIdToObjectIds.find(avatarId);
 
+    if(avatarIter != _avatarIdToObjectIds.end()) {
+        avatarIter->second.erase(
+                std::remove_if(avatarIter->second.begin(), avatarIter->second.end(),
+                        [&](const ID& id){
+                            return objectID == id;
+                }),
+                avatarIter->second.end()
+        );
+    }
 }
 
-bool InventoryService::doesObjectExist(const ID &objectId) const {
+bool InventoryService::doesObjectExist(const ID& objectId) const {
     return _objects.count(objectId) != 0;
 }
 

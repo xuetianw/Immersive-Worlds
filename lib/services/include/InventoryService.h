@@ -31,9 +31,9 @@ public:
 
     void giveObjectToAvatar(const ID& avatarId, Object item);
 
-    void removeObjectFromRoom(const ID& objectId);
+    void removeObjectFromRoom(const ID& roomId, const ID& objectId);
 
-    void takeObjectFromAvatar(const ID& objectID);
+    void takeObjectFromAvatar(const ID& avatarId, const ID& objectID);
 
     bool doesObjectExist(const ID& objectId) const;
 
