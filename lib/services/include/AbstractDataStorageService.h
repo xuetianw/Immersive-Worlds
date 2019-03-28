@@ -4,7 +4,7 @@
 #include <ID.h>
 #include <Room.h>
 
-class DataStorageServiceInterface {
+class AbstractDataStorageService {
 public:
     using Neighbours = std::vector<models::NeighbourInfo>;
 

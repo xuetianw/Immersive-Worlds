@@ -8,10 +8,10 @@
 #include "SingleItem.h"
 #include "CusJson.h"
 #include "Room.h"
-#include "DataStorageServiceInterface.h"
+#include "AbstractDataStorageService.h"
 #include <iostream>
 
-class DataStorageService : public DataStorageServiceInterface {
+class DataStorageService : public AbstractDataStorageService {
 private:
     using Neighbours = std::vector<models::NeighbourInfo>;
 
