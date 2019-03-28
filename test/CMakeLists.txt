@@ -30,7 +30,8 @@ add_executable(run_tests
     models/RoomTests.cpp
     services/CombatServiceTest.cpp
     services/RoomConnectionServiceTests.cpp
-    )
+    actions/MiniGameActions.cpp
+  )
 
 
 target_link_libraries(run_tests gmock gtest gtest_main)
