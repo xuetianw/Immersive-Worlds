@@ -9,6 +9,7 @@
 #include "CombatService.h"
 #include "MiniGame.h"
 #include "MiniGameActions.h"
+#include "InventoryService.h"
 
 constexpr char INITIAL_ROOM_START_MESSAGE[] = "User has spawned in initial room";
 constexpr char USER_CURRENTLY_LOCATED_MESSAGE[] = "You are currently located in ";
@@ -21,6 +22,7 @@ public:
     GameController() : _dataStorageService(DataStorageService{}),
                        _roomConnectionService{_dataStorageService},
                        _avatarService{_dataStorageService},
+                       _inventoryService{_dataStorageService},
                        _gameActions(_roomConnectionService, _avatarService),
                        _miniGameActions(_dataStorageService, _roomConnectionService) { }
 
@@ -105,11 +107,12 @@ private:
     DataStorageService _dataStorageService;
     RoomConnectionService _roomConnectionService;
     AvatarService _avatarService;
-    MiniGameActions _miniGameActions;
+    InventoryService _inventoryService;
 
     // Actions
     GameActions _gameActions;
     CombatService _combatService;
+    MiniGameActions _miniGameActions;
 
     std::unordered_map<ID, User*> _avatarIdToUser;
 
