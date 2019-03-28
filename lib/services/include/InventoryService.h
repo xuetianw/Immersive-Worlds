@@ -6,6 +6,7 @@
 #define WEBSOCKETNETWORKING_INVENTORYSERVICE_H
 
 #include <unordered_map>
+#include <unordered_set>
 
 #include "ID.h"
 #include "Object.h"
