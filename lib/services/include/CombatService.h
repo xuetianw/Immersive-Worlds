@@ -5,7 +5,7 @@
 #ifndef WEBSOCKETNETWORKING_COMBATSERVICE_H
 #define WEBSOCKETNETWORKING_COMBATSERVICE_H
 
-#include <map>
+#include <unordered_map>
 
 #include "Room.h"
 #include "Avatar.h"
@@ -26,7 +26,7 @@ private:
 
     //data structure to map user Avatar to his/her own combat
 
-    std::map<ID, Combat> combatMap;
+    std::unordered_map<ID, Combat> combatMap;
 
 public:
 
