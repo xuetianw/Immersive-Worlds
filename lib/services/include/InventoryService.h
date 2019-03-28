@@ -27,13 +27,13 @@ public:
 
     std::vector<Object*> getObjectsByRoomId(const ID& roomId) const;
 
-    void addObjectToRoom(const ID& roomId, Object item);
+    void addObjectToRoom(const ID& roomId, const ID& objectId);
 
-    void giveObjectToAvatar(const ID& avatarId, Object item);
+    void giveObjectToAvatar(const ID& avatarId, const ID& objectId);
 
     void removeObjectFromRoom(const ID& roomId, const ID& objectId);
 
-    void takeObjectFromAvatar(const ID& avatarId, const ID& objectID);
+    void takeObjectFromAvatar(const ID& avatarId, const ID& objectId);
 
     bool doesObjectExist(const ID& objectId) const;
 
@@ -44,9 +44,9 @@ private:
 
     std::unordered_map<ID, Object> _objects;
 
-    std::unordered_map<ID, std::vector<ID>> _roomIdToObjectIds;
+    std::unordered_map<ID, std::unordered_set<ID>> _roomIdToObjectIds;
 
-    std::unordered_map<ID, std::vector<ID>> _avatarIdToObjectIds;
+    std::unordered_map<ID, std::unordered_set<ID>> _avatarIdToObjectIds;
 };
 
 #endif //WEBSOCKETNETWORKING_INVENTORYSERVICE_H

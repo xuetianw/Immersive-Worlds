@@ -21,39 +21,27 @@ std::vector<Object*> InventoryService::getObjectsByRoomId(const ID& roomId) cons
     return std::vector<Object*>{};
 }
 
-void InventoryService::addObjectToRoom(const ID& roomId, Object item) {
-
+void InventoryService::addObjectToRoom(const ID& roomId, const ID& objectId) {
+    _roomIdToObjectIds[roomId].emplace(objectId);
 }
 
-void InventoryService::giveObjectToAvatar(const ID& avatarId, Object item) {
-
+void InventoryService::giveObjectToAvatar(const ID& avatarId, const ID& objectId) {
+    _avatarIdToObjectIds[avatarId].emplace(objectId);
 }
 
 void InventoryService::removeObjectFromRoom(const ID& roomId, const ID& objectId) {
     auto roomIter = _roomIdToObjectIds.find(roomId);
 
     if(roomIter != _roomIdToObjectIds.end()) {
-        roomIter->second.erase(
-                std::remove_if(roomIter->second.begin(), roomIter->second.end(),
-                        [&](const ID& id) {
-                            return objectId == id;
-                }),
-                roomIter->second.end()
-        );
+        roomIter->second.erase(objectId);
     }
 }
 
-void InventoryService::takeObjectFromAvatar(const ID& avatarId, const ID& objectID) {
+void InventoryService::takeObjectFromAvatar(const ID& avatarId, const ID& objectId) {
     auto avatarIter = _avatarIdToObjectIds.find(avatarId);
 
     if(avatarIter != _avatarIdToObjectIds.end()) {
-        avatarIter->second.erase(
-                std::remove_if(avatarIter->second.begin(), avatarIter->second.end(),
-                        [&](const ID& id){
-                            return objectID == id;
-                }),
-                avatarIter->second.end()
-        );
+        avatarIter->second.erase(objectId);
     }
 }
 
