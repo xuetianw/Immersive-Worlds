@@ -92,7 +92,19 @@ public:
     */
     std::vector<Message> say(const Message& message);
 
+    /**
+    * Displays to the user message sent by another user in the same or adjacent rooms
+    * @param message
+    * @return messages that will be sent to user in the same or adjacent rooms
+    */
     std::vector<Message> yell(const Message& message);
+
+    /**
+    * Deliver private message from a user to another user in the world
+    * @param message
+    * @return messages that will be sent to the receiver and sender (so they are aware of msg sent)
+    */
+    std::vector<Message> tell(const Message& message);
 
     /**
      * Displays to the user the available directions for their avatar
@@ -118,6 +130,8 @@ private:
     std::unordered_map<ID, User*> _avatarIdToUser;
 
     User* findUser(const ID& avatarId);
+
+    User* findUser(std::string username);
 
     /**
     * Construct message to send to multiple avatars

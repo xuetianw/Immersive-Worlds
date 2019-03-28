@@ -164,6 +164,42 @@ std::vector<Message> GameController::yell(const Message& message) {
     return constructMessageToAvatars(yellMessage, avatarIds);
 }
 
+std::vector<Message> GameController::tell(const Message& message) {
+
+    std::vector<Message> response{};
+
+    std::string userInput = message.text;
+
+    //split user input after command name by space
+    std::string recipient = userInput.substr(0, userInput.find(' '));
+    std::string sender = message.user.getAccount()._username;
+
+    if(recipient == sender) {
+        response.emplace_back(message.user, "You cannot send private message to yourself!");
+        return response;
+    }
+
+    std::string userMessage = userInput.substr(userInput.find(' ')+1);
+
+    if(userInput.find(' ') == std::string::npos || userMessage == ""){
+        response.emplace_back(message.user, "Please enter a message to send");
+        return response;
+    }
+
+    User* user = findUser(recipient);
+
+    if (user != nullptr){
+        //if user is online
+        response.emplace_back(*user, sender + " whispers: " + userMessage);
+        response.emplace_back(message.user, "You whispered to " + recipient + ": " + userMessage);
+    } else {
+        response.emplace_back(message.user, "User is not online or does not exist");
+    }
+
+    return response;
+
+}
+
 std::vector<Message> GameController::constructMessageToAvatars(std::string message, const std::vector<ID>& avatarIds){
 
     std::vector<Message> responses;
@@ -192,4 +228,23 @@ User* GameController::findUser(const ID& avatarId){
     }
     //return user associated with ID
     return _avatarIdToUser[avatarId];
+}
+
+
+User* GameController::findUser(std::string username){
+
+    //find user with matching username
+    auto it = std::find_if(
+            _avatarIdToUser.begin(),
+            _avatarIdToUser.end(),
+            [&username](const auto& it){
+                return it.second->getAccount()._username == username;
+            }
+    );
+
+    if (_avatarIdToUser.end() != it){
+        return it->second;
+    } else {
+        return nullptr;
+    }
 }

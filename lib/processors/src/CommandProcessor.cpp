@@ -87,6 +87,7 @@ void CommandProcessor::buildCommands() {
     addCommand("/move", MOVE, [this] (Message message) { return gameController->move(message); });
     addCommand("/say", SAY, [this] (Message message) { return gameController->say(message); });
     addCommand("/yell", YELL, [this] (Message message) { return gameController->yell(message); });
+    addCommand("/tell", TELL, [this] (Message message) { return gameController->tell(message); });
     addCommand("/minigame", MINIGAME, [this] (Message message) { return gameController->startMiniGame(message); });
     addCommand("/answer", MINIGAME_ANSWER, [this] (Message message) { return gameController->verifyMinigameAnswer(message); });
     addCommand("/attack", ATTACK, [this] (Message message) { return gameController->attackNPC(message);});

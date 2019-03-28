@@ -48,9 +48,6 @@ std::vector<string> GameActions::getDirectionsForAvatarId(const ID& avatarId) {
     return response;
 };
 
-bool GameActions::userYell(const User& user, const std::string& messageString) {
-    return false;
-}
 
 bool GameActions::spawnAvatarInStartingRoom(const ID& avatarId) {
     const ID& startingRoomID = _roomConnectionService.getStartingRoom();
