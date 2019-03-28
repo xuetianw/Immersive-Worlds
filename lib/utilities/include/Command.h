@@ -12,10 +12,12 @@ enum Command {
     LOGOUT,
     MOVE,
     SAY,
+    YELL,
     LOOK,
     HELP,
     MINIGAME,
     MINIGAME_ANSWER,
+    MINIGAME_NEXTROUND,
     DIRECTIONS,
     AVATAR_INFO,
     ATTACK,
@@ -46,9 +48,11 @@ public:
             MOVE,
             LOOK,
             SAY,
+            YELL,
             LOGOUT,
             HELP,
             DIRECTIONS,
+            MINIGAME,
             AVATAR_INFO
         };
     }
@@ -70,7 +74,9 @@ public:
     std::unordered_set<Command> getCommands() override {
         return {
             LOGOUT,
-            HELP
+            HELP,
+            MINIGAME_ANSWER,
+            MINIGAME_NEXTROUND
         };
     }
 };

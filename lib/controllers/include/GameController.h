@@ -8,6 +8,7 @@
 #include "GameActions.h"
 #include "CombatService.h"
 #include "MiniGame.h"
+#include "MiniGameActions.h"
 
 constexpr char INITIAL_ROOM_START_MESSAGE[] = "User has spawned in initial room";
 constexpr char USER_CURRENTLY_LOCATED_MESSAGE[] = "You are currently located in ";
@@ -20,7 +21,8 @@ public:
     GameController() : _dataStorageService(DataStorageService{}),
                        _roomConnectionService{_dataStorageService},
                        _avatarService{_dataStorageService},
-                       _gameActions(_roomConnectionService, _avatarService) {}
+                       _gameActions(_roomConnectionService, _avatarService),
+                       _miniGameActions(_dataStorageService, _roomConnectionService) { }
 
     /**
      * Calls GameService to Move Avatar.
@@ -73,6 +75,12 @@ public:
      */
     std::vector<Message> outputCurrentLocationInfo(const Message& message);
 
+    /* 
+     * increment the next round if a game exists
+     * @param message
+     * @return prints next round if there are rounds left. 
+     */
+    std::vector<Message> nextRound(const Message& message);
 
     /**
     * Displays to the user message sent by another user in the same room
@@ -80,6 +88,8 @@ public:
     * @return messages that will be sent to user in the same room
     */
     std::vector<Message> say(const Message& message);
+
+    std::vector<Message> yell(const Message& message);
 
     /**
      * Displays to the user the available directions for their avatar
@@ -95,6 +105,7 @@ private:
     DataStorageService _dataStorageService;
     RoomConnectionService _roomConnectionService;
     AvatarService _avatarService;
+    MiniGameActions _miniGameActions;
 
     // Actions
     GameActions _gameActions;
@@ -103,6 +114,14 @@ private:
     std::unordered_map<ID, User*> _avatarIdToUser;
 
     User* findUser(const ID& avatarId);
+
+    /**
+    * Construct message to send to multiple avatars
+    * @param message    the system message to be sent to avatars
+    * @param avatarIds  list of avatar that should receive the message
+    * @return vector of Messages that will be sent to the given list of avatars
+    */
+    std::vector<Message> constructMessageToAvatars(std::string message, const std::vector<ID>& avatarIds);
 };
 
 #endif //WEBSOCKETNETWORKING_GAMECONTROLLER_H

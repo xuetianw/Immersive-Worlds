@@ -1,6 +1,7 @@
 //
 // Created by asim on 07/02/19.
 //
+
 #include "GameController.h"
 #include "Helper.h"
 
@@ -67,13 +68,15 @@ const std::string GameController::spawnAvatarInStartingRoom(const ID& avatarId) 
 }
 
 std::vector<Message> GameController::startMiniGame(const Message& message) {
-    bool hasMiniGame = _gameActions.roomHaveMiniGame(message.user);
+    User& user = message.user;
+    auto roomID = _gameActions.getRoomId(message.user.getAvatarId());
+    bool hasMiniGame = _miniGameActions.roomHaveMiniGame(roomID);
 
     Message newMessage = Message(message.user);
     if(hasMiniGame) {
-        auto minigame = _gameActions.getMiniGame(message.user, message.text);
-
+        auto minigame = _miniGameActions.getMiniGame(roomID);
         newMessage.text = minigame.printQuestion();
+        user.setCommandType(new MinigameCommands());
     } else {
         newMessage.text = "MiniGame not available for this room";
     }
@@ -81,12 +84,32 @@ std::vector<Message> GameController::startMiniGame(const Message& message) {
     return std::vector<Message>{newMessage};
 }
 
+std::vector<Message> GameController::nextRound(const Message& message) {
+    // for testing purposes
+    User& user = message.user;
+    auto roomID = _gameActions.getRoomId(message.user.getAvatarId());
+    _miniGameActions.nextRound(roomID);
+
+    std::vector<Message> response;
+    auto minigame = _miniGameActions.getMiniGame(roomID);
+    if(minigame.hasMoreRounds()) {
+        response.push_back(Message{message.user, minigame.printQuestion()});
+    } else {
+        response.push_back(Message{message.user, "No More Questions"});
+        _miniGameActions.resetMiniGame(roomID);
+        user.setCommandType(new GameCommands());
+    }
+
+    return response;
+}
+
 std::vector<Message> GameController::verifyMinigameAnswer(const Message& message) {
     // TODO: figure out a better way to get the input. EX. maybe they type a number, should throw error or something
     char letter = (message.text).at(0);
     int input = letter - 'a';
 
-    bool result = _gameActions.verifyAnswer(message.user, input);
+    auto roomID = _gameActions.getRoomId(message.user.getAvatarId());
+    bool result = _miniGameActions.verifyAnswer(roomID, input);
 
     Message newMessage = Message(message.user, (result) ? "Correct" : "WRONG");
     return std::vector<Message>{newMessage};
@@ -128,13 +151,33 @@ std::vector<Message> GameController::say(const Message& message) {
     //retrieve the room the sender avatar is in.
     ID roomId = _gameActions.getRoomId(message.user.getAccount().avatarId);
 
-    std::vector<Message> responses;
     std::vector<ID> avatarIds = _gameActions.getAllAvatarIds(roomId);
+
+    return constructMessageToAvatars(sayMessage, avatarIds);
+}
+
+std::vector<Message> GameController::yell(const Message& message) {
+
+    std::string yellMessage = message.user.getAccount()._username + " yells: " + message.text;
+
+    //retrieve the room the sender avatar is in.
+    ID roomId = _gameActions.getRoomId(message.user.getAccount().avatarId);
+
+    std::vector<ID> avatarIds = _gameActions.getAllAvatarIdsInNeighbourAndCurrent(roomId);
+
+    return constructMessageToAvatars(yellMessage, avatarIds);
+}
+
+std::vector<Message> GameController::constructMessageToAvatars(std::string message, const std::vector<ID>& avatarIds){
+
+    std::vector<Message> responses;
+
     for(const ID& id : avatarIds) {
         User* user = findUser(id);
         if(user == nullptr) continue;
-        responses.emplace_back(Message{*user, sayMessage});
+        responses.emplace_back(Message{*user, message});
     }
+
     return responses;
 }
 

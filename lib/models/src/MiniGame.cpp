@@ -33,19 +33,26 @@ std::string MiniGame::printQuestion() {
     std::stringstream ss;
     ss << getQuestion() << std::endl;
 
-    std::vector<std::string> questions = getAnswers();
+    std::vector<std::string> answers = getAnswers();
 
     char letter = 'a';
-    for (int i = 0; i < questions.size(); i++, letter++) {
-        std::string question = questions.at(i);
+    for (int i = 0; i < answers.size(); i++, letter++) {
+        std::string answer = answers.at(i);
 
-        ss << letter << ") " << question << std::endl;
+        ss << letter << ") " << answer << std::endl;
     }
 
     return ss.str();
 }
 
-bool MiniGame::nextRound() {
+void MiniGame::nextRound() {
     _round++;
-    return _round == _questions.size();
+}
+
+bool MiniGame::hasMoreRounds() {
+    return _round < _questions.size();
+}
+
+void MiniGame::resetMiniGame() {
+    _round = 0;
 }
