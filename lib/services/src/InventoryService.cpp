@@ -4,20 +4,32 @@
 
 #include "InventoryService.h"
 
-const std::optional<std::reference_wrapper<const Object>>
-InventoryService::getObjectById(const ID& objectId) const {
+Object* InventoryService::getObjectById(const ID& objectId) {
     if(!doesObjectExist(objectId)) {
-        return std::nullopt;
+        return nullptr;
     }
 
-    return _objects.at(objectId);
+    return _objects[objectId].get();
 }
 
-std::vector<Object*> InventoryService::getObjectsByAvatarId(const ID& avatarId) const {
-    return std::vector<Object*>{};
+std::vector<Object*> InventoryService::getObjectsByAvatarId(const ID& avatarId) {
+    std::vector<Object*> objectsOwnedByAvatar;
+
+    auto avatarIter = _avatarIdToObjectIds.find(avatarId);
+    if(avatarIter != _avatarIdToObjectIds.end()) {
+        for(const auto& objectId : avatarIter->second) {
+            auto obj = getObjectById(objectId);
+
+            if(obj) {
+                objectsOwnedByAvatar.emplace_back(obj);
+            }
+        }
+    }
+
+    return objectsOwnedByAvatar;
 }
 
-std::vector<Object*> InventoryService::getObjectsByRoomId(const ID& roomId) const {
+std::vector<Object*> InventoryService::getObjectsByRoomId(const ID& roomId) {
     return std::vector<Object*>{};
 }
 

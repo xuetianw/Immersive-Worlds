@@ -21,12 +21,11 @@ public:
             loadFromStorage();
     }
 
-    const std::optional<std::reference_wrapper<const Object>>
-    getObjectById(const ID& objectId) const;
+    Object* getObjectById(const ID& objectId);
 
-    std::vector<Object*> getObjectsByAvatarId(const ID& avatarId) const;
+    std::vector<Object*> getObjectsByAvatarId(const ID& avatarId);
 
-    std::vector<Object*> getObjectsByRoomId(const ID& roomId) const;
+    std::vector<Object*> getObjectsByRoomId(const ID& roomId);
 
     void addObjectToRoom(const ID& roomId, const ID& objectId);
 
@@ -43,7 +42,7 @@ private:
 
     DataStorageService& _dataStorageService;
 
-    std::unordered_map<ID, Object> _objects;
+    std::unordered_map<ID, std::unique_ptr<Object>> _objects;
 
     std::unordered_map<ID, std::unordered_set<ID>> _roomIdToObjectIds;
 
