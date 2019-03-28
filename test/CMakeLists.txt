@@ -29,6 +29,7 @@ add_executable(run_tests
     models/InventoryTests.cpp
     models/RoomTests.cpp
     services/CombatServiceTest.cpp
+    actions/MiniGameActions.cpp
   )
 
 
