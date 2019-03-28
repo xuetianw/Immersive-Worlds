@@ -6,7 +6,7 @@
 #define WEBSOCKETNETWORKING_GAMECONTROLLER_H
 
 #include "GameActions.h"
-#include "CombatService.h"
+#include "CombatActions.h"
 #include "MiniGame.h"
 #include "MiniGameActions.h"
 
@@ -22,7 +22,8 @@ public:
                        _roomConnectionService{_dataStorageService},
                        _avatarService{_dataStorageService},
                        _gameActions(_roomConnectionService, _avatarService),
-                       _miniGameActions(_dataStorageService, _roomConnectionService) { }
+                       _miniGameActions(_dataStorageService, _roomConnectionService),
+                       _combatActions(_avatarService, _roomConnectionService){ }
 
     /**
      * Calls GameService to Move Avatar.
@@ -109,7 +110,7 @@ private:
 
     // Actions
     GameActions _gameActions;
-    CombatService _combatService;
+    CombatActions _combatActions;
 
     std::unordered_map<ID, User*> _avatarIdToUser;
 

@@ -12,7 +12,6 @@ namespace models {
 
         Avatar(ID avatarId, std::string name) :
             _avatarId(avatarId),
-            _roomId(ID{}),
             _name(std::move(name)){
         }
 

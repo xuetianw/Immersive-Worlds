@@ -17,10 +17,10 @@ using namespace models;
 /*
  * class for combat logic
  */
-class CombatService {
+class CombatActions {
 
 public:
-    CombatService(AvatarService& avatarService, RoomConnectionService& roomConnectionService) :
+    CombatActions(AvatarService& avatarService, RoomConnectionService& roomConnectionService) :
         _avatarService(avatarService), _roomConnectionService(roomConnectionService){}
 
     bool createCombat(Avatar& player, Avatar& NPC);

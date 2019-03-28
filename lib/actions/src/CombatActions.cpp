@@ -2,9 +2,9 @@
 // Created by Nirag Mehta on 2019-03-12.
 //
 
-#include "CombatService.h"
+#include "../include/CombatActions.h"
 
-bool CombatService::createCombat(Avatar& player, Avatar& NPC) {
+bool CombatActions::createCombat(Avatar& player, Avatar& NPC) {
     if(_combatMap.find(player.getAvatarId()) != _combatMap.end()){
         return false;
     }
@@ -18,7 +18,7 @@ bool CombatService::createCombat(Avatar& player, Avatar& NPC) {
     return true;
 }
 
-void CombatService::destroyCombat(Avatar &player) {
+void CombatActions::destroyCombat(Avatar &player) {
     //removes combat object from map
     _combatMap.erase(player.getAvatarId());
 }

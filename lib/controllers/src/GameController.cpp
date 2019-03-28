@@ -126,28 +126,12 @@ std::vector<Message> GameController::outputCurrentLocationInfo(const Message& me
     return std::vector<Message>{responseMessage};
 }
 
-//combat methods
 std::vector<Message> GameController::attackNPC(const Message &message) {
 
-
-    //attack NPC and return a response (current HP, damage dealt, etc)
     Message combatResponse = Message(message.user);
 
-    //obtain User's Avatar
     ID userAvatar = message.user.getAccount().avatarId;
 
-
-    // 1. /attack alice
-
-    // combatService.attack(ID attackerId, String defenderName)
-        /*
-         * In attack,
-         * Get Avatar for defenderName
-         *
-         * rest of the combat logic here
-         *
-         *
-         */
 
     return std::vector<Message>();
 }
