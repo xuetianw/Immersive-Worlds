@@ -30,7 +30,20 @@ std::vector<Object*> InventoryService::getObjectsByAvatarId(const ID& avatarId) 
 }
 
 std::vector<Object*> InventoryService::getObjectsByRoomId(const ID& roomId) {
-    return std::vector<Object*>{};
+    std::vector<Object*> objectsInTheRoom;
+
+    auto roomIter = _roomIdToObjectIds.find(roomId);
+    if(roomIter != _roomIdToObjectIds.end()) {
+        for(const auto& objectId : roomIter->second) {
+            auto obj = getObjectById(objectId);
+
+            if(obj) {
+                objectsInTheRoom.emplace_back(obj);
+            }
+        }
+    }
+
+    return objectsInTheRoom;
 }
 
 void InventoryService::addObjectToRoom(const ID& roomId, const ID& objectId) {
