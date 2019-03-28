@@ -29,19 +29,11 @@ void InventoryService::giveObjectToAvatar(const ID& avatarId, const ID& objectId
 }
 
 void InventoryService::removeObjectFromRoom(const ID& roomId, const ID& objectId) {
-    auto roomIter = _roomIdToObjectIds.find(roomId);
-
-    if(roomIter != _roomIdToObjectIds.end()) {
-        roomIter->second.erase(objectId);
-    }
+    removeObjectFromEntity(_roomIdToObjectIds, roomId, objectId);
 }
 
 void InventoryService::takeObjectFromAvatar(const ID& avatarId, const ID& objectId) {
-    auto avatarIter = _avatarIdToObjectIds.find(avatarId);
-
-    if(avatarIter != _avatarIdToObjectIds.end()) {
-        avatarIter->second.erase(objectId);
-    }
+    removeObjectFromEntity(_avatarIdToObjectIds, avatarId, objectId);
 }
 
 bool InventoryService::doesObjectExist(const ID& objectId) const {
@@ -65,6 +57,16 @@ std::vector<Object*> InventoryService::getObjectsByEntity(std::unordered_map<ID,
     }
 
     return objectsContainer;
+}
+
+void InventoryService::removeObjectFromEntity(std::unordered_map<ID, std::unordered_set<ID>> &objectIdMap,
+                                                const ID &entityId, const ID& objectId) {
+    auto iter = objectIdMap.find(entityId);
+
+    if(iter != objectIdMap.end()) {
+        iter->second.erase(objectId);
+    }
+
 }
 
 void InventoryService::loadFromStorage() {
