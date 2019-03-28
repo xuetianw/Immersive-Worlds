@@ -1,9 +1,6 @@
 //
 // Created by Nirag Mehta on 2019-03-19.
 //
-
-#include <Combat.h>
-
 #include "Combat.h"
 
 void Combat::attackNpc() {
@@ -79,6 +76,5 @@ bool Combat::isCombatInProgress() const {
 }
 
 void Combat::setCombatInProgress() {
-    if ((_player.get_hp() > 0 && _NPC.get_hp() > 0))
-        Combat::combatInProgress = true;
+    Combat::combatInProgress = true;
 }

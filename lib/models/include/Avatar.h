@@ -10,9 +10,9 @@ namespace models {
     class Avatar {
     public:
 
-        Avatar(ID roomId, std::string name) :
-            _avatarId(ID{}),
-            _roomId(roomId),
+        Avatar(ID avatarId, std::string name) :
+            _avatarId(avatarId),
+            _roomId(ID{}),
             _name(std::move(name)),
             _hp(200),
             _mana(100),
@@ -20,9 +20,8 @@ namespace models {
             _inCombat(false){
         }
 
-
-        Avatar(ID avatar, ID roomId, std::string name) :
-            _avatarId(avatar),
+        Avatar(ID avatarId, ID roomId, std::string name) :
+            _avatarId(avatarId),
             _roomId(roomId),
             _name(std::move(name)),
             _hp(200),
