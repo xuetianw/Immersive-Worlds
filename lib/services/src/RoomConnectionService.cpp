@@ -92,6 +92,21 @@ const std::vector<std::string> RoomConnectionService::getAvailableRoomDirections
     return availableDirections;
 }
 
+std::vector<ID> RoomConnectionService::getAllNeighbourId(const ID& roomId){
+
+    std::vector<ID>neighbours;
+    std::vector<std::string> allDirections = getAvailableRoomDirections(roomId);
+
+    for (const std::string& dir : allDirections){
+
+        const std::optional<std::reference_wrapper<const ID>> neighbourId = getNeighbourId(roomId, dir);
+        neighbours.push_back(neighbourId->get());
+
+    }
+
+    return neighbours;
+};
+
 const bool RoomConnectionService::isValidDirectionString(const std::string& directionString) {
     return _directions.count(directionString) != 0;
 }
