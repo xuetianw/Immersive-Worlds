@@ -40,6 +40,9 @@ public:
 private:
     void loadFromStorage();
 
+    std::vector<Object*> getObjectsByEntity(std::unordered_map<ID, std::unordered_set<ID>> &objectIdMap,
+                                            const ID &entityId);
+
     DataStorageService& _dataStorageService;
 
     std::unordered_map<ID, std::unique_ptr<Object>> _objects;

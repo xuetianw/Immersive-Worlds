@@ -13,37 +13,11 @@ Object* InventoryService::getObjectById(const ID& objectId) {
 }
 
 std::vector<Object*> InventoryService::getObjectsByAvatarId(const ID& avatarId) {
-    std::vector<Object*> objectsOwnedByAvatar;
-
-    auto avatarIter = _avatarIdToObjectIds.find(avatarId);
-    if(avatarIter != _avatarIdToObjectIds.end()) {
-        for(const auto& objectId : avatarIter->second) {
-            auto obj = getObjectById(objectId);
-
-            if(obj) {
-                objectsOwnedByAvatar.emplace_back(obj);
-            }
-        }
-    }
-
-    return objectsOwnedByAvatar;
+    return getObjectsByEntity(_avatarIdToObjectIds, avatarId);
 }
 
 std::vector<Object*> InventoryService::getObjectsByRoomId(const ID& roomId) {
-    std::vector<Object*> objectsInTheRoom;
-
-    auto roomIter = _roomIdToObjectIds.find(roomId);
-    if(roomIter != _roomIdToObjectIds.end()) {
-        for(const auto& objectId : roomIter->second) {
-            auto obj = getObjectById(objectId);
-
-            if(obj) {
-                objectsInTheRoom.emplace_back(obj);
-            }
-        }
-    }
-
-    return objectsInTheRoom;
+    return getObjectsByEntity(_roomIdToObjectIds, roomId);
 }
 
 void InventoryService::addObjectToRoom(const ID& roomId, const ID& objectId) {
@@ -75,6 +49,24 @@ bool InventoryService::doesObjectExist(const ID& objectId) const {
 }
 
 // PRIVATE
+std::vector<Object*> InventoryService::getObjectsByEntity(std::unordered_map<ID, std::unordered_set<ID>> &objectIdMap,
+                                                          const ID &entityId) {
+    std::vector<Object*> objectsContainer;
+
+    auto iter = objectIdMap.find(entityId);
+    if(iter != objectIdMap.end()) {
+        for(const auto& objectId : iter->second) {
+            auto obj = getObjectById(objectId);
+
+            if(obj) {
+                objectsContainer.emplace_back(obj);
+            }
+        }
+    }
+
+    return objectsContainer;
+}
+
 void InventoryService::loadFromStorage() {
 
 }
