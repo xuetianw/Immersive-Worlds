@@ -126,6 +126,19 @@ std::vector<Message> GameController::outputCurrentLocationInfo(const Message& me
     return std::vector<Message>{responseMessage};
 }
 
+std::vector<Message> GameController::attackNPC(const Message &message) {
+
+    Message combatResponse = Message(message.user);
+
+    ID userAvatar = message.user.getAccount().avatarId;
+
+
+    return std::vector<Message>();
+}
+
+std::vector<Message> GameController::fleeCombat(const Message &message) {
+    return std::vector<Message>();
+}
 
 std::vector<Message> GameController::say(const Message& message) {
 

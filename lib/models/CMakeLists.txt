@@ -6,6 +6,7 @@ add_library(models
     src/InventoryItem.cpp
     src/SingleItem.cpp
     src/MiniGame.cpp
+    src/Combat.cpp
     src/Object.cpp
     )
 

@@ -6,6 +6,7 @@
 #define WEBSOCKETNETWORKING_GAMECONTROLLER_H
 
 #include "GameActions.h"
+#include "CombatActions.h"
 #include "MiniGame.h"
 #include "MiniGameActions.h"
 #include "InventoryService.h"
@@ -23,7 +24,8 @@ public:
                        _avatarService{_dataStorageService},
                        _inventoryService{_dataStorageService},
                        _gameActions(_roomConnectionService, _avatarService),
-                       _miniGameActions(_dataStorageService, _roomConnectionService) { }
+                       _miniGameActions(_dataStorageService, _roomConnectionService),
+                       _combatActions(_avatarService, _roomConnectionService){ }
 
     /**
      * Calls GameService to Move Avatar.
@@ -52,6 +54,22 @@ public:
      * @return the message that will be displayed
      */
     std::vector<Message> verifyMinigameAnswer(const Message& message);
+
+    /*
+     * Start a combat session with an NPC
+     * OR
+     * continue combat session
+     * @param message
+     * @return the message that will be displayed
+     */
+    std::vector<Message> attackNPC(const Message& message);
+
+    /*
+     * Escape/Flee combat
+     * @param message
+     * @return the message that will be displayed
+     */
+    std::vector<Message> fleeCombat(const Message& message);
 
     /**
      * Displays to the user info about their current location.
@@ -94,6 +112,7 @@ private:
 
     // Actions
     GameActions _gameActions;
+    CombatActions _combatActions;
     MiniGameActions _miniGameActions;
 
     std::unordered_map<ID, User*> _avatarIdToUser;

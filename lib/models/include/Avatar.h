@@ -9,16 +9,16 @@
 namespace models {
     class Avatar {
     public:
-        Avatar(ID avatarID, std::string name) :
-                _avatarId(avatarID),
-                _name(std::move(name)) {
+
+        Avatar(ID avatarId, std::string name) :
+            _avatarId(avatarId),
+            _name(std::move(name)){
         }
 
-
-        Avatar(ID avatar, ID roomId, std::string name) :
-            _avatarId(avatar),
+        Avatar(ID avatarId, ID roomId, std::string name) :
+            _avatarId(avatarId),
             _roomId(roomId),
-            _name(std::move(name)) {
+            _name(std::move(name)){
         }
 
         const ID& getRoomId() const;
@@ -48,9 +48,9 @@ namespace models {
         ID _avatarId;
         ID _roomId;
         std::string _name;
-        int _hp ;
-        int _mana ;
-        int damageOutput;
+        int _hp = 500;
+        int _mana = 300;
+        int _damageOutput = 40;
     };
 }
 

@@ -19,7 +19,9 @@ enum Command {
     MINIGAME_ANSWER,
     MINIGAME_NEXTROUND,
     DIRECTIONS,
-    AVATAR_INFO
+    AVATAR_INFO,
+    ATTACK,
+    FLEE
 };
 
 class CommandType {
@@ -60,6 +62,8 @@ class CombatCommands : public CommandType {
 public:
     std::unordered_set<Command> getCommands() override {
         return {
+            ATTACK,
+            FLEE,
             LOGOUT,
             HELP
         };

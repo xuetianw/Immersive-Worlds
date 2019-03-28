@@ -3,7 +3,6 @@ add_library(services
     src/DataStorageService.cpp
     src/RoomConnectionService.cpp
     src/AvatarService.cpp
-    src/CombatService.cpp
     src/InventoryService.cpp
     )
 
