@@ -20,7 +20,7 @@ public:
     bool generateAvatarFromAvatarId(const ID& avatarId, const ID& roomId, const std::string& avatarName);
 
     //Returns an Avatar object of an avatarId
-    const std::optional<std::reference_wrapper<const models::Avatar>> getAvatarFromAvatarId(const ID& avatarId);
+    const std::optional<std::reference_wrapper<models::Avatar>> getAvatarFromAvatarId(const ID& avatarId);
 
     //sets the room for an avatar
     bool setAvatarRoomId(const ID& avatarId, const ID& roomId);

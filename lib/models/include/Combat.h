@@ -14,11 +14,11 @@ class Combat {
 
 private:
 
-    ID combatId;
+    ID _combatId;
     Avatar& _player;
     Avatar& _NPC;
-    int roundCount = 0;
-    bool combatInProgress = true;
+    int _roundCount = 0;
+    bool _combatInProgress = true;
 
     /*
     * function to determine if the combat state is still valid
@@ -29,7 +29,7 @@ private:
 public:
 
     Combat(Avatar& player, Avatar& NPC) :
-            combatId(ID{}),
+            _combatId(ID{}),
             _player(player),
             _NPC(NPC) {}
 
@@ -61,6 +61,8 @@ public:
     int getRoundCount() const;
 
     void setRoundCount(int roundCount);
+
+    bool isCombatInProgress() const;
 
 };
 

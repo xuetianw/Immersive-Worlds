@@ -11,7 +11,7 @@ bool GameActions::moveAvatar(const ID& avatarId, const string& directionString) 
         return false;
     }
 
-    const std::optional<std::reference_wrapper<const Avatar>> avatarOptional = _avatarService.getAvatarFromAvatarId(
+    const std::optional<std::reference_wrapper<Avatar>> avatarOptional = _avatarService.getAvatarFromAvatarId(
             avatarId);
     const ID& currentAvatarRoomId = avatarOptional->get().getRoomId();
 
@@ -36,7 +36,7 @@ std::vector<string> GameActions::getDirectionsForAvatarId(const ID& avatarId) {
     }
 
     //get the Avatar object
-    const std::optional<std::reference_wrapper<const Avatar>> avatarOptional =
+    const std::optional<std::reference_wrapper<Avatar>> avatarOptional =
             _avatarService.getAvatarFromAvatarId(avatarId);
 
     //get the room ID of the Avatar
@@ -60,7 +60,7 @@ std::optional<std::string> GameActions::getAvatarRoomName(const ID& avatarId) {
         return std::nullopt;
     }
 
-    const std::optional<std::reference_wrapper<const Avatar>> avatarOptional = _avatarService.getAvatarFromAvatarId(
+    const std::optional<std::reference_wrapper<Avatar>> avatarOptional = _avatarService.getAvatarFromAvatarId(
             avatarId);
     const ID& avatarRoomId = avatarOptional->get().getRoomId();
 
@@ -96,7 +96,7 @@ const ID& GameActions::getRoomId(const ID& avatarId){
 }
 
 std::vector<Message> GameActions::displayAvatarinfo(const Message& message) {
-    std::optional<std::reference_wrapper<const Avatar>> avatar = _avatarService.getAvatarFromAvatarId(message.user.getAccount().avatarId);
+    std::optional<std::reference_wrapper<Avatar>> avatar = _avatarService.getAvatarFromAvatarId(message.user.getAccount().avatarId);
 
     auto userAvatar = avatar.value().get();
     std::string response = "name :" + userAvatar.getName() + "\n"

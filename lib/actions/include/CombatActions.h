@@ -23,9 +23,20 @@ public:
     CombatActions(AvatarService& avatarService, RoomConnectionService& roomConnectionService) :
         _avatarService(avatarService), _roomConnectionService(roomConnectionService){}
 
-    bool createCombat(Avatar& player, Avatar& NPC);
+    /*
+     * functions which does the following
+     * -Checks if combat already exists (maps User Id to respective Combat)
+     * -checks if Avatar exists for given ID
+     * -creates Combat object for User Avatar and changes their state
+     */
+    bool createCombat(ID playerId, ID NPCId);
 
-    void destroyCombat(Avatar& player);
+    /*
+     * function which
+     * destroys combat if found and returns true,
+     * otherwise returns false
+     */
+    bool destroyCombat(ID playerId);
 
 private:
     int fightsInitialized;

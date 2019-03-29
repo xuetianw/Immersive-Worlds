@@ -36,16 +36,16 @@ void Combat::fightRound() {
     attackNpc();
     if(!isCombatActive()){
         //_NPC is dead, cannot attack dead Avatar
-        combatInProgress = false;
+        _combatInProgress = false;
         return;
     }
     receiveDamage();
 
     if(!isCombatActive()){
         //Player Avatar is dead
-        combatInProgress = false;
+        _combatInProgress = false;
     }
-    ++roundCount;
+    ++_roundCount;
 }
 
 bool Combat::isCombatActive() {
@@ -55,9 +55,13 @@ bool Combat::isCombatActive() {
 //getters and setters
 
 int Combat::getRoundCount() const {
-    return roundCount;
+    return _roundCount;
 }
 
 void Combat::setRoundCount(int roundCount) {
-    Combat::roundCount = roundCount;
+    Combat::_roundCount = roundCount;
+}
+
+bool Combat::isCombatInProgress() const {
+    return _combatInProgress;
 }
