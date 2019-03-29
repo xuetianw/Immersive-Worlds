@@ -17,7 +17,6 @@ constexpr char WRONG_DIRECTION_MESSAGE[] = "wrong message for direction";
 class GameController : AbstractController {
 public:
     GameController() : _gameService() {}
-    GameController(std::string jsonDirPath) : _gameService(jsonDirPath) {}
 
     /**
      * Calls GameService to Move Avatar.

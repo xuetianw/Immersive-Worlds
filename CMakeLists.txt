@@ -20,6 +20,13 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
 link_directories(${LIBRARY_OUTPUT_PATH})
 set(CMAKE_TEMP_LIBRARY_PATH "${PROJECT_BINARY_DIR}/lib")
 
+# Adding in json files to config folder in build
+configure_file(config/areas/shire.json config/areas/shire.json COPYONLY)
+configure_file(config/areas/mirkwood.json config/areas/mirkwood.json COPYONLY)
+configure_file(config/areas/solace.json config/areas/solace.json COPYONLY)
+configure_file(config/minigames/minigame.json config/minigames/minigame.json COPYONLY)
+
+
 add_subdirectory(lib)
 add_subdirectory(tools)
 add_subdirectory(test)

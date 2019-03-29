@@ -19,6 +19,11 @@ class DataStorageService {
 private:
     using Neighbours = std::vector<models::NeighbourInfo>;
 
+    const std::string ABSOLUTE_PATH_CONFIG_DIR = "config/";
+    const std::string AREAS_DIRECTORY = "areas/";
+    const std::string MINIGAMES_DIRECTORY = "minigames/";
+    const std::string MINIGAME_FILE_NAME = "minigame.json";
+
     CusJson::Area _jsonArea;
     std::vector<CusJson::Area> _jsonAreas;
     std::unordered_map<int, SingleItem> _objectMap;
@@ -34,24 +39,9 @@ private:
 
 public:
     DataStorageService() {
-        std::cout << "Default constructor of DataStorageService should not be used\n";
-//        json solaceJson = getTestingArea();
-//        _jsonArea = solaceJson.get<CusJson::Area>();
-//        configObjectMap(_jsonArea, _objectMap);
-//        configRoomsAndJsonIdMap(_jsonArea);
-//        configNeighboursMap(_jsonRoomIdToUuid, _jsonArea._rooms);
-//        json minigameJson = getTestingMiniGameList();
-//        _jsonMiniGameList = minigameJson.get<CusJson::MiniGameList>();
+        loadInJsonAreas();
+        loadInMiniGames();
     }
-
-    DataStorageService(std::string jsonDirPath) {
-
-        readFromPath(jsonDirPath);
-        json minigameJson = getTestingMiniGameList();
-        _jsonMiniGameList = minigameJson.get<CusJson::MiniGameList>();
-    }
-
-    const CusJson::Area& getJsonArea() const;
 
     std::unordered_map<ID, models::Room> getRoomIdToRoomMapCopy();
     std::unordered_map<ID, Neighbours> getRoomIdToNeighboursMapCopy();
@@ -62,9 +52,9 @@ public:
 
 private:
 
-    json getTestingMiniGameList();
+    void loadInJsonAreas();
 
-    void readFromPath(std::string jsonDirPath);
+    void loadInMiniGames();
 };
 
 #endif //WEBSOCKETNETWORKING_DATASTORAGESERVICE_H

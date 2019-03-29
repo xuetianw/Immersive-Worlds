@@ -91,12 +91,15 @@ namespace models {
                     {"up", Direction::UP}
             };
 
+    // The strings are based on the keywords found in the json file
     static const std::unordered_map<int, Direction>  DIRECTION_INDEX_TO_ENUM_MAP =
             {
                     {0, Direction::NORTH},
                     {1, Direction::EAST},
                     {2, Direction::SOUTH},
-                    {3, Direction::WEST}
+                    {3, Direction::WEST},
+                    {4, Direction::UP},
+                    {5, Direction::DOWN}
             };
 }
 

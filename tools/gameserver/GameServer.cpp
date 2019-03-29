@@ -97,10 +97,7 @@ int main(int argc, char *argv[]) {
 
     DBUtil::openConnection("adventure.db");
 
-    std::string webChatPath = std::string(argv[2]);
-    std::string directoryDelimiter = "webchat.html";
-    std::string jsonDirPath = webChatPath.substr(0, webChatPath.find(directoryDelimiter));
-    commandProcessor = make_unique<CommandProcessor>(jsonDirPath);
+    commandProcessor = make_unique<CommandProcessor>();
     Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
 
 

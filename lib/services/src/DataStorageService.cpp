@@ -4,69 +4,8 @@
 
 #include "DataStorageService.h"
 #include <iostream>
-#include <DataStorageService.h>
-
 
 using CusJson::Area;
-
-json DataStorageService::getTestingMiniGameList() {
-    json j = R"(
-  {
-    "MINIGAMES" : [
-        {
-          "id" : 1,
-          "roomId" : 10500,
-          "roomName" : "Lexie's Scuba Shop",
-          "type" : "multiple_choice",
-          "questions" : [
-                          "Which spelling is correct?",
-                          "Which spelling is correct?"
-                        ],
-          "answers" : [
-                        [
-                          "RRRR",
-                          "CAT",
-                          "TTTT"
-                        ],
-                        [
-                          "TTTT",
-                          "WWW",
-                          "HELLO"
-                        ]
-                      ],
-          "correctanswers" :  [
-                                1,
-                                2
-                              ]
-        },
-        {
-          "id" : 2,
-          "roomId" : 10608,
-          "roomName" : "Marketplace.",
-          "type" : "multiple_choice",
-          "questions" : [
-                        "Which spelling is correct?"
-                        ],
-          "answers" : [
-                        [
-                          "RRRR",
-                          "DOG",
-                          "TTTT"
-                        ]
-                      ],
-          "correctanswers" : [
-                              1
-                            ]
-        }
-    ]
-  }
-)"_json;
-    return j;
-}
-
-const Area& DataStorageService::getJsonArea() const {
-    return _jsonArea;
-}
 
 void DataStorageService::configRoomsAndJsonIdMap(const CusJson::Area& jsonArea) {
     for (const CusJson::Room& jsonRoom : jsonArea._rooms) {
@@ -96,7 +35,7 @@ SingleItem DataStorageService::spawnObjectCopy(int jsonId) {
     if (objectQueury != _objectMap.end()) {
         return SingleItem(objectQueury->second);
     } else {
-        std::cerr << "spawnObjectCopy called with unknown object Id";
+        std::cerr << "spawnObjectCopy called with unknown object Id" << jsonId << std::endl;
     }
 }
 
@@ -109,7 +48,7 @@ void DataStorageService::configNeighboursMap(std::unordered_map<int, ID> jsonIdT
 
         auto correspRoomId = jsonIdToUuid.find(jsonRoom._id);
         if (correspRoomId == jsonIdToUuid.end()) {
-            std::cout << "configNeighboursMap creation with " << jsonRoom._id << " in " << jsonRoom._name << " not found\n";
+            std::cerr << "configNeighboursMap creation with " << jsonRoom._id << " in " << jsonRoom._name << " not found\n";
             return;
         }
         _roomIdToNeighbours.try_emplace(jsonIdToUuid[jsonRoom._id], neighbours);
@@ -124,7 +63,7 @@ void DataStorageService::buildNeighbours(const std::unordered_map<int, ID>& json
 
         auto correspRoomId = jsonIdToUuid.find(jsonDoor._to);
         if (correspRoomId == jsonIdToUuid.end()) {
-            std::cout << "buildNeighbours with " << jsonDoor._to  << " not found\n";
+            std::cerr << "buildNeighbours with " << jsonDoor._to  << " not found\n";
             return;
         }
 
@@ -149,31 +88,21 @@ const CusJson::MiniGameList& DataStorageService::getMiniGameList() const {
     return _jsonMiniGameList;
 }
 
-void DataStorageService::readFromPath(std::string jsonDirPath) {
-    std::vector<directory_entry> filesAndDir;
+void DataStorageService::loadInJsonAreas() {
+    std::cout << "Assumed that ABSOLUTE_PATH_CONFIG_DIR + AREAS_DIRECTORY only contains areaJson files \n";
     std::vector<directory_entry> jsonFiles;
-    path pathOfJsonDir(jsonDirPath);
-    if (is_directory(pathOfJsonDir)) {
-        copy(directory_iterator(pathOfJsonDir), directory_iterator(), back_inserter(filesAndDir));
+    string jsonAreaPath = DataStorageService::ABSOLUTE_PATH_CONFIG_DIR + DataStorageService::AREAS_DIRECTORY;
+    path pathOfAreaJsonDir(jsonAreaPath);
+    copy(directory_iterator(pathOfAreaJsonDir), directory_iterator(), back_inserter(jsonFiles));
 
-        std::cout << pathOfJsonDir << " is a directory containing:\n";
-
-        for (std::vector<directory_entry>::const_iterator it = filesAndDir.begin(); it != filesAndDir.end(); ++it) {
-            auto filename = (*it).path().filename().string();
-            // This assumes the json in the Dir are only Rooms. Loading files take a while so change this to find just one file to shorten startup.
-            if (filename.find(".json") != std::string::npos) {
-                jsonFiles.push_back((*it));
-            }
-        }
-    }
-    for (auto entry : jsonFiles) {
-        std::cout << entry.path().filename().string() << " is being read\n";
+    for (auto areaJsonFile : jsonFiles) {
+        std::cout << areaJsonFile.path().filename().string() << " is being read\n";
+        auto jsonFileStream = boost::filesystem::ifstream(areaJsonFile.path());
         json jsonArea;
-        auto jsonFileStream = boost::filesystem::ifstream(entry.path());
         jsonFileStream >> jsonArea;
         _jsonAreas.push_back(jsonArea.get<CusJson::Area>());
-        configRoomsAndJsonIdMap(_jsonAreas.at(_jsonAreas.size() - 1));
-        std::cout << entry.path().filename().string() << " is finished\n";
+        configRoomsAndJsonIdMap(_jsonAreas.back());
+        std::cout << areaJsonFile.path().filename().string() << " is finished\n";
     }
 
     for (auto jsonArea : _jsonAreas) {
@@ -181,16 +110,30 @@ void DataStorageService::readFromPath(std::string jsonDirPath) {
         configObjectMap(jsonArea, _objectMap);
         configNeighboursMap(_jsonRoomIdToUuid, jsonArea._rooms);
     }
-    std::cout << "All Configs complete, feel free to start connecting\n";
+    std::cout << "Room Configs complete\n";
+}
+
+
+void DataStorageService::loadInMiniGames() {
+    std::cout << "Assumed that ABSOLUTE_PATH_CONFIG_DIR + MINIGAMES_DIRECTORY + MINIGAME_FILE_NAME is the path to the minigame file \n";
+    std::vector<directory_entry> jsonFiles;
+    string minigamePath = DataStorageService::ABSOLUTE_PATH_CONFIG_DIR + DataStorageService::MINIGAMES_DIRECTORY + DataStorageService::MINIGAME_FILE_NAME;
+    path pathOfJsonDir(minigamePath);
+    auto jsonFileStream = boost::filesystem::ifstream(pathOfJsonDir);
+    json jsonMinigame;
+    jsonFileStream >> jsonMinigame;
+    _jsonMiniGameList = jsonMinigame.get<CusJson::MiniGameList>();
+
+    std::cout << "Minigame Configs complete\n";
 }
 
 void DataStorageService::resetObjectsToWorld(std::unordered_map<ID, models::Room>& roomIdToRoomMap) {
-    auto containerConfiguration = _jsonArea._containerWrappers;
-    for (auto container : containerConfiguration) {
-        auto roomQuery = roomIdToRoomMap.find(_jsonRoomIdToUuid.find(container._roomId)->second);
+    auto objectConfiguration = _jsonArea._objectWrappers;
+    for (auto container : objectConfiguration) {
+        auto roomQuery = roomIdToRoomMap.find(_jsonRoomIdToUuid.find(container._roomJsonId)->second);
         if (roomQuery != roomIdToRoomMap.end()) {
-            auto spawnedContainer = spawnObjectCopy(container._objectId);
-            for (auto containedItemId : container._containedObjectIds) {
+            auto spawnedContainer = spawnObjectCopy(container._objectJsonId);
+            for (auto containedItemId : container._containedObjectJsonIds) {
                 spawnedContainer.getItemsInContainer().push_back(spawnObjectCopy(containedItemId));
             }
             roomQuery->second.addObject(spawnedContainer.getId(), spawnedContainer);

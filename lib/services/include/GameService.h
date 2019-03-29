@@ -32,13 +32,6 @@ public:
 
     }
 
-    GameService(string jsonDirPath)
-            : _dataStorage(DataStorageService(jsonDirPath)),
-              _roomConnectionService(_dataStorage),
-              _avatarService(_dataStorage) {
-
-    }
-
     /**
      * Changes the roomID of an avatar to the room in the direction of the avatar's current room.
      * Direction should be valid for the current avatar's room.
