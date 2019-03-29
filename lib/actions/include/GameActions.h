@@ -1,9 +1,9 @@
 //
-// Created by asim on 06/02/19.
+// Created by asim on 25/03/19.
 //
 
-#ifndef WEBSOCKETNETWORKING_GAMESERVICE_H
-#define WEBSOCKETNETWORKING_GAMESERVICE_H
+#ifndef WEBSOCKETNETWORKING_GAMEACTIONS_H
+#define WEBSOCKETNETWORKING_GAMEACTIONS_H
 
 #include <string>
 
@@ -23,14 +23,11 @@ using Connection = networking::Connection;
 using ConnectionHash = networking::ConnectionHash;
 using string = std::string;
 
-class GameService {
+class GameActions {
 public:
-    GameService()
-        : _dataStorage(DataStorageService()),
-          _roomConnectionService(_dataStorage),
-          _avatarService(_dataStorage) {
-
-    }
+    GameActions(RoomConnectionService& roomConnectionService, AvatarService& avatarService)
+            : _roomConnectionService(roomConnectionService),
+              _avatarService(avatarService) {}
 
     /**
      * Changes the roomID of an avatar to the room in the direction of the avatar's current room.
@@ -40,8 +37,6 @@ public:
      * @return true if successfully changed avatar's room id. false otherwise.
      */
     bool moveAvatar(const ID& avatarId, const std::string& directionString);
-
-    bool userYell(const User& user, const string& messageString);
 
     /**
      * Get a list of directions available for the Avatar
@@ -59,32 +54,24 @@ public:
 
     std::optional<std::string> getAvatarRoomName(const ID& avatarId);
 
-    /** 
-     * Get the current minigame available in this room
-     */
-    models::MiniGame getMiniGame(const User& user, const std::string keywordString);
-public:
-
-    /**
-     * It is assumed that the user is in a room, and the room has a list of connections(can be blank).
-    */
-    bool roomHaveMiniGame(const User& user);
-
-    /** 
-     * Verify if the answer given in the minigame is the correct one.
-     */
-    bool verifyAnswer(const User& user, const int input);
-
     std::vector<ID> getAllAvatarIds(ID roomId);
 
     const ID& getRoomId(const ID& avatarId);
 
+
+    /**
+     * Get ids of adjacent rooms and current room
+     */
+    std::vector<ID> getAllAvatarIdsInNeighbourAndCurrent(ID roomId);
+
+    std::vector<Message> displayAvatarinfo(const Message& message);
+
 private:
     std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;
 
-    DataStorageService _dataStorage;
-    RoomConnectionService _roomConnectionService;
-    AvatarService _avatarService;
+    RoomConnectionService& _roomConnectionService;
+
+    AvatarService& _avatarService;
 };
 
-#endif //WEBSOCKETNETWORKING_GAMESERVICE_H
+#endif //WEBSOCKETNETWORKING_GAMEACTIONS_H

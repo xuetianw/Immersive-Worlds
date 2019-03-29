@@ -10,11 +10,12 @@
 #include <unordered_map>
 #include <string>
 
-#include "AbstractController.h"
 #include "AccountController.h"
 #include "GameController.h"
 #include "User.h"
 #include "Message.h"
+
+
 
 using string = std::string;
 using stringstream = std::stringstream;
@@ -27,7 +28,7 @@ class CommandProcessor {
      */
 public:
     CommandProcessor() : accountController(std::make_unique<AccountController>()),
-                         gameController(std::make_unique<GameController>()) {
+                         gameController(std::make_unique<GameController>()){
         buildCommands();
     }
 
@@ -46,7 +47,7 @@ public:
      */
     void addCommand(string keyword, Command command, function_ptr);
 
-    Message handleDefaultMessage(const Message& message);
+    std::vector<Message> handleDefaultMessage(const Message& message);
 
     /*
      *  Lists the keywords of the allowed commands to the user

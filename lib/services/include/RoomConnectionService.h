@@ -26,6 +26,8 @@ public:
     //Return a vector of direction strings available for a room
     const std::vector<std::string> getAvailableRoomDirections(const ID& roomId);
 
+    std::vector<ID> getAllNeighbourId(const ID& roomId);
+
     //Check if a direction string is a valid direction
     const bool isValidDirectionString(const std::string& directionString);
 
@@ -36,11 +38,12 @@ private:
     using Room = models::Room;
     using Neighbours = std::vector<models::NeighbourInfo>;
 
-    DataStorageService _dataStorageService;
+    DataStorageService& _dataStorageService;
 
     std::unordered_map<ID, Room> _roomIdToRoom;
     std::unordered_map<ID, Neighbours> _roomIdToNeighbours;
     std::unordered_map<std::string, models::Direction> _directions = models::DIRECTION_STRING_TO_ENUM_MAP;
+
     const Room* findRoom(const ID& roomId);
 
     //builds a mapping of direction strings to Direction enum

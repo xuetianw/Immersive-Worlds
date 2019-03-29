@@ -1,10 +1,10 @@
 add_library(services
     src/AccountService.cpp
-    src/GameService.cpp
     src/DataStorageService.cpp
     src/RoomConnectionService.cpp
     src/AvatarService.cpp
-    src/CombatService.cpp)
+    src/InventoryService.cpp
+    )
 
 
 find_package(Boost 1.68 COMPONENTS system filesystem REQUIRED)

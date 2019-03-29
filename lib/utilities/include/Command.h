@@ -12,11 +12,17 @@ enum Command {
     LOGOUT,
     MOVE,
     SAY,
+    YELL,
+    TELL,
     LOOK,
     HELP,
     MINIGAME,
     MINIGAME_ANSWER,
-    DIRECTIONS
+    MINIGAME_NEXTROUND,
+    DIRECTIONS,
+    AVATAR_INFO,
+    ATTACK,
+    FLEE
 };
 
 class CommandType {
@@ -43,9 +49,13 @@ public:
             MOVE,
             LOOK,
             SAY,
+            YELL,
+            TELL,
             LOGOUT,
             HELP,
-            DIRECTIONS
+            DIRECTIONS,
+            MINIGAME,
+            AVATAR_INFO
         };
     }
 };
@@ -54,6 +64,8 @@ class CombatCommands : public CommandType {
 public:
     std::unordered_set<Command> getCommands() override {
         return {
+            ATTACK,
+            FLEE,
             LOGOUT,
             HELP
         };
@@ -65,7 +77,9 @@ public:
     std::unordered_set<Command> getCommands() override {
         return {
             LOGOUT,
-            HELP
+            HELP,
+            MINIGAME_ANSWER,
+            MINIGAME_NEXTROUND
         };
     }
 };

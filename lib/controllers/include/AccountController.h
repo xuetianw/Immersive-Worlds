@@ -13,9 +13,8 @@
 
 #include "User.h"
 #include "AccountService.h"
-#include "AbstractController.h"
 
-class AccountController : public AbstractController {
+class AccountController {
 public:
     AccountController() : _accountService() {}
 
@@ -27,7 +26,7 @@ public:
 
     std::vector<Message> escapeLogin(const Message& message);
 
-    Message respondToMessage(const Message& message) override;
+    std::vector<Message> respondToMessage(const Message& message);
 
 private:
     AccountService _accountService;

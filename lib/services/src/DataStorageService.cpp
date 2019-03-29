@@ -17,6 +17,16 @@ void DataStorageService::configRoomsAndJsonIdMap(const CusJson::Area& jsonArea) 
     }
 }
 
+void DataStorageService::configRoomsAndMiniGame(const CusJson::MiniGameList& jsonMiniGameList) {
+  for(const CusJson::MiniGame& jsonMiniGame : jsonMiniGameList._minigames) {
+    models::MiniGame miniGame{jsonMiniGame};
+    const int jsonRoomId = jsonMiniGame._roomId;
+
+    auto roomId = _jsonRoomIdToUuid.find(jsonRoomId);
+    _roomIdToMiniGameConnectionsList.emplace(roomId->second, miniGame);
+  }
+}
+
 void DataStorageService::configObjectMap(const CusJson::Area& jsonArea, std::unordered_map<int, SingleItem>& jsonIdToItemMap) {
     for (CusJson::Object jsonObject : jsonArea._objects) {
         std::vector<string> keywords = jsonObject.keywords;
@@ -84,8 +94,9 @@ std::unordered_map<ID, std::vector<models::NeighbourInfo>> DataStorageService::g
     return roomIdToNeighboursMapCopy;
 }
 
-const CusJson::MiniGameList& DataStorageService::getMiniGameList() const {
-    return _jsonMiniGameList;
+std::unordered_map<ID, models::MiniGame> DataStorageService::getRoomIdToMiniGameCopy() {
+    auto roomIdMiniGameConnection = this->_roomIdToMiniGameConnectionsList;
+    return roomIdMiniGameConnection;
 }
 
 void DataStorageService::loadInJsonAreas() {
@@ -123,7 +134,7 @@ void DataStorageService::loadInMiniGames() {
     json jsonMinigame;
     jsonFileStream >> jsonMinigame;
     _jsonMiniGameList = jsonMinigame.get<CusJson::MiniGameList>();
-
+    configRoomsAndMiniGame(_jsonMiniGameList);
     std::cout << "Minigame Configs complete\n";
 }
 

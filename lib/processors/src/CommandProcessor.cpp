@@ -34,16 +34,22 @@ std::vector<Message> CommandProcessor::processCommand(const Message& message) {
         }
     }
 
-    Message msg = handleDefaultMessage(message);
-    return std::vector<Message>{ msg };
+    return handleDefaultMessage(message);
 }
 
-Message CommandProcessor::handleDefaultMessage(const Message& message) {
-    Message accountControllerResponse = accountController->respondToMessage(message);
+std::vector<Message> CommandProcessor::handleDefaultMessage(const Message& message) {
+    // Default Game handler when the user is logged in
+    if(message.user.getAccount().isLoggedIn) {
+        return gameController->respondToMessage(message);
+    }
 
-    return message.user.getAccount().isLoggedIn
-        ? gameController->respondToMessage(accountControllerResponse)
-        : accountControllerResponse;
+    std::vector<Message> accountControllerResponse = accountController->respondToMessage(message);
+    bool loggedInStatusChanged = accountControllerResponse.front().user.getAccount().isLoggedIn;
+    if(loggedInStatusChanged) {
+        return gameController->onLogin(accountControllerResponse.front());
+    }
+
+    return accountControllerResponse;
 }
 
 std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
@@ -80,9 +86,15 @@ void CommandProcessor::buildCommands() {
     addCommand("/escape", ESCAPE, [this] (Message message) { return accountController->escapeLogin(message); });
     addCommand("/move", MOVE, [this] (Message message) { return gameController->move(message); });
     addCommand("/say", SAY, [this] (Message message) { return gameController->say(message); });
+    addCommand("/yell", YELL, [this] (Message message) { return gameController->yell(message); });
+    addCommand("/tell", TELL, [this] (Message message) { return gameController->tell(message); });
     addCommand("/minigame", MINIGAME, [this] (Message message) { return gameController->startMiniGame(message); });
     addCommand("/answer", MINIGAME_ANSWER, [this] (Message message) { return gameController->verifyMinigameAnswer(message); });
+    addCommand("/attack", ATTACK, [this] (Message message) { return gameController->attackNPC(message);});
+    addCommand("/flee", FLEE, [this] (Message message) { return gameController->fleeCombat(message);});
+    addCommand("/nextRound", MINIGAME_NEXTROUND, [this] (Message message) { return gameController->nextRound(message); });
     addCommand("/help", HELP, [this] (Message message) { return listAvailableCommands(message);});
     addCommand("/directions", DIRECTIONS, [this](Message message) { return gameController->listDirections(message); });
+    addCommand("/avatar", AVATAR_INFO, [this] (Message message) { return gameController->displayAvatarInfo(message);});
 }
 

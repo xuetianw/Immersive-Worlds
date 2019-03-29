@@ -23,6 +23,10 @@ Account& User::getAccount() {
     return _account;
 }
 
+ID User::getAvatarId() const{
+    return _account.avatarId;
+}
+
 void User::setAccount(const Account& account) {
     _account = account;
 }

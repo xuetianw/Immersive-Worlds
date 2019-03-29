@@ -30,10 +30,13 @@ private:
     std::unordered_map<int, ID> _jsonRoomIdToUuid;
     std::unordered_map<ID, models::Room> _roomIdToRoom;
     std::unordered_map<ID, Neighbours> _roomIdToNeighbours;
+    
     CusJson::MiniGameList _jsonMiniGameList;
+    std::unordered_map<ID, models::MiniGame> _roomIdToMiniGameConnectionsList;
 
     void configRoomsAndJsonIdMap(const CusJson::Area& jsonArea);
     void configObjectMap(const CusJson::Area& jsonArea, std::unordered_map<int, SingleItem>& jsonIdToItemMap);
+    void configRoomsAndMiniGame(const CusJson::MiniGameList& jsonMiniGameList);
     void configNeighboursMap(std::unordered_map<int, ID> jsonIdToUuid, std::vector<CusJson::Room> jsonRooms);
     void buildNeighbours(const std::unordered_map<int, ID>& tmp, const CusJson::Room& jsonRoom, Neighbours& neighbours);
 
@@ -45,9 +48,10 @@ public:
 
     std::unordered_map<ID, models::Room> getRoomIdToRoomMapCopy();
     std::unordered_map<ID, Neighbours> getRoomIdToNeighboursMapCopy();
+    std::unordered_map<ID, models::MiniGame> getRoomIdToMiniGameCopy();
+
     SingleItem spawnObjectCopy(int jsonId);
 
-    const CusJson::MiniGameList& getMiniGameList() const;
     void resetObjectsToWorld(std::unordered_map<ID, models::Room>& roomIdToRoomMap);
 
 private:
