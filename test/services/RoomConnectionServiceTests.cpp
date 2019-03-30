@@ -43,13 +43,19 @@ struct RoomConnectionServiceTests : testing::Test {
 
         buildRoomConnections(startingRoomId, rooms, neighbours);
 
-        EXPECT_CALL(dataStorageStub, getRoomIdToRoomMapCopy())
-            .WillOnce(Return(rooms));
 
-        EXPECT_CALL(dataStorageStub, getRoomIdToNeighboursMapCopy())
-            .WillOnce(Return(neighbours));
+        {
+            InSequence dummy;
 
-        EXPECT_CALL(dataStorageStub, resetObjectsToWorld(::testing::_));
+            EXPECT_CALL(dataStorageStub, getRoomIdToRoomMapCopy())
+                    .WillOnce(Return(rooms));
+            EXPECT_CALL(dataStorageStub, getRoomIdToNeighboursMapCopy())
+                    .WillOnce(Return(neighbours));
+
+            EXPECT_CALL(dataStorageStub, resetObjectsToWorld(::testing::_));
+
+        }
+
 
         roomConnectionService = std::make_unique<RoomConnectionService>(dataStorageStub);
     }
@@ -77,7 +83,6 @@ struct RoomConnectionServiceTests : testing::Test {
         std::vector<NeighbourInfo> room2neighbours{
             NeighbourInfo{Direction::SOUTH, room1.getId(), std::vector<string>{}},
             NeighbourInfo{Direction::WEST, room4.getId(), std::vector<string>{}}
-
         };
 
         std::vector<NeighbourInfo> room3neighbours{
