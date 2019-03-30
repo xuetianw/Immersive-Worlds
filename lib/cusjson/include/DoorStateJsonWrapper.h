@@ -12,9 +12,9 @@ namespace CusJson {
     public:
         int _id;
         int _roomId;
-        std::string state;
+        std::string _state;
 
-        DoorStateJsonWrapper(int id, int _roomId, const std::string& state);
+        DoorStateJsonWrapper(int id, int roomId, const std::string& state);
     };
 }
 #endif //WEBSOCKETNETWORKING_DOORSTATEJSONWRAPPER_H

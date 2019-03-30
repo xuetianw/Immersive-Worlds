@@ -51,13 +51,18 @@ public:
 
     SingleItem spawnObjectCopy(int jsonId);
 
-    const CusJson::MiniGameList& getMiniGameList() const;
     void resetObjectsToWorld(std::unordered_map<ID, models::Room>& roomIdToRoomMap);
+
+    void resetDoorStatsToWorld(std::unordered_map<ID, Neighbours>& roomIdToNeighbours);
 
 private:
     json getTestingArea();
 
     json getTestingMiniGameList();
+
+    void configDoorOnTheOtherSide(std::unordered_map<ID, Neighbours>& roomIdToNeighbours,
+                                  const CusJson::DoorStateJsonWrapper& doorConfiguration,
+                                  const models::DoorState& doorState, models::NeighbourInfo neighbour) const;
 };
 
 #endif //WEBSOCKETNETWORKING_DATASTORAGESERVICE_H

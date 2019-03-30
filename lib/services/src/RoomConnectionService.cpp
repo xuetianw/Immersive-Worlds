@@ -132,5 +132,6 @@ void RoomConnectionService::loadFromStorage() {
 
     _roomIdToNeighbours = _dataStorageService.getRoomIdToNeighboursMapCopy();
 
+    _dataStorageService.resetDoorStatsToWorld(_roomIdToNeighbours);
     _dataStorageService.resetObjectsToWorld(_roomIdToRoom);
 }

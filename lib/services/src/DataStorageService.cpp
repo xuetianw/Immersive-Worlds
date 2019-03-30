@@ -292,7 +292,7 @@ json DataStorageService::getTestingArea() {
     },
     {
       "action": "door",
-      "id": 0,
+      "id": 1,
       "room": 10609,
       "state": "locked"
     },
@@ -409,4 +409,33 @@ void DataStorageService::resetObjectsToWorld(std::unordered_map<ID, models::Room
             roomQuery->second.addObject(spawnedContainer.getId(), spawnedContainer);
         }
     }
+}
+
+void DataStorageService::resetDoorStatsToWorld(std::unordered_map<ID, Neighbours>& roomIdToNeighbours) {
+    for (auto doorConfiguration : _jsonArea._doorStateWrappers) {
+        auto roomId = _jsonRoomIdToUuid[doorConfiguration._roomId];
+        auto doorDirection = models::DIRECTION_INDEX_TO_ENUM_MAP.at(doorConfiguration._id);
+        auto doorState = models::DOOR_STATE_STRING_ENUM_MAP.at(doorConfiguration._state);
+        for (models::NeighbourInfo& neighbour : roomIdToNeighbours[roomId]) {
+            if (neighbour.direction == doorDirection) {
+                neighbour.doorState = doorState;
+                configDoorOnTheOtherSide(roomIdToNeighbours, doorConfiguration, doorState, neighbour);
+            }
+        }
+    }
+
+}
+
+void DataStorageService::configDoorOnTheOtherSide(
+        std::unordered_map<ID, DataStorageService::Neighbours>& roomIdToNeighbours,
+        const CusJson::DoorStateJsonWrapper& doorConfiguration, const models::DoorState& doorState,
+        models::NeighbourInfo neighbour) const {
+    auto otherRoomId = neighbour.destinationRoomId;
+    auto inverseDoorIndex = models::DIRECTION_INDEX_TO_INVERSE_MAP.at(doorConfiguration._id);
+    auto oppositeDoorDirection = models::DIRECTION_INDEX_TO_ENUM_MAP.at(inverseDoorIndex);
+    for (models::NeighbourInfo& otherNeighbour : roomIdToNeighbours[otherRoomId]) {
+                    if (otherNeighbour.direction == oppositeDoorDirection) {
+                        otherNeighbour.doorState = doorState;
+                    }
+                }
 }

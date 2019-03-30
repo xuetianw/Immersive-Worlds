@@ -4,5 +4,5 @@
 
 #include "DoorStateJsonWrapper.h"
 
-CusJson::DoorStateJsonWrapper::DoorStateJsonWrapper(int id, int _roomId, const std::string& state)
-        : _id(id), _roomId(_roomId), state(state) {}
+CusJson::DoorStateJsonWrapper::DoorStateJsonWrapper(int id, int roomId, const std::string& state)
+        : _id(id), _roomId(roomId), _state(state) {}

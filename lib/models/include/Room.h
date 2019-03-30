@@ -74,10 +74,15 @@ namespace models {
         NORTH, SOUTH, EAST, WEST
     };
 
+    enum DoorState {
+        OPEN, CLOSED, LOCKED
+    };
+
     struct NeighbourInfo {
         Direction direction;
         ID destinationRoomId;
         std::vector<string> descriptions;
+        DoorState doorState = DoorState::OPEN;
     };
 
     // The strings are based on the keywords found in the json file
@@ -95,6 +100,20 @@ namespace models {
                     {1, Direction::EAST},
                     {2, Direction::SOUTH},
                     {3, Direction::WEST}
+            };
+
+    static const std::unordered_map<int, int> DIRECTION_INDEX_TO_INVERSE_MAP =
+            {
+                    {0,2},
+                    {1,3},
+                    {2,0},
+                    {3,1}
+            };
+    static const std::unordered_map<std::string, DoorState> DOOR_STATE_STRING_ENUM_MAP =
+            {
+                    {"open", DoorState::OPEN},
+                    {"closed", DoorState::CLOSED},
+                    {"locked", DoorState::LOCKED}
             };
 }
 
