@@ -7,7 +7,7 @@
 
 class RoomConnectionService {
 public:
-    explicit RoomConnectionService(DataStorageService& dataStorageService)
+    explicit RoomConnectionService(AbstractDataStorageService& dataStorageService)
             : _dataStorageService(dataStorageService) {
 //        buildDirectionsMap();
         loadFromStorage();
@@ -38,7 +38,7 @@ private:
     using Room = models::Room;
     using Neighbours = std::vector<models::NeighbourInfo>;
 
-    DataStorageService& _dataStorageService;
+    AbstractDataStorageService& _dataStorageService;
 
     std::unordered_map<ID, Room> _roomIdToRoom;
     std::unordered_map<ID, Neighbours> _roomIdToNeighbours;
