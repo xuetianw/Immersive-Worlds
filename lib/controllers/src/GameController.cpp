@@ -128,16 +128,52 @@ std::vector<Message> GameController::outputCurrentLocationInfo(const Message& me
 
 std::vector<Message> GameController::attackNPC(const Message &message) {
 
-    Message combatResponse = Message(message.user);
+    User& user = message.user;
+    Message combatResponse = Message(user);
+    ID playerID = message.user.getAccount().avatarId;
 
-    ID userAvatar = message.user.getAccount().avatarId;
+    //create temp NPC
+    //coded for testing
+    ID NPCID{573};
+    _avatarService.generateAvatarFromAvatarId(NPCID,ID{},"NPC");
 
+    if(_combatActions.checkAndCreateCombat(playerID, NPCID)){
+        //state transition from game commands to combat commands
+        user.setCommandType(new CombatCommands());
+    } else{
+        combatResponse.text = "The NPC you want to fight does not exist";
+        return std::vector<Message>{combatResponse};
+    }
 
-    return std::vector<Message>();
+    if(_combatActions.performCombatRound(playerID)){
+        //display combat round message
+        combatResponse.text = _combatActions.displayCombatDetails(playerID);
+    } else{
+        combatResponse.text += "The NPC you want to fight is not located in the same room as you";
+        return std::vector<Message>{combatResponse};
+    }
+
+    if(!_combatActions.isCombatActive(playerID)){
+        combatResponse.text += "You have finished the combat phase";
+        user.setCommandType(new GameCommands());
+    }
+
+    return std::vector<Message>{combatResponse};
 }
 
 std::vector<Message> GameController::fleeCombat(const Message &message) {
-    return std::vector<Message>();
+
+    User& user = message.user;
+    Message fleeResponse = Message(user);
+    ID playerID = message.user.getAccount().avatarId;
+    if(_combatActions.destroyCombat(playerID)){
+        fleeResponse.text = "You have successfully fled combat";
+        user.setCommandType(new GameCommands());
+    } else{
+        fleeResponse.text = "You have failed to flee combat";
+    }
+
+    return std::vector<Message>{fleeResponse};
 }
 
 std::vector<Message> GameController::say(const Message& message) {

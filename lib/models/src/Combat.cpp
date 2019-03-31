@@ -1,6 +1,8 @@
 //
 // Created by Nirag Mehta on 2019-03-19.
 //
+#include <Combat.h>
+
 #include "Combat.h"
 
 void Combat::attackNpc() {
@@ -37,6 +39,7 @@ void Combat::fightRound() {
     if(!isCombatActive()){
         //_NPC is dead, cannot attack dead Avatar
         _combatInProgress = false;
+        ++_roundCount;
         return;
     }
     receiveDamage();
@@ -46,6 +49,17 @@ void Combat::fightRound() {
         _combatInProgress = false;
     }
     ++_roundCount;
+}
+
+std::string Combat::getCombatInfo() {
+
+    std::string combatDetails;
+    string playerHp = std::to_string(_player.get_hp());
+    string NPCHp = std::to_string(_NPC.get_hp());
+    combatDetails = "Your current hp is" + playerHp +
+            "\nNPC's current hp is" + NPCHp + "\n";
+
+    return combatDetails;
 }
 
 bool Combat::isCombatActive() {
@@ -64,4 +78,16 @@ void Combat::setRoundCount(int roundCount) {
 
 bool Combat::isCombatInProgress() const {
     return _combatInProgress;
+}
+
+const ID& Combat::get_combatId() const {
+    return _combatId;
+}
+
+Avatar& Combat::get_player() const {
+    return _player;
+}
+
+Avatar& Combat::get_NPC() const {
+    return _NPC;
 }

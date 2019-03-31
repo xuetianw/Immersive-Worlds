@@ -55,7 +55,8 @@ public:
             HELP,
             DIRECTIONS,
             MINIGAME,
-            AVATAR_INFO
+            AVATAR_INFO,
+            ATTACK
         };
     }
 };

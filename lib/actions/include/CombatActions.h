@@ -29,20 +29,37 @@ public:
      * -checks if Avatar exists for given ID
      * -creates Combat object for User Avatar and changes their state
      */
-    bool createCombat(ID playerId, ID NPCId);
+    bool checkAndCreateCombat(ID& playerId, ID& NPCId);
 
     /*
      * function which
      * destroys combat if found and returns true,
      * otherwise returns false
      */
-    bool destroyCombat(ID playerId);
+    bool destroyCombat(ID& playerId);
+
+    /*
+     * performs a single round of combat between the player and NPC
+     */
+    bool performCombatRound(ID& playerID);
+
+    /*
+     * checks if combat is valid or not (based on hp)
+     */
+    bool isCombatActive(ID& playerID);
+
+    /*
+     * returns a string containing the players and NPC's current hp
+     */
+    std::string displayCombatDetails(ID& playerID);
 
 private:
     int fightsInitialized;
     std::unordered_map<ID, Combat> _combatMap;
     AvatarService& _avatarService;
     RoomConnectionService& _roomConnectionService;
+
+    bool isAttackValid(Avatar& player, Avatar& NPC);
 };
 
 #endif //WEBSOCKETNETWORKING_COMBATSERVICE_H

@@ -64,6 +64,12 @@ public:
 
     bool isCombatInProgress() const;
 
+    const ID& get_combatId() const;
+
+    Avatar& get_player() const;
+
+    Avatar& get_NPC() const;
+
 };
 
 #endif //WEBSOCKETNETWORKING_COMBAT_H
