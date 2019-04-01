@@ -115,6 +115,8 @@ public:
 
     std::vector<Message> displayAvatarInfo(const Message& message);
 
+    std::vector<Message> swapAvatar(const Message& message);
+
 private:
     // Services
     DataStorageService _dataStorageService;

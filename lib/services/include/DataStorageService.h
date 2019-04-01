@@ -8,6 +8,7 @@
 #include "SingleItem.h"
 #include "CusJson.h"
 #include "Room.h"
+#include "AbstractDataStorageService.h"
 #include <iostream>
 
 #define BOOST_NO_CXX11_SCOPED_ENUMS
@@ -15,7 +16,7 @@
 #undef BOOST_NO_CXX11_SCOPED_ENUMS
 using namespace boost::filesystem;
 
-class DataStorageService {
+class DataStorageService : public AbstractDataStorageService {
 private:
     using Neighbours = std::vector<models::NeighbourInfo>;
 
@@ -46,13 +47,15 @@ public:
         loadInMiniGames();
     }
 
-    std::unordered_map<ID, models::Room> getRoomIdToRoomMapCopy();
-    std::unordered_map<ID, Neighbours> getRoomIdToNeighboursMapCopy();
+    std::unordered_map<ID, models::Room> getRoomIdToRoomMapCopy() override;
+
+    std::unordered_map<ID, Neighbours> getRoomIdToNeighboursMapCopy() override;
+
     std::unordered_map<ID, models::MiniGame> getRoomIdToMiniGameCopy();
 
     SingleItem spawnObjectCopy(int jsonId);
-
-    void resetObjectsToWorld(std::unordered_map<ID, models::Room>& roomIdToRoomMap);
+    
+    void resetObjectsToWorld(std::unordered_map<ID, models::Room>& roomIdToRoomMap) override;
 
 private:
 
