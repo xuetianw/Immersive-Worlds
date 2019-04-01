@@ -130,7 +130,7 @@ std::vector<Message> GameController::outputCurrentLocationInfo(const Message& me
     }
 
     responseMessage.text = roomName.has_value() ? "Currently located in room: " + roomName.value()
-                                                   + "\nAvatars that are in the rooms :" + avatarRespond
+                                                   + "\nAvatars that are in the rooms:\n" + avatarRespond
                                                 : "Error locating avatar";
 
     return std::vector<Message>{responseMessage};
