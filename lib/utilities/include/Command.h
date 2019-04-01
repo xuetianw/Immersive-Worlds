@@ -21,6 +21,7 @@ enum Command {
     MINIGAME_NEXTROUND,
     DIRECTIONS,
     AVATAR_INFO,
+    SWAP_AVATAR,
     ATTACK,
     FLEE
 };
@@ -55,7 +56,8 @@ public:
             HELP,
             DIRECTIONS,
             MINIGAME,
-            AVATAR_INFO
+            AVATAR_INFO,
+            SWAP_AVATAR
         };
     }
 };
