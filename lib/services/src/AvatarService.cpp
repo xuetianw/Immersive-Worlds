@@ -16,7 +16,7 @@ bool AvatarService::generateAvatarFromAvatarId(const ID& avatarId, const ID& roo
     return true;
 }
 
-const std::optional<std::reference_wrapper<const Avatar>>
+const std::optional<std::reference_wrapper<Avatar>>
 AvatarService::getAvatarFromAvatarId(const ID& avatarId) {
     if (!doesAvatarExist(avatarId)) {
         return std::nullopt;
@@ -24,7 +24,7 @@ AvatarService::getAvatarFromAvatarId(const ID& avatarId) {
 
     const std::unique_ptr<Avatar>& avatar = _avatars.at(avatarId);
 
-    return std::optional<std::reference_wrapper<const Avatar>>{*avatar};
+    return std::optional<std::reference_wrapper<Avatar>>{*avatar};
 }
 
 bool AvatarService::setAvatarRoomId(const ID& avatarId, const ID& roomId) {

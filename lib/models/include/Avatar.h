@@ -44,6 +44,8 @@ namespace models {
         void setDamageOutput(int damageOutput);
 
 
+
+
     private:
         ID _avatarId;
         ID _roomId;

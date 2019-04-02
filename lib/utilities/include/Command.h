@@ -57,6 +57,7 @@ public:
             DIRECTIONS,
             MINIGAME,
             AVATAR_INFO,
+            ATTACK,
             SWAP_AVATAR
         };
     }
