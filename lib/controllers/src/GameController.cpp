@@ -120,20 +120,15 @@ std::vector<Message> GameController::outputCurrentLocationInfo(const Message& me
     const ID& avatarId = message.user.getAccount().avatarId;
     std::optional<std::string> roomName = _gameActions.getAvatarRoomName(avatarId);
 
-
-    std::vector<ID> avatarIDs = _gameActions.getAllAvatarIds(_avatarService.getAvatarFromAvatarId(message.user.getAvatarId()).value().get().getRoomId());
-    auto it = std::find(avatarIDs.begin(), avatarIDs.end(), message.user.getAvatarId());
-    avatarIDs.erase(it);
-    std::string avatarRespond;
-    for (auto avatarID : avatarIDs) {
-        avatarRespond += _gameActions.displayAvatarinfoFromID(avatarID);
-    }
-
     responseMessage.text = roomName.has_value() ? "Currently located in room: " + roomName.value()
-                                                   + "\nAvatars that are in the rooms:\n" + avatarRespond
-                                                : "Error locating avatar";
+                                                : "Error locating room";
 
     return std::vector<Message>{responseMessage};
+}
+
+std::vector<Message> GameController::outputAvatarsInCurrentRoom(const Message& message) {
+    auto avatarInfo = _gameActions.getAllAvatarInfoInCurrentRoom(message.user.getAvatarId());
+    return std::vector<Message> { Message{message.user, avatarInfo}};
 }
 
 std::vector<Message> GameController::attackNPC(const Message &message) {
