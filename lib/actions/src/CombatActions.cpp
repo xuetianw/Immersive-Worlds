@@ -48,7 +48,7 @@ bool CombatActions::checkAndCreateCombat(ID& playerId, ID& NPCId) {
     auto playerOptional = _avatarService.getAvatarFromAvatarId(playerId);
     auto NPCOptional = _avatarService.getAvatarFromAvatarId(NPCId);
 
-    if(!NPCOptional.has_value()){
+    if(!playerOptional.has_value() || !NPCOptional.has_value()){
         //user or NPC does not exist
         return false;
     }

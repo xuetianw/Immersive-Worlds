@@ -98,7 +98,7 @@ const ID& GameActions::getRoomId(const ID& avatarId) {
 }
 
 std::string GameActions::displayAvatarinfoFromID(const ID& id) {
-    std::optional<std::reference_wrapper<const Avatar>> avatar = _avatarService.getAvatarFromAvatarId(id);
+    std::optional<std::reference_wrapper<Avatar>> avatar = _avatarService.getAvatarFromAvatarId(id);
 
     auto userAvatar = avatar.value().get();
     std::string response = "name :" + userAvatar.getName() + "\n"
