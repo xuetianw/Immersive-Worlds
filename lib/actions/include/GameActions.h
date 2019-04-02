@@ -67,9 +67,9 @@ public:
 
     std::vector<Message> swapAvatar(const Message& message);
 
-private:
     std::vector<ID> getAllAvatarIds(ID roomId);
 
+private:
     std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;
 
     RoomConnectionService& _roomConnectionService;
