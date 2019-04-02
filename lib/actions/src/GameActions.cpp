@@ -2,6 +2,8 @@
 // Created by asim on 25/03/19.
 //
 
+#include <GameActions.h>
+
 #include "GameActions.h"
 
 using models::RoomConnection;
@@ -69,7 +71,7 @@ std::optional<std::string> GameActions::getAvatarRoomName(const ID& avatarId) {
     return avatarRoomName.value();
 }
 
-std::vector<ID> GameActions::getAllAvatarIdsInNeighbourAndCurrent(ID roomId){
+std::vector<ID> GameActions::getAllAvatarIdsInNeighbourAndCurrent(ID roomId) {
 
     std::vector<ID> currAvatars;
     std::vector<ID> neighbours;
@@ -78,7 +80,7 @@ std::vector<ID> GameActions::getAllAvatarIdsInNeighbourAndCurrent(ID roomId){
 
     neighbours = _roomConnectionService.getAllNeighbourId(roomId);
 
-    for(const ID& neighbourId : neighbours){
+    for (const ID& neighbourId : neighbours) {
         currAvatars = getAllAvatarIds(neighbourId);
         avatars.insert(avatars.end(), currAvatars.begin(), currAvatars.end());
     }
@@ -91,16 +93,29 @@ std::vector<ID> GameActions::getAllAvatarIds(ID roomId) {
     return _avatarService.getAllAvatarIds(roomId);
 };
 
-const ID& GameActions::getRoomId(const ID& avatarId){
+const ID& GameActions::getRoomId(const ID& avatarId) {
     return _avatarService.getRoomId(avatarId);
 }
 
 std::vector<Message> GameActions::displayAvatarinfo(const Message& message) {
-    std::optional<std::reference_wrapper<Avatar>> avatar = _avatarService.getAvatarFromAvatarId(message.user.getAccount().avatarId);
+    std::optional<std::reference_wrapper<Avatar>> avatar = _avatarService.getAvatarFromAvatarId(
+            message.user.getAccount().avatarId);
 
     auto userAvatar = avatar.value().get();
     std::string response = "name :" + userAvatar.getName() + "\n"
                            + "_hp: " + std::to_string(userAvatar.get_hp()) + "\n"
                            + "_mana: " + std::to_string(userAvatar.get_mana()) + "\n";
     return std::vector<Message>{Message(message.user, response)};
+}
+
+std::vector<std::string> GameActions::getAllAvatarsNamesForRoomId(const ID& roomId){
+    std::vector<ID> avatarIds = _avatarService.getAllAvatarIds(roomId);
+    std::vector<std::string> avatarsNames{};
+
+    for (const ID& avatarId : avatarIds) {
+        Avatar& avatar = _avatarService.getAvatarFromAvatarId(avatarId)->get();
+        avatarsNames.push_back(avatar.getName());
+    }
+
+    return avatarsNames;
 }

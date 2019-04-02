@@ -1,8 +1,6 @@
 //
 // Created by Nirag Mehta on 2019-03-19.
 //
-#include <Combat.h>
-
 #include "Combat.h"
 
 void Combat::attackNpc() {
@@ -56,8 +54,10 @@ std::string Combat::getCombatInfo() {
     std::string combatDetails;
     string playerHp = std::to_string(_player.get_hp());
     string NPCHp = std::to_string(_NPC.get_hp());
-    combatDetails = "Your current hp is" + playerHp +
-            "\nNPC's current hp is" + NPCHp + "\n";
+    combatDetails = "You sustained " + std::to_string(_NPC.getDamageOutput()) + " damage from the NPC\n" +
+            "You dealt " + std::to_string(_player.getDamageOutput()) + " damage to the NPC\n" +
+            "Your current hp is " + playerHp +
+            "\nNPC's current hp is " + NPCHp + "\n";
 
     return combatDetails;
 }

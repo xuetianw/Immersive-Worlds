@@ -21,7 +21,10 @@ class CombatActions {
 
 public:
     CombatActions(AvatarService& avatarService, RoomConnectionService& roomConnectionService) :
-        _avatarService(avatarService), _roomConnectionService(roomConnectionService){}
+            _avatarService(avatarService), _roomConnectionService(roomConnectionService) {
+
+        _avatarService.generateAvatarFromAvatarId(NPCID, ID{}, "NPC");
+    }
 
     /*
      * functions which does the following
@@ -53,11 +56,17 @@ public:
      */
     std::string displayCombatDetails(ID& playerID);
 
+    const ID& getNPCID() const;
+
 private:
     int fightsInitialized;
     std::unordered_map<ID, Combat> _combatMap;
     AvatarService& _avatarService;
     RoomConnectionService& _roomConnectionService;
+
+    //temp NPC
+    ID NPCID{573};
+
 
     bool isAttackValid(Avatar& player, Avatar& NPC);
 };

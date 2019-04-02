@@ -1,9 +1,6 @@
 //
 // Created by Nirag Mehta on 2019-03-12.
 //
-
-#include <CombatActions.h>
-
 #include "../include/CombatActions.h"
 
 bool CombatActions::performCombatRound(ID& playerID) {
@@ -24,7 +21,7 @@ bool CombatActions::performCombatRound(ID& playerID) {
 bool CombatActions::isAttackValid(Avatar& player, Avatar& NPC) {
 
     //compares room ID pointers
-    if(&player.getRoomId() != &NPC.getRoomId())
+    if(player.getRoomId() != NPC.getRoomId())
         return false;
 
     return true;
@@ -75,6 +72,10 @@ bool CombatActions::destroyCombat(ID& playerId) {
     _combatMap.erase(playerId);
 
     return true;
+}
+
+const ID& CombatActions::getNPCID() const {
+    return NPCID;
 }
 
 
