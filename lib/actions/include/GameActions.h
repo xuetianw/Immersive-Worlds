@@ -65,7 +65,9 @@ public:
      */
     std::vector<ID> getAllAvatarIdsInNeighbourAndCurrent(ID roomId);
 
-    std::vector<Message> displayAvatarinfo(const Message& message);
+    std::string displayAvatarinfoFromID(const ID& id);
+
+    std::vector<Message> swapAvatar(const Message& message);
 
 private:
     std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;
