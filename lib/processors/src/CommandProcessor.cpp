@@ -97,5 +97,6 @@ void CommandProcessor::buildCommands() {
     addCommand("/directions", DIRECTIONS, [this](Message message) { return gameController->listDirections(message); });
     addCommand("/avatar", AVATAR_INFO, [this] (Message message) { return gameController->displayAvatarInfo(message);});
     addCommand("/swap", SWAP_AVATAR, [this] (Message message) { return gameController->swapAvatar(message);});
+    addCommand("/avatars_in_room", AVATARS_IN_ROOM, [this] (Message message) { return gameController->outputAvatarsInCurrentRoom(message);});
 }
 

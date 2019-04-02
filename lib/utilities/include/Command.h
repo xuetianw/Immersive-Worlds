@@ -22,6 +22,7 @@ enum Command {
     DIRECTIONS,
     AVATAR_INFO,
     SWAP_AVATAR,
+    AVATARS_IN_ROOM,
     ATTACK,
     FLEE
 };
@@ -57,7 +58,8 @@ public:
             DIRECTIONS,
             MINIGAME,
             AVATAR_INFO,
-            SWAP_AVATAR
+            SWAP_AVATAR,
+            AVATARS_IN_ROOM
         };
     }
 };
