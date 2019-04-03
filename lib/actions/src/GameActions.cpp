@@ -142,18 +142,16 @@ std::vector<Message> GameActions::swapAvatar(const Message& message) {
     if (allAvatarIds.empty()) {
         response = "there is no avatar available currently in the room, use look_avatar command to check";
     } else {
-        for (unsigned i = 0; i < allAvatarIds.size(); i++) {
-            if (!_avatarService.getAvatarFromAvatarId(allAvatarIds[i])->get().is_playable()) {
+        for (auto& allAvatarId : allAvatarIds) {
+            if (!_avatarService.getAvatarFromAvatarId(allAvatarId)->get().is_playable()) {
                 _avatarService.getAvatarFromAvatarId(id)->get().set_playable(true);
-                message.user.setAvatarId(allAvatarIds[i]);
+                message.user.setAvatarId(allAvatarId);
                 _avatarService.getAvatarFromAvatarId(id)->get().set_playable(false);
-                response = "swapped successfully";
-                break;
-            }
-            if (i == allAvatarIds.size() -1) {
-                response = "there is no playable avatar available currently in the room, use look_avatar command to check";
+                return std::vector<Message>{Message(message.user, "swapped successfully")};
             }
         }
+        return std::vector<Message>{Message(message.user,
+                "there is no playable avatar available currently in the room, use look_avatar command to check")};
     }
 
     return std::vector<Message>{Message(message.user, response)};
