@@ -21,11 +21,11 @@ std::vector<Message> GameController::onLogin(Message& message) {
     user.setCommandType(new GameCommands());
 
     message.text += spawnAvatarInStartingRoom(avatarId);
-    return std::vector<Message> { message };
+    return std::vector<Message>{message};
 }
 
 std::vector<Message> GameController::respondToMessage(const Message& message) {
-    return std::vector<Message> { Message {message.user, INVALID_GAME_COMMAND} };
+    return std::vector<Message>{Message{message.user, INVALID_GAME_COMMAND}};
 }
 
 std::vector<Message> GameController::move(const Message& message) {
@@ -73,7 +73,7 @@ std::vector<Message> GameController::startMiniGame(const Message& message) {
     bool hasMiniGame = _miniGameActions.roomHaveMiniGame(roomID);
 
     Message newMessage = Message(message.user);
-    if(hasMiniGame) {
+    if (hasMiniGame) {
         auto minigame = _miniGameActions.getMiniGame(roomID);
         newMessage.text = minigame.printQuestion();
         user.setCommandType(new MinigameCommands());
@@ -92,7 +92,7 @@ std::vector<Message> GameController::nextRound(const Message& message) {
 
     std::vector<Message> response;
     auto minigame = _miniGameActions.getMiniGame(roomID);
-    if(minigame.hasMoreRounds()) {
+    if (minigame.hasMoreRounds()) {
         response.push_back(Message{message.user, minigame.printQuestion()});
     } else {
         response.push_back(Message{message.user, "No More Questions"});
@@ -118,10 +118,15 @@ std::vector<Message> GameController::verifyMinigameAnswer(const Message& message
 std::vector<Message> GameController::outputCurrentLocationInfo(const Message& message) {
     Message responseMessage{message.user};
     const ID& avatarId = message.user.getAccount().avatarId;
+    const ID& roomId = _gameActions.getRoomId(avatarId);
     std::optional<std::string> roomName = _gameActions.getAvatarRoomName(avatarId);
 
     responseMessage.text = roomName.has_value() ? "Currently located in room: " + roomName.value()
                                                 : "Error locating room";
+
+    std::vector<std::string> avatarNames = _gameActions.getAllAvatarsNamesForRoomId(roomId);
+
+    responseMessage.text += "\n" + helper::convertListToString(avatarNames);
 
     return std::vector<Message>{responseMessage};
 }
@@ -131,18 +136,50 @@ std::vector<Message> GameController::outputAvatarsInCurrentRoom(const Message& m
     return std::vector<Message> { Message{message.user, avatarInfo}};
 }
 
-std::vector<Message> GameController::attackNPC(const Message &message) {
+std::vector<Message> GameController::attackNPC(const Message& message) {
+    User& user = message.user;
+    Message combatResponse = Message(user);
+    ID playerID = message.user.getAccount().avatarId;
 
-    Message combatResponse = Message(message.user);
+    ID NPCID = _combatActions.getNPCID();
 
-    ID userAvatar = message.user.getAccount().avatarId;
+    if (_combatActions.checkAndCreateCombat(playerID, NPCID)) {
+        //state transition from game commands to combat commands
+        user.setCommandType(new CombatCommands());
+    } else {
+        combatResponse.text = "The NPC you want to fight does not exist";
+        return std::vector<Message>{combatResponse};
+    }
 
+    if (_combatActions.performCombatRound(playerID)) {
+        //display combat round message
+        combatResponse.text = _combatActions.displayCombatDetails(playerID);
+    } else {
+        combatResponse.text += "The NPC you want to fight is not located in the same room as you";
+        return std::vector<Message>{combatResponse};
+    }
 
-    return std::vector<Message>();
+    if (!_combatActions.isCombatActive(playerID)) {
+        combatResponse.text += "You have finished the combat phase";
+        user.setCommandType(new GameCommands());
+    }
+
+    return std::vector<Message>{combatResponse};
 }
 
-std::vector<Message> GameController::fleeCombat(const Message &message) {
-    return std::vector<Message>();
+std::vector<Message> GameController::fleeCombat(const Message& message) {
+
+    User& user = message.user;
+    Message fleeResponse = Message(user);
+    ID playerID = message.user.getAccount().avatarId;
+    if (_combatActions.destroyCombat(playerID)) {
+        fleeResponse.text = "You have successfully fled combat";
+        user.setCommandType(new GameCommands());
+    } else {
+        fleeResponse.text = "You have failed to flee combat";
+    }
+
+    return std::vector<Message>{fleeResponse};
 }
 
 std::vector<Message> GameController::say(const Message& message) {
@@ -179,21 +216,21 @@ std::vector<Message> GameController::tell(const Message& message) {
     std::string recipient = userInput.substr(0, userInput.find(' '));
     std::string sender = message.user.getAccount()._username;
 
-    if(recipient == sender) {
+    if (recipient == sender) {
         response.emplace_back(message.user, "You cannot send private message to yourself!");
         return response;
     }
 
-    std::string userMessage = userInput.substr(userInput.find(' ')+1);
+    std::string userMessage = userInput.substr(userInput.find(' ') + 1);
 
-    if(userInput.find(' ') == std::string::npos || userMessage == ""){
+    if (userInput.find(' ') == std::string::npos || userMessage == "") {
         response.emplace_back(message.user, "Please enter a message to send");
         return response;
     }
 
     User* user = findUser(recipient);
 
-    if (user != nullptr){
+    if (user != nullptr) {
         //if user is online
         response.emplace_back(*user, sender + " whispers: " + userMessage);
         response.emplace_back(message.user, "You whispered to " + recipient + ": " + userMessage);
@@ -205,13 +242,13 @@ std::vector<Message> GameController::tell(const Message& message) {
 
 }
 
-std::vector<Message> GameController::constructMessageToAvatars(std::string message, const std::vector<ID>& avatarIds){
+std::vector<Message> GameController::constructMessageToAvatars(std::string message, const std::vector<ID>& avatarIds) {
 
     std::vector<Message> responses;
 
-    for(const ID& id : avatarIds) {
+    for (const ID& id : avatarIds) {
         User* user = findUser(id);
-        if(user == nullptr) continue;
+        if (user == nullptr) continue;
         responses.emplace_back(Message{*user, message});
     }
 
@@ -233,8 +270,8 @@ std::vector<Message> GameController::swapAvatar(const Message& message) {
 /*
  * PRIVATE
  */
-User* GameController::findUser(const ID& avatarId){
-    if(_avatarIdToUser.count(avatarId) == 0){
+User* GameController::findUser(const ID& avatarId) {
+    if (_avatarIdToUser.count(avatarId) == 0) {
         return nullptr;
     }
     //return user associated with ID
@@ -242,18 +279,18 @@ User* GameController::findUser(const ID& avatarId){
 }
 
 
-User* GameController::findUser(std::string username){
+User* GameController::findUser(std::string username) {
 
     //find user with matching username
     auto it = std::find_if(
             _avatarIdToUser.begin(),
             _avatarIdToUser.end(),
-            [&username](const auto& it){
+            [&username](const auto& it) {
                 return it.second->getAccount()._username == username;
             }
     );
 
-    if (_avatarIdToUser.end() != it){
+    if (_avatarIdToUser.end() != it) {
         return it->second;
     } else {
         return nullptr;

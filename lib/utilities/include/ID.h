@@ -28,6 +28,10 @@ public:
         return _uuid == other.getID();
     }
 
+    bool operator!=(const ID& other) const {
+        return _uuid != other.getID();
+    }
+
 private:
     UUID _uuid;
 

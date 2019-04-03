@@ -60,6 +60,7 @@ public:
             AVATAR_INFO,
             SWAP_AVATAR,
             AVATARS_IN_ROOM
+            ATTACK
         };
     }
 };

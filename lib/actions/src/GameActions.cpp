@@ -2,6 +2,8 @@
 // Created by asim on 25/03/19.
 //
 
+#include <GameActions.h>
+
 #include "GameActions.h"
 
 using models::RoomConnection;
@@ -11,7 +13,7 @@ bool GameActions::moveAvatar(const ID& avatarId, const string& directionString) 
         return false;
     }
 
-    const std::optional<std::reference_wrapper<const Avatar>> avatarOptional = _avatarService.getAvatarFromAvatarId(
+    const std::optional<std::reference_wrapper<Avatar>> avatarOptional = _avatarService.getAvatarFromAvatarId(
             avatarId);
     const ID& currentAvatarRoomId = avatarOptional->get().getRoomId();
 
@@ -36,7 +38,7 @@ std::vector<string> GameActions::getDirectionsForAvatarId(const ID& avatarId) {
     }
 
     //get the Avatar object
-    const std::optional<std::reference_wrapper<const Avatar>> avatarOptional =
+    const std::optional<std::reference_wrapper<Avatar>> avatarOptional =
             _avatarService.getAvatarFromAvatarId(avatarId);
 
     //get the room ID of the Avatar
@@ -60,7 +62,7 @@ std::optional<std::string> GameActions::getAvatarRoomName(const ID& avatarId) {
         return std::nullopt;
     }
 
-    const std::optional<std::reference_wrapper<const Avatar>> avatarOptional = _avatarService.getAvatarFromAvatarId(
+    const std::optional<std::reference_wrapper<Avatar>> avatarOptional = _avatarService.getAvatarFromAvatarId(
             avatarId);
     const ID& avatarRoomId = avatarOptional->get().getRoomId();
 
@@ -69,7 +71,7 @@ std::optional<std::string> GameActions::getAvatarRoomName(const ID& avatarId) {
     return avatarRoomName.value();
 }
 
-std::vector<ID> GameActions::getAllAvatarIdsInNeighbourAndCurrent(ID roomId){
+std::vector<ID> GameActions::getAllAvatarIdsInNeighbourAndCurrent(ID roomId) {
 
     std::vector<ID> currAvatars;
     std::vector<ID> neighbours;
@@ -78,7 +80,7 @@ std::vector<ID> GameActions::getAllAvatarIdsInNeighbourAndCurrent(ID roomId){
 
     neighbours = _roomConnectionService.getAllNeighbourId(roomId);
 
-    for(const ID& neighbourId : neighbours){
+    for (const ID& neighbourId : neighbours) {
         currAvatars = getAllAvatarIds(neighbourId);
         avatars.insert(avatars.end(), currAvatars.begin(), currAvatars.end());
     }
@@ -91,7 +93,7 @@ std::vector<ID> GameActions::getAllAvatarIds(ID roomId) {
     return _avatarService.getAllAvatarIds(roomId);
 };
 
-const ID& GameActions::getRoomId(const ID& avatarId){
+const ID& GameActions::getRoomId(const ID& avatarId) {
     return _avatarService.getRoomId(avatarId);
 }
 
@@ -137,4 +139,16 @@ std::vector<Message> GameActions::swapAvatar(const Message& message) {
     }
 
     return std::vector<Message>{Message(message.user, response)};
+}
+
+std::vector<std::string> GameActions::getAllAvatarsNamesForRoomId(const ID& roomId){
+    std::vector<ID> avatarIds = _avatarService.getAllAvatarIds(roomId);
+    std::vector<std::string> avatarsNames{};
+
+    for (const ID& avatarId : avatarIds) {
+        Avatar& avatar = _avatarService.getAvatarFromAvatarId(avatarId)->get();
+        avatarsNames.push_back(avatar.getName());
+    }
+
+    return avatarsNames;
 }

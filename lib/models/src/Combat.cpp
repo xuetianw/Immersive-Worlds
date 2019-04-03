@@ -36,16 +36,30 @@ void Combat::fightRound() {
     attackNpc();
     if(!isCombatActive()){
         //_NPC is dead, cannot attack dead Avatar
-        combatInProgress = false;
+        _combatInProgress = false;
+        ++_roundCount;
         return;
     }
     receiveDamage();
 
     if(!isCombatActive()){
         //Player Avatar is dead
-        combatInProgress = false;
+        _combatInProgress = false;
     }
-    ++roundCount;
+    ++_roundCount;
+}
+
+std::string Combat::getCombatInfo() {
+
+    std::string combatDetails;
+    string playerHp = std::to_string(_player.get_hp());
+    string NPCHp = std::to_string(_NPC.get_hp());
+    combatDetails = "You sustained " + std::to_string(_NPC.getDamageOutput()) + " damage from the NPC\n" +
+            "You dealt " + std::to_string(_player.getDamageOutput()) + " damage to the NPC\n" +
+            "Your current hp is " + playerHp +
+            "\nNPC's current hp is " + NPCHp + "\n";
+
+    return combatDetails;
 }
 
 bool Combat::isCombatActive() {
@@ -55,9 +69,25 @@ bool Combat::isCombatActive() {
 //getters and setters
 
 int Combat::getRoundCount() const {
-    return roundCount;
+    return _roundCount;
 }
 
 void Combat::setRoundCount(int roundCount) {
-    Combat::roundCount = roundCount;
+    Combat::_roundCount = roundCount;
+}
+
+bool Combat::isCombatInProgress() const {
+    return _combatInProgress;
+}
+
+const ID& Combat::get_combatId() const {
+    return _combatId;
+}
+
+Avatar& Combat::get_player() const {
+    return _player;
+}
+
+Avatar& Combat::get_NPC() const {
+    return _NPC;
 }

@@ -58,6 +58,8 @@ public:
 
     std::string getAllAvatarInfoInCurrentRoom(const ID& avatarId);
 
+    std::vector<std::string> getAllAvatarsNamesForRoomId(const ID& roomId);
+
     /**
      * Get ids of adjacent rooms and current room
      */
