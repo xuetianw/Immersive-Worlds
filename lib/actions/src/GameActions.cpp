@@ -120,7 +120,7 @@ std::string GameActions::displayAvatarinfoFromID(const ID& id) {
     if(avatar.has_value()) {
         auto userAvatar = avatar->get();
         response << "name: " << userAvatar.getName();
-        if (userAvatar.is_playable()) {
+        if (userAvatar.is_being_played()) {
             response << "\nplayable: " << "yes";
         } else{
             response << "\nplayable: " << "no";
@@ -141,10 +141,10 @@ std::vector<Message> GameActions::swapAvatar(const Message& message) {
         response = "there is no avatar available currently in the room, use look_avatar command to check";
     } else {
         for (auto& allAvatarId : allAvatarIds) {
-            if (!_avatarService.getAvatarFromAvatarId(allAvatarId)->get().is_playable()) {
-                _avatarService.getAvatarFromAvatarId(allAvatarId)->get().set_playable(true);
+            if (!_avatarService.getAvatarFromAvatarId(allAvatarId)->get().is_being_played()) {
+                _avatarService.getAvatarFromAvatarId(allAvatarId)->get().set_being_played(true);
                 message.user.setAvatarId(allAvatarId);
-                _avatarService.getAvatarFromAvatarId(id)->get().set_playable(false);
+                _avatarService.getAvatarFromAvatarId(id)->get().set_being_played(false);
                 return std::vector<Message>{Message(message.user, "swapped successfully")};
             }
         }

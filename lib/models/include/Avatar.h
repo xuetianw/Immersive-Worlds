@@ -19,7 +19,7 @@ namespace models {
             _avatarId(avatarId),
             _roomId(roomId),
             _name(std::move(name)),
-            _playable(playable) {
+            _being_played(playable) {
         }
 
         const ID& getRoomId() const;
@@ -44,9 +44,9 @@ namespace models {
 
         void setDamageOutput(int damageOutput);
 
-        bool is_playable() const;
+        bool is_being_played() const;
 
-        void set_playable(bool _playable);
+        void set_being_played(bool _being_played);
 
 
     private:
@@ -56,7 +56,7 @@ namespace models {
         int _hp = 500;
         int _mana = 300;
         int _damageOutput = 40;
-        bool _playable;
+        bool _being_played;
     };
 }
 
