@@ -1,0 +1,49 @@
+{
+    "MINIGAMES" : [
+        {
+            "id" : 1,
+            "roomId" : 10500,
+            "roomName" : "Lexie's Scuba Shop",
+            "type" : "multiple_choice",
+            "questions" : [
+                "Which spelling is correct?",
+                "Which spelling is correct?"
+            ],
+            "answers" : [
+                [
+                    "RRRR",
+                    "CAT",
+                    "TTTT"
+                ],
+                [
+                    "TTTT",
+                    "WWW",
+                    "HELLO"
+                ]
+            ],
+            "correctanswers" :  [
+                1,
+                2
+            ]
+        },
+        {
+            "id" : 2,
+            "roomId" : 10608,
+            "roomName" : "Marketplace.",
+            "type" : "multiple_choice",
+            "questions" : [
+                "Which spelling is correct?"
+            ],
+            "answers" : [
+                [
+                    "RRRR",
+                    "DOG",
+                    "TTTT"
+                ]
+            ],
+            "correctanswers" : [
+                1
+            ]
+        }
+    ]
+}

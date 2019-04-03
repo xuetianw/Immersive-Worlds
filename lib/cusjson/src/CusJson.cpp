@@ -154,16 +154,16 @@ namespace CusJson {
                     resetJsonObject["state"].get<std::string>()
                 ));
             } else if (actionString == "object") {
-                area._containerWrappers.push_back(ContainerJsonWrapper(
+                area._objectWrappers.push_back(ObjectJsonWrapper(
                         resetJsonObject["id"].get<int>(),
                         resetJsonObject["room"].get<int>()
                 ));
             } else if (actionString == "put") {
-                auto object = find_if(area._containerWrappers.begin(), area._containerWrappers.end(),
-                                           [resetJsonObject](ContainerJsonWrapper wrapper) {
-                                               return wrapper._objectId == resetJsonObject["container"].get<int>();
+                auto object = find_if(area._objectWrappers.begin(), area._objectWrappers.end(),
+                                           [resetJsonObject](ObjectJsonWrapper wrapper) {
+                                               return wrapper._objectJsonId == resetJsonObject["container"].get<int>();
                                            });
-                if (object != area._containerWrappers.end()) {
+                if (object != area._objectWrappers.end()) {
                     object.base()->addObject(resetJsonObject["id"].get<int>());
                 }
             }

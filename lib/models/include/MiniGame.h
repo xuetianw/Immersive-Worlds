@@ -64,16 +64,10 @@ namespace models {
         std::vector<std::vector<std::string>> _answers;
         std::vector<std::string> _questions;
         std::vector<int> _correctAnswers;
-        int _round;
+        unsigned _round;
         std::string _roomName;
 
     };
 } // namespace channel
-
-namespace channel {
-    enum MiniGameType {
-        MULTIPLE_CHOICE
-    };
-}
 
 #endif //CHANNEL_MINIGAME_H
