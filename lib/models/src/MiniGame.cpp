@@ -36,7 +36,7 @@ std::string MiniGame::printQuestion() {
     std::vector<std::string> answers = getAnswers();
 
     char letter = 'a';
-    for (int i = 0; i < answers.size(); i++, letter++) {
+    for (unsigned i = 0; i < answers.size(); i++, letter++) {
         std::string answer = answers.at(i);
 
         ss << letter << ") " << answer << std::endl;

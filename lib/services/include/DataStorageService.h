@@ -52,6 +52,7 @@ public:
     std::unordered_map<ID, Neighbours> getRoomIdToNeighboursMapCopy() override;
 
     std::unordered_map<ID, models::MiniGame> getRoomIdToMiniGameCopy();
+    std::unordered_map<int, ID> getJsonIdToRoomIdCopy();
 
     SingleItem spawnObjectCopy(int jsonId);
     

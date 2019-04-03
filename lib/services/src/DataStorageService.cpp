@@ -89,6 +89,11 @@ std::unordered_map<ID, models::Room> DataStorageService::getRoomIdToRoomMapCopy(
     return roomIdToRoomMapCopy;
 }
 
+std::unordered_map<int, ID> DataStorageService::getJsonIdToRoomIdCopy() {
+    auto jsonRoomToId = this->_jsonRoomIdToUuid;
+    return jsonRoomToId;
+}
+
 std::unordered_map<ID, std::vector<models::NeighbourInfo>> DataStorageService::getRoomIdToNeighboursMapCopy() {
     auto roomIdToNeighboursMapCopy = this->_roomIdToNeighbours;
     return roomIdToNeighboursMapCopy;
