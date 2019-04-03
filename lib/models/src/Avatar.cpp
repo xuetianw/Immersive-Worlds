@@ -48,3 +48,11 @@ void Avatar::set_mana(int _mana) {
 void Avatar::setDamageOutput(int damageOutput) {
     Avatar::_damageOutput = damageOutput;
 }
+
+bool models::Avatar::is_playable() const {
+    return _playable;
+}
+
+void models::Avatar::set_playable(bool _playable) {
+    Avatar::_playable = _playable;
+}

@@ -54,7 +54,7 @@ std::vector<string> GameActions::getDirectionsForAvatarId(const ID& avatarId) {
 bool GameActions::spawnAvatarInStartingRoom(const ID& avatarId) {
     const ID& startingRoomID = _roomConnectionService.getStartingRoom();
     //TODO retrive avatar name from the database
-    return _avatarService.generateAvatarFromAvatarId(avatarId, startingRoomID, "AVATAR NAME");
+    return _avatarService.generateAvatarFromAvatarId(avatarId, startingRoomID, "AVATAR NAME", true);
 }
 
 std::optional<std::string> GameActions::getAvatarRoomName(const ID& avatarId) {
@@ -103,6 +103,8 @@ std::string GameActions::getAllAvatarInfoInCurrentRoom(const ID& avatarId) {
 
     // Get all avatar info in the room
     std::vector<ID> avatarIDs = getAllAvatarIds(roomIdOfAvatar);
+    auto it = std::find(avatarIDs.begin(), avatarIDs.end(), avatarId);
+    avatarIDs.erase(it);
     std::string avatarResponse = "\nAvatars that are in the rooms:\n";
     for (auto avatarID : avatarIDs) {
         avatarResponse.append(displayAvatarinfoFromID(avatarID));
@@ -117,25 +119,41 @@ std::string GameActions::displayAvatarinfoFromID(const ID& id) {
 
     if(avatar.has_value()) {
         auto userAvatar = avatar->get();
-        response << "name: " << userAvatar.getName()
-                << "\n_hp: " << std::to_string(userAvatar.get_hp())
-                << "\n_mana: " << std::to_string(userAvatar.get_mana())
-                << "\n";
+        response << "name: " << userAvatar.getName();
+        if (userAvatar.is_playable()) {
+            response << "\nplayable: " << "yes";
+        } else{
+            response << "\nplayable: " << "no";
+        }
+        response << "\n_hp: " << std::to_string(userAvatar.get_hp())
+                 << "\n_mana: " << std::to_string(userAvatar.get_mana())
+                 << "\n";
     }
 
     return response.str();
 }
 
 std::vector<Message> GameActions::swapAvatar(const Message& message) {
+    ID id = message.user.getAvatarId();
     std::string response;
-    std::vector<ID> allAvatarIds = getAllAvatarIds(_avatarService.getAvatarFromAvatarId(message.user.getAvatarId()).value().get().getRoomId());
-    auto it = std::find(allAvatarIds.begin(), allAvatarIds.end(), message.user.getAvatarId());
+    std::vector<ID> allAvatarIds = getAllAvatarIds(_avatarService.getAvatarFromAvatarId(id)->get().getRoomId());
+    auto it = std::find(allAvatarIds.begin(), allAvatarIds.end(), id);
     allAvatarIds.erase(it);
     if (allAvatarIds.empty()) {
-        response = "there is no avatar available currently in the room, use look command to check";
+        response = "there is no avatar available currently in the room, use look_avatar command to check";
     } else {
-        message.user.setAvatarId(allAvatarIds.at(0));
-        response = "swapped successfully";
+        for (unsigned i = 0; i < allAvatarIds.size(); i++) {
+            if (!_avatarService.getAvatarFromAvatarId(allAvatarIds[i])->get().is_playable()) {
+                _avatarService.getAvatarFromAvatarId(id)->get().set_playable(true);
+                message.user.setAvatarId(allAvatarIds[i]);
+                _avatarService.getAvatarFromAvatarId(id)->get().set_playable(false);
+                response = "swapped successfully";
+                break;
+            }
+            if (i == allAvatarIds.size() -1) {
+                response = "there is no playable avatar available currently in the room, use look_avatar command to check";
+            }
+        }
     }
 
     return std::vector<Message>{Message(message.user, response)};
