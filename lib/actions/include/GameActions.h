@@ -54,9 +54,9 @@ public:
 
     std::optional<std::string> getAvatarRoomName(const ID& avatarId);
 
-    std::vector<ID> getAllAvatarIds(ID roomId);
-
     const ID& getRoomId(const ID& avatarId);
+
+    std::string getAllAvatarInfoInCurrentRoom(const ID& avatarId);
 
     std::vector<std::string> getAllAvatarsNamesForRoomId(const ID& roomId);
 
@@ -68,6 +68,8 @@ public:
     std::string displayAvatarinfoFromID(const ID& id);
 
     std::vector<Message> swapAvatar(const Message& message);
+
+    std::vector<ID> getAllAvatarIds(ID roomId);
 
 private:
     std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;

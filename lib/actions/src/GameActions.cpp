@@ -97,14 +97,33 @@ const ID& GameActions::getRoomId(const ID& avatarId) {
     return _avatarService.getRoomId(avatarId);
 }
 
-std::string GameActions::displayAvatarinfoFromID(const ID& id) {
-    std::optional<std::reference_wrapper<Avatar>> avatar = _avatarService.getAvatarFromAvatarId(id);
+std::string GameActions::getAllAvatarInfoInCurrentRoom(const ID& avatarId) {
+    // Find the current room
+    auto roomIdOfAvatar = _avatarService.getAvatarFromAvatarId(avatarId)->get().getRoomId();
 
-    auto userAvatar = avatar.value().get();
-    std::string response = "name :" + userAvatar.getName() + "\n"
-                           + "_hp: " + std::to_string(userAvatar.get_hp()) + "\n"
-                           + "_mana: " + std::to_string(userAvatar.get_mana()) + "\n";
-    return response;
+    // Get all avatar info in the room
+    std::vector<ID> avatarIDs = getAllAvatarIds(roomIdOfAvatar);
+    std::string avatarResponse = "\nAvatars that are in the rooms:\n";
+    for (auto avatarID : avatarIDs) {
+        avatarResponse.append(displayAvatarinfoFromID(avatarID));
+    }
+
+    return avatarResponse;
+}
+
+std::string GameActions::displayAvatarinfoFromID(const ID& id) {
+    auto avatar = _avatarService.getAvatarFromAvatarId(id);
+    std::ostringstream response;
+
+    if(avatar.has_value()) {
+        auto userAvatar = avatar->get();
+        response << "name: " << userAvatar.getName()
+                << "\n_hp: " << std::to_string(userAvatar.get_hp())
+                << "\n_mana: " << std::to_string(userAvatar.get_mana())
+                << "\n";
+    }
+
+    return response.str();
 }
 
 std::vector<Message> GameActions::swapAvatar(const Message& message) {

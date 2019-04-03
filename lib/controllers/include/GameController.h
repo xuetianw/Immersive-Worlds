@@ -78,6 +78,13 @@ public:
      */
     std::vector<Message> outputCurrentLocationInfo(const Message& message);
 
+    /**
+     * Output Avatars in the current room
+     * @param message
+     * @return
+     */
+     std::vector<Message> outputAvatarsInCurrentRoom(const Message& message);
+
     /* 
      * increment the next round if a game exists
      * @param message
