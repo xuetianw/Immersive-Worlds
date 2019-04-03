@@ -103,11 +103,11 @@ std::string GameActions::getAllAvatarInfoInCurrentRoom(const ID& avatarId) {
 
     // Get all avatar info in the room
     std::vector<ID> avatarIDs = getAllAvatarIds(roomIdOfAvatar);
-    auto it = std::find(avatarIDs.begin(), avatarIDs.end(), avatarId);
-    avatarIDs.erase(it);
     std::string avatarResponse = "\nAvatars that are in the rooms:\n";
-    for (auto avatarID : avatarIDs) {
-        avatarResponse.append(displayAvatarinfoFromID(avatarID));
+    for (auto curAvatarID : avatarIDs) {
+        if (curAvatarID != avatarId) {
+            avatarResponse.append(displayAvatarinfoFromID(curAvatarID));
+        }
     }
 
     return avatarResponse;
@@ -137,21 +137,19 @@ std::vector<Message> GameActions::swapAvatar(const Message& message) {
     ID id = message.user.getAvatarId();
     std::string response;
     std::vector<ID> allAvatarIds = getAllAvatarIds(_avatarService.getAvatarFromAvatarId(id)->get().getRoomId());
-    auto it = std::find(allAvatarIds.begin(), allAvatarIds.end(), id);
-    allAvatarIds.erase(it);
-    if (allAvatarIds.empty()) {
+    if (allAvatarIds.size() == 1) {
         response = "there is no avatar available currently in the room, use look_avatar command to check";
     } else {
         for (auto& allAvatarId : allAvatarIds) {
             if (!_avatarService.getAvatarFromAvatarId(allAvatarId)->get().is_playable()) {
-                _avatarService.getAvatarFromAvatarId(id)->get().set_playable(true);
+                _avatarService.getAvatarFromAvatarId(allAvatarId)->get().set_playable(true);
                 message.user.setAvatarId(allAvatarId);
                 _avatarService.getAvatarFromAvatarId(id)->get().set_playable(false);
                 return std::vector<Message>{Message(message.user, "swapped successfully")};
             }
         }
         return std::vector<Message>{Message(message.user,
-                "there is no playable avatar available currently in the room, use look_avatar command to check")};
+                "there is no non-playable avatar available currently in the room, use look_avatar command to check")};
     }
 
     return std::vector<Message>{Message(message.user, response)};
