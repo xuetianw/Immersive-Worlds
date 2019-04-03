@@ -9,11 +9,11 @@
 #include <vector>
 #include "NPCJsonWrapper.h"
 #include "DoorStateJsonWrapper.h"
-#include "ContainerJsonWrapper.h"
+#include "ObjectJsonWrapper.h"
 #include <nlohmann/json.hpp>
 #include "NPCJsonWrapper.h"
 #include "DoorStateJsonWrapper.h"
-#include "ContainerJsonWrapper.h"
+#include "ObjectJsonWrapper.h"
 
 using json = nlohmann::json;
 
@@ -68,7 +68,7 @@ namespace CusJson {
         std::vector<Room> _rooms;
         std::vector<NPCJsonWrapper> _npcsWrappers;
         std::vector<DoorStateJsonWrapper> _doorStateWrappers;
-        std::vector<ContainerJsonWrapper> _containerWrappers;
+        std::vector<ObjectJsonWrapper> _objectWrappers;
     };
 
     class MiniGame {

@@ -11,11 +11,22 @@
 #include "AbstractDataStorageService.h"
 #include <iostream>
 
+#define BOOST_NO_CXX11_SCOPED_ENUMS
+#include <boost/filesystem.hpp>
+#undef BOOST_NO_CXX11_SCOPED_ENUMS
+using namespace boost::filesystem;
+
 class DataStorageService : public AbstractDataStorageService {
 private:
     using Neighbours = std::vector<models::NeighbourInfo>;
 
+    const std::string ABSOLUTE_PATH_CONFIG_DIR = "config/";
+    const std::string AREAS_DIRECTORY = "areas/";
+    const std::string MINIGAMES_DIRECTORY = "minigames/";
+    const std::string MINIGAME_FILE_NAME = "minigame.json";
+
     CusJson::Area _jsonArea;
+    std::vector<CusJson::Area> _jsonAreas;
     std::unordered_map<int, SingleItem> _objectMap;
     std::unordered_map<int, ID> _jsonRoomIdToUuid;
     std::unordered_map<ID, models::Room> _roomIdToRoom;
@@ -25,42 +36,32 @@ private:
     std::unordered_map<ID, models::MiniGame> _roomIdToMiniGameConnectionsList;
 
     void configRoomsAndJsonIdMap(const CusJson::Area& jsonArea);
+    void configObjectMap(const CusJson::Area& jsonArea, std::unordered_map<int, SingleItem>& jsonIdToItemMap);
     void configRoomsAndMiniGame(const CusJson::MiniGameList& jsonMiniGameList);
-    std::unordered_map<int, SingleItem> configObjectMap(const CusJson::Area& jsonArea);
     void configNeighboursMap(std::unordered_map<int, ID> jsonIdToUuid, std::vector<CusJson::Room> jsonRooms);
     void buildNeighbours(const std::unordered_map<int, ID>& tmp, const CusJson::Room& jsonRoom, Neighbours& neighbours);
 
 public:
     DataStorageService() {
-        json solaceJson = getTestingArea();
-        _jsonArea = solaceJson.get<CusJson::Area>();
-
-        _objectMap = configObjectMap(_jsonArea);
-        configRoomsAndJsonIdMap(_jsonArea);
-        configNeighboursMap(_jsonRoomIdToUuid, _jsonArea._rooms);
-
-        json minigameJson = getTestingMiniGameList();
-        _jsonMiniGameList = minigameJson.get<CusJson::MiniGameList>();
-        configRoomsAndMiniGame(_jsonMiniGameList);
+        loadInJsonAreas();
+        loadInMiniGames();
     }
-
-    const CusJson::Area& getJsonArea() const;
 
     std::unordered_map<ID, models::Room> getRoomIdToRoomMapCopy() override;
 
     std::unordered_map<ID, Neighbours> getRoomIdToNeighboursMapCopy() override;
+
     std::unordered_map<ID, models::MiniGame> getRoomIdToMiniGameCopy();
 
     SingleItem spawnObjectCopy(int jsonId);
-
-    const CusJson::MiniGameList& getMiniGameList() const;
-
+    
     void resetObjectsToWorld(std::unordered_map<ID, models::Room>& roomIdToRoomMap) override;
 
 private:
-    json getTestingArea();
 
-    json getTestingMiniGameList();
+    void loadInJsonAreas();
+
+    void loadInMiniGames();
 };
 
 #endif //WEBSOCKETNETWORKING_DATASTORAGESERVICE_H

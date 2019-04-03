@@ -71,7 +71,7 @@ namespace models {
     };
 
     enum Direction {
-        NORTH, SOUTH, EAST, WEST
+        NORTH, SOUTH, EAST, WEST, DOWN, UP
     };
 
     struct NeighbourInfo {
@@ -86,15 +86,20 @@ namespace models {
                     {"north", Direction::NORTH},
                     {"east", Direction::EAST},
                     {"south", Direction::SOUTH},
-                    {"west", Direction::WEST}
+                    {"west", Direction::WEST},
+                    {"down", Direction::DOWN},
+                    {"up", Direction::UP}
             };
 
+    // The strings are based on the keywords found in the json file
     static const std::unordered_map<int, Direction>  DIRECTION_INDEX_TO_ENUM_MAP =
             {
                     {0, Direction::NORTH},
                     {1, Direction::EAST},
                     {2, Direction::SOUTH},
-                    {3, Direction::WEST}
+                    {3, Direction::WEST},
+                    {4, Direction::UP},
+                    {5, Direction::DOWN}
             };
 }
 

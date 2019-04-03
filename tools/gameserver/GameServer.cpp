@@ -96,8 +96,10 @@ int main(int argc, char *argv[]) {
     unsigned short port = static_cast<unsigned short>(std::stoi(argv[1]));
 
     DBUtil::openConnection("adventure.db");
+
     commandProcessor = make_unique<CommandProcessor>();
     Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
+
 
     while (!done) {
         try {
