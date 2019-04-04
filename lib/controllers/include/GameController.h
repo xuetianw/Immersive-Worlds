@@ -132,6 +132,8 @@ public:
      */
     std::vector<Message> confuseAvatar(const Message& message);
 
+    std::vector<Message> unconfuseAvatar(const Message& message);
+
     /**
      * Determine whether or not an avatar is confused
      * @param avatarId
@@ -156,6 +158,14 @@ private:
     User* findUser(const ID& avatarId);
 
     User* findUser(std::string username);
+
+    /**
+     * Change confuse state of an avatar
+     * @param avatarId: id of target avatar
+     *        isConfused: new value of confuse state
+     * @return false if avatar not found, true if found and set to new value
+     */
+    bool setAvatarConfuseState(const ID& avatarId, bool isConfused);
 
     /**
     * Construct message to send to multiple avatars

@@ -112,6 +112,7 @@ void CommandProcessor::buildCommands() {
     addCommand("/avatar", AVATAR_INFO, [this] (Message message) { return gameController->displayAvatarInfo(message);});
     addCommand("/swap", SWAP_AVATAR, [this] (Message message) { return gameController->swapAvatar(message);});
     addCommand("/confuse", CONFUSE, [this] (Message message) { return gameController->confuseAvatar(message);});
+    addCommand("/unconfuse", UNCONFUSE, [this] (Message message) { return gameController->unconfuseAvatar(message);});
     addCommand("/look_avatar", LOOK_AVATAR, [this] (Message message) { return gameController->outputAvatarsInCurrentRoom(message);});
 }
 

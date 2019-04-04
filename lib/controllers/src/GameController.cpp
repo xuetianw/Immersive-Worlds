@@ -278,7 +278,7 @@ std::vector<Message> GameController::confuseAvatar(const Message& message){
 
     if (user != nullptr) {
         //if user is online
-        if(_avatarService.setAvatarConfuseState(user->getAccount().avatarId, true)){
+        if(setAvatarConfuseState(user->getAccount().avatarId, true)){
             response.emplace_back(*user, USER_CONFUSED_MESSAGE);
             response.emplace_back(message.user, recipient + " has been confused!");
         } else {
@@ -292,6 +292,17 @@ std::vector<Message> GameController::confuseAvatar(const Message& message){
     return response;
 }
 
+std::vector<Message> GameController::unconfuseAvatar(const Message& message) {
+
+    const ID& avatarId = message.user.getAccount().avatarId;
+
+    if (getAvatarConfuseState(avatarId)) {
+        setAvatarConfuseState(avatarId, false);
+        return std::vector<Message>{Message{message.user, "You have been released from the confuse state"}};
+    } else {
+        return std::vector<Message>{Message{message.user, "You are not confused"}};
+    }
+}
 
 bool GameController::getAvatarConfuseState(const ID &avatarId) {
     return _avatarService.getAvatarConfuseState(avatarId);
@@ -300,6 +311,12 @@ bool GameController::getAvatarConfuseState(const ID &avatarId) {
 /*
  * PRIVATE
  */
+
+
+bool GameController::setAvatarConfuseState(const ID& avatarId, bool isConfused) {
+    return _avatarService.setAvatarConfuseState(avatarId, isConfused);
+}
+
 User* GameController::findUser(const ID& avatarId) {
     if (_avatarIdToUser.count(avatarId) == 0) {
         return nullptr;

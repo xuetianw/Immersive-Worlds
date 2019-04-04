@@ -25,7 +25,8 @@ enum Command {
     LOOK_AVATAR,
     ATTACK,
     FLEE,
-    CONFUSE
+    CONFUSE,
+    UNCONFUSE
 };
 
 class CommandType {
@@ -62,7 +63,8 @@ public:
             SWAP_AVATAR,
             LOOK_AVATAR,
             ATTACK,
-            CONFUSE
+            CONFUSE,
+            UNCONFUSE
         };
     }
 };
