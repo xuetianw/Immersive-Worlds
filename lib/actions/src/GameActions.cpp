@@ -141,7 +141,7 @@ std::vector<Message> GameActions::swapAvatar(const Message& message) {
     std::string response;
     std::vector<ID> allAvatarIds = getAllAvatarIds(_avatarService.getAvatarFromAvatarId(id)->get().getRoomId());
     if (allAvatarIds.size() == 1) {
-        response = "there is no avatar available currently in the room, use look_avatar command to check";
+        response = "there is no avatar available currently in the room, move to other rooms or use look_avatar command to check";
     } else {
         for (auto& avatarId : allAvatarIds) {
             if (!_avatarService.getAvatarFromAvatarId(avatarId)->get().getBeingPlayed()) {
@@ -152,7 +152,7 @@ std::vector<Message> GameActions::swapAvatar(const Message& message) {
             }
         }
         return std::vector<Message>{Message(message.user,
-                "there is no non-playable avatar available currently in the room, use look_avatar command to check")};
+                "all avatar available in the room are being played by user, move to other rooms or use look_avatar command to check")};
     }
 
     return std::vector<Message>{Message(message.user, response)};
