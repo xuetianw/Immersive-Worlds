@@ -124,9 +124,9 @@ std::string GameActions::displayAvatarinfoFromID(const ID& avatarId) {
         auto userAvatar = avatar->get();
         response << "name: " << userAvatar.getName();
         if (userAvatar.getBeingPlayed()) {
-            response << "\nplayable: " << "yes";
+            response << "\nbeing played: " << "yes";
         } else{
-            response << "\nplayable: " << "no";
+            response << "\nbeing played: " << "no";
         }
         response << "\n_hp: " << std::to_string(userAvatar.get_hp())
                  << "\n_mana: " << std::to_string(userAvatar.get_mana())
