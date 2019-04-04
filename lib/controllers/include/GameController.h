@@ -125,8 +125,18 @@ public:
 
     std::vector<Message> swapAvatar(const Message& message);
 
+    /**
+     * Confuses an avatar (i.e. the message avatar sees is scrambled)
+     * @param message
+     * @return message telling the initiator and target that this action has been done
+     */
     std::vector<Message> confuseAvatar(const Message& message);
 
+    /**
+     * Determine whether or not an avatar is confused
+     * @param avatarId
+     * @return whether or not the avatar associated with given avatarId is confused
+     */
     bool getAvatarConfuseState(const ID& avatarId);
 
 private:

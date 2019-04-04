@@ -61,14 +61,6 @@ std::vector<Message> CommandProcessor::handleDefaultMessage(const Message& messa
     return accountControllerResponse;
 }
 
-std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
-    boost::trim(messageText);
-    stringstream msgStream(messageText);
-    string keyCommand, remainder;
-    msgStream >> keyCommand;
-    getline(msgStream >> std::ws, remainder);
-    return std::pair<string,string>(keyCommand, remainder);
-}
 
 std::vector<Message> CommandProcessor::listAvailableCommands(const Message& message) {
     std::stringstream output;
@@ -85,6 +77,19 @@ std::vector<Message> CommandProcessor::listAvailableCommands(const Message& mess
     }
 
     return std::vector<Message>{Message{message.user, output.str()}};
+}
+
+
+//Private
+
+
+std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
+    boost::trim(messageText);
+    stringstream msgStream(messageText);
+    string keyCommand, remainder;
+    msgStream >> keyCommand;
+    getline(msgStream >> std::ws, remainder);
+    return std::pair<string,string>(keyCommand, remainder);
 }
 
 void CommandProcessor::buildCommands() {
@@ -110,8 +115,6 @@ void CommandProcessor::buildCommands() {
     addCommand("/look_avatar", LOOK_AVATAR, [this] (Message message) { return gameController->outputAvatarsInCurrentRoom(message);});
 }
 
-
-//Private
 
 void CommandProcessor::scrambleMessage(Message& message){
     for(char& c: message.text){

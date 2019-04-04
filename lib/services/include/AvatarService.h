@@ -32,8 +32,10 @@ public:
 
     std::vector<ID> getAllAvatarIds(const ID& roomId);
 
+    //set the confuse state of an avatar
     bool setAvatarConfuseState(const ID& avatarId, bool isConfused);
 
+    //get the confuse state of an avatar
     bool getAvatarConfuseState(const ID& avatarId);
 
 private:

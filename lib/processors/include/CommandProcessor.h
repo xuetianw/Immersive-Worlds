@@ -65,6 +65,9 @@ private:
      */
     void buildCommands();
 
+    /*
+     * scramble text of Message object (used for Confuse command)
+     */
     void scrambleMessage(Message& message);
 
     /*
