@@ -103,24 +103,27 @@ std::string GameActions::getAllAvatarInfoInCurrentRoom(const ID& avatarId) {
 
     // Get all avatar info in the room
     std::vector<ID> avatarIDs = getAllAvatarIds(roomIdOfAvatar);
-    std::string avatarResponse = "\nAvatars that are in the rooms:\n";
-    for (auto curAvatarID : avatarIDs) {
-        if (curAvatarID != avatarId) {
-            avatarResponse.append(displayAvatarinfoFromID(curAvatarID));
+    if (avatarIDs.size() == 1) {
+        return "\nThere are no avatars in the room";
+    } else {
+        std::string avatarResponse = "\nAvatars that are in the room:\n";
+        for (auto curAvatarID : avatarIDs) {
+            if (curAvatarID != avatarId) {
+                avatarResponse.append(displayAvatarinfoFromID(curAvatarID));
+            }
         }
+        return avatarResponse;
     }
-
-    return avatarResponse;
 }
 
-std::string GameActions::displayAvatarinfoFromID(const ID& id) {
-    auto avatar = _avatarService.getAvatarFromAvatarId(id);
+std::string GameActions::displayAvatarinfoFromID(const ID& avatarId) {
+    auto avatar = _avatarService.getAvatarFromAvatarId(avatarId);
     std::ostringstream response;
 
     if(avatar.has_value()) {
         auto userAvatar = avatar->get();
         response << "name: " << userAvatar.getName();
-        if (userAvatar.is_being_played()) {
+        if (userAvatar.getBeingPlayed()) {
             response << "\nplayable: " << "yes";
         } else{
             response << "\nplayable: " << "no";
@@ -140,11 +143,11 @@ std::vector<Message> GameActions::swapAvatar(const Message& message) {
     if (allAvatarIds.size() == 1) {
         response = "there is no avatar available currently in the room, use look_avatar command to check";
     } else {
-        for (auto& allAvatarId : allAvatarIds) {
-            if (!_avatarService.getAvatarFromAvatarId(allAvatarId)->get().is_being_played()) {
-                _avatarService.getAvatarFromAvatarId(allAvatarId)->get().set_being_played(true);
-                message.user.setAvatarId(allAvatarId);
-                _avatarService.getAvatarFromAvatarId(id)->get().set_being_played(false);
+        for (auto& avatarId : allAvatarIds) {
+            if (!_avatarService.getAvatarFromAvatarId(avatarId)->get().getBeingPlayed()) {
+                _avatarService.getAvatarFromAvatarId(avatarId)->get().setBeingplayed(true);
+                message.user.setAvatarId(avatarId);
+                _avatarService.getAvatarFromAvatarId(id)->get().setBeingplayed(false);
                 return std::vector<Message>{Message(message.user, "swapped successfully")};
             }
         }

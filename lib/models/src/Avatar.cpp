@@ -49,10 +49,10 @@ void Avatar::setDamageOutput(int damageOutput) {
     Avatar::_damageOutput = damageOutput;
 }
 
-bool models::Avatar::is_being_played() const {
+bool models::Avatar::getBeingPlayed() const {
     return _being_played;
 }
 
-void models::Avatar::set_being_played(bool being_played) {
+void models::Avatar::setBeingplayed(bool being_played) {
     Avatar::_being_played = being_played;
 }

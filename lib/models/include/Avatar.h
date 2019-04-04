@@ -44,9 +44,9 @@ namespace models {
 
         void setDamageOutput(int damageOutput);
 
-        bool is_being_played() const;
+        bool getBeingPlayed() const;
 
-        void set_being_played(bool _being_played);
+        void setBeingplayed(bool _being_played);
 
 
     private:
