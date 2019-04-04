@@ -117,7 +117,7 @@ std::string GameActions::getAllAvatarInfoInCurrentRoom(const ID& avatarId) {
 }
 
 std::string GameActions::displayAvatarinfoFromID(const ID& avatarId) {
-    auto avatar = _avatarService.getAvatarFromAvatarId(avatarId);
+    std::optional<std::reference_wrapper<Avatar>> avatar = _avatarService.getAvatarFromAvatarId(avatarId);
     std::ostringstream response;
 
     if(avatar.has_value()) {
