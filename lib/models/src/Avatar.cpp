@@ -56,3 +56,18 @@ bool models::Avatar::getBeingPlayed() const {
 void models::Avatar::setBeingplayed(bool being_played) {
     Avatar::_being_played = being_played;
 }
+
+std::string models::Avatar::display() {
+    std::ostringstream response;
+    response << "name: " << this->getName();
+    if (this->getBeingPlayed()) {
+        response << "\nbeing played: " << "yes";
+    } else{
+        response << "\nbeing played: " << "no";
+    }
+    response << "\n_hp: " << std::to_string(this->get_hp())
+             << "\n_mana: " << std::to_string(this->get_mana())
+             << "\n";
+
+    return response.str();
+}

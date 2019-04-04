@@ -48,6 +48,8 @@ namespace models {
 
         void setBeingplayed(bool _being_played);
 
+        std::string display();
+
 
     private:
         ID _avatarId;
