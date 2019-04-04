@@ -28,7 +28,16 @@ std::vector<Message> CommandProcessor::processCommand(const Message& message) {
         auto commandFunc = commandsIter->second;
 
         if(message.user.canPreformCommand(command)) {
-            return commandFunc(Message {message.user, commandMessagePair.second});
+            auto outputMessages = commandFunc(Message {message.user, commandMessagePair.second});
+
+            for( Message& msg : outputMessages ) {
+                //scramble message if user is confused
+                if(gameController->getAvatarConfuseState(msg.user.getAccount().avatarId)
+                    && msg.text != USER_CONFUSED_MESSAGE){
+                    scrambleMessage(msg);
+                }
+            }
+            return outputMessages;
         } else {
             return std::vector<Message>{ Message {message.user, INVALID_INPUT_PROMPT} };
         }
@@ -97,6 +106,15 @@ void CommandProcessor::buildCommands() {
     addCommand("/directions", DIRECTIONS, [this](Message message) { return gameController->listDirections(message); });
     addCommand("/avatar", AVATAR_INFO, [this] (Message message) { return gameController->displayAvatarInfo(message);});
     addCommand("/swap", SWAP_AVATAR, [this] (Message message) { return gameController->swapAvatar(message);});
+    addCommand("/confuse", CONFUSE, [this] (Message message) { return gameController->confuseAvatar(message);});
     addCommand("/look_avatar", LOOK_AVATAR, [this] (Message message) { return gameController->outputAvatarsInCurrentRoom(message);});
 }
 
+
+//Private
+
+void CommandProcessor::scrambleMessage(Message& message){
+    for(char& c: message.text){
+        c++;
+    }
+}

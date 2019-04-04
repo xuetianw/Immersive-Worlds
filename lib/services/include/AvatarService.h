@@ -32,7 +32,11 @@ public:
 
     std::vector<ID> getAllAvatarIds(const ID& roomId);
 
-        private:
+    bool setAvatarConfuseState(const ID& avatarId, bool isConfused);
+
+    bool getAvatarConfuseState(const ID& avatarId);
+
+private:
     //map of Avatar IDs to Avatar objects
     std::unordered_map<ID, std::unique_ptr<Avatar>> _avatars;
     DataStorageService& _dataStorageService;

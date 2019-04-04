@@ -48,3 +48,11 @@ void Avatar::set_mana(int _mana) {
 void Avatar::setDamageOutput(int damageOutput) {
     Avatar::_damageOutput = damageOutput;
 }
+
+bool Avatar::getConfuseState() const {
+    return _isConfused;
+}
+
+void Avatar::setConfuseState(bool isConfused) {
+    _isConfused = isConfused;
+}

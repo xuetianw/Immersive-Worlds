@@ -65,6 +65,8 @@ private:
      */
     void buildCommands();
 
+    void scrambleMessage(Message& message);
+
     /*
      *  Holds all the commands added to the map
      */

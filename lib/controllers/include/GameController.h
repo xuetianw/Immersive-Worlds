@@ -16,6 +16,7 @@ constexpr char USER_CURRENTLY_LOCATED_MESSAGE[] = "You are currently located in 
 constexpr char ROOM_SPAWN_FAIL_MESSAGE[] = "User failed to be spawned in a room";
 constexpr char WRONG_DIRECTION_MESSAGE[] = "wrong message for direction";
 constexpr char INVALID_GAME_COMMAND[] = "Invalid Command. Please enter a valid game command!";
+constexpr char USER_CONFUSED_MESSAGE[] = "You have been confused by another player!";
 
 class GameController {
 public:
@@ -123,6 +124,10 @@ public:
     std::vector<Message> displayAvatarInfo(const Message& message);
 
     std::vector<Message> swapAvatar(const Message& message);
+
+    std::vector<Message> confuseAvatar(const Message& message);
+
+    bool getAvatarConfuseState(const ID& avatarId);
 
 private:
     // Services

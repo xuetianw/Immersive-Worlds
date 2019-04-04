@@ -267,6 +267,36 @@ std::vector<Message> GameController::swapAvatar(const Message& message) {
     return  _gameActions.swapAvatar(message);
 }
 
+
+std::vector<Message> GameController::confuseAvatar(const Message& message){
+
+    std::vector<Message> response{};
+
+    std::string recipient = message.text;
+
+    User* user = findUser(recipient);
+
+    if (user != nullptr) {
+        //if user is online
+        if(_avatarService.setAvatarConfuseState(user->getAccount().avatarId, true)){
+            response.emplace_back(*user, USER_CONFUSED_MESSAGE);
+            response.emplace_back(message.user, recipient + " has been confused!");
+        } else {
+            response.emplace_back(*user, "User is not online");
+        }
+
+    } else {
+        response.emplace_back(message.user, "User does not exist");
+    }
+
+    return response;
+}
+
+
+bool GameController::getAvatarConfuseState(const ID &avatarId) {
+    return _avatarService.getAvatarConfuseState(avatarId);
+}
+
 /*
  * PRIVATE
  */
