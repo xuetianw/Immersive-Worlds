@@ -141,6 +141,11 @@ public:
      */
     bool getAvatarConfuseState(const ID& avatarId);
 
+    void scrambleMessages(std::vector<Message>& messages);
+
+    void scrambleMessage(Message& message);
+
+
 private:
     // Services
     DataStorageService _dataStorageService;
@@ -159,6 +164,8 @@ private:
 
     User* findUser(std::string username);
 
+    std::string scrambleMessage(std::string message);
+
     /**
      * Change confuse state of an avatar
      * @param avatarId: id of target avatar
@@ -173,7 +180,12 @@ private:
     * @param avatarIds  list of avatar that should receive the message
     * @return vector of Messages that will be sent to the given list of avatars
     */
-    std::vector<Message> constructMessageToAvatars(std::string message, const std::vector<ID>& avatarIds);
+    std::vector<Message> constructMessageToAvatars(std::string messageHeader, std::string messageBody,
+                                                                   const ID& senderAvatarId, const std::vector<ID>& avatarIds);
+
+    //scrambles string if needed based on confuse state
+    std::string processMessageForConfuse(std::string messageHeader, std::string messageBody,
+                                                     bool senderIsConfused, bool isSender);
 };
 
 #endif //WEBSOCKETNETWORKING_GAMECONTROLLER_H

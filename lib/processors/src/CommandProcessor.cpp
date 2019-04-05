@@ -34,7 +34,7 @@ std::vector<Message> CommandProcessor::processCommand(const Message& message) {
                 //scramble message if user is confused
                 if(gameController->getAvatarConfuseState(msg.user.getAccount().avatarId)
                     && msg.text != USER_CONFUSED_MESSAGE){
-                    scrambleMessage(msg);
+                    gameController->scrambleMessage(msg);
                 }
             }
             return outputMessages;
@@ -116,9 +116,3 @@ void CommandProcessor::buildCommands() {
     addCommand("/look_avatar", LOOK_AVATAR, [this] (Message message) { return gameController->outputAvatarsInCurrentRoom(message);});
 }
 
-
-void CommandProcessor::scrambleMessage(Message& message){
-    for(char& c: message.text){
-        c++;
-    }
-}
