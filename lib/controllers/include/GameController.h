@@ -183,9 +183,10 @@ private:
     std::vector<Message> constructMessageToAvatars(std::string messageHeader, std::string messageBody,
                                                                    const ID& senderAvatarId, const std::vector<ID>& avatarIds);
 
-    //scrambles string if needed based on confuse state
-    std::string processMessageForConfuse(std::string messageHeader, std::string messageBody,
-                                                     bool senderIsConfused, bool isSender);
+    //construct message string based on confuse state
+    std::string constructMessageStringToAvatar(std::string messageHeader, std::string messageBody,
+                                                         const ID& senderAvatarId);
+
 };
 
 #endif //WEBSOCKETNETWORKING_GAMECONTROLLER_H
