@@ -37,7 +37,8 @@ std::vector<Message> GameController::move(const Message& message) {
 
     if (didMoveAvatar) {
         std::optional<std::string> newAvatarRoomName = _gameActions.getAvatarRoomName(avatarId);
-        responseMessage.text = "Successfully moved " + directionString + " to room: " + newAvatarRoomName.value();
+        responseMessage.text = "Successfully moved " + directionString + " to room: " + newAvatarRoomName.value()
+                + _gameActions.getAllAvatarInfoInCurrentRoom(message.user.getAvatarId());
     } else {
         responseMessage.text = "Failed to move avatar " + directionString;
     }

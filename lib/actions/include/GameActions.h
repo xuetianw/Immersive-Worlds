@@ -65,7 +65,7 @@ public:
      */
     std::vector<ID> getAllAvatarIdsInNeighbourAndCurrent(ID roomId);
 
-    std::string displayAvatarinfoFromID(const ID& id);
+    std::string displayAvatarinfoFromID(const ID& avatarId);
 
     std::vector<Message> swapAvatar(const Message& message);
 

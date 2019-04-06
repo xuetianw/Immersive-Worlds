@@ -23,7 +23,7 @@ public:
     CombatActions(AvatarService& avatarService, RoomConnectionService& roomConnectionService) :
             _avatarService(avatarService), _roomConnectionService(roomConnectionService) {
 
-        _avatarService.generateAvatarFromAvatarId(NPCID, ID{}, "NPC");
+        _avatarService.generateAvatarFromAvatarId(NPCID, ID{}, "NPC", false);
     }
 
     /*

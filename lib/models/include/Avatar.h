@@ -15,10 +15,11 @@ namespace models {
             _name(std::move(name)){
         }
 
-        Avatar(ID avatarId, ID roomId, std::string name) :
+        Avatar(ID avatarId, ID roomId, std::string name, bool playable) :
             _avatarId(avatarId),
             _roomId(roomId),
-            _name(std::move(name)){
+            _name(std::move(name)),
+            _being_played(playable) {
         }
 
         const ID& getRoomId() const;
@@ -43,8 +44,12 @@ namespace models {
 
         void setDamageOutput(int damageOutput);
 
+        bool getBeingPlayed() const;
         bool getConfuseState() const;
 
+        void setBeingplayed(bool _being_played);
+
+        std::string display();
         void setConfuseState(bool isConfused);
 
 
@@ -55,6 +60,7 @@ namespace models {
         int _hp = 500;
         int _mana = 300;
         int _damageOutput = 40;
+        bool _being_played;
         bool _isConfused = false;
     };
 }

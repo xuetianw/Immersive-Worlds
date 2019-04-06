@@ -17,7 +17,7 @@ public:
     }
 
     //creates an avatar and adds it to the avatar map
-    bool generateAvatarFromAvatarId(const ID& avatarId, const ID& roomId, const std::string& avatarName);
+    bool generateAvatarFromAvatarId(const ID& avatarId, const ID& roomId, const std::string& avatarName, bool isPlayable);
 
     //Returns an Avatar object of an avatarId
     const std::optional<std::reference_wrapper<models::Avatar>> getAvatarFromAvatarId(const ID& avatarId);
