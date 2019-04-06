@@ -184,26 +184,32 @@ std::vector<Message> GameController::fleeCombat(const Message& message) {
 
 std::vector<Message> GameController::say(const Message& message) {
 
-    std::string sayMessage = message.user.getAccount()._username + " says: " + message.text;
+    std::string sayHeader = message.user.getAccount()._username + " says: ";
+    std::string sayBody = message.text;
+
+    const ID& senderAvatarId = message.user.getAccount().avatarId;
 
     //retrieve the room the sender avatar is in.
-    ID roomId = _gameActions.getRoomId(message.user.getAccount().avatarId);
+    ID roomId = _gameActions.getRoomId(senderAvatarId);
 
     std::vector<ID> avatarIds = _gameActions.getAllAvatarIds(roomId);
 
-    return constructMessageToAvatars(sayMessage, avatarIds);
+    return constructMessageToAvatars(sayHeader, sayBody, senderAvatarId, avatarIds);
 }
 
 std::vector<Message> GameController::yell(const Message& message) {
 
-    std::string yellMessage = message.user.getAccount()._username + " yells: " + message.text;
+    std::string yellHeader = message.user.getAccount()._username + " yells: ";
+    std::string yellBody = message.text;
+
+    const ID& senderAvatarId = message.user.getAccount().avatarId;
 
     //retrieve the room the sender avatar is in.
-    ID roomId = _gameActions.getRoomId(message.user.getAccount().avatarId);
+    ID roomId = _gameActions.getRoomId(senderAvatarId);
 
     std::vector<ID> avatarIds = _gameActions.getAllAvatarIdsInNeighbourAndCurrent(roomId);
 
-    return constructMessageToAvatars(yellMessage, avatarIds);
+    return constructMessageToAvatars(yellHeader, yellBody, senderAvatarId, avatarIds);
 }
 
 std::vector<Message> GameController::tell(const Message& message) {
@@ -213,10 +219,11 @@ std::vector<Message> GameController::tell(const Message& message) {
     std::string userInput = message.text;
 
     //split user input after command name by space
-    std::string recipient = userInput.substr(0, userInput.find(' '));
+    std::string receiver = userInput.substr(0, userInput.find(' '));
     std::string sender = message.user.getAccount()._username;
+    const ID& senderAvatarId = message.user.getAccount().avatarId;
 
-    if (recipient == sender) {
+    if (receiver == sender) {
         response.emplace_back(message.user, "You cannot send private message to yourself!");
         return response;
     }
@@ -228,32 +235,20 @@ std::vector<Message> GameController::tell(const Message& message) {
         return response;
     }
 
-    User* user = findUser(recipient);
+    User* user = findUser(receiver);
 
     if (user != nullptr) {
         //if user is online
-        response.emplace_back(*user, sender + " whispers: " + userMessage);
-        response.emplace_back(message.user, "You whispered to " + recipient + ": " + userMessage);
+        response.emplace_back(*user, constructMessageStringToAvatar(sender + " whispers: ", userMessage, senderAvatarId));
+        response.emplace_back(message.user, constructMessageStringToAvatar("You whispered to " + receiver + ": ", userMessage, senderAvatarId));
     } else {
-        response.emplace_back(message.user, "User is not online or does not exist");
+        response.emplace_back(message.user, constructMessageStringToAvatar("User is not online or does not exist", "", senderAvatarId));
     }
 
     return response;
 
 }
 
-std::vector<Message> GameController::constructMessageToAvatars(std::string message, const std::vector<ID>& avatarIds) {
-
-    std::vector<Message> responses;
-
-    for (const ID& id : avatarIds) {
-        User* user = findUser(id);
-        if (user == nullptr) continue;
-        responses.emplace_back(Message{*user, message});
-    }
-
-    return responses;
-}
 
 
 std::vector<Message> GameController::displayAvatarInfo(const Message& message) {
@@ -267,9 +262,104 @@ std::vector<Message> GameController::swapAvatar(const Message& message) {
     return  _gameActions.swapAvatar(message);
 }
 
+
+std::vector<Message> GameController::confuseAvatar(const Message& message){
+
+    std::vector<Message> response{};
+
+    std::string recipient = message.text;
+
+    User* user = findUser(recipient);
+
+    if (user != nullptr) {
+        //if user is online
+        if(setAvatarConfuseState(user->getAccount().avatarId, true)){
+            response.emplace_back(*user, USER_CONFUSED_MESSAGE);
+            response.emplace_back(message.user, recipient + " has been confused!");
+        } else {
+            response.emplace_back(*user, "User is not online");
+        }
+
+    } else {
+        response.emplace_back(message.user, "User does not exist");
+    }
+
+    return response;
+}
+
+std::vector<Message> GameController::unconfuseAvatar(const Message& message) {
+
+    const ID& avatarId = message.user.getAccount().avatarId;
+
+    if (getAvatarConfuseState(avatarId)) {
+        setAvatarConfuseState(avatarId, false);
+        return std::vector<Message>{Message{message.user, "You have been released from the confuse state"}};
+    } else {
+        return std::vector<Message>{Message{message.user, "You are not confused"}};
+    }
+}
+
+bool GameController::getAvatarConfuseState(const ID &avatarId) {
+    return _avatarService.getAvatarConfuseState(avatarId);
+}
+
+void GameController::scrambleMessages(std::vector<Message>& messages) {
+    for (Message& msg: messages) {
+        scrambleMessage(msg);
+    }
+}
+
+void GameController::scrambleMessage(Message& message) {
+    message.text = scrambleMessage(message.text);
+}
+
+
+
 /*
  * PRIVATE
  */
+
+std::string GameController::constructMessageStringToAvatar(std::string messageHeader, std::string messageBody,
+                                                           const ID& senderAvatarId) {
+    bool senderIsConfused = getAvatarConfuseState(senderAvatarId);
+    if (senderIsConfused){
+        messageBody = scrambleMessage(messageBody);
+    }
+    return messageHeader+messageBody;
+}
+
+std::vector<Message> GameController::constructMessageToAvatars(std::string messageHeader, std::string messageBody,
+                                                               const ID& senderAvatarId, const std::vector<ID>& avatarIds) {
+
+    bool senderIsConfused = getAvatarConfuseState(senderAvatarId);
+
+    std::vector<Message> responses;
+
+    if (senderIsConfused){
+        messageBody = scrambleMessage(messageBody);
+    }
+
+    for (const ID& avatarId : avatarIds) {
+        User* user = findUser(avatarId);
+        if (user == nullptr) continue;
+        responses.emplace_back( Message {*user, messageHeader+messageBody});
+
+    }
+
+    return responses;
+}
+
+std::string GameController::scrambleMessage(std::string message) {
+    for(char& c: message){
+        c++;
+    }
+    return message;
+}
+
+bool GameController::setAvatarConfuseState(const ID& avatarId, bool isConfused) {
+    return _avatarService.setAvatarConfuseState(avatarId, isConfused);
+}
+
 User* GameController::findUser(const ID& avatarId) {
     if (_avatarIdToUser.count(avatarId) == 0) {
         return nullptr;

@@ -43,7 +43,9 @@ namespace models {
 
         void setDamageOutput(int damageOutput);
 
+        bool getConfuseState() const;
 
+        void setConfuseState(bool isConfused);
 
 
     private:
@@ -53,6 +55,7 @@ namespace models {
         int _hp = 500;
         int _mana = 300;
         int _damageOutput = 40;
+        bool _isConfused = false;
     };
 }
 
