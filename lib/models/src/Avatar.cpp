@@ -71,3 +71,12 @@ std::string models::Avatar::display() {
 
     return response.str();
 }
+
+
+bool Avatar::getConfuseState() const {
+    return _isConfused;
+}
+
+void Avatar::setConfuseState(bool isConfused) {
+    _isConfused = isConfused;
+}

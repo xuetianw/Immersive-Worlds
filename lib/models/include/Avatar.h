@@ -45,10 +45,12 @@ namespace models {
         void setDamageOutput(int damageOutput);
 
         bool getBeingPlayed() const;
+        bool getConfuseState() const;
 
         void setBeingplayed(bool _being_played);
 
         std::string display();
+        void setConfuseState(bool isConfused);
 
 
     private:
@@ -59,6 +61,7 @@ namespace models {
         int _mana = 300;
         int _damageOutput = 40;
         bool _being_played;
+        bool _isConfused = false;
     };
 }
 

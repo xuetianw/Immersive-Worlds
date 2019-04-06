@@ -57,3 +57,21 @@ std::vector<ID> AvatarService::getAllAvatarIds(const ID& roomId) {
     }
     return avatarIdsInRoom;
 }
+
+bool AvatarService::setAvatarConfuseState(const ID& avatarId, bool isConfused){
+    if (!doesAvatarExist(avatarId)) {
+        return false;
+    }
+
+    Avatar& avatar = *(_avatars.at(avatarId));
+    avatar.setConfuseState(isConfused);
+
+    return true;
+}
+
+bool AvatarService::getAvatarConfuseState(const ID& avatarId){
+    if (!doesAvatarExist(avatarId)) {
+        return false;
+    }
+    return _avatars.at(avatarId)->getConfuseState();
+}
