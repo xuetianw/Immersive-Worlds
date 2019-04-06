@@ -28,7 +28,16 @@ std::vector<Message> CommandProcessor::processCommand(const Message& message) {
         auto commandFunc = commandsIter->second;
 
         if(message.user.canPreformCommand(command)) {
-            return commandFunc(Message {message.user, commandMessagePair.second});
+            auto outputMessages = commandFunc(Message {message.user, commandMessagePair.second});
+
+            for( Message& msg : outputMessages ) {
+                //scramble message if user is confused
+                if(gameController->getAvatarConfuseState(msg.user.getAccount().avatarId)
+                    && msg.text != USER_CONFUSED_MESSAGE){
+                    gameController->scrambleMessage(msg);
+                }
+            }
+            return outputMessages;
         } else {
             return std::vector<Message>{ Message {message.user, INVALID_INPUT_PROMPT} };
         }
@@ -52,14 +61,6 @@ std::vector<Message> CommandProcessor::handleDefaultMessage(const Message& messa
     return accountControllerResponse;
 }
 
-std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
-    boost::trim(messageText);
-    stringstream msgStream(messageText);
-    string keyCommand, remainder;
-    msgStream >> keyCommand;
-    getline(msgStream >> std::ws, remainder);
-    return std::pair<string,string>(keyCommand, remainder);
-}
 
 std::vector<Message> CommandProcessor::listAvailableCommands(const Message& message) {
     std::stringstream output;
@@ -76,6 +77,19 @@ std::vector<Message> CommandProcessor::listAvailableCommands(const Message& mess
     }
 
     return std::vector<Message>{Message{message.user, output.str()}};
+}
+
+
+//Private
+
+
+std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
+    boost::trim(messageText);
+    stringstream msgStream(messageText);
+    string keyCommand, remainder;
+    msgStream >> keyCommand;
+    getline(msgStream >> std::ws, remainder);
+    return std::pair<string,string>(keyCommand, remainder);
 }
 
 void CommandProcessor::buildCommands() {
@@ -96,5 +110,9 @@ void CommandProcessor::buildCommands() {
     addCommand("/help", HELP, [this] (Message message) { return listAvailableCommands(message);});
     addCommand("/directions", DIRECTIONS, [this](Message message) { return gameController->listDirections(message); });
     addCommand("/avatar", AVATAR_INFO, [this] (Message message) { return gameController->displayAvatarInfo(message);});
+    addCommand("/swap", SWAP_AVATAR, [this] (Message message) { return gameController->swapAvatar(message);});
+    addCommand("/confuse", CONFUSE, [this] (Message message) { return gameController->confuseAvatar(message);});
+    addCommand("/unconfuse", UNCONFUSE, [this] (Message message) { return gameController->unconfuseAvatar(message);});
+    addCommand("/look_avatar", LOOK_AVATAR, [this] (Message message) { return gameController->outputAvatarsInCurrentRoom(message);});
 }
 

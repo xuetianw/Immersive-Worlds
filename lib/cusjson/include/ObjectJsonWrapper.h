@@ -8,13 +8,13 @@
 #include <vector>
 
 namespace CusJson {
-    class ContainerJsonWrapper {
+    class ObjectJsonWrapper {
     public:
-        int _objectId;
-        int _roomId;
-        std::vector<int> _containedObjectIds;
+        int _objectJsonId;
+        int _roomJsonId;
+        std::vector<int> _containedObjectJsonIds;
 
-        ContainerJsonWrapper(int _objectId, int _roomId);
+        ObjectJsonWrapper(int _objectId, int _roomId);
 
         void addObject(int objectId);
     };

@@ -54,17 +54,22 @@ public:
 
     std::optional<std::string> getAvatarRoomName(const ID& avatarId);
 
-    std::vector<ID> getAllAvatarIds(ID roomId);
-
     const ID& getRoomId(const ID& avatarId);
 
+    std::string getAllAvatarInfoInCurrentRoom(const ID& avatarId);
+
+    std::vector<std::string> getAllAvatarsNamesForRoomId(const ID& roomId);
 
     /**
      * Get ids of adjacent rooms and current room
      */
     std::vector<ID> getAllAvatarIdsInNeighbourAndCurrent(ID roomId);
 
-    std::vector<Message> displayAvatarinfo(const Message& message);
+    std::string displayAvatarinfoFromID(const ID& avatarId);
+
+    std::vector<Message> swapAvatar(const Message& message);
+
+    std::vector<ID> getAllAvatarIds(ID roomId);
 
 private:
     std::unordered_map<std::string, models::MiniGame> _roomIdToMiniGameConnectionsList;

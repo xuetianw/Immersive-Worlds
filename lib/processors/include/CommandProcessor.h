@@ -66,6 +66,11 @@ private:
     void buildCommands();
 
     /*
+     * scramble text of Message object (used for Confuse command)
+     */
+    void scrambleMessage(Message& message);
+
+    /*
      *  Holds all the commands added to the map
      */
     std::unordered_map<Command , function_ptr> _commands;

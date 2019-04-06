@@ -16,6 +16,7 @@ constexpr char USER_CURRENTLY_LOCATED_MESSAGE[] = "You are currently located in 
 constexpr char ROOM_SPAWN_FAIL_MESSAGE[] = "User failed to be spawned in a room";
 constexpr char WRONG_DIRECTION_MESSAGE[] = "wrong message for direction";
 constexpr char INVALID_GAME_COMMAND[] = "Invalid Command. Please enter a valid game command!";
+constexpr char USER_CONFUSED_MESSAGE[] = "You have been confused by another player!";
 
 class GameController {
 public:
@@ -78,6 +79,13 @@ public:
      */
     std::vector<Message> outputCurrentLocationInfo(const Message& message);
 
+    /**
+     * Output Avatars in the current room
+     * @param message
+     * @return
+     */
+     std::vector<Message> outputAvatarsInCurrentRoom(const Message& message);
+
     /* 
      * increment the next round if a game exists
      * @param message
@@ -115,6 +123,29 @@ public:
 
     std::vector<Message> displayAvatarInfo(const Message& message);
 
+    std::vector<Message> swapAvatar(const Message& message);
+
+    /**
+     * Confuses an avatar (i.e. the message avatar sees is scrambled)
+     * @param message
+     * @return message telling the initiator and target that this action has been done
+     */
+    std::vector<Message> confuseAvatar(const Message& message);
+
+    std::vector<Message> unconfuseAvatar(const Message& message);
+
+    /**
+     * Determine whether or not an avatar is confused
+     * @param avatarId
+     * @return whether or not the avatar associated with given avatarId is confused
+     */
+    bool getAvatarConfuseState(const ID& avatarId);
+
+    void scrambleMessages(std::vector<Message>& messages);
+
+    void scrambleMessage(Message& message);
+
+
 private:
     // Services
     DataStorageService _dataStorageService;
@@ -133,13 +164,29 @@ private:
 
     User* findUser(std::string username);
 
+    std::string scrambleMessage(std::string message);
+
+    /**
+     * Change confuse state of an avatar
+     * @param avatarId: id of target avatar
+     *        isConfused: new value of confuse state
+     * @return false if avatar not found, true if found and set to new value
+     */
+    bool setAvatarConfuseState(const ID& avatarId, bool isConfused);
+
     /**
     * Construct message to send to multiple avatars
     * @param message    the system message to be sent to avatars
     * @param avatarIds  list of avatar that should receive the message
     * @return vector of Messages that will be sent to the given list of avatars
     */
-    std::vector<Message> constructMessageToAvatars(std::string message, const std::vector<ID>& avatarIds);
+    std::vector<Message> constructMessageToAvatars(std::string messageHeader, std::string messageBody,
+                                                                   const ID& senderAvatarId, const std::vector<ID>& avatarIds);
+
+    //construct message string based on confuse state
+    std::string constructMessageStringToAvatar(std::string messageHeader, std::string messageBody,
+                                                         const ID& senderAvatarId);
+
 };
 
 #endif //WEBSOCKETNETWORKING_GAMECONTROLLER_H

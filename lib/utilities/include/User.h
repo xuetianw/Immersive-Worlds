@@ -41,6 +41,8 @@ public:
 
     ID getAvatarId() const;
 
+    void setAvatarId(ID &id);
+
     void setAccount(const Account& account);
 
     void setCommandType(CommandType* commandType);

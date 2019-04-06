@@ -17,10 +17,10 @@ public:
     }
 
     //creates an avatar and adds it to the avatar map
-    bool generateAvatarFromAvatarId(const ID& avatarId, const ID& roomId, const std::string& avatarName);
+    bool generateAvatarFromAvatarId(const ID& avatarId, const ID& roomId, const std::string& avatarName, bool isPlayable);
 
     //Returns an Avatar object of an avatarId
-    const std::optional<std::reference_wrapper<const models::Avatar>> getAvatarFromAvatarId(const ID& avatarId);
+    const std::optional<std::reference_wrapper<models::Avatar>> getAvatarFromAvatarId(const ID& avatarId);
 
     //sets the room for an avatar
     bool setAvatarRoomId(const ID& avatarId, const ID& roomId);
@@ -31,6 +31,12 @@ public:
     const ID& getRoomId(const ID& avatarId);
 
     std::vector<ID> getAllAvatarIds(const ID& roomId);
+
+    //set the confuse state of an avatar
+    bool setAvatarConfuseState(const ID& avatarId, bool isConfused);
+
+    //get the confuse state of an avatar
+    bool getAvatarConfuseState(const ID& avatarId);
 
 private:
     //map of Avatar IDs to Avatar objects

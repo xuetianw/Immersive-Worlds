@@ -21,8 +21,12 @@ enum Command {
     MINIGAME_NEXTROUND,
     DIRECTIONS,
     AVATAR_INFO,
+    SWAP_AVATAR,
+    LOOK_AVATAR,
     ATTACK,
-    FLEE
+    FLEE,
+    CONFUSE,
+    UNCONFUSE
 };
 
 class CommandType {
@@ -55,7 +59,12 @@ public:
             HELP,
             DIRECTIONS,
             MINIGAME,
-            AVATAR_INFO
+            AVATAR_INFO,
+            SWAP_AVATAR,
+            LOOK_AVATAR,
+            ATTACK,
+            CONFUSE,
+            UNCONFUSE
         };
     }
 };
