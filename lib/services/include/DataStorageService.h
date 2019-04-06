@@ -55,14 +55,28 @@ public:
     std::unordered_map<int, ID> getJsonIdToRoomIdCopy();
 
     SingleItem spawnObjectCopy(int jsonId);
-    
+
     void resetObjectsToWorld(std::unordered_map<ID, models::Room>& roomIdToRoomMap) override;
+
+    void resetDoorStatsToWorld(std::unordered_map<ID, Neighbours>& roomIdToNeighbours) override;
 
 private:
 
     void loadInJsonAreas();
 
     void loadInMiniGames();
+
+    /**
+     * Since DoorStateJsonWrapper only has information for one side of the door but requires that both sides requiring a state change,
+     * This function is to set that doors state on the other side
+     * @param roomIdToNeighbours The map of IDs to Neighbours to modify
+     * @param doorConfiguration information about the door action reset
+     * @param doorState the enum states of the door
+     * @param neighbour the original single direction neighbour object which its corresponding neighbour needs modification
+     */
+    void configDoorOnTheOtherSide(std::unordered_map<ID, Neighbours>& roomIdToNeighbours,
+                                  const CusJson::DoorStateJsonWrapper& doorConfiguration,
+                                  const models::DoorState& doorState, models::NeighbourInfo neighbour) const;
 };
 
 #endif //WEBSOCKETNETWORKING_DATASTORAGESERVICE_H

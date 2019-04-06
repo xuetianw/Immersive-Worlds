@@ -14,6 +14,8 @@ public:
 
     virtual void resetObjectsToWorld(std::unordered_map<ID, models::Room>& roomIdToRoomMap) = 0;
 
+    virtual void resetDoorStatsToWorld(std::unordered_map<ID, Neighbours>& roomIdToNeighbours) = 0;
+
 };
 
 #endif //WEBSOCKETNETWORKING_DATASTORAGESERVICEINTERFACE_H

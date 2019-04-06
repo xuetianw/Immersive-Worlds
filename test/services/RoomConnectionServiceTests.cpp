@@ -52,8 +52,9 @@ struct RoomConnectionServiceTests : testing::Test {
             EXPECT_CALL(dataStorageStub, getRoomIdToNeighboursMapCopy())
                     .WillOnce(Return(neighbours));
 
-            EXPECT_CALL(dataStorageStub, resetObjectsToWorld(::testing::_));
+            EXPECT_CALL(dataStorageStub, resetDoorStatsToWorld(::testing::_));
 
+            EXPECT_CALL(dataStorageStub, resetObjectsToWorld(::testing::_));
         }
 
 

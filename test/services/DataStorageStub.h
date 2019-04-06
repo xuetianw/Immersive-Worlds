@@ -13,6 +13,9 @@ public:
     //this line is need to get the unit tests to work
     MOCK_METHOD1(resetObjectsToWorld, void(std::unordered_map<ID, models::Room>
         &));
+
+    MOCK_METHOD1(resetDoorStatsToWorld, void(std::unordered_map<ID, Neighbours>& roomIdToNeighbours));
+
 };
 
 #endif //WEBSOCKETNETWORKING_DATASTORAGESTUB_H
