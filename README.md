@@ -4,7 +4,7 @@ Immersive Worlds Command-Driven Game
 
 based off https://github.com/nsumner/web-socket-networking
 
-### accepted coomands
+### accept commands
     /look"
     /logout"
     /login"
