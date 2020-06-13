@@ -29,8 +29,7 @@ using networking::Server;
 
 using namespace std;
 
-// Manager for handling client commands
-unique_ptr<CommandProcessor> commandProcessor;
+
 
 // Store User State
 unordered_map<Connection, User, ConnectionHash> users;
@@ -48,7 +47,7 @@ void onDisconnect(Connection &c) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-std::deque<ServerMessage> processMessages(CommandProcessor& commandProcessor,
+std::deque<ServerMessage> processMessages(unique_ptr<CommandProcessor>& commandProcessor,
                                     Server& server,
                                     const std::deque<ServerMessage>& incoming,
                                     bool& quit) {
@@ -61,7 +60,7 @@ std::deque<ServerMessage> processMessages(CommandProcessor& commandProcessor,
             std::cout << "Shutting down.\n";
             quit = true;
         } else {
-            std::vector<Message> returnedMessages = commandProcessor.processCommand(message);
+            std::vector<Message> returnedMessages = commandProcessor->processCommand(message);
             for (auto& msg : returnedMessages){
                 result.push_back(msg.convertToServerMessage());
             }
@@ -97,7 +96,8 @@ int main(int argc, char *argv[]) {
 
     DBUtil::openConnection("adventure.db");
 
-    commandProcessor = make_unique<CommandProcessor>();
+    // Manager for handling client commands
+    unique_ptr<CommandProcessor> commandProcessor = make_unique<CommandProcessor>();
     Server server{port, getHTTPMessage(argv[2]), onConnect, onDisconnect};
 
 
@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
         }
 
         auto incoming = server.receive();
-        auto outgoing = processMessages(*commandProcessor, server, incoming, done);
+        auto outgoing = processMessages(commandProcessor, server, incoming, done);
         server.send(outgoing);
         sleep(1);
     }

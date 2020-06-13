@@ -7,12 +7,7 @@
 
 #include "CommandProcessor.h"
 
-bool CommandProcessor::isCommand(const Message& message) {
-    std::pair commandMessagePair = splitCommand(message.text);
-    return _keywords.find(commandMessagePair.first) != _keywords.end();
-}
-
-void CommandProcessor::addCommand(string keyword, Command command, function_ptr fnPtr) {
+void CommandProcessor::addCommand(const string& keyword, Command command, function_ptr fnPtr) {
     _keywords[keyword] = command;
     _commands[command] = move(fnPtr);
 }
@@ -30,7 +25,7 @@ std::vector<Message> CommandProcessor::processCommand(const Message& message) {
         if(message.user.canPreformCommand(command)) {
             auto outputMessages = commandFunc(Message {message.user, commandMessagePair.second});
 
-            for( Message& msg : outputMessages ) {
+            for(Message& msg : outputMessages) {
                 //scramble message if user is confused
                 if(gameController->getAvatarConfuseState(msg.user.getAccount().avatarId)
                     && msg.text != USER_CONFUSED_MESSAGE){
@@ -93,26 +88,26 @@ std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
 }
 
 void CommandProcessor::buildCommands() {
-    addCommand("/look", LOOK, [this](Message message) { return gameController->outputCurrentLocationInfo(message); });
-    addCommand("/logout", LOGOUT, [this] (Message message) { return accountController->logoutUser(message); });
-    addCommand("/login", LOGIN, [this] (Message message) { return accountController->startLogin(message); });
-    addCommand("/register", REGISTER, [this] (Message message) { return accountController->startRegister(message); });
-    addCommand("/escape", ESCAPE, [this] (Message message) { return accountController->escapeLogin(message); });
-    addCommand("/move", MOVE, [this] (Message message) { return gameController->move(message); });
-    addCommand("/say", SAY, [this] (Message message) { return gameController->say(message); });
-    addCommand("/yell", YELL, [this] (Message message) { return gameController->yell(message); });
-    addCommand("/tell", TELL, [this] (Message message) { return gameController->tell(message); });
-    addCommand("/minigame", MINIGAME, [this] (Message message) { return gameController->startMiniGame(message); });
-    addCommand("/answer", MINIGAME_ANSWER, [this] (Message message) { return gameController->verifyMinigameAnswer(message); });
-    addCommand("/attack", ATTACK, [this] (Message message) { return gameController->attackNPC(message);});
-    addCommand("/flee", FLEE, [this] (Message message) { return gameController->fleeCombat(message);});
-    addCommand("/nextRound", MINIGAME_NEXTROUND, [this] (Message message) { return gameController->nextRound(message); });
-    addCommand("/help", HELP, [this] (Message message) { return listAvailableCommands(message);});
-    addCommand("/directions", DIRECTIONS, [this](Message message) { return gameController->listDirections(message); });
-    addCommand("/avatar", AVATAR_INFO, [this] (Message message) { return gameController->displayAvatarInfo(message);});
-    addCommand("/swap", SWAP_AVATAR, [this] (Message message) { return gameController->swapAvatar(message);});
-    addCommand("/confuse", CONFUSE, [this] (Message message) { return gameController->confuseAvatar(message);});
-    addCommand("/unconfuse", UNCONFUSE, [this] (Message message) { return gameController->unconfuseAvatar(message);});
-    addCommand("/look_avatar", LOOK_AVATAR, [this] (Message message) { return gameController->outputAvatarsInCurrentRoom(message);});
+    addCommand("/look", LOOK, [this](const Message& message) { return gameController->outputCurrentLocationInfo(message); });
+    addCommand("/logout", LOGOUT, [this] (const Message& message) { return accountController->logoutUser(message); });
+    addCommand("/login", LOGIN, [this] (const Message& message) { return accountController->startLogin(message); });
+    addCommand("/register", REGISTER, [this] (const Message& message) { return accountController->startRegister(message); });
+    addCommand("/escape", ESCAPE, [this] (const Message& message) { return accountController->escapeLogin(message); });
+    addCommand("/move", MOVE, [this] (const Message& message) { return gameController->move(message); });
+    addCommand("/say", SAY, [this] (const Message& message) { return gameController->say(message); });
+    addCommand("/yell", YELL, [this] (const Message& message) { return gameController->yell(message); });
+    addCommand("/tell", TELL, [this] (const Message& message) { return gameController->tell(message); });
+    addCommand("/minigame", MINIGAME, [this] (const Message& message) { return gameController->startMiniGame(message); });
+    addCommand("/answer", MINIGAME_ANSWER, [this] (const Message& message) { return gameController->verifyMinigameAnswer(message); });
+    addCommand("/attack", ATTACK, [this] (const Message& message) { return gameController->attackNPC(message);});
+    addCommand("/flee", FLEE, [this] (const Message& message) { return gameController->fleeCombat(message);});
+    addCommand("/nextRound", MINIGAME_NEXTROUND, [this] (const Message& message) { return gameController->nextRound(message); });
+    addCommand("/help", HELP, [this] (const Message& message) { return listAvailableCommands(message);});
+    addCommand("/directions", DIRECTIONS, [this](const Message& message) { return gameController->listDirections(message); });
+    addCommand("/avatar", AVATAR_INFO, [this] (const Message& message) { return gameController->displayAvatarInfo(message);});
+    addCommand("/swap", SWAP_AVATAR, [this] (const Message& message) { return gameController->swapAvatar(message);});
+    addCommand("/confuse", CONFUSE, [this] (const Message& message) { return gameController->confuseAvatar(message);});
+    addCommand("/unconfuse", UNCONFUSE, [this] (const Message& message) { return gameController->unconfuseAvatar(message);});
+    addCommand("/look_avatar", LOOK_AVATAR, [this] (const Message& message) { return gameController->outputAvatarsInCurrentRoom(message);});
 }
 

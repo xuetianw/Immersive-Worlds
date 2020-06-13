@@ -33,11 +33,6 @@ public:
     }
 
     /*
-     * Determines if the message is a command prompt by checking if the first word is mapped to a command
-     */
-    bool isCommand(const Message &message);
-
-    /*
      * Finds the map value from the message's keyword and preforms the function with the message's remaining string
      */
     std::vector<Message> processCommand(const Message &message);
@@ -45,7 +40,7 @@ public:
     /*
      * Adds a function to a keyword, the function has to be in format of ServerMessage _____(ServerMessage message)
      */
-    void addCommand(string keyword, Command command, function_ptr);
+    void addCommand(const string& keyword, Command command, function_ptr);
 
     std::vector<Message> handleDefaultMessage(const Message& message);
 
@@ -58,7 +53,7 @@ private:
     /*
      * Split a user message text to retrieve the command for processing
      */
-    std::pair<string, string> splitCommand(string messageText);
+    static std::pair<string, string> splitCommand(string messageText);
 
     /*
      * Map a command to a function ptr that executes it

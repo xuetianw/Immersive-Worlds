@@ -11,8 +11,7 @@ std::vector<Message> AccountService::updateUserState(const Message& message, Use
     Account& userAccount = message.user.getAccount();
 
     auto newState = std::visit(
-            [&](auto& state, auto& event) -> std::optional<UserStateVariant>
-            {
+            [&](auto& state, auto& event) {
                 return _transitions(state, event, userAccount, message.text);
             }, userAccount._state, event);
     if(newState) {
