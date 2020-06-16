@@ -28,7 +28,7 @@ void DataStorageService::configRoomsAndMiniGame(const CusJson::MiniGameList& jso
 }
 
 void DataStorageService::configObjectMap(const CusJson::Area& jsonArea, std::unordered_map<int, SingleItem>& jsonIdToItemMap) {
-    for (CusJson::Object jsonObject : jsonArea._objects) {
+    for (const CusJson::Object& jsonObject : jsonArea._objects) {
         std::vector<string> keywords = jsonObject.keywords;
         std::vector<string> longDesc = jsonObject.longdesc;
         for (CusJson::ExtDesc extDesc : jsonObject._jsonExtDesc) {
@@ -50,7 +50,7 @@ SingleItem DataStorageService::spawnObjectCopy(int jsonId) {
 }
 
 void DataStorageService::configNeighboursMap(std::unordered_map<int, ID> jsonIdToUuid,
-                                             std::vector<CusJson::Room> jsonRooms) {
+                                             const std::vector<CusJson::Room>& jsonRooms) {
     for (const CusJson::Room& jsonRoom : jsonRooms) {
         Neighbours neighbours;
 
@@ -111,7 +111,7 @@ void DataStorageService::loadInJsonAreas() {
     path pathOfAreaJsonDir(jsonAreaPath);
     copy(directory_iterator(pathOfAreaJsonDir), directory_iterator(), back_inserter(jsonFiles));
 
-    for (auto areaJsonFile : jsonFiles) {
+    for (const auto& areaJsonFile : jsonFiles) {
         std::cout << areaJsonFile.path().filename().string() << " is being read\n";
         auto jsonFileStream = boost::filesystem::ifstream(areaJsonFile.path());
         json jsonArea;
@@ -121,7 +121,7 @@ void DataStorageService::loadInJsonAreas() {
         std::cout << areaJsonFile.path().filename().string() << " is finished\n";
     }
 
-    for (auto jsonArea : _jsonAreas) {
+    for (const auto& jsonArea : _jsonAreas) {
         std::cout << "Now configuring Objects and Neighbours for "<< jsonArea._name << std::endl;
         configObjectMap(jsonArea, _objectMap);
         configNeighboursMap(_jsonRoomIdToUuid, jsonArea._rooms);
@@ -145,7 +145,7 @@ void DataStorageService::loadInMiniGames() {
 
 void DataStorageService::resetObjectsToWorld(std::unordered_map<ID, models::Room>& roomIdToRoomMap) {
     auto objectConfiguration = _jsonArea._objectWrappers;
-    for (auto container : objectConfiguration) {
+    for (const auto& container : objectConfiguration) {
         auto roomQuery = roomIdToRoomMap.find(_jsonRoomIdToUuid.find(container._roomJsonId)->second);
         if (roomQuery != roomIdToRoomMap.end()) {
             auto spawnedContainer = spawnObjectCopy(container._objectJsonId);
@@ -158,7 +158,7 @@ void DataStorageService::resetObjectsToWorld(std::unordered_map<ID, models::Room
 }
 
 void DataStorageService::resetDoorStatsToWorld(std::unordered_map<ID, Neighbours>& roomIdToNeighbours) {
-    for (auto doorConfiguration : _jsonArea._doorStateWrappers) {
+    for (const auto& doorConfiguration : _jsonArea._doorStateWrappers) {
         auto roomId = _jsonRoomIdToUuid[doorConfiguration._roomId];
         auto doorDirection = models::DIRECTION_INDEX_TO_ENUM_MAP.at(doorConfiguration._id);
         auto doorState = models::DOOR_STATE_STRING_ENUM_MAP.at(doorConfiguration._state);
@@ -175,7 +175,7 @@ void DataStorageService::resetDoorStatsToWorld(std::unordered_map<ID, Neighbours
 void DataStorageService::configDoorOnTheOtherSide(
         std::unordered_map<ID, DataStorageService::Neighbours>& roomIdToNeighbours,
         const CusJson::DoorStateJsonWrapper& doorConfiguration, const models::DoorState& doorState,
-        models::NeighbourInfo neighbour) const {
+        const models::NeighbourInfo& neighbour) const {
     auto otherRoomId = neighbour.destinationRoomId;
     auto inverseDoorIndex = models::DIRECTION_INDEX_TO_INVERSE_MAP.at(doorConfiguration._id);
     auto oppositeDoorDirection = models::DIRECTION_INDEX_TO_ENUM_MAP.at(inverseDoorIndex);

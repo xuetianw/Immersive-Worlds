@@ -38,7 +38,7 @@ private:
     void configRoomsAndJsonIdMap(const CusJson::Area& jsonArea);
     void configObjectMap(const CusJson::Area& jsonArea, std::unordered_map<int, SingleItem>& jsonIdToItemMap);
     void configRoomsAndMiniGame(const CusJson::MiniGameList& jsonMiniGameList);
-    void configNeighboursMap(std::unordered_map<int, ID> jsonIdToUuid, std::vector<CusJson::Room> jsonRooms);
+    void configNeighboursMap(std::unordered_map<int, ID> jsonIdToUuid, const std::vector<CusJson::Room>& jsonRooms);
     void buildNeighbours(const std::unordered_map<int, ID>& tmp, const CusJson::Room& jsonRoom, Neighbours& neighbours);
 
 public:
@@ -76,7 +76,7 @@ private:
      */
     void configDoorOnTheOtherSide(std::unordered_map<ID, Neighbours>& roomIdToNeighbours,
                                   const CusJson::DoorStateJsonWrapper& doorConfiguration,
-                                  const models::DoorState& doorState, models::NeighbourInfo neighbour) const;
+                                  const models::DoorState& doorState, const models::NeighbourInfo& neighbour) const;
 };
 
 #endif //WEBSOCKETNETWORKING_DATASTORAGESERVICE_H
