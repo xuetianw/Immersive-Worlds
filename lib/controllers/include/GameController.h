@@ -162,7 +162,7 @@ private:
 
     User* findUser(const ID& avatarId);
 
-    User* findUser(std::string username);
+    User* findUser(const std::string& username);
 
     std::string scrambleMessage(std::string message);
 
@@ -180,11 +180,11 @@ private:
     * @param avatarIds  list of avatar that should receive the message
     * @return vector of Messages that will be sent to the given list of avatars
     */
-    std::vector<Message> constructMessageToAvatars(std::string messageHeader, std::string messageBody,
+    std::vector<Message> constructMessageToAvatars(const std::string& messageHeader, std::string messageBody,
                                                                    const ID& senderAvatarId, const std::vector<ID>& avatarIds);
 
     //construct message string based on confuse state
-    std::string constructMessageStringToAvatar(std::string messageHeader, std::string messageBody,
+    std::string constructMessageStringToAvatar(const std::string& messageHeader, std::string messageBody,
                                                          const ID& senderAvatarId);
 
 };

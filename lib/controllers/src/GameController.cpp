@@ -320,7 +320,7 @@ void GameController::scrambleMessage(Message& message) {
  * PRIVATE
  */
 
-std::string GameController::constructMessageStringToAvatar(std::string messageHeader, std::string messageBody,
+std::string GameController::constructMessageStringToAvatar(const std::string& messageHeader, std::string messageBody,
                                                            const ID& senderAvatarId) {
     bool senderIsConfused = getAvatarConfuseState(senderAvatarId);
     if (senderIsConfused){
@@ -329,7 +329,7 @@ std::string GameController::constructMessageStringToAvatar(std::string messageHe
     return messageHeader+messageBody;
 }
 
-std::vector<Message> GameController::constructMessageToAvatars(std::string messageHeader, std::string messageBody,
+std::vector<Message> GameController::constructMessageToAvatars(const std::string& messageHeader, std::string messageBody,
                                                                const ID& senderAvatarId, const std::vector<ID>& avatarIds) {
 
     bool senderIsConfused = getAvatarConfuseState(senderAvatarId);
@@ -370,16 +370,11 @@ User* GameController::findUser(const ID& avatarId) {
 }
 
 
-User* GameController::findUser(std::string username) {
+User* GameController::findUser(const std::string& username) {
 
     //find user with matching username
-    auto it = std::find_if(
-            _avatarIdToUser.begin(),
-            _avatarIdToUser.end(),
-            [&username](const auto& it) {
-                return it.second->getAccount()._username == username;
-            }
-    );
+    auto it = std::find_if(_avatarIdToUser.begin(),_avatarIdToUser.end(),
+            [&username](const auto& it) {return it.second->getAccount()._username == username;});
 
     if (_avatarIdToUser.end() != it) {
         return it->second;

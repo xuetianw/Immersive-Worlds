@@ -20,7 +20,7 @@
 using string = std::string;
 using stringstream = std::stringstream;
 
-typedef std::function<std::vector<Message>(Message)> function_ptr;
+using function_ptr = std::function<std::vector<Message>(Message)> ;
 
 class CommandProcessor {
     /*
@@ -59,11 +59,6 @@ private:
      * Map a command to a function ptr that executes it
      */
     void buildCommands();
-
-    /*
-     * scramble text of Message object (used for Confuse command)
-     */
-    void scrambleMessage(Message& message);
 
     /*
      *  Holds all the commands added to the map
