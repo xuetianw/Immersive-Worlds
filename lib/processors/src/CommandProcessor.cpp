@@ -13,7 +13,7 @@ void CommandProcessor::addCommand(const string& keyword, Command command, functi
 }
 
 std::vector<Message> CommandProcessor::processCommand(const Message& message) {
-    std::pair commandMessagePair = splitCommand(message.text);
+    const std::pair commandMessagePair = splitCommand(message.text);
 
     auto keywordIter = _keywords.find(commandMessagePair.first);
     auto commandsIter = keywordIter != _keywords.end() ? _commands.find(keywordIter->second) : _commands.end();
@@ -37,7 +37,7 @@ std::vector<Message> CommandProcessor::processCommand(const Message& message) {
             return std::vector<Message>{ Message {message.user, INVALID_INPUT_PROMPT} };
         }
     }
-
+    // when it is a valid command
     return handleDefaultMessage(message);
 }
 
@@ -46,7 +46,7 @@ std::vector<Message> CommandProcessor::handleDefaultMessage(const Message& messa
     if(message.user.getAccount().isLoggedIn) {
         return gameController->respondToMessage(message);
     }
-
+    // if the user is not logged in yet
     std::vector<Message> accountControllerResponse = accountController->respondToMessage(message);
     bool loggedInStatusChanged = accountControllerResponse.front().user.getAccount().isLoggedIn;
     if(loggedInStatusChanged) {
@@ -84,7 +84,7 @@ std::pair<string,string> CommandProcessor::splitCommand(string messageText) {
     string keyCommand, remainder;
     msgStream >> keyCommand;
     getline(msgStream >> std::ws, remainder);
-    return std::pair<string,string>(keyCommand, remainder);
+    return std::pair<string, string>(keyCommand, remainder);
 }
 
 void CommandProcessor::buildCommands() {

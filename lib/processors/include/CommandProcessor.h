@@ -37,11 +37,6 @@ public:
      */
     std::vector<Message> processCommand(const Message &message);
 
-    /*
-     * Adds a function to a keyword, the function has to be in format of ServerMessage _____(ServerMessage message)
-     */
-    void addCommand(const string& keyword, Command command, function_ptr);
-
     std::vector<Message> handleDefaultMessage(const Message& message);
 
     /*
@@ -50,6 +45,10 @@ public:
     std::vector<Message> listAvailableCommands(const Message& message);
 
 private:
+    /*
+     * Adds a function to a keyword, the function has to be in format of ServerMessage _____(ServerMessage message)
+     */
+    void addCommand(const string& keyword, Command command, function_ptr);
     /*
      * Split a user message text to retrieve the command for processing
      */
@@ -63,7 +62,7 @@ private:
     /*
      *  Holds all the commands added to the map
      */
-    std::unordered_map<Command , function_ptr> _commands;
+    std::unordered_map<Command, function_ptr> _commands;
     std::unordered_map<string, Command> _keywords;
 
     // Manager for handling client connections and authentication
