@@ -141,10 +141,8 @@ public:
      */
     bool getAvatarConfuseState(const ID& avatarId);
 
-    void scrambleMessages(std::vector<Message>& messages);
 
     void scrambleMessage(Message& message);
-
 
 private:
     // Services

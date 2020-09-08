@@ -19,19 +19,9 @@ std::vector<Message> CommandProcessor::processCommand(const Message& message) {
     auto commandsIter = keywordIter != _keywords.end() ? _commands.find(keywordIter->second) : _commands.end();
 
     if(commandsIter != _commands.end()) {
-        auto command = commandsIter->first;
-        auto commandFunc = commandsIter->second;
 
-        if(message.user.canPreformCommand(command)) {
-            auto outputMessages = commandFunc(Message {message.user, commandMessagePair.second});
-
-            for(Message& msg : outputMessages) {
-                //scramble message if user is confused
-                if(gameController->getAvatarConfuseState(msg.user.getAccount().avatarId)
-                    && msg.text != USER_CONFUSED_MESSAGE){
-                    gameController->scrambleMessage(msg);
-                }
-            }
+        if(message.user.canPreformCommand(commandsIter->first)) {
+            std::vector<Message> outputMessages = commandsIter->second(Message {message.user, commandMessagePair.second});
             return outputMessages;
         } else {
             return std::vector<Message>{ Message {message.user, INVALID_INPUT_PROMPT} };

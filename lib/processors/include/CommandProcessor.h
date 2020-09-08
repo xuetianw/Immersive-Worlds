@@ -39,12 +39,12 @@ public:
 
     std::vector<Message> handleDefaultMessage(const Message& message);
 
+private:
+
     /*
      *  Lists the keywords of the allowed commands to the user
      */
     std::vector<Message> listAvailableCommands(const Message& message);
-
-private:
     /*
      * Adds a function to a keyword, the function has to be in format of ServerMessage _____(ServerMessage message)
      */

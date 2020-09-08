@@ -304,16 +304,9 @@ bool GameController::getAvatarConfuseState(const ID &avatarId) {
     return _avatarService.getAvatarConfuseState(avatarId);
 }
 
-void GameController::scrambleMessages(std::vector<Message>& messages) {
-    for (Message& msg: messages) {
-        scrambleMessage(msg);
-    }
-}
-
 void GameController::scrambleMessage(Message& message) {
     message.text = scrambleMessage(message.text);
 }
-
 
 
 /*
@@ -351,9 +344,7 @@ std::vector<Message> GameController::constructMessageToAvatars(const std::string
 }
 
 std::string GameController::scrambleMessage(std::string message) {
-    for(char& c: message){
-        c++;
-    }
+    for(char& c: message) c++;
     return message;
 }
 

@@ -33,6 +33,7 @@ using namespace std;
 
 // Store User State
 unordered_map<Connection, User, ConnectionHash> users;
+std::deque<ServerMessage> convertToServerMessage (const std::vector<Message>& msgs);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void onConnect(Connection &c) {
@@ -51,23 +52,21 @@ std::deque<ServerMessage> processMessages(unique_ptr<CommandProcessor>& commandP
                                     Server& server,
                                     const std::deque<ServerMessage>& incoming,
                                     bool& quit) {
-    std::deque<ServerMessage> result;
     for (auto &serverMessage : incoming) {
         Message message{users[serverMessage.connection], serverMessage.text};
-        if (message.text == "/quit") {
-            server.disconnect(message.user.getConnection());
-        } else if (message.text == "shutdown") {
-            std::cout << "Shutting down.\n";
-            quit = true;
-        } else {
-            std::vector<Message> returnedMessages = commandProcessor->processCommand(message);
-            for (auto& msg : returnedMessages){
-                result.push_back(msg.convertToServerMessage());
-            }
-        }
-    }
+        if (message.text == "/quit") { server.disconnect(message.user.getConnection());}
 
-    return result;
+        else if (message.text == "shutdown") { quit = true; }
+
+        else { return convertToServerMessage(commandProcessor->processCommand(message)); }
+    }
+    return std::deque<ServerMessage>{};
+}
+
+std::deque<ServerMessage> convertToServerMessage (const std::vector<Message>& msgs) {
+    std::deque<ServerMessage> res;
+    for (const Message& message : msgs) { res.push_back(ServerMessage{message.user.getConnection(), message.text}); }
+    return res;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
