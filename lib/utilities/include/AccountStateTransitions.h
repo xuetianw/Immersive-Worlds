@@ -200,7 +200,7 @@ struct AccountStateTransitions {
     }
 
     template<typename State, typename Event>
-    std::optional<UserStateVariant> operator()(State&, Event&, Account& account, const string& message) {
+    std::optional<UserStateVariant> operator()(State&, const Event&, Account& account, const string& message) {
         _currentUserResponseMessage = INVALID_INPUT_PROMPT;
         return std::nullopt;
     }
