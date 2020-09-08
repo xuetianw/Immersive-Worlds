@@ -52,7 +52,7 @@ TEST_F(AccountControllerTests, LogoutWithoutLoggingInTest){
 
 //user login
 TEST_F(AccountControllerTests, LoginTest){
-    user.reset();
+    user.resetAllowedCommands();
     Message userPrompt = accountController.startLogin(firstMessage).front();
 
     Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage).front();
@@ -70,7 +70,7 @@ TEST_F(AccountControllerTests, LoginTest){
 
 //same user login twice
 TEST_F(AccountControllerTests, LoginTwiceTest){
-    user.reset();
+    user.resetAllowedCommands();
     Message userPrompt = accountController.startLogin(firstMessage).front();
 
     Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage).front();
@@ -92,7 +92,7 @@ TEST_F(AccountControllerTests, LoginTwiceTest){
 
 //user login first and logout
 TEST_F(AccountControllerTests, LoginLogoutSequenceTest){
-    user.reset();
+    user.resetAllowedCommands();
     Message userPrompt = accountController.startLogin(firstMessage).front();
 
     Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage).front();
@@ -114,7 +114,7 @@ TEST_F(AccountControllerTests, LoginLogoutSequenceTest){
 
 //register without logging in
 TEST_F(AccountControllerTests, RegisterTest){
-    user.reset();
+    user.resetAllowedCommands();
     Message message = accountController.startRegister(firstMessage).front();
 
     Message accountControllerFirstResponse = accountController.respondToMessage(registerUsernameMessage).front();
@@ -132,7 +132,7 @@ TEST_F(AccountControllerTests, RegisterTest){
 
 //login with non-existing username
 TEST_F(AccountControllerTests, LoginWhenUsernameExists) {
-    user.reset();
+    user.resetAllowedCommands();
     Message message = accountController.startLogin(firstMessage).front();
 
     Message accountControllerFirstResponse = accountController.respondToMessage(usernameNotExistsMessage).front();
@@ -148,7 +148,7 @@ TEST_F(AccountControllerTests, LoginWhenUsernameExists) {
 
 //login with invalid password
 TEST_F(AccountControllerTests, LoginWithEmptyPassword) {
-    user.reset();
+    user.resetAllowedCommands();
     Message message = accountController.startLogin(firstMessage).front();
 
     Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage).front();
@@ -168,7 +168,7 @@ TEST_F(AccountControllerTests, LoginWithEmptyPassword) {
 
 //register with already existing username
 TEST_F(AccountControllerTests, RegisterWhenUsernameExists) {
-    user.reset();
+    user.resetAllowedCommands();
     Message message = accountController.startRegister(firstMessage).front();
 
     Message accountControllerFirstResponse = accountController.respondToMessage(usernameExistsMessage).front();
@@ -182,7 +182,7 @@ TEST_F(AccountControllerTests, RegisterWhenUsernameExists) {
 
 //register with invalid password
 TEST_F(AccountControllerTests, RegisterWithEmptyPassword) {
-    user.reset();
+    user.resetAllowedCommands();
     Message message = accountController.startRegister(firstMessage).front();
 
     Message accountControllerFirstResponse = accountController.respondToMessage(registerUsernameMessage).front();
@@ -202,7 +202,7 @@ TEST_F(AccountControllerTests, RegisterWithEmptyPassword) {
 
 //register after logging in
 TEST_F(AccountControllerTests, LoginRegisterTest){
-    user.reset();
+    user.resetAllowedCommands();
     Message userPrompt = accountController.startLogin(firstMessage).front();
 
     Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage).front();
@@ -225,7 +225,7 @@ TEST_F(AccountControllerTests, LoginRegisterTest){
 
 //register and escape
 TEST_F(AccountControllerTests, RegisterEscapeTest){
-    user.reset();
+    user.resetAllowedCommands();
     Message message = accountController.startRegister(firstMessage).front();
 
     Message accountControllerFirstResponse = accountController.respondToMessage(registerUsernameMessage).front();
@@ -242,7 +242,7 @@ TEST_F(AccountControllerTests, RegisterEscapeTest){
 
 //login and escape
 TEST_F(AccountControllerTests, LoginEscapeTest){
-    user.reset();
+    user.resetAllowedCommands();
     Message userPrompt = accountController.startLogin(firstMessage).front();
 
     Message accountControllerFirstResponse = accountController.respondToMessage(loginUsernameMessage).front();
@@ -259,7 +259,7 @@ TEST_F(AccountControllerTests, LoginEscapeTest){
 
 //user escape without loggingin
 TEST_F(AccountControllerTests, LoginEscape_WithoutLoginTest){
-    user.reset();
+    user.resetAllowedCommands();
     Message escapeMessage = accountController.escapeLogin(firstMessage).front();
     EXPECT_EQ(ID1, escapeMessage.user.getConnection().id);
     EXPECT_EQ(INVALID_INPUT_PROMPT, escapeMessage.text);

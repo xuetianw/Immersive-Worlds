@@ -21,17 +21,15 @@ private:
 
     std::unordered_set<Command> _allowedCommands;
 
-    std::unique_ptr<CommandType> _commandType;
-
 public:
     User() = default;
 
     explicit User(Connection c) :
         _connection(c) {
-        reset();
+        resetAllowedCommands();
     }
 
-    void reset();
+    void resetAllowedCommands();
 
     const Connection& getConnection() const;
 

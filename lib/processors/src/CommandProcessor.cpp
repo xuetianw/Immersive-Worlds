@@ -21,11 +21,8 @@ std::vector<Message> CommandProcessor::processCommand(const Message& message) {
     if(commandsIter != _commands.end()) {
 
         if(message.user.canPreformCommand(commandsIter->first)) {
-            std::vector<Message> outputMessages = commandsIter->second(Message {message.user, commandMessagePair.second});
-            return outputMessages;
-        } else {
-            return std::vector<Message>{ Message {message.user, INVALID_INPUT_PROMPT} };
-        }
+            return commandsIter->second(Message {message.user, commandMessagePair.second});
+        } else { return std::vector<Message>{ Message {message.user, INVALID_INPUT_PROMPT} };}
     }
     // when it is a valid command
     return handleDefaultMessage(message);

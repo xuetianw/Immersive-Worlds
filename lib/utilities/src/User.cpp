@@ -6,9 +6,8 @@
 
 using std::unordered_set;
 
-void User::reset() {
-    _commandType = std::make_unique<AccountCommands>();
-    _allowedCommands = _commandType->getCommands();
+void User::resetAllowedCommands() {
+    _allowedCommands = std::make_unique<AccountCommands>()->getCommands();
 }
 
 const Connection& User::getConnection() const {
@@ -35,8 +34,7 @@ void User::setAccount(const Account& account) {
 }
 
 void User::setCommandType(CommandType* commandType) {
-    _commandType.reset(commandType);
-    _allowedCommands = _commandType->getCommands();
+    _allowedCommands = commandType->getCommands();
 }
 
 const unordered_set<Command>& User::getAllowedCommands() const {
